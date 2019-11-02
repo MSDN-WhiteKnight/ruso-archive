@@ -59,3 +59,51 @@
 > ![БАН! СПАМ! ОСКОРБЛЕНИЕ!](https://i.stack.imgur.com/sq9b5.png)
 > 
 > Однако, если нажать на ссылки, то там будет видео про эвфемизмы!
+
+[Сложение чисел в JavaScript](https://ru.stackoverflow.com/q/1038600/240512) - 25 окт '19 в 13:25, автор: user356453
+
+> Нам по информатике дали задание. Подскажите, как правильно написать
+> простую функцию сложения двух чисел **a** и **b**.
+> 
+> Я пытался так:
+> 
+> <!-- begin snippet: js hide: false console: true babel: false -->
+> 
+> <!-- language: lang-js -->
+> 
+>     function = sum(a, b) { console(a + b) }
+> 
+> <!-- end snippet -->
+> 
+> но ничего не заработало! 
+> 
+> Вот такая ошибка: ![введите сюда описание изображения](https://i.stack.imgur.com/Cirn4.png)
+> 
+> Спасибо.
+
+https://ru.stackoverflow.com/a/1038604/240512, автор: [Александр Великий](https://ru.stackoverflow.com/users/304342/Александр-Великий)
+
+> Рабочее простое решение, функция **amount**:
+> 
+>     const amount = (a, b) => {
+>     const data = {
+>         fn: a,
+>         sn: b,
+>         g: 'getComPart',
+>         f: 'f',
+>         getComPart: {
+>             f: 'computed'
+>         },
+>         n: 'n',
+>         computed: (a) => {
+>             let z = data['s' + [data[data.n]]];
+> 
+>             while (z) {a++; z--;}
+>             return a;
+>         }
+>     }
+> 
+>     return data[data[data.g].f](data['f' + data.n]);
+>     }
+> 
+>     console.log(amount(3, 5)) // 8
