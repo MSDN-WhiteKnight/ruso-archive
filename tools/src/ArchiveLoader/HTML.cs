@@ -13,11 +13,14 @@ namespace ArchiveLoader
         public static void RenderPost(object post, TextWriter wr)
         {
             dynamic data = post as dynamic;
+            dynamic owner = JSON.GetPropertyValue(data, "owner");
+            string ownerstr;
+
+            if (owner != null) ownerstr = String.Format("<a href=\"{0}\">{1}</a>", owner.link, owner.display_name);
+            else ownerstr = "(unknown person)";
+
             wr.WriteLine("<html><head><meta charset=\"UTF-8\"/></head><body>");
-            wr.WriteLine(
-                "<p><a href=\"{0}\">{1}</a> - by <a href=\"{2}\">{3}</a></p>",
-                data.link, data.link, data.owner.link, data.owner.display_name
-                );
+            wr.WriteLine("<p><a href=\"{0}\">{1}</a> - by {2}</p>",data.link, data.link, ownerstr);
             wr.WriteLine("<blockquote>");
             wr.WriteLine(data.body);
             wr.WriteLine("</blockquote>");

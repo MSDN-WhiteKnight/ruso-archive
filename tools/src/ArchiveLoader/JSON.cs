@@ -32,6 +32,7 @@ namespace ArchiveLoader
         static object GetProperty(IDispatch dispatchObject, string property)
         {
             int dispId = GetDispId(dispatchObject, property);
+            if (dispId < 0) return null;
             return InvokePropertyGetter(dispatchObject, dispId);            
         }
         
@@ -44,17 +45,15 @@ namespace ArchiveLoader
         {
             int[] dispIds = new int[1];
             Guid emtpyRiid = Guid.Empty;
-            dispatchObject.GetIDsOfNames(
+            int hr = dispatchObject.GetIDsOfNames(
                 emtpyRiid,
                 new string[] { methodName },
                 1,
                 0,
                 dispIds);
 
-            if (dispIds[0] == -1)
-            {
-                throw new ArgumentException(String.Format("Method name {0} cannot be recognized", methodName));
-            }
+            if ((uint)hr == 0x80020006) return -1; //DISP_E_UNKNOWNNAME
+            else if (hr != 0) throw Marshal.GetExceptionForHR(hr);
 
             return dispIds[0];
         }
@@ -99,6 +98,16 @@ namespace ArchiveLoader
             }
         }
 
+        public static object GetPropertyValue(object o, string prop)
+        {
+            IDispatch dispatchObject = null;
+            dispatchObject = o as IDispatch;
+
+            if (dispatchObject == null) throw new ArgumentException("Object is not IDispatch");
+
+            return GetProperty(dispatchObject, prop);            
+        }
+
         // *** COM INTEROP **
         [DllImport("ole32.dll")]
         static extern int CLSIDFromProgID([MarshalAs(UnmanagedType.LPWStr)] string lpszProgID, out Guid pclsid);
@@ -114,7 +123,8 @@ namespace ArchiveLoader
             [PreserveSig]
             int GetTypeInfo(int iTInfo, int lcid, out ComTypes.ITypeInfo ppTInfo);
 
-            void GetIDsOfNames(
+            [PreserveSig]
+            int GetIDsOfNames(
                 [MarshalAs(UnmanagedType.LPStruct)] Guid iid,
                 [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)] string[] rgszNames,
                 int cNames,
