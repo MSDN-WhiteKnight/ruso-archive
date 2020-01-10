@@ -89,12 +89,34 @@ namespace ArchiveLoader
             }
         }
 
+        static void Generate(string site)
+        {
+            string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
+            string postsdir = Path.Combine(datadir, "posts-json\\");
+            
+            Dictionary<int, Question> questions = Question.LoadAllFromDir(postsdir, site);
+            Console.WriteLine("Questions: {0}", questions.Count);
+
+            foreach (int q in questions.Keys)
+            {
+                string title = questions[q].DataDynamic.title;
+                Console.WriteLine(title);
+
+                foreach (Answer a in questions[q].Answers)
+                {
+                    Console.WriteLine(a.DataDynamic.owner.display_name);
+                }
+            }
+
+            //TODO: Generate HTML
+        }
+
         [STAThread]
         static void Main(string[] args)
         {
             if (args.Length == 0)
             {
-                LoadData();
+                LoadData();                
             }
             else if (args.Length >= 3 && args[0] == "-saveq")
             {
