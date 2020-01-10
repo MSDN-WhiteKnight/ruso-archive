@@ -21,6 +21,26 @@ namespace ArchiveLoader
             wc.Headers["Accept-Encoding"] = "GZIP";
         }
 
+        public string DoRequest(string url)
+        {
+            byte[] bytes = wc.DownloadData(url);
+            byte[] bytes_decompressed;
+            using (MemoryStream original = new MemoryStream(bytes))
+            {
+                using (MemoryStream decompressed = new MemoryStream())
+                {
+                    using (GZipStream decompressionStream = new GZipStream(original, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressed);
+                        bytes_decompressed = decompressed.ToArray();
+                    }
+                }
+            }
+
+            string apires = Encoding.UTF8.GetString(bytes_decompressed);
+            return apires;
+        }
+
         public Dictionary<int, object> LoadPostsRange(int start, int end)
         {
             StringBuilder request = new StringBuilder(500);
@@ -34,7 +54,7 @@ namespace ArchiveLoader
             request.Append("?site="+this.site);
             request.Append("&filter=withbody&pagesize=100");
 
-            byte[] bytes = wc.DownloadData(request.ToString());
+            /*byte[] bytes = wc.DownloadData(request.ToString());
             byte[] bytes_decompressed;
             using (MemoryStream original = new MemoryStream(bytes))
             {
@@ -48,7 +68,8 @@ namespace ArchiveLoader
                 }
             }            
 
-            string apires=Encoding.UTF8.GetString(bytes_decompressed);
+            string apires=Encoding.UTF8.GetString(bytes_decompressed);*/
+            string apires = DoRequest(request.ToString());
             
             dynamic data = JSON.Parse(apires);
             IEnumerable<object> items;
