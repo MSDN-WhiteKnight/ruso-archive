@@ -29,6 +29,26 @@ namespace ArchiveLoader
             }
         }
 
+        public static string Stringify(object val)
+        {
+            dynamic html = null;
+            dynamic JsonObject = null;
+            try
+            {
+                html = Activator.CreateInstance(Type.GetTypeFromProgID("htmlfile"));
+                html.open();
+                html.write("<html><head><meta http-equiv=\"x-ua-compatible\" content=\"IE=9\" /></head><body></body></html>");
+
+                JsonObject = html.defaultView.JSON;
+                return JsonObject.stringify(val);
+            }
+            finally
+            {
+                if (html != null) Marshal.ReleaseComObject(html);
+                if (JsonObject != null) Marshal.ReleaseComObject(JsonObject);
+            }
+        }
+
         static object GetProperty(IDispatch dispatchObject, string property)
         {
             int dispId = GetDispId(dispatchObject, property);
