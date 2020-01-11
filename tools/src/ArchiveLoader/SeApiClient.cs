@@ -137,7 +137,7 @@ namespace ArchiveLoader
                     case "posts": posts[item.post_id] = item; break;
                     case "questions": posts[item.question_id] = item; break;
                     case "answers": posts[item.answer_id] = item; break;
-                    default: throw new InvalidDataException(type + " is not a valid vaule for 'type'");
+                    default: throw new InvalidDataException(type + " is not a valid value for 'type'");
                 }
             }
 
@@ -174,7 +174,7 @@ namespace ArchiveLoader
                     case "posts": posts[item.post_id] = item; break;
                     case "questions": posts[item.question_id] = item; break;
                     case "answers": posts[item.answer_id] = item; break;
-                    default: throw new InvalidDataException(type+" is not a valid vaule for 'type'");
+                    default: throw new InvalidDataException(type + " is not a valid value for 'type'");
                 }
             }
 
