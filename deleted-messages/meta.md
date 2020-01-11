@@ -1052,6 +1052,6 @@ https://ru.meta.stackoverflow.com/a/9584/240512 - 9 окт '19 в 1:45, авто
 > как человек с кнопкой взял и забанил целый сайт SE. Из добрых
 > намерений.)
 
-https://ru.meta.stackoverflow.com/a/9895/240512 - 19 дек '19, автор: [Valentin Heinitz](https://ru.meta.stackoverflow.com/users/190304/valentin-heinitz)
+https://ru.meta.stackoverflow.com/a/9895/240512 - 19 дек '19, автор: [Valentin Heinitz](https://ru.meta.stackoverflow.com/users/190304/valentin-heinitz) (<a name="9895" href="#9895">#</a>)
 
 >Потому что хозяин СО - Джoeл Cпoльcкий исвестный Нью-Йоркский гoмик. Кстати, он раньше кичился тем, что иностранным наемником в изрaильcкoй армии был. Это наверное и обьясняет толерантность к пиратским шапкам.
