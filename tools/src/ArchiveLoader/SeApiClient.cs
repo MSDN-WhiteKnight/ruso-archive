@@ -43,32 +43,8 @@ namespace ArchiveLoader
         }
 
         public Dictionary<int, object> LoadPostsRange(int start, int end)
-        {
-            StringBuilder request = new StringBuilder(500);
-            request.Append(apiurl + "posts/");
-
-            for (int i = start; i <= end; i++)
-            {
-                if (i > start) request.Append(";");
-                request.Append(i.ToString());
-            }
-            request.Append("?site="+this.site);
-            request.Append("&filter=withbody&pagesize=100");
-                        
-            string apires = DoRequest(request.ToString());
-            
-            dynamic data = JSON.Parse(apires);
-            IEnumerable<object> items;
-            items = JSON.ToCollection(data.items);
-
-            Dictionary<int, object> posts = new Dictionary<int, object>();
-
-            foreach (dynamic item in items)
-            {
-                posts[item.post_id] = item;
-            }
-
-            return posts;            
+        {            
+            return this.LoadPostsRange("posts", start, end);
         }
 
         public string LoadQuestion(int id)
@@ -131,6 +107,88 @@ namespace ArchiveLoader
 
             if (retval != null) return JSON.Stringify(retval);
             else return null;
+        }
+
+        public Dictionary<int, object> LoadPostsRange(string type,int start, int end)
+        {
+            StringBuilder request = new StringBuilder(500);
+            request.Append(apiurl + type+"/");
+
+            for (int i = start; i <= end; i++)
+            {
+                if (i > start) request.Append(";");
+                request.Append(i.ToString());
+            }
+            request.Append("?site=" + this.site);
+            request.Append("&filter=withbody&pagesize=100");
+
+            string apires = DoRequest(request.ToString());
+
+            dynamic data = JSON.Parse(apires);
+            IEnumerable<object> items;
+            items = JSON.ToCollection(data.items);
+
+            Dictionary<int, object> posts = new Dictionary<int, object>();
+
+            foreach (dynamic item in items)
+            {
+                switch (type)
+                {
+                    case "posts": posts[item.post_id] = item; break;
+                    case "questions": posts[item.question_id] = item; break;
+                    case "answers": posts[item.answer_id] = item; break;
+                    default: throw new InvalidDataException(type + " is not a valid value for 'type'");
+                }
+            }
+
+            return posts;
+        }
+
+        public Dictionary<int, object> LoadPostsSequence(string type, IEnumerable<int> ids)
+        {
+            StringBuilder request = new StringBuilder(500);
+            request.Append(apiurl + type + "/");
+
+            bool first = true;
+            foreach (int id in ids)
+            {
+                if (!first) request.Append(";");
+                request.Append(id.ToString());
+                first = false;
+            }
+            request.Append("?site=" + this.site);
+            request.Append("&filter=withbody&pagesize=100");
+
+            string apires = DoRequest(request.ToString());
+
+            dynamic data = JSON.Parse(apires);
+            IEnumerable<object> items;
+            items = JSON.ToCollection(data.items);
+
+            Dictionary<int, object> posts = new Dictionary<int, object>();
+
+            foreach (dynamic item in items)
+            {
+                switch (type)
+                {
+                    case "posts": posts[item.post_id] = item; break;
+                    case "questions": posts[item.question_id] = item; break;
+                    case "answers": posts[item.answer_id] = item; break;
+                    default: throw new InvalidDataException(type + " is not a valid value for 'type'");
+                }
+            }
+
+            return posts;
+        }
+
+        public Dictionary<int, object> LoadQuestionsSequence(IEnumerable<int> ids)
+        {
+            return this.LoadPostsSequence("questions", ids);
+        }
+
+        public Dictionary<int, object> LoadAnswersSequence(IEnumerable<int> ids)
+        {
+            return this.LoadPostsSequence("answers", ids);
         }
     }
 }

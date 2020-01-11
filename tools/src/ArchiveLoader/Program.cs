@@ -15,7 +15,8 @@ namespace ArchiveLoader
             const int StartingPoint = 9800;
             string site = "ru.meta.stackoverflow.com";
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
-            string postsdir = Path.Combine(datadir, "posts\\");
+            string postsdir = Path.Combine(datadir, "posts-raw\\");
+            string postsdir2 = Path.Combine(datadir, "posts\\");
             string deleted_dir = Path.Combine(datadir, "deleted\\");
             int i1 = StartingPoint;
             int i2 = StartingPoint + 99;
@@ -24,6 +25,7 @@ namespace ArchiveLoader
 
             if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
             if (!Directory.Exists(deleted_dir)) Directory.CreateDirectory(deleted_dir);
+            if (!Directory.Exists(postsdir2)) Directory.CreateDirectory(postsdir2);
 
             SeApiClient client = new SeApiClient(APIURL, site);
 
@@ -38,21 +40,32 @@ namespace ArchiveLoader
 
                 for (int i = i1; i <= i2; i++)
                 {
-                    path = Path.Combine(postsdir, i.ToString() + ".html");
+                    path = Path.Combine(postsdir, i.ToString() + ".json");
 
                     if (!posts.ContainsKey(i))
                     {
                         if (File.Exists(path))
                         {
                             Console.WriteLine("Found deleted post: {0}", i);
-                            File.Move(path, Path.Combine(deleted_dir, i.ToString() + ".html"));
+                            string path2 = Path.Combine(postsdir2,"Q"+i.ToString() + ".json");
+                            if (File.Exists(path2))
+                            {
+                                File.Move(path2,Path.Combine(deleted_dir, "Q" + i.ToString() + ".json"));
+                            }
+
+                            path2 = Path.Combine(postsdir2, "A" + i.ToString() + ".json");
+                            if (File.Exists(path2))
+                            {
+                                File.Move(path2, Path.Combine(deleted_dir, "A" + i.ToString() + ".json"));
+                            }
+                            File.Delete(path);
                         }
                     }
                     else
                     {
                         using (TextWriter wr = new StreamWriter(path, false))
                         {
-                            HTML.RenderPost(posts[i], wr);
+                            wr.Write(JSON.Stringify(posts[i]));
                         }
                     }
                 }
@@ -60,12 +73,141 @@ namespace ArchiveLoader
                 i1 = i2 + 1;
                 i2 = i1 + 99;
             }
+
+            //Scan posts and split to questions and answers
+            List<int> question_ids = new List<int>();
+            List<int> answer_ids = new List<int>();
+            string[] files = Directory.GetFiles(postsdir, "*.json");
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                string file = Path.GetFileNameWithoutExtension(files[i]);
+                string idstr = file;
+                int id;
+
+                if (!Int32.TryParse(idstr, out id))
+                {
+                    Console.WriteLine("Bad post id = {0} in file {1}", idstr, files[i]);
+                    continue;
+                }
+
+                try
+                {
+                    string json = File.ReadAllText(files[i], Encoding.UTF8);
+                    dynamic post = JSON.Parse(json);
+                    if (post.post_type == "question") question_ids.Add(id);
+                    else if (post.post_type == "answer") answer_ids.Add(id);
+                    else Console.WriteLine("Unknown post type: {0} in {1}",post.post_type,files[i]);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error reading file " + files[i]);
+                    Console.WriteLine(ex.ToString());
+                    throw;
+                }
+            }
+
+            int[] sequence;
+
+            //load questions
+            int[] q_arr = question_ids.ToArray();            
+            i1 = 0;
+            i2 = 99;
+            if (i2 >= q_arr.Length) i2 = q_arr.Length - 1;
+
+            while (true)
+            {
+                sequence = new int[i2 - i1 + 1];
+                Console.WriteLine("Loading questions from #{0} to #{1}...", i1, i2);
+                Array.Copy(q_arr, i1, sequence, 0, sequence.Length);
+                Dictionary<int, object> questions = client.LoadQuestionsSequence(sequence);                                
+
+                Console.WriteLine("{0} questions loaded", questions.Count);
+                //if (questions.Count == 0) break;
+
+                for (int i = 0; i < sequence.Length; i++)
+                {
+                    int id = sequence[i];
+                    path = Path.Combine(postsdir2, "Q"+id.ToString() + ".json");
+
+                    if (!questions.ContainsKey(id))
+                    {
+                        if (File.Exists(path))
+                        {
+                            Console.WriteLine("Found deleted question: {0}", id);
+                            File.Move(
+                                Path.Combine(postsdir2, "Q" + id.ToString() + ".json"),
+                                Path.Combine(deleted_dir, "Q" + id.ToString() + ".json")
+                                );
+                        }
+                    }
+                    else
+                    {
+                        using (TextWriter wr = new StreamWriter(path, false))
+                        {
+                            wr.Write(JSON.Stringify(questions[id]));
+                        }
+                    }
+                }
+                                
+                i1 = i2 + 1;
+                if (i1 >= q_arr.Length) break;
+                i2 = i1 + 99;
+                if (i2 >= q_arr.Length) i2 = q_arr.Length - 1;
+            }
+
+            //load answers
+            int[] a_arr = answer_ids.ToArray();            
+            i1 = 0;
+            i2 = 99;
+            if (i2 >= a_arr.Length) i2 = a_arr.Length - 1;
+
+            while (true)
+            {
+                sequence = new int[i2 - i1 + 1];
+                Console.WriteLine("Loading answers from #{0} to #{1}...", i1, i2);
+                Array.Copy(a_arr, i1, sequence, 0, sequence.Length);
+                Dictionary<int, object> answers = client.LoadAnswersSequence(sequence);
+
+                Console.WriteLine("{0} answers loaded", answers.Count);
+                //if (questions.Count == 0) break;
+
+                for (int i = 0; i < sequence.Length; i++)
+                {
+                    int id = sequence[i];
+                    path = Path.Combine(postsdir2, "A" + id.ToString() + ".json");
+
+                    if (!answers.ContainsKey(id))
+                    {
+                        if (File.Exists(path))
+                        {
+                            Console.WriteLine("Found deleted answer: {0}", id);
+                            File.Move(
+                                Path.Combine(postsdir2, "A" + id.ToString() + ".json"),
+                                Path.Combine(deleted_dir, "A" + id.ToString() + ".json")
+                                );
+                        }
+                    }
+                    else
+                    {
+                        using (TextWriter wr = new StreamWriter(path, false))
+                        {
+                            wr.Write(JSON.Stringify(answers[id]));
+                        }
+                    }
+                }
+
+                i1 = i2 + 1;
+                if (i1 >= a_arr.Length) break;
+                i2 = i1 + 99;
+                if (i2 >= a_arr.Length) i2 = a_arr.Length - 1;
+            }            
         }
 
         static void SaveQuestion(string site,int id)
         {
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
-            string postsdir = Path.Combine(datadir, "posts-json\\");                        
+            string postsdir = Path.Combine(datadir, "posts\\");                        
             string path;
 
             if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
@@ -94,7 +236,7 @@ namespace ArchiveLoader
         static void SaveSingleAnswer(string site, int id)
         {
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
-            string postsdir = Path.Combine(datadir, "posts-json\\");
+            string postsdir = Path.Combine(datadir, "posts\\");
             string path;
 
             if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
@@ -114,26 +256,29 @@ namespace ArchiveLoader
             Console.WriteLine("Success");
         }
 
-        static void Generate(string site)
+        static void Generate(string site, string subdir,string toc_title)
         {
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
-            string postsdir = Path.Combine(datadir, "posts-json\\");
+            string postsdir = Path.Combine(datadir, subdir+"\\");
             string htmldir = "..\\..\\..\\..\\html\\" + site + "\\";
+            string targetdir = Path.Combine(htmldir, subdir + "\\");
             string path;
             TextWriter wr;
 
+            if (!Directory.Exists(htmldir)) Directory.CreateDirectory(htmldir);
+            if (!Directory.Exists(targetdir)) Directory.CreateDirectory(targetdir);  
+
+            Console.WriteLine("Generating HTML files ({0}, {1})...", site, subdir);
+
             PostSet posts = PostSet.LoadFromDir(postsdir, site);
             Dictionary<int, Question> questions = posts.Questions;
-            Console.WriteLine("Questions: {0}", questions.Count);
-
-            if (!Directory.Exists(htmldir)) Directory.CreateDirectory(htmldir);
+            Console.WriteLine("Questions: {0}", questions.Count);                                  
 
             foreach (int q in questions.Keys)
             {
-                string title = questions[q].DataDynamic.title;
-                Console.WriteLine(title);
+                string title = questions[q].DataDynamic.title;                
 
-                path = Path.Combine(htmldir, q.ToString() + ".html");
+                path = Path.Combine(targetdir, q.ToString() + ".html");
                 wr = new StreamWriter(path, false);
 
                 using (wr)
@@ -145,8 +290,8 @@ namespace ArchiveLoader
             Console.WriteLine("Single answers: {0}", posts.SingleAnswers.Count);
 
             foreach (int a in posts.SingleAnswers.Keys)
-            {                
-                path = Path.Combine(htmldir, a.ToString() + ".html");
+            {
+                path = Path.Combine(targetdir, a.ToString() + ".html");
                 wr = new StreamWriter(path, false);
 
                 using (wr)
@@ -157,12 +302,12 @@ namespace ArchiveLoader
                 }
             }
 
-            Console.WriteLine("Generating TOC...");
-            path = Path.Combine(htmldir, "index.html");
+            Console.WriteLine("Generating TOC ({0}: {1})...",site,toc_title);
+            path = Path.Combine(targetdir, "index.html");
             wr = new StreamWriter(path, false);
             using (wr)
             {
-                HTML.RenderTOC(site, posts, wr);
+                HTML.RenderTOC(site,toc_title, posts, wr);
             }
         }
 
@@ -171,11 +316,24 @@ namespace ArchiveLoader
         {
             if (args.Length == 0)
             {
-                LoadData();                
+                LoadData();
+                Generate("ru.meta.stackoverflow.com", "posts", "Posts");
+                Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
+                Generate("ru.stackoverflow.com", "posts", "Posts");
             }
             else if (args.Length >= 3 && args[0] == "-saveq")
             {
                 SaveQuestion(args[1], Convert.ToInt32(args[2]));
+            }
+            else if (args.Length >= 3 && args[0] == "-savea")
+            {
+                SaveSingleAnswer(args[1], Convert.ToInt32(args[2]));
+            }
+            else if (args.Length >= 1 && args[0] == "-generate")
+            {
+                Generate("ru.meta.stackoverflow.com", "posts", "Posts");
+                Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
+                Generate("ru.stackoverflow.com", "posts", "Posts");
             }
             else
             {
