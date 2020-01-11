@@ -43,32 +43,7 @@ namespace ArchiveLoader
         }
 
         public Dictionary<int, object> LoadPostsRange(int start, int end)
-        {
-            /*StringBuilder request = new StringBuilder(500);
-            request.Append(apiurl + "posts/");
-
-            for (int i = start; i <= end; i++)
-            {
-                if (i > start) request.Append(";");
-                request.Append(i.ToString());
-            }
-            request.Append("?site="+this.site);
-            request.Append("&filter=withbody&pagesize=100");
-                        
-            string apires = DoRequest(request.ToString());
-            
-            dynamic data = JSON.Parse(apires);
-            IEnumerable<object> items;
-            items = JSON.ToCollection(data.items);
-
-            Dictionary<int, object> posts = new Dictionary<int, object>();
-
-            foreach (dynamic item in items)
-            {
-                posts[item.post_id] = item;
-            }
-
-            return posts;  */
+        {            
             return this.LoadPostsRange("posts", start, end);
         }
 
