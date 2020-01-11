@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ArchiveLoader
 {
-    abstract class Post
+    public abstract class Post
     {
         protected string site;
         protected int id;

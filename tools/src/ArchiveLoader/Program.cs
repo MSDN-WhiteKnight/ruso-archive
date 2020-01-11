@@ -8,6 +8,8 @@ namespace ArchiveLoader
 {   
     class Program
     {
+        const string APIURL = "https://api.stackexchange.com/2.2/";
+
         static void LoadData()
         {
             const int StartingPoint = 9800;
@@ -23,7 +25,7 @@ namespace ArchiveLoader
             if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
             if (!Directory.Exists(deleted_dir)) Directory.CreateDirectory(deleted_dir);
 
-            SeApiClient client = new SeApiClient("https://api.stackexchange.com/2.2/", site);
+            SeApiClient client = new SeApiClient(APIURL, site);
 
             while (true)
             {
@@ -66,9 +68,9 @@ namespace ArchiveLoader
             string postsdir = Path.Combine(datadir, "posts-json\\");                        
             string path;
 
-            if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);            
+            if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
 
-            SeApiClient client = new SeApiClient("https://api.stackexchange.com/2.2/", site);
+            SeApiClient client = new SeApiClient(APIURL, site);
             string q = client.LoadQuestion(id);
 
             if (q == null)
@@ -84,31 +86,84 @@ namespace ArchiveLoader
 
             foreach (int key in answers.Keys)
             {
-                path = Path.Combine(postsdir, key.ToString() + ".json");
+                path = Path.Combine(postsdir, "A" + key.ToString() + ".json");
                 File.WriteAllText(path, answers[key], Encoding.UTF8);
             }
+        }
+
+        static void SaveSingleAnswer(string site, int id)
+        {
+            string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
+            string postsdir = Path.Combine(datadir, "posts-json\\");
+            string path;
+
+            if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
+            Console.WriteLine("Saving single answer {0} from {1}...", id, site);
+
+            SeApiClient client = new SeApiClient(APIURL, site);
+            string a = client.LoadSingleAnswer(id);
+
+            if (a == null)
+            {
+                throw new Exception("Failed to load answer " + id.ToString() + " from " + site);
+            }
+
+            path = Path.Combine(postsdir, "A" + id.ToString() + ".json");
+            File.WriteAllText(path, a, Encoding.UTF8);
+
+            Console.WriteLine("Success");
         }
 
         static void Generate(string site)
         {
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
             string postsdir = Path.Combine(datadir, "posts-json\\");
-            
-            Dictionary<int, Question> questions = Question.LoadAllFromDir(postsdir, site);
+            string htmldir = "..\\..\\..\\..\\html\\" + site + "\\";
+            string path;
+            TextWriter wr;
+
+            PostSet posts = PostSet.LoadFromDir(postsdir, site);
+            Dictionary<int, Question> questions = posts.Questions;
             Console.WriteLine("Questions: {0}", questions.Count);
+
+            if (!Directory.Exists(htmldir)) Directory.CreateDirectory(htmldir);
 
             foreach (int q in questions.Keys)
             {
                 string title = questions[q].DataDynamic.title;
                 Console.WriteLine(title);
 
-                foreach (Answer a in questions[q].Answers)
+                path = Path.Combine(htmldir, q.ToString() + ".html");
+                wr = new StreamWriter(path, false);
+
+                using (wr)
                 {
-                    Console.WriteLine(a.DataDynamic.owner.display_name);
+                    questions[q].GenerateHTML(wr);
                 }
             }
 
-            //TODO: Generate HTML
+            Console.WriteLine("Single answers: {0}", posts.SingleAnswers.Count);
+
+            foreach (int a in posts.SingleAnswers.Keys)
+            {                
+                path = Path.Combine(htmldir, a.ToString() + ".html");
+                wr = new StreamWriter(path, false);
+
+                using (wr)
+                {
+                    HTML.RenderHeader(a,wr);
+                    posts.SingleAnswers[a].GenerateHTML(wr);
+                    HTML.RenderBottom(wr);
+                }
+            }
+
+            Console.WriteLine("Generating TOC...");
+            path = Path.Combine(htmldir, "index.html");
+            wr = new StreamWriter(path, false);
+            using (wr)
+            {
+                HTML.RenderTOC(site, posts, wr);
+            }
         }
 
         [STAThread]

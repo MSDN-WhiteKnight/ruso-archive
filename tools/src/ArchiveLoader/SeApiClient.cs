@@ -113,5 +113,24 @@ namespace ArchiveLoader
 
             return posts;
         }
+
+        public string LoadSingleAnswer(int id)
+        {
+            StringBuilder request = new StringBuilder(500);
+            request.Append(apiurl + "answers/");
+            request.Append(id.ToString());
+            request.Append("?site=" + this.site);
+            request.Append("&filter=withbody");
+
+            string apires = DoRequest(request.ToString());
+
+            dynamic data = JSON.Parse(apires);
+            IEnumerable<object> items;
+            items = JSON.ToCollection(data.items);
+            object retval = items.FirstOrDefault();
+
+            if (retval != null) return JSON.Stringify(retval);
+            else return null;
+        }
     }
 }
