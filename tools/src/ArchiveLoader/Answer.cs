@@ -21,12 +21,8 @@ namespace ArchiveLoader
 
         public void GenerateHTML(TextWriter wr)
         {
-            dynamic data = this.DataDynamic;
-            dynamic owner = JSON.GetPropertyValue(data, "owner");
-            string ownerstr;
-
-            if (owner != null) ownerstr = String.Format("<a href=\"{0}\">{1}</a>", owner.link, owner.display_name);
-            else ownerstr = "(unknown person)";
+            dynamic data = this.DataDynamic;            
+            string ownerstr = HTML.GetOwnerString(data);
                         
             wr.WriteLine("<h2>Answer {0}</h2>", data.answer_id);
             wr.WriteLine("<p><a href=\"https://{0}/a/{1}/\">Source</a> - by {2}</p>", this.site, data.answer_id, ownerstr);

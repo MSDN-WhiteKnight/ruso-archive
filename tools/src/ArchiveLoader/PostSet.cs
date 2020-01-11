@@ -72,8 +72,7 @@ namespace ArchiveLoader
                         questions[qid].AddAnswer(a);
                     }
                     else
-                    {
-                        Console.WriteLine("Question without parent answer: {0}", files[i]);
+                    {                        
                         single_answers[id] = a;
                     }
                 }
@@ -83,6 +82,8 @@ namespace ArchiveLoader
                     Console.WriteLine(ex.ToString());
                 }
             }
+
+            Console.WriteLine("{0} answers without parent question", single_answers.Count);
 
             return new PostSet { Questions = questions, SingleAnswers = single_answers };
         }
