@@ -10,6 +10,8 @@ namespace ArchiveLoader
     {
         public Dictionary<int, Question> Questions { get; set; }
         public Dictionary<int, Answer> SingleAnswers { get; set; }
+        public Dictionary<int, string> MarkdownQuestions { get; set; }
+        public Dictionary<int, string> MarkdownAnswers { get; set; }
 
         protected PostSet() { }
 
@@ -18,6 +20,10 @@ namespace ArchiveLoader
             Dictionary<int, Question> questions = new Dictionary<int, Question>();
             Dictionary<int, Answer> answers = new Dictionary<int, Answer>();
             Dictionary<int, Answer> single_answers = new Dictionary<int, Answer>();
+
+            Dictionary<int, string> mdquestions =new Dictionary<int,string>();
+            Dictionary<int, string> mdanswers = new Dictionary<int, string>();
+
             string[] files = Directory.GetFiles(path, "Q*.json");
 
             for (int i = 0; i < files.Length; i++)
@@ -83,9 +89,63 @@ namespace ArchiveLoader
                 }
             }
 
-            Console.WriteLine("{0} answers without parent question", single_answers.Count);
+            files = Directory.GetFiles(path, "Q*.md");
 
-            return new PostSet { Questions = questions, SingleAnswers = single_answers };
+            for (int i = 0; i < files.Length; i++)
+            {
+                string file = Path.GetFileNameWithoutExtension(files[i]);
+                string idstr = file.Substring(1);
+                int id;
+
+                if (!Int32.TryParse(idstr, out id))
+                {
+                    Console.WriteLine("Bad question id = {0} in file {1}", idstr, files[i]);
+                    continue;
+                }
+
+                try
+                {
+                    string md = File.ReadAllText(files[i], Encoding.UTF8);                    
+                    mdquestions[id] = md;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error reading file " + files[i]);
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            files = Directory.GetFiles(path, "A*.md");
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                string file = Path.GetFileNameWithoutExtension(files[i]);
+                string idstr = file.Substring(1);
+                int id;
+
+                if (!Int32.TryParse(idstr, out id))
+                {
+                    Console.WriteLine("Bad answer id = {0} in file {1}", idstr, files[i]);
+                    continue;
+                }
+
+                try
+                {
+                    string md = File.ReadAllText(files[i], Encoding.UTF8);
+                    mdanswers[id] = md;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error reading file " + files[i]);
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            //Console.WriteLine("{0} answers without parent question", single_answers.Count);
+
+            return new PostSet { 
+                Questions = questions, SingleAnswers = single_answers, MarkdownQuestions = mdquestions, MarkdownAnswers = mdanswers 
+            };
         }
     }
 }

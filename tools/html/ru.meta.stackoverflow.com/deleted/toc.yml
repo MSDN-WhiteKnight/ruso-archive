@@ -1,0 +1,9 @@
+- name: "ru.meta.stackoverflow.com: Deleted posts"
+  href: index.md
+  items:
+  - name: "Answer 9895"
+    href: 9895.md
+  - name: "Answer 9969"
+    href: 9969.md
+  - name: "Answer 9584"
+    href: 9584.md

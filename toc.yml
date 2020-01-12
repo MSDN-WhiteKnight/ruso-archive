@@ -1,2 +1,4 @@
-- name: Deleted messages
+﻿- name: "Удаленные сообщения (2016-2019)"
   href: deleted-messages/
+- name: "Основной архив"
+  href: tools/html/index.md
