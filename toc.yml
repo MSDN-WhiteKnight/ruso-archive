@@ -1,2 +1,4 @@
 - name: Deleted messages
   href: deleted-messages/
+- name: Posts
+  href: tools/html/ru.stackoverflow.com/posts/
