@@ -1,2 +1,9 @@
-- name: Posts
-  href: index.html
+- name: "ru.stackoverflow.com: Posts"
+  href: index.md
+  items:
+  - name: "Определение методов класса с одинаковой сигнатурой"
+    href: 865803.md
+  - name: "С# Имя из названия переменной гетера/сеттера"
+    href: 931182.md
+  - name: "Answer 882523"
+    href: 882523.md

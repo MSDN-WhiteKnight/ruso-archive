@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "D:/VADIM/repos/ruso-archive",
+  "source_base_path": "C:/VADIM/repos/ruso-archive",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,10 +9,10 @@
       "output": {
         ".html": {
           "relative_path": "deleted-messages/main.html",
-          "hash": "8BlX8mFROwP/qV4RgJ2kzg=="
+          "hash": "L0gO6vUmEbb4CxFRnCKczg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -21,10 +21,10 @@
       "output": {
         ".html": {
           "relative_path": "deleted-messages/meta.html",
-          "hash": "KPhZrAtGv+afRTgl1G/bGQ=="
+          "hash": "2w/hg+KfZmX55dlOTD3BJg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -45,22 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "14CWTd0cAuVrddzkatt/Lw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "readme.md",
-      "output": {
-        ".html": {
-          "relative_path": "readme.html",
-          "hash": "IA5Uko4iISX5TmIbrATjWA=="
+          "hash": "qKXQV1fD9W5uRWVML50i7g=="
         }
       },
       "is_incremental": false,
@@ -72,54 +57,1306 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "jLXb464k4H1cl392jKBwrA=="
+          "hash": "7btOsGGPmw5biHlkk10TUg=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "type": "Resource",
-      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/865803.html",
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/index.md",
       "output": {
-        "resource": {
-          "relative_path": "tools/html/ru.stackoverflow.com/posts/865803.html"
+        ".html": {
+          "relative_path": "tools/html/index.html",
+          "hash": "oikd8MVnzPB1R2HwY761NQ=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "type": "Resource",
-      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/882523.html",
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/9584.md",
       "output": {
-        "resource": {
-          "relative_path": "tools/html/ru.stackoverflow.com/posts/882523.html"
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/9584.html",
+          "hash": "SBmZhU59gd/zuePY3T006Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/9895.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/9895.html",
+          "hash": "qx8tCyTgN01xJrWEOD38dg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/9969.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/9969.html",
+          "hash": "bbPU0xYgH02WoBan5YoiNw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/index.html",
+          "hash": "jfOYNb3YyY9MQjiz23Lg4Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/deleted/toc.html",
+          "hash": "VLjJg8VTBqCQs1QeSuH8gQ=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "type": "Resource",
-      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/931182.html",
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10000.md",
       "output": {
-        "resource": {
-          "relative_path": "tools/html/ru.stackoverflow.com/posts/931182.html"
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10000.html",
+          "hash": "U0uimxcWAL1g21ab7b/pag=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10004.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10004.html",
+          "hash": "rChyE0Bu60OCieNIQrnE1Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10005.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10005.html",
+          "hash": "gbEz7qIf1+CiMV5wu1JpMQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10007.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10007.html",
+          "hash": "cg8Wz9PgHiQCOjrH20Mh1A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10008.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10008.html",
+          "hash": "Wt5azXrMIWWQSh2VpB50YA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9800.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9800.html",
+          "hash": "FUyM0atJk4K4ZQlSIxc3TA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9803.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9803.html",
+          "hash": "PWzIZxcnZegnP57H4WB4zA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9804.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9804.html",
+          "hash": "ECz0bWon0mMZNk7LMepoGw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9805.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9805.html",
+          "hash": "5FR8g+GcEQH8smO3T7Nw8A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9807.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9807.html",
+          "hash": "Usk9T94tpv9Uu4YkxMMmiw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9810.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9810.html",
+          "hash": "lL19gkOxkRxjyUaCSWwthw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9811.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9811.html",
+          "hash": "hFbVnuwVSM6myd3ErYdbMQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9815.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9815.html",
+          "hash": "GTVVb65gppsDZF6tS+yfpA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9816.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9816.html",
+          "hash": "Z4JgID5lbI5yvCV7yRub+A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9817.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9817.html",
+          "hash": "phQOb1phMpsDdf2lGv8hKQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9821.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9821.html",
+          "hash": "eHG1NLkp7o4NZRsCwZdoNg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9823.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9823.html",
+          "hash": "XyFz2lFoL/+6zdOkPymaKA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9824.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9824.html",
+          "hash": "HLkaYnHL7jyLFKZZFTjHCg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9826.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9826.html",
+          "hash": "4NS2TfgllB/PSER+5xn9/w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9832.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9832.html",
+          "hash": "92v+4409Zr6DAgO1BbeJfQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9835.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9835.html",
+          "hash": "kiO6fApVMfAzdnPg9zK8Cg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9838.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9838.html",
+          "hash": "hhdJwPtQJPf/gCBtBYG9pg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9841.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9841.html",
+          "hash": "3cG464pnrY3sBeOmjFooVQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9842.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9842.html",
+          "hash": "ObntyB+96QytLPLSKgNRmA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9843.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9843.html",
+          "hash": "HgKLk9qrykBeJu+K8qRGbQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9844.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9844.html",
+          "hash": "TB/txYJV+vqobmyXepOVnQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9845.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9845.html",
+          "hash": "MXWYoEyZSfN4gWuCiUmkEA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9848.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9848.html",
+          "hash": "Ojn/UGnJW47K0V7lXrLWmw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9850.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9850.html",
+          "hash": "G03UQjum45h6lg7ya92qvg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9852.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9852.html",
+          "hash": "i+B+SlnpSSDUwMiQTw4xHA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9855.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9855.html",
+          "hash": "vg0YFLCvM4Wa/hEEvD0Xtw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9857.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9857.html",
+          "hash": "x5ZxytZTRrf8pqdXN0rmlA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9859.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9859.html",
+          "hash": "tyh7PdNvzs5fk++E9t5GXw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9862.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9862.html",
+          "hash": "LG6Q6VERdWoa5uT8j752hQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9863.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9863.html",
+          "hash": "jvCLXMZjVM1AmxjGg/004g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9866.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9866.html",
+          "hash": "v5+sP906Qz0vb6fvxs7jcg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9868.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9868.html",
+          "hash": "/wLGPwxdrvGmBxMd6Od0TQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9869.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9869.html",
+          "hash": "GQ5B+yEEO8l4uBMaRSSVFA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9870.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9870.html",
+          "hash": "2lQ/C/NDJ+5bPLL5K1CmJA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9873.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9873.html",
+          "hash": "9KqSp27neEQbZir1FStUPw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9874.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9874.html",
+          "hash": "pHcSmqZEccWMSut0FZFLHg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9876.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9876.html",
+          "hash": "4Cn84gz3utJayHdAkS1b5g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9880.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9880.html",
+          "hash": "/ZoxyNk5wMi2bgdptm5Lbg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9882.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9882.html",
+          "hash": "Gmy9QMDRpPRN3W0lz7s+kA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9883.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9883.html",
+          "hash": "BbE5hmp+h1DA8LFLynQsZA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9884.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9884.html",
+          "hash": "9TLtfxzEaAWdx8EYSYmFSA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9885.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9885.html",
+          "hash": "pXE9YEKkac0yLduj0iu1iA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9887.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9887.html",
+          "hash": "MJ/agtrWypKkFU3XO+UKPA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9889.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9889.html",
+          "hash": "X9QQAbeEbkOyDkXWrWY1eg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9890.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9890.html",
+          "hash": "o3XykdD+2jO7AON5V7QkWQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9891.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9891.html",
+          "hash": "rOSE8ImdcbFAH+NL/PDGEQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9894.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9894.html",
+          "hash": "HzPHEfZh1vbkq9ooyCu+4g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9897.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9897.html",
+          "hash": "vusoQZOhWpH9Lx5xrCQdsQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9901.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9901.html",
+          "hash": "IJu8RIHgsJIq5qZtiIUnVQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9903.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9903.html",
+          "hash": "k9VWPDHSYFqW2LceHqvUig=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9905.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9905.html",
+          "hash": "40u/PF+YiD1G5g2UPfwqDA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9907.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9907.html",
+          "hash": "E0kOyPT5kwXHp5KKNlWsCw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9908.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9908.html",
+          "hash": "BrTY7eIe1b5jEcpgoGx5ZA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9911.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9911.html",
+          "hash": "aO1N4hAhgWJczKcxPfiY5g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9912.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9912.html",
+          "hash": "aMGMRwYiN5gO0+V5C+hRHg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9914.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9914.html",
+          "hash": "MEQB8CkeUW4fOs1NKB+UUQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9918.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9918.html",
+          "hash": "mORbbybSQKQm8eP/XTBImw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9919.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9919.html",
+          "hash": "i0aY5BzS1FpSTWMHKSACnA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9920.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9920.html",
+          "hash": "VJtR00slGr3R/fdlX3xlFQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9927.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9927.html",
+          "hash": "w8zWN8cGf1ItfUjIkIH27Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9928.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9928.html",
+          "hash": "T+NMPjoSfpeX3P1ZpFya6g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9930.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9930.html",
+          "hash": "cH4YCRmI1Npec+xQb66zEQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9931.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9931.html",
+          "hash": "A7xCo3VlVobF21GHqkhzjQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9932.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9932.html",
+          "hash": "piTGEluJQGUbYO6nozbfxA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9938.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9938.html",
+          "hash": "NGuzaOMaZSAs3LHMCvFhBA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9940.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9940.html",
+          "hash": "cqijMR0y+tjKpqrGDERJYQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9942.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9942.html",
+          "hash": "TUhnfY9THkIprBUblSahVQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9945.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9945.html",
+          "hash": "SK72gPCyuSI6SIPG1NylIA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9947.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9947.html",
+          "hash": "TX3TqST2d4twbYgP43rNTA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9952.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9952.html",
+          "hash": "YKLkTxERb14uveJOTk6mSg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9953.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9953.html",
+          "hash": "oOfn1G1oWWZIoPjrhFYbWw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9956.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9956.html",
+          "hash": "GMBiTquhU+fanjH9/fpaqg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9958.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9958.html",
+          "hash": "MlIYzS3ECxvMwdeEUxqOnA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9961.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9961.html",
+          "hash": "e4FbQTMuiiaV8jl1wd+chQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9963.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9963.html",
+          "hash": "c4r6OdzXA6XQgppbz8CHyw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9965.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9965.html",
+          "hash": "k73AIfbTe4ZMI0Bx9NtejA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9966.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9966.html",
+          "hash": "qQUZ86pnitiFbJXmp8Mf9Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9971.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9971.html",
+          "hash": "/alTKdWWU93xrMFlgZw49g=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9973.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9973.html",
+          "hash": "+4nr1E2jDzC8l9LvM9myQw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9976.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9976.html",
+          "hash": "t2zkD/UA304bb3dq99ezRA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9977.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9977.html",
+          "hash": "d88JAmirZ5Vm2M/l4dpVpw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9979.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9979.html",
+          "hash": "2ye8xmbIOpGrtbheh5j3gA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9981.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9981.html",
+          "hash": "DUCEiV9nV7UfdGTKK6PJ4A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9986.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9986.html",
+          "hash": "9ybG8RjLSncZcrHfXLWM5A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9987.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9987.html",
+          "hash": "shbbJKex8FDBZUT8JQJTFw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9988.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9988.html",
+          "hash": "y+CvWj18KfD7Nsl56lSSBw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9989.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9989.html",
+          "hash": "PCqGCmEY9coR9YbiFeTSiQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9991.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9991.html",
+          "hash": "gkYrRy1AdtDWrd4P/zc2QA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9994.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9994.html",
+          "hash": "i7Ls92JVI7ki2EZomWV+3A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9998.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9998.html",
+          "hash": "snWfQ3R/1yOWJ+3bOJV6eg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9999.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9999.html",
+          "hash": "jezd+VkeRG/IngVEcoXVHA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/index.html",
+          "hash": "Pc6M3mrgs+uD6JBHYzoQ9Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/toc.html",
+          "hash": "yfA264R9K74it1a9Oy4Vzw=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "type": "Resource",
-      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/index.html",
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/865803.md",
       "output": {
-        "resource": {
-          "relative_path": "tools/html/ru.stackoverflow.com/posts/index.html"
+        ".html": {
+          "relative_path": "tools/html/ru.stackoverflow.com/posts/865803.html",
+          "hash": "cfmzG/Cy+n7OcoE90/9pzQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/882523.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.stackoverflow.com/posts/882523.html",
+          "hash": "JSa76o26Lv76NatCJ48qgg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/931182.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.stackoverflow.com/posts/931182.html",
+          "hash": "2koxOSVat9BtClCtlWIkPQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.stackoverflow.com/posts/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.stackoverflow.com/posts/index.html",
+          "hash": "cctliFXRPeEQ9MqElyiFIw=="
+        }
+      },
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -128,7 +1365,19 @@
       "output": {
         ".html": {
           "relative_path": "tools/html/ru.stackoverflow.com/posts/toc.html",
-          "hash": "Eqt2lvYXVvvfe1FqCDUSBw=="
+          "hash": "U3HAt06v2YjzyKcbl7eFxA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "tools/html/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/toc.html",
+          "hash": "KNoQav8vOrb5V3ZNmLr1Ng=="
         }
       },
       "is_incremental": false,
@@ -138,21 +1387,12 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
+        "can_incremental": true,
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
+        "skipped_file_count": 0
       },
       "processors": {
-        "ResourceDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -161,17 +1401,17 @@
           "skipped_file_count": 0
         },
         "ConceptualDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 4,
-          "skipped_file_count": 0
+          "total_file_count": 109,
+          "skipped_file_count": 109
         }
       }
     },
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
         "incrementalPhase": "postProcessing",
         "total_file_count": 0,
         "skipped_file_count": 0
