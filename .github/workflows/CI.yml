@@ -1,0 +1,23 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Build with MSBuild
+      run: |
+        & "$env:windir\Microsoft.NET\Framework\v4.0.30319\msbuild.exe" tools\src\RuSoTools.sln
+    - name: Generate website
+      run: |
+        & cd tools\src\ArchiveLoader\bin\Debug\
+          ArchiveLoader.exe generate
+    - name: Archive build results
+      uses: actions/upload-artifact@v1
+      with:
+          name: Data
+          path: tools/
