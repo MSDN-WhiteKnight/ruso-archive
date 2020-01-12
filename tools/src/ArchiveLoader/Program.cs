@@ -278,7 +278,7 @@ namespace ArchiveLoader
             {
                 string title = questions[q].DataDynamic.title;                
 
-                path = Path.Combine(targetdir, q.ToString() + ".html");
+                path = Path.Combine(targetdir, q.ToString() + ".md");
                 wr = new StreamWriter(path, false);
 
                 using (wr)
@@ -291,7 +291,7 @@ namespace ArchiveLoader
 
             foreach (int a in posts.SingleAnswers.Keys)
             {
-                path = Path.Combine(targetdir, a.ToString() + ".html");
+                path = Path.Combine(targetdir, a.ToString() + ".md");
                 wr = new StreamWriter(path, false);
 
                 using (wr)
@@ -302,12 +302,46 @@ namespace ArchiveLoader
                 }
             }
 
+            Console.WriteLine("Markdown questions: {0}", posts.MarkdownQuestions.Count);
+
+            foreach (int q in posts.MarkdownQuestions.Keys)
+            {  
+                path = Path.Combine(targetdir, q.ToString() + ".md");
+                wr = new StreamWriter(path, false);
+
+                using (wr)
+                {
+                    wr.Write(posts.MarkdownQuestions[q]);
+                }
+            }
+
+            Console.WriteLine("Markdown answers: {0}", posts.MarkdownAnswers.Count);
+
+            foreach (int a in posts.MarkdownAnswers.Keys)
+            {
+                path = Path.Combine(targetdir, a.ToString() + ".md");
+                wr = new StreamWriter(path, false);
+
+                using (wr)
+                {
+                    wr.Write(posts.MarkdownAnswers[a]);
+                }
+            }
+
             Console.WriteLine("Generating TOC ({0}: {1})...",site,toc_title);
-            path = Path.Combine(targetdir, "index.html");
+            path = Path.Combine(targetdir, "index.md");
             wr = new StreamWriter(path, false);
             using (wr)
             {
                 HTML.RenderTOC(site,toc_title, posts, wr);
+            }
+
+            Console.WriteLine("Generating toc.yml ({0}: {1})...", site, toc_title);
+            path = Path.Combine(targetdir, "toc.yml");
+            wr = new StreamWriter(path, false);
+            using (wr)
+            {
+                HTML.RenderYamlTOC(site, toc_title, posts, wr);
             }
         }
 
@@ -317,40 +351,45 @@ namespace ArchiveLoader
             if (args.Length == 0)
             {
                 LoadData();
-                Generate("ru.meta.stackoverflow.com", "posts", "Posts");
-                Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
-                Generate("ru.stackoverflow.com", "posts", "Posts");
+
+                if (!Console.IsInputRedirected)
+                {
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                }
             }
-            else if (args.Length >= 3 && args[0] == "-saveq")
+            else if (args.Length >= 3 && args[0] == "saveq")
             {
                 SaveQuestion(args[1], Convert.ToInt32(args[2]));
+                Console.WriteLine("Done");
             }
-            else if (args.Length >= 3 && args[0] == "-savea")
+            else if (args.Length >= 3 && args[0] == "savea")
             {
                 SaveSingleAnswer(args[1], Convert.ToInt32(args[2]));
+                Console.WriteLine("Done");
             }
-            else if (args.Length >= 1 && args[0] == "-generate")
+            else if (args.Length >= 1 && args[0] == "generate")
             {
                 Generate("ru.meta.stackoverflow.com", "posts", "Posts");
                 Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
                 Generate("ru.stackoverflow.com", "posts", "Posts");
+                Console.WriteLine("Done");
             }
             else
             {
                 Console.WriteLine(" *** RuSO Archive Tool *** ");
                 Console.WriteLine(" Usage: ");
-                Console.WriteLine("ArchiveLoader -saveq [site] [question_id] | Save question and its answers");
+                Console.WriteLine("ArchiveLoader saveq [site] [question_id] | Save question and its answers");
+                Console.WriteLine("ArchiveLoader savea [site] [question_id] | Save single answer");
+                Console.WriteLine("ArchiveLoader generate                   | Generate website");
                 Console.WriteLine();
-            }
-            
-            Console.WriteLine("Done");
 
-            if (!Console.IsInputRedirected)
-            {
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
+                if (!Console.IsInputRedirected)
+                {
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                }
             }
-
         }
     }
 }
