@@ -14,7 +14,9 @@
     ],
     "resource": [
       {
-        "files": [		  
+        "files": [
+          "deleted-messages/*.txt",
+          "deleted-messages/*.png",	  
           "images/**"
         ]
       }

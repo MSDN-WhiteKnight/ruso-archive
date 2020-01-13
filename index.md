@@ -5,6 +5,7 @@
 - [Main (2016-2019)](deleted-messages/main.md)
 - [Meta (2016-2019)](deleted-messages/meta.md)
 - [Meta (2019+)](tools/html/ru.meta.stackoverflow.com/deleted/index.md)
+- [Chat 2019-04-05](deleted-messages/chat-20190405.txt)
 
 ## Сохраненные сообщения
 
