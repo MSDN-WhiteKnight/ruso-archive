@@ -96,7 +96,7 @@
           "hash": "qx8tCyTgN01xJrWEOD38dg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -108,7 +108,7 @@
           "hash": "bbPU0xYgH02WoBan5YoiNw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -120,7 +120,7 @@
           "hash": "jfOYNb3YyY9MQjiz23Lg4Q=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -214,6 +214,18 @@
         ".html": {
           "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10012.html",
           "hash": "0jxYZkLtxLZtTNKQOnu8cw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10013.md",
+      "output": {
+        ".html": {
+          "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/10013.html",
+          "hash": "oSfWpBu3x5ICyTt42pmgxQ=="
         }
       },
       "is_incremental": false,
@@ -465,7 +477,7 @@
       "output": {
         ".html": {
           "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9844.html",
-          "hash": "TB/txYJV+vqobmyXepOVnQ=="
+          "hash": "oRoly+xT2GCudJjS+N6+ng=="
         }
       },
       "is_incremental": false,
@@ -837,7 +849,7 @@
       "output": {
         ".html": {
           "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/9907.html",
-          "hash": "E0kOyPT5kwXHp5KKNlWsCw=="
+          "hash": "Vqraqlj4eoSu9DlZt2DmiA=="
         }
       },
       "is_incremental": false,
@@ -1317,7 +1329,7 @@
       "output": {
         ".html": {
           "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/index.html",
-          "hash": "alszMLAPdy9b/aknq6pU0A=="
+          "hash": "UInU0Zw/WP3quBt6ozhpeA=="
         }
       },
       "is_incremental": false,
@@ -1329,7 +1341,7 @@
       "output": {
         ".html": {
           "relative_path": "tools/html/ru.meta.stackoverflow.com/posts/toc.html",
-          "hash": "5h51N5nYYr//7StsxHw93A=="
+          "hash": "8cOdlOX+Nl8rfSnu/EzQPw=="
         }
       },
       "is_incremental": false,
@@ -1344,7 +1356,7 @@
           "hash": "cfmzG/Cy+n7OcoE90/9pzQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1356,7 +1368,7 @@
           "hash": "JSa76o26Lv76NatCJ48qgg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1368,7 +1380,7 @@
           "hash": "2koxOSVat9BtClCtlWIkPQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1380,7 +1392,7 @@
           "hash": "cctliFXRPeEQ9MqElyiFIw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1427,8 +1439,8 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 111,
-          "skipped_file_count": 7
+          "total_file_count": 112,
+          "skipped_file_count": 108
         }
       }
     },
