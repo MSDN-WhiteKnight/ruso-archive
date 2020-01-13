@@ -15,8 +15,16 @@ jobs:
     - name: Generate website
       run: |
         Set-Location -Path tools\src\ArchiveLoader\bin\Debug\; .\ArchiveLoader.exe generate
-    - name: Archive build results
+    - name: Build website with DocFX
+      run: |
+        choco install docfx; docfx .\docfx.json
+    - name: Archive program binaries
       uses: actions/upload-artifact@v1
       with:
-          name: Output
+          name: Program
           path: tools\src\ArchiveLoader\bin\Debug\
+    - name: Archive website build results
+      uses: actions/upload-artifact@v1
+      with:
+          name: Website
+          path: html\
