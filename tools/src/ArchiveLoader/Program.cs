@@ -29,6 +29,8 @@ namespace ArchiveLoader
 
             SeApiClient client = new SeApiClient(APIURL, site);
 
+            Console.WriteLine(" Updating archive data: {0}", DateTime.Now);
+
             while (true)
             {
                 Console.WriteLine("Loading posts {0} to {1}...", i1, i2);
@@ -374,6 +376,21 @@ namespace ArchiveLoader
                 Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
                 Generate("ru.stackoverflow.com", "posts", "Posts");
                 Console.WriteLine("Done");
+            }
+            else if (args.Length >= 1 && args[0] == "load")
+            {
+                TextWriter wr = new StreamWriter("ArchiveLoader.log", true);
+                using (wr)
+                {
+                    Console.SetOut(wr);
+                    Console.SetError(wr);
+                    LoadData();
+                    Console.WriteLine("Done");
+
+                    var standardOutput = new StreamWriter(Console.OpenStandardOutput());
+                    standardOutput.AutoFlush = true;
+                    Console.SetOut(standardOutput);
+                }
             }
             else
             {
