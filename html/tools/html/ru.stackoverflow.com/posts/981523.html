@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1088;&#1086;&#1073;&#1083;&#1077;&#1084;&#1072; &#1089; PlaySoundA | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1088;&#1086;&#1073;&#1083;&#1077;&#1084;&#1072; &#1089; PlaySoundA | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Проблема с PlaySoundA</h1>
+<p><a href="https://ru.stackoverflow.com/questions/981523/%d0%9f%d1%80%d0%be%d0%b1%d0%bb%d0%b5%d0%bc%d0%b0-%d1%81-playsounda">Source</a> - by <a href="https://ru.stackoverflow.com/users/268032/33cc00">33cc00</a></p>
+<blockquote>
+<p>Воспроизвожу звук так:</p>
+<pre class="lang-cpp prettyprint-override"><code>PlaySound( "C:\\snd.wav" , NULL , SND_FILENAME | SND_ASYNC );
+</code></pre>
+<p>В итоге если звук нужно воспроизвести несколько раз, при каждом воспроизведении старый звук прекращается не доиграв до конца.</p>
+<p>Как можно сделать чтобы звуки проигрывались, при этом не завершая предыдущий пока он сам по себе не доиграет?</p>
+</blockquote>
+<h2>Answer 981582</h2>
+<p><a href="https://ru.stackoverflow.com/a/981582/">Source</a> - by <a href="https://ru.stackoverflow.com/users/193157/goldstar-labs">goldstar_labs</a></p>
+<blockquote>
+<p>Первый способ:<br>
+Вызывать <code>PlaySound</code> с флагом <code>SND_SYNC</code> в цикле столько раз, сколько надо.</p>
+<pre><code>int main() 
+{
+    for (int i = 0; i &lt; 2; ++i)
+    {
+        BOOL ret = PlaySound(L"c:\\Windows\\media\\Alarm01.wav", NULL, SND_FILENAME | SND_SYNC | SND_NOSTOP);
+
+        if (ret != TRUE)
+        {
+            std::cerr &lt;&lt; "Error playing sound :(" &lt;&lt; std::endl;
+        }
+    }
+
+    system("pause");
+    return 0;
+}
+</code></pre>
+<p>Минус такого способа в блокирующем вызове PlaySound, пока проигрывание звука не завершится функция не вернет управление. Можно поместить данный код в поток и управлять</p>
+<p>Второй:
+Можно вызвать <code>PlaySound</code> с флагом <code>SND_LOOP</code></p>
+<pre><code>int main() 
+{
+    BOOL ret = PlaySound(L"c:\\Windows\\media\\Alarm01.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+    if (ret != TRUE)
+    {
+        std::cerr &lt;&lt; "Error playing sound :(" &lt;&lt; std::endl;
+    }
+
+    system("pause");
+
+    // Stop playing
+    PlaySound(NULL, NULL, 0);
+
+    return 0;
+}
+</code></pre>
+<p>Минус - непонятно как контролировать, сколько раз проигрался звук.</p>
+</blockquote>
+<h2>Answer 981830</h2>
+<p><a href="https://ru.stackoverflow.com/a/981830/">Source</a> - by <a href="https://ru.stackoverflow.com/users/268032/33cc00">33cc00</a></p>
+<blockquote>
+<p>К сожалению, проблему невозможно решить, или нужно делать очень дикие костыли.</p>
+<p>Сделал проще, подключил библиотеку BASS и все работает как нужно, правда уже без WinAPI функции.</p>
+</blockquote>
+<h2>Answer 981885</h2>
+<p><a href="https://ru.stackoverflow.com/a/981885/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>PlaySound - самый примитивный из звуковых API в Windows, кроме того, устаревший лет 10 назад. Параллельное воспроизведение он действительно не поддерживает (видимо, для отслеживания состояния воспроизведения используется какой-то глобальный объект, который каждый раз сбрасывается). PlaySound нормально использовать для воспроизведения коротких звуков из ресурсов или системных звуков, но для файлов лучше взять что-то более продвинутое, хотя бы <a href="https://docs.microsoft.com/en-us/windows/desktop/directshow/how-to-play-a-file" rel="nofollow noreferrer">DirectShow</a>:</p>
+<pre><code>#include &lt;windows.h&gt;
+#include &lt;Dshow.h&gt;
+#include &lt;stdio.h&gt;
+
+#pragma comment( lib, "winmm.lib" )
+#pragma comment( lib, "Strmiids.lib" )
+
+void PlaySoundNew_Impl(const TCHAR* file){ //реализация воспроизведения файла с использованием DirectShow
+
+    IGraphBuilder *pGraph = NULL;
+    IMediaControl *pControl = NULL;
+    IMediaEvent   *pEvent = NULL;       
+
+    // Create the filter graph manager and query for interfaces.
+    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, 
+                        IID_IGraphBuilder, (void **)&amp;pGraph);
+    if (FAILED(hr))
+    {
+        printf("ERROR - Could not create the Filter Graph Manager.");
+        return;
+    }
+
+    hr = pGraph-&gt;QueryInterface(IID_IMediaControl, (void **)&amp;pControl);
+    hr = pGraph-&gt;QueryInterface(IID_IMediaEvent, (void **)&amp;pEvent);
+
+    // Build the graph. 
+    hr = pGraph-&gt;RenderFile(file, NULL);
+    if (SUCCEEDED(hr))
+    {
+        // Run the graph.
+        hr = pControl-&gt;Run();
+        if (SUCCEEDED(hr))
+        {
+            // Wait for completion.
+            long evCode;
+            pEvent-&gt;WaitForCompletion(INFINITE, &amp;evCode);                       
+        }
+    }
+    else printf("RenderFile error 0x%x",(UINT)hr);
+
+    pControl-&gt;Release();
+    pEvent-&gt;Release();
+    pGraph-&gt;Release();
+}
+
+DWORD WINAPI PlaySoundNew_ThreadProc(LPVOID lpThreadParameter){ //функция для фонового потока
+
+    HRESULT hr = CoInitialize(NULL); //для фонового потока также нужна инициализация COM
+    if (FAILED(hr))
+    {
+        printf("ERROR - Could not initialize COM library");
+        return 1;
+    }
+
+    const TCHAR* file = (const TCHAR*)lpThreadParameter;
+    PlaySoundNew_Impl(file);
+
+    CoUninitialize();
+    return 0;
+}
+
+void PlaySoundNew(const TCHAR* file, bool async){ //воспроизведение файла через DirectShow
+
+    if( async == FALSE){ 
+        PlaySoundNew_Impl(file); //синхронно        
+    }
+    else{ 
+        CreateThread(NULL,0,PlaySoundNew_ThreadProc,(LPVOID)file,0,NULL); //асинхронно
+    }
+}
+
+int main(int argc, char* argv[])
+{   
+    HRESULT hr = CoInitialize(NULL);
+    if (FAILED(hr))
+    {
+        printf("ERROR - Could not initialize COM library");
+        return 1;
+    }
+
+    PlaySoundNew(L"C:\\Music\\Sound1.wav", true);
+    Sleep(2000);
+    PlaySoundNew(L"C:\\Music\\Sound2.wav", true);   
+
+    getchar();
+    CoUninitialize();
+    return 0;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

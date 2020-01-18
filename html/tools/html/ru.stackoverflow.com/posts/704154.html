@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1048;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; Desktop Duplication API | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1048;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; Desktop Duplication API | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Использование Desktop Duplication API</h1>
+<p><a href="https://ru.stackoverflow.com/questions/704154/%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-desktop-duplication-api">Source</a> - by <a href="https://ru.stackoverflow.com/users/238013/d-stark">D .Stark</a></p>
+<blockquote>
+<pre><code>#include "stdafx.h"
+<p>#include &quot;stdafx.h&quot;
+#include &quot;iostream&quot;</p>
+<p>#include &quot;D3D9.h&quot;
+#include &lt;Wincodec.h&gt;
+#include &lt;chrono&gt;</p>
+<p>#include &lt;shellapi.h&gt;
+#include &lt;d3d11.h&gt;
+#include &lt;dxgi1_2.h&gt;
+#include &lt;Atlbase.h&gt;
+#include &lt;comdef.h&gt;</p>
+<p>#include &lt;windows.h&gt;
+#include &lt;shlobj.h&gt;
+#include &lt;shellapi.h&gt;
+#include &lt;dxgi1_2.h&gt;
+#include &lt;d3d11.h&gt;
+#include &lt;memory&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;</p>
+<p>#pragma comment(lib, &quot;D3D11.lib&quot;)
+#pragma comment(lib, &quot;D3d9.lib&quot;)
+#pragma comment(lib, &quot;dxgi.lib&quot;)</p>
+<p>#pragma comment(lib, &quot;gdi32.lib&quot;)</p>
+<p>using namespace System;</p>
+<p>#define EXIT(hr) { if (FAILED(hr)) <br>
+{ Console::WriteLine(&quot;Error!&quot;); <br>
+Console::ReadKey(); return -1; } }</p>
+<p>HBITMAP ExtractBitmap(ID3D11Texture2D* d3dtex, ID3D11Device* pDevice)
+{
+HRESULT hr;</p>
+<pre><code>HBITMAP hBitmapTexture = NULL;
+HGDIOBJ hBitmap;
+
+D3D11_TEXTURE2D_DESC desc;
+ID3D11Texture2D* pNewTexture = NULL;
+
+D3D11_TEXTURE2D_DESC description;
+
+d3dtex-&amp;gt;GetDesc(&amp;amp;desc);
+d3dtex-&amp;gt;GetDesc(&amp;amp;description);
+
+description.BindFlags = 0;
+description.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+description.Usage = D3D11_USAGE_STAGING;
+
+if (FAILED(pDevice-&amp;gt;CreateTexture2D(&amp;amp;description, NULL, &amp;amp;pNewTexture)))
+{
+    Console::WriteLine(&quot;CreateTexture2D failed!&quot;);
+    return NULL;
+}
+
+ID3D11DeviceContext* ctx = NULL;
+pDevice-&amp;gt;GetImmediateContext(&amp;amp;ctx);
+
+ctx-&amp;gt;CopyResource(pNewTexture, d3dtex);
+
+D3D11_MAPPED_SUBRESOURCE resource;
+UINT subresource = D3D11CalcSubresource(0, 0, 0);
+ctx-&amp;gt;Map(pNewTexture, subresource, D3D11_MAP_READ_WRITE, 0, &amp;amp;resource);
+
+// Copy from texture to bitmap buffer.
+uint8_t* sptr = reinterpret_cast&amp;lt;uint8_t*&amp;gt;(resource.pData);
+uint8_t* dptr = new uint8_t[desc.Width*desc.Height * 4];
+
+for (size_t h = 0; h &amp;lt; desc.Height; ++h)
+{
+    size_t msize = std::min&amp;lt;size_t&amp;gt;(desc.Width * 4, resource.RowPitch);
+    memcpy_s(dptr, desc.Width * 4, sptr, msize);
+    sptr += resource.RowPitch;
+    dptr += desc.Width * 4;
+}
+
+dptr -= desc.Width*desc.Height * 4;
+
+// Swap BGR to RGB bitmap.
+uint32_t *dPtr = reinterpret_cast&amp;lt;uint32_t*&amp;gt;(dptr);
+for (size_t count = 0; count &amp;lt; desc.Width*desc.Height * 4; count += 4)
+{
+    uint32_t t = *dPtr;
+    uint32_t t1 = (t &amp;amp; 0x00ff0000) &amp;gt;&amp;gt; 16;
+    uint32_t t2 = (t &amp;amp; 0x000000ff) &amp;lt;&amp;lt; 16;
+    uint32_t t3 = (t &amp;amp; 0x0000ff00);
+    uint32_t ta = (t &amp;amp; 0xFF000000);
+    *(dPtr++) = t1 | t2 | t3 | ta;
+}
+
+hBitmapTexture = CreateCompatibleBitmap(GetDC(NULL), desc.Width, desc.Height);
+SetBitmapBits(hBitmapTexture, desc.Width*desc.Height * 4, dptr);
+
+return (HBITMAP)CopyImage(hBitmapTexture, IMAGE_BITMAP, desc.Width, desc.Height, LR_CREATEDIBSECTION);
+</code></pre>
+<p>}</p>
+<p>int main(array&lt;System::String^&gt; ^args)
+{
+HRESULT hr;</p>
+<pre><code>// Supported feature levels.
+D3D_FEATURE_LEVEL featureLevels[] =
+{
+    D3D_FEATURE_LEVEL_11_0,
+    D3D_FEATURE_LEVEL_10_1,
+    D3D_FEATURE_LEVEL_10_0,
+    D3D_FEATURE_LEVEL_9_1
+};
+
+D3D_FEATURE_LEVEL d3dFeatLvl;
+ID3D11Device* pDevice = nullptr;
+ID3D11DeviceContext* pImmediateContext = nullptr;
+
+// Get device object.
+hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE,
+    NULL, 0, featureLevels,
+    ARRAYSIZE(featureLevels),
+    D3D11_SDK_VERSION,
+    &amp;amp;pDevice,
+    &amp;amp;d3dFeatLvl,
+    &amp;amp;pImmediateContext);
+EXIT(hr);
+
+// Get DXGI device.
+IDXGIDevice* DxgiDevice = nullptr;
+hr = pDevice-&amp;gt;QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast&amp;lt;void**&amp;gt;(&amp;amp;DxgiDevice));
+EXIT(hr);
+
+// Get DXGI adapter.
+IDXGIAdapter* DxgiAdapter = nullptr;
+hr = DxgiDevice-&amp;gt;GetParent(__uuidof(IDXGIAdapter), reinterpret_cast&amp;lt;void**&amp;gt;(&amp;amp;DxgiAdapter));
+DxgiDevice-&amp;gt;Release();
+DxgiDevice = nullptr;
+EXIT(hr);
+
+// Get DXGI output.
+IDXGIOutput* DxgiOutput = nullptr;
+hr = DxgiAdapter-&amp;gt;EnumOutputs(0, &amp;amp;DxgiOutput);
+DxgiAdapter-&amp;gt;Release();
+DxgiAdapter = nullptr;
+EXIT(hr);
+
+DXGI_OUTPUT_DESC OutputDesc;
+DxgiOutput-&amp;gt;GetDesc(&amp;amp;OutputDesc);
+
+// Query interface for Output1.
+IDXGIOutput1* DxgiOutput1 = nullptr;
+hr = DxgiOutput-&amp;gt;QueryInterface(__uuidof(DxgiOutput1), reinterpret_cast&amp;lt;void**&amp;gt;(&amp;amp;DxgiOutput1));
+DxgiOutput-&amp;gt;Release();
+DxgiOutput = nullptr;
+EXIT(hr);
+
+// Create desktop duplication.
+IDXGIOutputDuplication* DeskDupl = nullptr;
+hr = DxgiOutput1-&amp;gt;DuplicateOutput(pDevice, &amp;amp;DeskDupl);
+DxgiOutput1-&amp;gt;Release();
+DxgiOutput1 = nullptr;
+EXIT(hr);
+
+DXGI_OUTDUPL_DESC OutputDuplDesc;
+DeskDupl-&amp;gt;GetDesc(&amp;amp;OutputDuplDesc);
+
+///////////////////////////////////////////////////////////////////////////
+
+ID3D11Texture2D* AcquiredDesktopImage = nullptr;
+
+IDXGIResource* DesktopResource = nullptr;
+DXGI_OUTDUPL_FRAME_INFO FrameInfo;
+
+// Get new frame.
+hr = DeskDupl-&amp;gt;AcquireNextFrame(500, &amp;amp;FrameInfo, &amp;amp;DesktopResource);
+EXIT(hr);
+
+// If still holding old frame, destroy it.
+if (AcquiredDesktopImage)
+{
+    AcquiredDesktopImage-&amp;gt;Release();
+    AcquiredDesktopImage = nullptr;
+}
+
+// Query interface for IDXGIResource.
+hr = DesktopResource-&amp;gt;QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast&amp;lt;void**&amp;gt;(&amp;amp;AcquiredDesktopImage));
+DesktopResource-&amp;gt;Release();
+DesktopResource = nullptr;
+EXIT(hr);
+
+HBITMAP hBmp = (HBITMAP)ExtractBitmap(AcquiredDesktopImage, pDevice);
+
+///////////////////////////////////////////////////////////////////////////
+
+System::Drawing::Bitmap::FromHbitmap(IntPtr(hBmp))-&amp;gt;Save(&quot;Screenshot.bmp&quot;);
+
+Console::WriteLine(&quot;END!&quot;);
+Console::ReadKey();
+return 0;
+</code></pre>
+<p>}
+</code></pre><p>
+<p>Привожу пример своего исходника по работе с Desktop Duplication API (на C++/CLI).
+К сожалению, не могу добиться от него результата - картинка получается пустая.
+Каким образом можно поправить этот код, чтобы он работал; +добавить цикл, чтобы можно было получать скрины не вызывая функцию целиком.</p>
+</blockquote>
+<h2>Answer 706395</h2>
+<p><a href="https://ru.stackoverflow.com/a/706395/">Source</a> - by <a href="https://ru.stackoverflow.com/users/206435/%e3%83%92%e3%83%9f%e3%82%b3">ヒミコ</a></p>
+<blockquote>
+<p>Собственно, вот.</p>
+<pre><code>#include "D3D9.h"
+#include &lt;Wincodec.h&gt;
+#include &lt;chrono&gt;
+
+#include &lt;shellapi.h&gt;
+#include &lt;d3d11.h&gt;
+#include &lt;dxgi1_2.h&gt;
+#include &lt;Atlbase.h&gt;
+#include &lt;comdef.h&gt;
+
+#include &lt;windows.h&gt;
+#include &lt;shlobj.h&gt;
+#include &lt;shellapi.h&gt;
+#include &lt;dxgi1_2.h&gt;
+#include &lt;d3d11.h&gt;
+#include &lt;memory&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+
+#pragma comment(lib, "D3D11.lib")
+#pragma comment(lib, "D3d9.lib")
+#pragma comment(lib, "dxgi.lib")
+
+#pragma comment(lib, "gdi32.lib")
+using namespace System;
+
+#define EXIT(hr) { if (FAILED(hr)) \
+                { Console::WriteLine("Error!"); \
+                Console::ReadKey(); return -1; } }
+
+HBITMAP ExtractBitmap(ID3D11Texture2D* d3dtex, ID3D11Device* pDevice)
+{
+    HRESULT hr;
+
+    HBITMAP hBitmapTexture = NULL;
+    HGDIOBJ hBitmap;
+
+    D3D11_TEXTURE2D_DESC desc;
+    ID3D11Texture2D* pNewTexture = NULL;
+
+    D3D11_TEXTURE2D_DESC description;
+
+    d3dtex-&gt;GetDesc(&amp;desc);
+    d3dtex-&gt;GetDesc(&amp;description);
+
+    description.BindFlags = 0;
+    description.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+    description.Usage = D3D11_USAGE_STAGING;
+    description.MiscFlags = 0;
+
+    if (FAILED(pDevice-&gt;CreateTexture2D(&amp;description, NULL, &amp;pNewTexture)))
+    {
+        return NULL;
+    }
+
+    ID3D11DeviceContext* ctx = NULL;
+    pDevice-&gt;GetImmediateContext(&amp;ctx);
+
+    ctx-&gt;CopyResource(pNewTexture, d3dtex);
+
+    D3D11_MAPPED_SUBRESOURCE resource;
+    UINT subresource = D3D11CalcSubresource(0, 0, 0);
+    ctx-&gt;Map(pNewTexture, subresource, D3D11_MAP_READ_WRITE, 0, &amp;resource);
+
+    // Copy from texture to bitmap buffer.
+    uint8_t* sptr = reinterpret_cast&lt;uint8_t*&gt;(resource.pData);
+    uint8_t* dptr = new uint8_t[desc.Width*desc.Height * 4];
+
+    for (size_t h = 0; h &lt; desc.Height; ++h)
+    {
+        size_t msize = std::min&lt;size_t&gt;(desc.Width * 4, resource.RowPitch);
+        memcpy_s(dptr, desc.Width * 4, sptr, msize);
+        sptr += resource.RowPitch;
+        dptr += desc.Width * 4;
+    }
+
+    dptr -= desc.Width*desc.Height * 4;
+
+    // SWAP BGR to RGB bitmap
+    uint32_t *dPtr = reinterpret_cast&lt;uint32_t*&gt;(dptr);
+    for (size_t count = 0; count &lt; desc.Width*desc.Height * 4; count += 4)
+    {
+        uint32_t t = *(dPtr);
+        uint32_t t1 = (t &amp; 0x00ff0000) &gt;&gt; 16;
+        uint32_t t2 = (t &amp; 0x000000ff) &lt;&lt; 16;
+        uint32_t t3 = (t &amp; 0x0000ff00);
+        uint32_t ta = (t &amp; 0xFF000000);
+
+        *(dPtr++) = t1 | t2 | t3 | ta;
+    }
+
+    hBitmapTexture = CreateCompatibleBitmap(GetDC(NULL), desc.Width, desc.Height);
+    SetBitmapBits(hBitmapTexture, desc.Width*desc.Height * 4, dptr);
+
+    return (HBITMAP)CopyImage(hBitmapTexture, IMAGE_BITMAP, desc.Width, desc.Height, LR_CREATEDIBSECTION);
+}
+
+
+int main(array&lt;System::String^&gt; ^args)
+{
+    HRESULT hr;
+
+    // Supported feature levels.
+    D3D_FEATURE_LEVEL featureLevels[] =
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+        D3D_FEATURE_LEVEL_9_1
+    };
+
+    D3D_FEATURE_LEVEL d3dFeatLvl;
+    ID3D11Device* pDevice = nullptr;
+    ID3D11DeviceContext* pImmediateContext = nullptr;
+
+    // Get device object.
+    hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE,
+        NULL, 0, featureLevels,
+        ARRAYSIZE(featureLevels),
+        D3D11_SDK_VERSION,
+        &amp;pDevice,
+        &amp;d3dFeatLvl,
+        &amp;pImmediateContext);
+    EXIT(hr);
+
+    // Get DXGI device.
+    IDXGIDevice* DxgiDevice = nullptr;
+    hr = pDevice-&gt;QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast&lt;void**&gt;(&amp;DxgiDevice));
+
+
+    // Get DXGI adapter.
+    IDXGIAdapter* DxgiAdapter = nullptr;
+    hr = DxgiDevice-&gt;GetParent(__uuidof(IDXGIAdapter), reinterpret_cast&lt;void**&gt;(&amp;DxgiAdapter));
+    if (FAILED(hr))
+    {
+        Console::WriteLine("ERROR: failed to DxgiDevice-&gt;GetParent");
+        Console::Read();
+        return -1;
+    }
+    DxgiDevice-&gt;Release();
+    DxgiDevice = nullptr;
+
+    // Get DXGI output.
+    IDXGIOutput* DxgiOutput = nullptr;
+    hr = DxgiAdapter-&gt;EnumOutputs(0, &amp;DxgiOutput);
+    if (FAILED(hr))
+    {
+        Console::WriteLine("ERROR: failed to DxgiAdapter-&gt;EnumOutputs");
+        Console::Read();
+        return -1;
+    }
+    DxgiAdapter-&gt;Release();
+    DxgiAdapter = nullptr;
+
+    DXGI_OUTPUT_DESC OutputDesc;
+    DxgiOutput-&gt;GetDesc(&amp;OutputDesc);
+
+    // Query interface for Output1.
+    IDXGIOutput1* DxgiOutput1 = nullptr;
+    hr = DxgiOutput-&gt;QueryInterface(__uuidof(IDXGIOutput1), reinterpret_cast&lt;void**&gt;(&amp;DxgiOutput1));
+    if (FAILED(hr))
+    {
+        Console::WriteLine("ERROR: failed to DxgiOutput-&gt;QueryInterface");
+        Console::Read();
+        return -1;
+    }
+
+    DxgiOutput-&gt;Release();
+    DxgiOutput = nullptr;
+
+    // Create desktop duplication.
+    IDXGIOutputDuplication* DeskDupl = nullptr;
+    hr = DxgiOutput1-&gt;DuplicateOutput(pDevice, &amp;DeskDupl);
+    if (FAILED(hr))
+    {
+        Console::WriteLine("ERROR: failed to DxgiOutput1-&gt;DuplicateOutput");
+        Console::Read();
+        return -1;
+    }
+    DxgiOutput1-&gt;Release();
+    DxgiOutput1 = nullptr;
+
+    DXGI_OUTDUPL_DESC OutputDuplDesc;
+    DeskDupl-&gt;GetDesc(&amp;OutputDuplDesc);
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    ID3D11Texture2D* AcquiredDesktopImage = nullptr;
+
+    IDXGIResource* DesktopResource = nullptr;
+    DXGI_OUTDUPL_FRAME_INFO FrameInfo;
+
+    // Get new frame.
+    hr = DeskDupl-&gt;AcquireNextFrame(500, &amp;FrameInfo, &amp;DesktopResource);
+    if (FAILED(hr))
+    {
+        Console::WriteLine("ERROR: failed to DeskDupl-&gt;AcquireNextFrame");
+        Console::Read();
+        return -1;
+    }
+
+    // If still holding old frame, destroy it.
+    //if (AcquiredDesktopImage)
+    //{
+        //AcquiredDesktopImage-&gt;Release();
+        //AcquiredDesktopImage = nullptr;
+    //}
+
+    // Query interface for IDXGIResource.
+    hr = DesktopResource-&gt;QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast&lt;void**&gt;(&amp;AcquiredDesktopImage));
+
+    if (FAILED(hr))
+    {
+        Console::WriteLine("ERROR: failed to DesktopResource-&gt;QueryInterface");
+        Console::Read();
+        return -1;
+    }
+    DesktopResource-&gt;Release();
+    DesktopResource = nullptr;
+
+    HBITMAP hBmp = (HBITMAP)ExtractBitmap(AcquiredDesktopImage, pDevice);
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    System::Drawing::Bitmap::FromHbitmap(IntPtr(hBmp))-&gt;Save("Screenshot.bmp");
+
+    Console::WriteLine("END!");
+    Console::ReadKey();
+    return 0;
+}
+</code></pre>
+<p>На вопрос где же была ошибка, могу сказать одно.</p>
+<p>Копируя чужой код в свой проект, проверяйте его, а так же читайте комментарии :)</p>
+</blockquote>
+<h2>Answer 718000</h2>
+<p><a href="https://ru.stackoverflow.com/a/718000/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Подробный ответ дан <a href="https://social.msdn.microsoft.com/Forums/ru-RU/740eb02c-b29e-40a9-b3bd-ff0b0468a95a/desktop-duplication-api-?forum=fordesktopru&amp;prof=required" rel="nofollow noreferrer">здесь</a></p>
+<p>Суть в двух моментах:</p>
+<ol>
+<li><p>Однократного вызова AcquireNextFrame недостаточно для получения изображения экрана, так как "Frame" - это необязательно изображение экрана, а совокупность некоторой информации о изменении состояния рабочего стола (среди которой, иногда, может быть и изображение экрана). Для получения изображения нужно циклически вызывать AcquireNextFrame и сохранять все полученные результаты.</p></li>
+<li><p>Для корректного зацикливания нужно освободить Frame:</p>
+<pre>IDXGIOutputDuplication* DeskDupl;
+//инициализация...
+
+DeskDupl->AcquireNextFrame(5000, &FrameInfo, &DesktopResource);
+
+//работа с Frame...
+
+hr = DeskDupl->ReleaseFrame();//освобождаем Frame
+
+if (FAILED(hr))
+{
+   //произошла ошибка
+}
+else
+{
+   //можно получить следующий Frame
+}</pre></li>
+</ol>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

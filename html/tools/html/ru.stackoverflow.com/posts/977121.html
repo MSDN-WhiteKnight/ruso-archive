@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1100; &#1087;&#1086;&#1089;&#1083;&#1077;&#1076;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100;&#1085;&#1086;&#1089;&#1090;&#1100; &#1082;&#1086;&#1084;&#1072;&#1085;&#1076; cmd &#1080;&#1079; WindowsForm? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1080;&#1090;&#1100; &#1087;&#1086;&#1089;&#1083;&#1077;&#1076;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100;&#1085;&#1086;&#1089;&#1090;&#1100; &#1082;&#1086;&#1084;&#1072;&#1085;&#1076; cmd &#1080;&#1079; WindowsForm? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как выполнить последовательность команд cmd из WindowsForm?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/977121/%d0%9a%d0%b0%d0%ba-%d0%b2%d1%8b%d0%bf%d0%be%d0%bb%d0%bd%d0%b8%d1%82%d1%8c-%d0%bf%d0%be%d1%81%d0%bb%d0%b5%d0%b4%d0%be%d0%b2%d0%b0%d1%82%d0%b5%d0%bb%d1%8c%d0%bd%d0%be%d1%81%d1%82%d1%8c-%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4-cmd-%d0%b8%d0%b7-windowsform">Source</a> - by <a href="https://ru.stackoverflow.com/users/336698/%d0%98%d0%b2%d0%b0%d0%bd">Иван</a></p>
+<blockquote>
+<p>Как запустить cmd в скрытом режиме из приложения WindowsForm, и выполнять в ней команды с получением ответа.
+Или как запустить консольное приложение с атрибутами из WindowsForm, и выполнять в ней команды с получением ответа.</p>
+<p>Пример: Запустилась cmd
+выполнилась 1 команда
+получил ответ
+если в ответе 1 то
+выполняем команду 2
+и тд…</p>
+</blockquote>
+<h2>Answer 978850</h2>
+<p><a href="https://ru.stackoverflow.com/a/978850/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>cmd.exe принимает команды через свой стандартный ввод, а результат выдает в стандартный вывод. Соответственно, нужно перенаправить эти потоки при создании процесса:</p>
+<pre><code>public partial class Form1 : Form
+{
+    Process process;
+
+    public Form1()
+    {
+        InitializeComponent();
+        process = new Process();
+        process.StartInfo.FileName = "cmd.exe";
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.RedirectStandardOutput = true;
+        process.StartInfo.RedirectStandardInput = true;
+        process.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);            
+        process.StartInfo.CreateNoWindow = true;
+        process.OutputDataReceived += Process_OutputDataReceived; //подписываемся на событие появления новых данных
+        process.Start();            
+        process.BeginOutputReadLine(); //начинаем операции асинхронного чтения Output
+    }
+
+    private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+    {            
+        //при получении данных из Output, выведем в TextBox 
+        Invoke(new Action(() =&gt; { textBox1.Text += e.Data + Environment.NewLine; }));            
+    }
+
+    void SendCommand(string cmd)
+    {
+        process.StandardInput.WriteLine(cmd);
+        process.StandardInput.Flush();
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+        SendCommand("program.exe arg1 arg2");
+    }
+
+    private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        process.StandardInput.WriteLine("exit");
+        process.StandardInput.Flush();
+        process.Close();
+    }
+}  
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

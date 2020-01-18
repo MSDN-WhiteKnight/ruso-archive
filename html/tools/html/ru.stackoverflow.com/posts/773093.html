@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 773093 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 773093 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 773093</h1>
+<h2>Answer 773093</h2>
+<p><a href="https://ru.stackoverflow.com/a/773093/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Свойство <code>DocumentText</code> возвращает то, что вы просите - код документа. Код содержимого iframe'ов в него не входит, поскольку iframe - это больше, чем просто механизм подстановки одного HTML внутрь другого (*). Чтобы получить документ вместе с содержимым iframe'ов, единственный способ - пройти по всем iframe'ам, взять их содержимое (например, через интерфейс <code>MSHTML.IHTMLIFrameElement3</code>) и подставить в исходный документ. Понятно, нельзя получить содержимое, если iframe смотрит в другой домен.</p>
+<p>Как-то так:</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+
+namespace WebBrowserTest
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();            
+        }
+
+        public String DomDocumentText
+        {
+            get
+            {
+                var document = webBrowser1.Document;
+                string returnstr = "";
+
+                MSHTML.IHTMLDocument3 doc3 = null;
+                MSHTML.HTMLDocument new_doc = null;
+                MSHTML.IHTMLDocument2 doc2 = null;
+                MSHTML.IHTMLElementCollection elems = null;
+                MSHTML.IHTMLDocument3 new_doc3 = null;
+                MSHTML.IHTMLElementCollection elems_new = null;
+
+                MSHTML.IHTMLDocument3 child_doc = null;
+                MSHTML.IHTMLElement content = null;
+                MSHTML.IHTMLElement content_new = null;
+                MSHTML.IHTMLElementCollection elem_col = null;
+
+
+                try
+                {
+                    doc3 = (MSHTML.IHTMLDocument3)document.DomDocument;//исходный документ
+
+                    new_doc = new MSHTML.HTMLDocument();//копия документа
+
+                    doc2 = new_doc as MSHTML.IHTMLDocument2;
+                    doc2.write(webBrowser1.DocumentText);//создаем копию документа
+
+                    //получаем все iframe в документе и его копии...
+
+                    elems = doc3.getElementsByTagName("iframe");
+
+                    new_doc3 = new_doc as MSHTML.IHTMLDocument3;
+
+                    elems_new = (new_doc3).getElementsByTagName("iframe");
+
+
+                    int i = 0;
+                    foreach (MSHTML.IHTMLIFrameElement3 elem in elems) //для каждого iframe...
+                    {
+                        try
+                        {
+                            child_doc = elem.contentDocument as MSHTML.IHTMLDocument3;
+                            elem_col = child_doc.getElementsByTagName("body");
+                            if (elem_col == null || elem_col.length == 0) { i++; continue; }
+
+                            content = (MSHTML.IHTMLElement)elem_col.item(0);
+                            string str = (content).innerHTML;//получаем содержимое iframe
+                            content_new = elems_new.item(i) as MSHTML.IHTMLElement;
+                            (content_new).outerHTML = str;//заменяем iframe на его содержимое                  
+                            i++;
+                        }
+                        catch (Exception ex)
+                        {
+                            //для iframe, URL которых в другом домене, будет исключение
+                            //HRESULT: 0x80070005 (E_ACCESSDENIED)
+                            System.Diagnostics.Debug.WriteLine("Can't process iframe " + i.ToString());
+                            System.Diagnostics.Debug.WriteLine(ex.Message);
+                        }
+                        finally
+                        {
+                            //Очистка ресурсов, задействованных в цикле...
+                            if (child_doc != null)
+                            {
+                                Marshal.ReleaseComObject(child_doc); child_doc = null;
+                            }
+
+                            if (elem_col != null)
+                            {
+                                Marshal.ReleaseComObject(elem_col); elem_col = null;
+                            }
+
+                            if (content != null)
+                            {
+                                Marshal.ReleaseComObject(content); content = null;
+                            }
+
+                            if (content_new != null)
+                            {
+                                Marshal.ReleaseComObject(content_new); content_new = null;
+                            }
+                        }
+                    }//end foreach
+
+
+                    returnstr = new_doc.documentElement.innerHTML;
+                    return returnstr;
+                }
+                finally
+                {                
+                    //Окончательная очистка ресурсов...
+                    if (doc3 != null) Marshal.ReleaseComObject(doc3);
+                    if (new_doc != null) Marshal.ReleaseComObject(new_doc);
+                    if (doc2 != null) Marshal.ReleaseComObject(doc2);
+                    if (elems != null) Marshal.ReleaseComObject(elems);
+                    if (new_doc3 != null) Marshal.ReleaseComObject(new_doc3);
+                    if (elems_new != null) Marshal.ReleaseComObject(elems_new);
+                    if (child_doc != null) Marshal.ReleaseComObject(child_doc);
+                    if (content != null) Marshal.ReleaseComObject(content);
+                    if (content_new != null) Marshal.ReleaseComObject(content_new);
+                    if (elem_col != null) Marshal.ReleaseComObject(elem_col);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(DomDocumentText);
+        }
+    }
+}
+</code></pre>
+<p>Для использования нужно подключить библиотеку COM-объектов IE (в Visual Studio  <kbd>Добавить ссылку</kbd> -> <kbd>СОМ</kbd> -> <kbd>Microsoft HTML Object Library</kbd>, либо вручную указать файл mshtml.tlb). </p>
+<p><strong>Примечания</strong></p>
+<p>(*) - Для iframe браузер создает отдельное окно внутри основного окна, которое может, в общем случае, отображать не HTML, а документ другого типа. Поэтому в модели DOM свойство <code>InnerHTML</code> у iframe соответствует не его содержимому, а замещающему тексту для браузеров без поддержки iframe, который можно поместить внутрь тега iframe (что редко используется в наше время).</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

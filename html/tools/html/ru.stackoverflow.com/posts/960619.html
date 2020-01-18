@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1048;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1084;&#1077;&#1085;&#1080; &#1082;&#1072;&#1088;&#1090;&#1080;&#1085;&#1082;&#1080; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1048;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1084;&#1077;&#1085;&#1080; &#1082;&#1072;&#1088;&#1090;&#1080;&#1085;&#1082;&#1080; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Изменение имени картинки</h1>
+<p><a href="https://ru.stackoverflow.com/questions/960619/%d0%98%d0%b7%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b8%d0%bc%d0%b5%d0%bd%d0%b8-%d0%ba%d0%b0%d1%80%d1%82%d0%b8%d0%bd%d0%ba%d0%b8">Source</a> - by <a href="https://ru.stackoverflow.com/users/269015/frallen">Frallen</a></p>
+<blockquote>
+<p>Есть sql запрос, который меняет название рецепта через введенное значение в texbox.
+Картинка привязывается к имени в textbox</p>
+<pre><code>var directory = FilePath.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Firstimage2.Source = new BitmapImage(new Uri(FilePath.Combine(directory, "images/" + vivodnamerecept.Text + ".png")));
+</code></pre>
+<p><strong>НО</strong> я ведь меняю название рецепта,а картинка остается с прежним именем.
+Мне нужно чтобы если я изменил текст в textbox (напр Кулич на Куличи) и нажал на кнопку то у картинки должно изменится имя (Куличи.png) </p>
+<p>Как это сделать?</p>
+</blockquote>
+<h2>Answer 961418</h2>
+<p><a href="https://ru.stackoverflow.com/a/961418/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Проблема в том, что при таком способе создания BitmapImage исходный файл открывается монопольно и остается открытым так неопределенное время (видимо, пока его не съест сборщик мусора), так как метода закрытия источника у этого класса нет. Вам нужно вместо этого реализовать загрузку изображения в промежуточный буфер в памяти, тогда вы сможете перемещать его как угодно. Например, это можно реализовать так:</p>
+<pre><code>&lt;Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+        mc:Ignorable="d"
+        Title="MainWindow" Height="400" Width="600"&gt;
+
+    &lt;Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" &gt;
+        &lt;TextBox HorizontalAlignment="Stretch" Height="60" Margin="20,20,170,20"
+                 x:Name="tbFilename"
+                 TextWrapping="Wrap" Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" 
+                 VerticalAlignment="Top" /&gt;
+        &lt;Button Content="Save" HorizontalAlignment="Right" Height="60" Margin="20,20,20,20" 
+                VerticalAlignment="Top" Width="120" Click="Save_Click"
+                IsEnabled="{Binding Path=HasChanges}"/&gt;
+        &lt;Image HorizontalAlignment="Stretch" Height="226" Margin="20,100,20,20" 
+               VerticalAlignment="Stretch" 
+               Source="{Binding Path=Image}"/&gt;
+    &lt;/Grid&gt;
+&lt;/Window&gt;
+</code></pre>
+<hr>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Reflection;
+using System.ComponentModel;
+
+namespace WpfApp1
+{
+    public partial class MainWindow : Window
+    {
+        ImageFile imagefile;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            var directory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            directory = System.IO.Path.Combine(directory, "images");            
+            imagefile = new ImageFile(directory, "test");
+            this.DataContext = imagefile;
+        }     
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            imagefile.Save();
+        }        
+    }
+
+    public class ImageFile: INotifyPropertyChanged
+    {
+        string dir;
+        string source_name;
+        BitmapImage img;
+        string new_name;
+
+        static BitmapImage LoadImage(string path)
+        {
+            byte[] data = System.IO.File.ReadAllBytes(path);
+            var ms = new System.IO.MemoryStream(data);
+            BitmapImage im = new BitmapImage();
+            im.BeginInit();
+            im.StreamSource = ms;
+            im.EndInit();
+            return im;
+        }
+
+        public ImageFile(string d,string name)
+        {
+            dir = d;
+            source_name = name;
+            var source_path = System.IO.Path.Combine(dir, source_name+".png");
+            img = LoadImage(source_path);
+            new_name = name;
+        }
+
+        public string Name
+        {
+            get { return new_name; }
+            set
+            {
+                new_name = value;
+                OnPropertyChanged("Name");
+                OnPropertyChanged("HasChanges");
+            }
+        }
+
+        public ImageSource Image
+        {
+            get { return img; }
+        }
+
+        public bool HasChanges
+        {
+            get { return new_name != source_name; }
+        }
+
+        public void Save()
+        {
+            if (new_name != source_name)
+            {                
+                var source_path = System.IO.Path.Combine(dir, source_name + ".png");
+                var dest_path = System.IO.Path.Combine(dir, new_name + ".png");
+
+                System.IO.File.Move(source_path, dest_path);
+                source_name = new_name;                
+                OnPropertyChanged("HasChanges");
+
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(name));
+        }
+    }
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

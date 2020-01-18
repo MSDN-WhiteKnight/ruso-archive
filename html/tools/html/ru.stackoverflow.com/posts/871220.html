@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 871220 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 871220 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 871220</h1>
+<h2>Answer 871220</h2>
+<p><a href="https://ru.stackoverflow.com/a/871220/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Вместо того, чтобы парсить XML, лучше воспользоваться <a href="https://docs.microsoft.com/ru-ru/windows/desktop/TaskSchd/enumerating-tasks-and-displaying-task-information" rel="nofollow noreferrer">библиотекой COM-объектов планировщика задач</a>. Она должна быть в составе ОС по крайней мере начиная с Windows 7.</p>
+<pre><code>//Reference: COM -&gt; Task scheduler 1.1 type library
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
+using System.Runtime.InteropServices;
+using TaskScheduler;
+
+...       
+
+static void PrintFolder(ITaskFolder folder) //метод для рекурсивного обхода каталогов
+{
+    IRegisteredTaskCollection coll = null;
+    ITaskDefinition def = null;
+    ITaskFolderCollection folders = null;
+    IExecAction exec = null;
+
+    try
+    {
+        coll = folder.GetTasks(0); //найдем задачи в каталоге
+
+        foreach (IRegisteredTask item in coll)
+        {
+            if (def != null) { Marshal.ReleaseComObject(def); def = null; }
+            if (exec != null) { Marshal.ReleaseComObject(exec); exec = null; }
+
+            def = item.Definition;
+            bool autostart = false;
+
+            foreach (ITrigger trig in def.Triggers)
+            {
+                //нас интересуют только задачи, запускающиеся при включении или входе пользователя
+                if (trig.Type == _TASK_TRIGGER_TYPE2.TASK_TRIGGER_BOOT ||
+                    trig.Type == _TASK_TRIGGER_TYPE2.TASK_TRIGGER_LOGON)
+                {
+                    autostart = true; break;
+                }
+            }
+
+            if (autostart)
+            {
+                //выведем информацию о задаче
+                Console.Write( item.Name + " ");
+                foreach (IAction act in def.Actions)
+                {
+                    if (act.Type != _TASK_ACTION_TYPE.TASK_ACTION_EXEC)
+                    {
+                        Console.Write( "(" + act.Type.ToString() + ")");
+                    }
+                    else
+                    {
+                        exec = (IExecAction)act;
+                        //выведем командную строку, запускаемую задачей
+                        Console.Write( "(" + exec.Path + " " + exec.Arguments + ")");
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+
+        //обходим подкаталоги текущего каталога
+        folders = folder.GetFolders(0);
+        foreach (ITaskFolder item in folders)
+        {
+            PrintFolder(item);
+        }
+    }
+    finally
+    {
+        if (coll != null) Marshal.ReleaseComObject(coll);
+        if (def != null) Marshal.ReleaseComObject(def);
+        if (folders != null) Marshal.ReleaseComObject(folders);
+        if (exec != null) Marshal.ReleaseComObject(exec);
+    }
+}
+
+public static void PrintTasks() 
+{
+    TaskScheduler.TaskScheduler ts = null;
+    ITaskService its = null;
+    ITaskFolder folder = null;
+
+    try
+    {
+        ts = new TaskScheduler.TaskScheduler();
+        its = (ITaskService)ts;
+
+        //подключаемся к локальной машине
+        its.Connect();
+
+        //получаем корневой каталог задач
+        folder = its.GetFolder("\\");                
+
+        //рекурсивно выводим задачи
+        PrintFolder(folder);
+    }
+    finally
+    {
+        if (folder != null) Marshal.ReleaseComObject(folder);
+        if (its != null) Marshal.ReleaseComObject(its);
+        if (ts != null) Marshal.ReleaseComObject(ts);
+    }
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

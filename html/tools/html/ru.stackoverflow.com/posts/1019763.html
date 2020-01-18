@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1048;&#1089;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1077; &#1076;&#1077;&#1083;&#1077;&#1085;&#1080;&#1103; &#1085;&#1072; &#1085;&#1086;&#1083;&#1100; C# | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1048;&#1089;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1077; &#1076;&#1077;&#1083;&#1077;&#1085;&#1080;&#1103; &#1085;&#1072; &#1085;&#1086;&#1083;&#1100; C# | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Исключение деления на ноль C#</h1>
+<p><a href="https://ru.stackoverflow.com/questions/1019763/%d0%98%d1%81%d0%ba%d0%bb%d1%8e%d1%87%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b4%d0%b5%d0%bb%d0%b5%d0%bd%d0%b8%d1%8f-%d0%bd%d0%b0-%d0%bd%d0%be%d0%bb%d1%8c-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/317856/valera">Valera</a></p>
+<blockquote>
+<p>Как отловить исключение деления на ноль, когда у тебя данные в double хранятся. С Int всё отлично ловит(try...catch естественно). При делении на число равное нулю, ничего не крашится ХД, а хотелось бы. Как верно это дело отловить. If не подойдет)</p>
+</blockquote>
+<h2>Answer 1019768</h2>
+<p><a href="https://ru.stackoverflow.com/a/1019768/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Никак, потому что исключения нет. Деление на ноль для double вместо исключения выдает специальное значение (Infinity или NaN):</p>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/arithmetic-operators#floating-point-arithmetic-overflow" rel="nofollow noreferrer">https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/arithmetic-operators#floating-point-arithmetic-overflow</a></p>
+<blockquote>
+  <p>Arithmetic operations with the float and double types never throw an exception. The result of arithmetic operations with those types can be one of special values that represent infinity and not-a-number</p>
+<pre><code>double a = 1.0 / 0.0;
+Console.WriteLine(a);                    // output: Infinity
+Console.WriteLine(double.IsInfinity(a)); // output: True
+
+Console.WriteLine(double.MaxValue + double.MaxValue); // output: Infinity
+
+double b = 0.0 / 0.0;
+Console.WriteLine(b);                // output: NaN
+Console.WriteLine(double.IsNaN(b));  // output: True
+</code></pre>
+</blockquote>
+<p>Но для отлова деления на ноль в общем случае это использовать нельзя, так как эти же значения могут говорить о переполнении или, скажем, о конвертации в double непредставимого в нем битового значения. Так что только проверка делителя перед делением.</p>
+<p>Конкретно для Windows на архитектурах x86/x86-64 можно включить аппаратное исключение при делении на ноль с помощью <a href="https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/controlfp-s?view=vs-2017" rel="nofollow noreferrer">_controlfp_s</a>:</p>
+<pre><code>using System;
+using System.Runtime.InteropServices;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        /* msvcrt.dll - недокументированная версия Microsoft CRT, поставляемая с Windows.
+        Можно вместо нее взять CRT из конкретной версии Visual C++ Redistributable, например
+        msvcr110.dll для Visual C++ 2012 */
+        [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        static extern uint _controlfp_s(ref uint _CurrentState, uint _NewValue, uint _Mask);
+
+        const uint _EM_ZERODIVIDE = 0x00000008;
+        const uint _MCW_EM = 0x0008001f;
+
+        static bool EnableFloatingPointTrap()
+        {
+            uint control_word = 0;
+            uint err = _controlfp_s(ref control_word, 0, 0);
+            if (err != 0) return false;
+
+            //снимаем флаг, маскирующий исключение при делении на ноль
+            uint control_word_new = control_word &amp; ~_EM_ZERODIVIDE;
+            err = _controlfp_s(ref control_word, control_word_new, _MCW_EM);
+            if (err != 0) return false;
+
+            return true;
+        }
+
+        static void Main(string[] args)
+        {
+            EnableFloatingPointTrap();
+            double x = 0.0;
+            double y = 1.0 / x; //System.DivideByZeroException
+            Console.WriteLine(y);
+
+            Console.ReadKey();
+
+        }
+    }  
+}
+</code></pre>
+<p>Однако делать так не рекомендуется, так как неизвестно, как поведет себя CLR, если поменять флаги процессора на неожиданные для нее значения. Кроме того, другой код может вернуть назад значение флага.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

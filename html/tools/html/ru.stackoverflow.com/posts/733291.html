@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1089;&#1074;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; &#1079;&#1074;&#1091;&#1082;&#1086;&#1074;&#1086;&#1075;&#1086; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; MMDevice API | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1089;&#1074;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; &#1079;&#1074;&#1091;&#1082;&#1086;&#1074;&#1086;&#1075;&#1086; &#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; MMDevice API | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Получить свойства звукового устройства с помощью MMDevice API</h1>
+<p><a href="https://ru.stackoverflow.com/questions/733291/%d0%9f%d0%be%d0%bb%d1%83%d1%87%d0%b8%d1%82%d1%8c-%d1%81%d0%b2%d0%be%d0%b9%d1%81%d1%82%d0%b2%d0%b0-%d0%b7%d0%b2%d1%83%d0%ba%d0%be%d0%b2%d0%be%d0%b3%d0%be-%d1%83%d1%81%d1%82%d1%80%d0%be%d0%b9%d1%81%d1%82%d0%b2%d0%b0-%d1%81-%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e-mmdevice-api">Source</a> - by <a href="https://ru.stackoverflow.com/users/243717/range">Range</a></p>
+<blockquote>
+<p>Требуется получить определённые свойства звукового устройства(выделю на скриншоте). Я дошёл до свойств, получил количество этих свойств, могу к ним обратиться - но что делать далее не знаю. Подскажите, как получить данные свойства(именно, наименование, количество..)
+Код:</p>
+<pre><code>    HRESULT hresult; // для ошибок и проверок
+    const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
+    const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
+    CoInitialize(NULL); // инициализируем систему COM
+    hresult = CoCreateInstance( // создаем COM - объект, связанный с устройствами аудио вывода
+        CLSID_MMDeviceEnumerator, NULL,
+        CLSCTX_ALL, IID_IMMDeviceEnumerator,
+        (void**)&amp;enumerator);
+
+    IMMDeviceCollection *pCollection = nullptr; // указатель на коллекцию устройств
+    IMMDevice *pEndpoint = NULL; // указатель на конкретное устройство
+
+    hresult = this-&gt;enumerator-&gt;EnumAudioEndpoints( // получаем список устройств в системе(оно одно у меня, добавлять не думаю, но
+        // если буду - делать проверку устройств(ниже) в цикле, там надо получить количество устройств ещё
+        eRender, DEVICE_STATE_ACTIVE,
+        &amp;pCollection);
+
+    hresult = pCollection-&gt;Item(0, &amp;pEndpoint); // получаем единственное устройство в системе
+    IPropertyStore* propertys; // свойства устройства
+    hresult = pEndpoint-&gt;OpenPropertyStore(STGM_READ, &amp;propertys); // получаем свойства устройства для чтения(запись нам не нужна)
+    DWORD count;  propertys-&gt;GetCount(&amp;count);
+    for (DWORD i(0); i &lt; count; i++)
+    {
+        PROPERTYKEY prop;
+        propertys-&gt;GetAt(i, &amp;prop);
+        // конкретные свойства(какие?) лежат в prop, но как "расшифровать" - не понимаю
+    }
+</code></pre>
+<p><a href="https://i.stack.imgur.com/8TzKd.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/8TzKd.png" alt="введите сюда описание изображения"></a></p>
+</blockquote>
+<h2>Answer 736536</h2>
+<p><a href="https://ru.stackoverflow.com/a/736536/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Значения GUID свойств находятся в <em>Functiondiscoverykeys_devpkey.h</em>. Например, имя устройства - <code>PKEY_Device_FriendlyName</code>.</p>
+<p>Но информация о разъемах - это не свойства. Ее получают с помощью другого API -  <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370825(v=vs.85).aspx" rel="nofollow noreferrer">Device Topology</a>. Интерфейс <code>IKsJackDescription</code> позволяет получить структуру <code>KSJACK_DESCRIPTION</code>, содержащую данные о типе разъема, его расположении и т.д.</p>
+<p>Пример кода для вывода ID, имени и информации о разъемах для всех аудиоустройств:</p>
+<pre><code>#define INITGUID
+#include &lt;stdio.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;Windows.h&gt;
+#include &lt;Objbase.h&gt;
+#include &lt;Shobjidl.h&gt;
+#include &lt;MMDeviceAPI.h&gt;
+#include &lt;locale.h&gt;
+#include &lt;Functiondiscoverykeys_devpkey.h&gt;
+#include &lt;Devicetopology.h&gt;
+
+#pragma comment(lib, "uuid.lib")
+
+
+#define SAFE_RELEASE(punk)  \
+              if ((punk) != NULL)  \
+                { (punk)-&gt;Release(); (punk) = NULL; }
+
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+ setlocale(LC_ALL,"Russian");
+ CoInitialize(NULL);
+ TCHAR* pstr=NULL;
+ DWORD state;
+
+ IMMDeviceEnumerator *deviceEnumerator = NULL;
+ IMMDeviceCollection *deviceCollection = NULL;
+ IMMDevice* dev=NULL;
+ IPropertyStore *propertyStore=NULL;
+ IDeviceTopology *pDeviceTopology = NULL;
+ IConnector *pConnFrom = NULL;
+ IConnector *pConnTo = NULL;
+ IPart *pPart = NULL;
+ IKsJackDescription *pJackDesc = NULL;
+
+ HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&amp;deviceEnumerator));
+ if(FAILED(hr)) {printf("CoCreateInstance failed");goto End;}
+
+ /*Получение аудиоустройств*/ 
+ hr = deviceEnumerator-&gt;EnumAudioEndpoints(eRender,  DEVICE_STATE_ACTIVE|DEVICE_STATE_UNPLUGGED, &amp;deviceCollection);
+ if(FAILED(hr)) {printf("EnumAudioEndpoints failed");goto End;}
+
+ UINT deviceCount;
+ hr = deviceCollection-&gt;GetCount(&amp;deviceCount);
+ if(FAILED(hr)) {printf("GetCount failed");goto End;}
+
+ for (UINT DeviceIndex = 0 ; DeviceIndex &lt; deviceCount; DeviceIndex++)
+ {
+    deviceCollection-&gt;Item(DeviceIndex,&amp;dev);
+    if(FAILED(hr)) {printf("Item failed");continue;}
+    dev-&gt;GetId(&amp;pstr);
+    if(FAILED(hr)) {printf("GetId failed");continue;}
+    printf("Device id: ");
+    wprintf(pstr);
+    printf("\n");
+
+
+    hr = dev-&gt;OpenPropertyStore(STGM_READ, &amp;propertyStore); 
+    if(FAILED(hr)) {printf("OpenPropertyStore failed");goto Next;}
+
+    /*Получение имени устройства*/
+    PROPVARIANT friendlyName;
+    PropVariantInit(&amp;friendlyName);
+    hr = propertyStore-&gt;GetValue(PKEY_Device_FriendlyName, &amp;friendlyName);
+
+    if(FAILED(hr)) {printf("GetValue failed");goto Next;}
+    wprintf(friendlyName.pwszVal);
+    printf("\n");
+    PropVariantClear(&amp;friendlyName);  
+
+    /*Получение информации о разъемах*/
+
+    hr = dev-&gt;Activate(__uuidof(IDeviceTopology), CLSCTX_ALL,
+                           NULL, (void**)&amp;pDeviceTopology);
+    if(FAILED(hr)) {printf("Activate failed");goto Next;}
+
+    hr = pDeviceTopology-&gt;GetConnector(0, &amp;pConnFrom);
+    if(FAILED(hr)) {printf("GetConnector failed");goto Next;} 
+
+    hr = pConnFrom-&gt;GetConnectedTo(&amp;pConnTo);
+    if (HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr)
+    {
+        // The adapter device is not currently active.
+        hr = E_NOINTERFACE;
+    }
+    if(FAILED(hr)) {printf("GetConnector 2 failed");goto Next;} 
+
+    // Get the connector's IPart interface.
+    hr = pConnTo-&gt;QueryInterface(__uuidof(IPart), (void**)&amp;pPart);
+    if(FAILED(hr)) {printf("QueryInterface failed");goto Next;}
+
+    // Activate the connector's IKsJackDescription interface.  
+    hr = pPart-&gt;Activate(CLSCTX_INPROC_SERVER,
+                         __uuidof(IKsJackDescription), (void**)&amp;pJackDesc);
+    if(FAILED(hr)) {printf("IKsJackDescription failed: %d\n",hr);goto Next;}
+
+    UINT jacks=0;
+    KSJACK_DESCRIPTION jdesc;
+    hr=pJackDesc-&gt;GetJackCount(&amp;jacks);
+    if(FAILED(hr)) {printf("GetJackCount failed");goto Next;}
+    printf("Jack count: %d\n\n",jacks);
+
+    /*Вывод разъемов*/
+    for(UINT i=0;i&lt;jacks;i++){
+        hr=pJackDesc-&gt;GetJackDescription(i,&amp;jdesc);
+        if(FAILED(hr)) {printf("GetJackDescription failed");continue;}
+        printf("* Jack #%d *\n",(int)(i+1)); 
+
+        if(jdesc.IsConnected==0){//состояние
+            printf("Device not connected\n");      
+        }else{
+            printf("Device connected\n");
+        }
+
+        wprintf(L"Connection Type: ");
+        switch (jdesc.ConnectionType)//тип разъема
+        {
+        case eConnType3Point5mm: wprintf(L"Разъем 3.5 мм \n");break;
+        case eConnTypeAtapiInternal:wprintf(L"Разъем ATAPI \n");break;
+        case eConnTypeRCA: wprintf(L"Разъем RCA \n");break;
+        case eConnTypeQuarter: wprintf(L"Разъем 1/2 дюйма \n");break;
+        case eConnTypeOtherAnalog: wprintf(L"Аналоговый разъем \n");break;
+        case eConnTypeOtherDigital: wprintf(L"Цифровой разъем \n"); break;
+        default: wprintf(L"0x%x\n",jdesc.ConnectionType); break;
+        }
+
+        wprintf(L"GeoLocation: ");
+
+        switch (jdesc.GeoLocation)//расположение разъема
+        {
+        case eGeoLocFront: wprintf(L"Передняя панель\n");break;
+        case eGeoLocRear: wprintf(L"Задняя панель\n");break;
+        case eGeoLocHDMI: wprintf(L"HDMI\n");break;
+        case eGeoLocATAPI: wprintf(L"ATAPI\n");break;
+        case eGeoLocNotApplicable: wprintf(L"Не определено\n");break;
+        default: printf("0x%x\n",jdesc.GeoLocation);break;
+        }
+
+
+     }
+     /* очистка ресурсов */
+  Next:SAFE_RELEASE(dev);SAFE_RELEASE(propertyStore);SAFE_RELEASE(pDeviceTopology);
+       SAFE_RELEASE(pConnFrom);SAFE_RELEASE(pConnTo);SAFE_RELEASE(pPart);
+       SAFE_RELEASE(pJackDesc);
+       printf("\n");
+ } 
+
+End:
+ SAFE_RELEASE(deviceEnumerator);
+ SAFE_RELEASE(deviceCollection);
+ system("PAUSE");
+ CoUninitialize();
+ return 0;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,720 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1088;&#1086;&#1073;&#1083;&#1077;&#1084;&#1099; &#1089; BASS | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1088;&#1086;&#1073;&#1083;&#1077;&#1084;&#1099; &#1089; BASS | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Проблемы с BASS</h1>
+<p><a href="https://ru.stackoverflow.com/questions/708052/%d0%9f%d1%80%d0%be%d0%b1%d0%bb%d0%b5%d0%bc%d1%8b-%d1%81-bass">Source</a> - by <a href="https://ru.stackoverflow.com/users/185348/eanmos">eanmos</a></p>
+<blockquote>
+<p>Пытаюсь скомпилировать такой код:</p>
+<pre><code>/*
+    BASS simple console player
+    Copyright (c) 1999-2015 Un4seen Developments Ltd.
+*/
+
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#define BASSDEF(f) (WINAPI *f) // define the functions as pointers
+#include "bass.h"
+
+#ifdef _WIN32 // Windows
+#include &lt;conio.h&gt;
+#else // OSX/Linux
+#include &lt;sys/time.h&gt;
+#include &lt;termios.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+
+#define Sleep(x) usleep(x*1000)
+
+int _kbhit()
+{
+    int r;
+    fd_set rfds;
+    struct timeval tv={0};
+    struct termios term,oterm;
+    tcgetattr(0,&amp;oterm);
+    memcpy(&amp;term,&amp;oterm,sizeof(term));
+    cfmakeraw(&amp;term);
+    tcsetattr(0,TCSANOW,&amp;term);
+    FD_ZERO(&amp;rfds);
+    FD_SET(0,&amp;rfds);
+    r=select(1,&amp;rfds,NULL,NULL,&amp;tv);
+    tcsetattr(0,TCSANOW,&amp;oterm);
+    return r;
+}
+#endif
+
+// display error messages
+void Error(const char *text) 
+{
+    printf("Error(%d): %s\n",BASS_ErrorGetCode(),text);
+    BASS_Free();
+    exit(0);
+}
+
+void ListDevices()
+{
+    BASS_DEVICEINFO di;
+    int a;
+    for (a=1;BASS_GetDeviceInfo(a,&amp;di);a++) {
+        if (di.flags&amp;BASS_DEVICE_ENABLED) // enabled output device
+            printf("dev %d: %s\n",a,di.name);
+    }
+}
+
+void main(int argc, char **argv)
+{
+    DWORD chan,act,time,level;
+    BOOL ismod;
+    QWORD pos;
+    int a,device=-1;
+
+    printf("Simple console mode BASS example : MOD/MPx/OGG/WAV player\n"
+            "---------------------------------------------------------\n");
+
+    // check the correct BASS was loaded
+    if (HIWORD(BASS_GetVersion())!=BASSVERSION) {
+        printf("An incorrect version of BASS was loaded");
+        return;
+    }
+
+    for (a=1;a&lt;argc;a++) {
+        if (!strcmp(argv[a],"-l")) {
+            ListDevices();
+            return;
+        } else if (!strcmp(argv[a],"-d") &amp;&amp; a+1&lt;argc) device=atoi(argv[++a]);
+        else break;
+    }
+    if (a!=argc-1) {
+        printf("\tusage: contest [-l] [-d #] &lt;file&gt;\n"
+            "\t-l = list devices\n"
+            "\t-d = device number\n");
+        return;
+    }
+
+    // initialize output device
+    if (!BASS_Init(device,44100,0,0,NULL))
+        Error("Can't initialize device");
+
+    // try streaming the file/url
+    if ((chan=BASS_StreamCreateFile(FALSE,argv[argc-1],0,0,BASS_SAMPLE_LOOP))
+        || (chan=BASS_StreamCreateURL(argv[argc-1],0,BASS_SAMPLE_LOOP,0,0))) {
+        pos=BASS_ChannelGetLength(chan,BASS_POS_BYTE);
+        if (BASS_StreamGetFilePosition(chan,BASS_FILEPOS_DOWNLOAD)!=-1) {
+            // streaming from the internet
+            if (pos!=-1)
+#ifdef _WIN32
+                printf("streaming internet file [%I64d bytes]",pos);
+#else
+                printf("streaming internet file [%lld bytes]",pos);
+#endif
+            else
+                printf("streaming internet file");
+        } else
+#ifdef _WIN32
+            printf("streaming file [%I64d bytes]",pos);
+#else
+            printf("streaming file [%lld bytes]",pos);
+#endif
+        ismod=FALSE;
+    } else {
+        // try loading the MOD (with looping, sensitive ramping, and calculate the duration)
+        if (!(chan=BASS_MusicLoad(FALSE,argv[argc-1],0,0,BASS_SAMPLE_LOOP|BASS_MUSIC_RAMPS|BASS_MUSIC_PRESCAN,1)))
+            // not a MOD either
+            Error("Can't play the file");
+        { // count channels
+            float dummy;
+            for (a=0;BASS_ChannelGetAttribute(chan,BASS_ATTRIB_MUSIC_VOL_CHAN+a,&amp;dummy);a++);
+        }
+        printf("playing MOD music \"%s\" [%u chans, %u orders]",
+            BASS_ChannelGetTags(chan,BASS_TAG_MUSIC_NAME),a,(DWORD)BASS_ChannelGetLength(chan,BASS_POS_MUSIC_ORDER));
+        pos=BASS_ChannelGetLength(chan,BASS_POS_BYTE);
+        ismod=TRUE;
+    }
+
+    // display the time length
+    if (pos!=-1) {
+        time=(DWORD)BASS_ChannelBytes2Seconds(chan,pos);
+        printf(" %u:%02u\n",time/60,time%60);
+    } else // no time length available
+        printf("\n");
+
+    BASS_ChannelPlay(chan,FALSE);
+
+    while (!_kbhit() &amp;&amp; (act=BASS_ChannelIsActive(chan))) {
+        // display some stuff and wait a bit
+        level=BASS_ChannelGetLevel(chan);
+        pos=BASS_ChannelGetPosition(chan,BASS_POS_BYTE);
+        time=BASS_ChannelBytes2Seconds(chan,pos);
+#ifdef _WIN32
+        printf("pos %09I64u",pos);
+#else
+        printf("pos %09llu",pos);
+#endif
+        if (ismod) {
+            pos=BASS_ChannelGetPosition(chan,BASS_POS_MUSIC_ORDER);
+            printf(" (%03u:%03u)",LOWORD(pos),HIWORD(pos));
+        }
+        printf(" - %u:%02u - L ",time/60,time%60);
+        if (act==BASS_ACTIVE_STALLED) { // playback has stalled
+            printf("-- buffering : %05u --",(DWORD)BASS_StreamGetFilePosition(chan,BASS_FILEPOS_BUFFER));
+        } else {
+            for (a=27204;a&gt;200;a=a*2/3) putchar(LOWORD(level)&gt;=a?'*':'-');
+            putchar(' ');
+            for (a=210;a&lt;32768;a=a*3/2) putchar(HIWORD(level)&gt;=a?'*':'-');
+        }
+        printf(" R - cpu %.2f%%  \r",BASS_GetCPU());
+        fflush(stdout);
+        Sleep(50);
+    }
+    printf("                                                                             \r");
+
+    // wind the frequency down...
+    BASS_ChannelSlideAttribute(chan,BASS_ATTRIB_FREQ,1000,500);
+    Sleep(300);
+    // ...and fade-out to avoid a "click"
+    BASS_ChannelSlideAttribute(chan,BASS_ATTRIB_VOL,-1,200);
+    // wait for slide to finish
+    while (BASS_ChannelIsSliding(chan,0)) Sleep(1);
+
+    BASS_Free();
+}
+</code></pre>
+<p>Этот пример доступен из коробки. От себя добавил только</p>
+<pre><code>#define BASSDEF(f) (WINAPI* f) // define the functions as pointers
+</code></pre>
+<p>иначе не собиралось. После запуска программа, не открывая окно, сразу падает. <em>gdb</em> пишет </p>
+<pre><code>Program received signal SIGSEGV, Segmentation fault.
+0x00000000 in ?? ()
+
+(gdb) bt
+#0  0x00000000 in ?? ()
+#1  0x004015c1 in main (argc=1, argv=0xdc15b0) at qks.c:68
+</code></pre>
+<p>Даже этот пример не работает:</p>
+<pre><code>#define BASSDEF(f) (WINAPI *f)
+#include "bass.h"
+
+int main() {
+    BASS_Init(-1, 44100, 0, 0, NULL);
+}
+</code></pre>
+<p>Компилирую так:</p>
+<pre><code>gcc.exe -m32 -Wall -Wextra -Wpedantic -lbass -mwindows qks.c -o qks.exe
+</code></pre>
+<p><em>ОС</em> - Windows 10 x64; <em>GCC</em> - 4.9.2</p>
+<p><strong>UPD</strong></p>
+<p>Появился небольшой прогресс. Эта программа компилируется и успешно завершается:</p>
+<pre><code>#include &lt;windows.h&gt;
+#include &lt;commctrl.h&gt;
+#include &lt;stdio.h&gt;
+#define BASSDEF(f) (WINAPI *f)
+#include "bass.h"
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow) {
+    (void) hPrevInstance, (void) lpCmdLine, (void) nCmdShow;
+
+    HINSTANCE bass=LoadLibrary("bass.dll"); // load BASS
+    BASS_Init=GetProcAddress(bass,"BASS_Init"); // get BASS_Init
+    BASS_Init(-1,44100,0,NULL,NULL) // call BASS_Init
+}
+</code></pre>
+<p>Вот что написано в документации:</p>
+<blockquote>
+  <p>The downside is that you have to manually import each function that
+  you use, with the <code>GetProcAddress</code> function. But it has been made a lot
+  simpler to import BASS this way by the use of the <code>BASSDEF #define</code>.
+  Here's a small example:</p>
+<pre><code>#define BASSDEF(f) (WINAPI *f) // define the functions as pointers
+#include "bass.h" ... HINSTANCE bass=LoadLibrary("BASS.DLL"); // load BASS
+BASS_Init=GetProcAddress(bass,"BASS_Init"); // get BASS_Init
+BASS_Init(-1,44100,0,hWnd,NULL); // call BASS_Init
+</code></pre>
+</blockquote>
+<p>Однако при попытке получить адрес других функций ловлю предупреждение:</p>
+<pre><code>warning: assignment from incompatible pointer type
+  BASS_GetVersion=GetProcAddress(bass,"BASS_GetVersion");
+</code></pre>
+<p>И если вызвать эту функцию (или какие-нибудь другие), то снова происходит <code>SIGSEGV</code>.</p>
+<p><strong>UPD 2</strong> </p>
+<p>Приведенный выше пример работает, если добавит в начало тела <code>main</code> эти строки:</p>
+<pre><code>HINSTANCE bass=LoadLibrary("bass.dll"); // load BASS
+BASS_Init=GetProcAddress(bass,"BASS_Init"); // get BASS_Init
+BASS_GetVersion=GetProcAddress(bass,"BASS_GetVersion");
+BASS_Free=GetProcAddress(bass,"BASS_Free");
+BASS_SetVolume=GetProcAddress(bass,"BASS_SetVolume");
+BASS_SetConfig=GetProcAddress(bass,"BASS_SetConfig");
+BASS_SampleFree=GetProcAddress(bass,"BASS_SampleFree");
+BASS_SampleLoad=GetProcAddress(bass,"BASS_SampleLoad");
+BASS_SampleGetChannel=GetProcAddress(bass,"BASS_SampleGetChannel");
+BASS_ChannelPlay=GetProcAddress(bass,"BASS_ChannelPlay");
+BASS_ChannelStop=GetProcAddress(bass,"BASS_ChannelStop");
+BASS_GetVolume=GetProcAddress(bass,"BASS_GetVolume");
+BASS_GetVersion=GetProcAddress(bass,"BASS_GetVersion");
+BASS_GetCPU=GetProcAddress(bass,"BASS_GetCPU");
+BASS_Pause=GetProcAddress(bass,"BASS_Pause");
+BASS_Start=GetProcAddress(bass,"BASS_Start");
+BASS_MusicFree=GetProcAddress(bass,"BASS_MusicFree");
+BASS_MusicLoad=GetProcAddress(bass,"BASS_MusicLoad");
+BASS_ChannelSetAttribute=GetProcAddress(bass,"BASS_ChannelSetAttribute");
+BASS_StreamCreateFile=GetProcAddress(bass,"BASS_StreamCreateFile");
+BASS_ErrorGetCode=GetProcAddress(bass,"BASS_ErrorGetCode");
+BASS_StreamCreateURL=GetProcAddress(bass, "BASS_StreamCreateURL");
+BASS_ChannelGetLength=GetProcAddress(bass, "BASS_ChannelGetLength");
+BASS_StreamGetFilePosition=GetProcAddress(bass, "BASS_StreamGetFilePosition");
+BASS_ChannelGetAttribute=GetProcAddress(bass, "BASS_ChannelGetAttribute");
+BASS_ChannelGetTags=GetProcAddress(bass, "BASS_ChannelGetTags");
+BASS_ChannelGetLength=GetProcAddress(bass, "BASS_ChannelGetLength");
+BASS_ChannelBytes2Seconds=GetProcAddress(bass, "BASS_ChannelBytes2Seconds");
+BASS_ChannelIsActive=GetProcAddress(bass, "BASS_ChannelIsActive");
+BASS_ChannelGetLevel=GetProcAddress(bass, "BASS_ChannelGetLevel");
+BASS_ChannelGetPosition=GetProcAddress(bass, "BASS_ChannelGetPosition");
+BASS_ChannelSlideAttribute=GetProcAddress(bass, "BASS_ChannelSlideAttribute");
+</code></pre>
+<p>Одно большое "<strong>НО</strong>":
+Звук воспроизводиться при запуске из командной строки (cmd.exe, ConEmu), но нет текстовой информации. Т.е. я запускаю программу и она работает в фоне, в терминале сразу появляется приглашение ввода:</p>
+<pre><code>user@LAPTOP-OIQUIP0K C:\Users\user\Documents\Projects\sound 
+&gt; qks.exe -d -1 "C:\Users\user\Music\Radiohead\Creep.mp3"   
+
+user@LAPTOP-OIQUIP0K C:\Users\user\Documents\Projects\sound 
+&gt;             
+</code></pre>
+<p>Однако вся текстовая информация (звук тоже работает) появляется во встроенной консоли <code>SublimeText 3</code>:</p>
+<pre><code>C:\Users\user\Documents\Projects\sound&gt;qks.exe -d -1 "C:\Users\user\Music\Radiohead\Creep.mp3" 
+Simple console mode BASS example : MOD/MPx/OGG/WAV player
+---------------------------------------------------------
+streaming file [41587200 bytes] 3:55
+pos 000000136 - 0:00 - L ------------- ------------- R - cpu 0.00%  
+pos 000005944 - 0:00 - L ------------- ------------- R - cpu 0.00%  
+pos 000014808 - 0:00 - L ------------- ------------- R - cpu 0.00%  
+pos 000023728 - 0:00 - L ------------- ------------- R - cpu 0.00%  
+pos 000032628 - 0:00 - L ------------- ------------- R - cpu 0.07%  
+pos 000041584 - 0:00 - L ---********** **********--- R - cpu 0.07%  
+pos 000050496 - 0:00 - L -----******** ********----- R - cpu 0.14%  
+pos 000059536 - 0:00 - L -----******** *********---- R - cpu 0.14%  
+pos 000068572 - 0:00 - L -----******** *********---- R - cpu 0.19%  
+pos 000077544 - 0:00 - L -----******** ********----- R - cpu 0.19%  
+pos 000086464 - 0:00 - L -----******** *********---- R - cpu 0.25%  
+pos 000095364 - 0:00 - L -----******** ********----- R - cpu 0.25%
+...
+</code></pre>
+<p>Информация о компиляторе (gcc -v):</p>
+<pre><code>Using built-in specs.
+COLLECT_GCC=gcc.exe
+COLLECT_LTO_WRAPPER=c:/mingw64/bin/../libexec/gcc/x86_64-w64-mingw32/4.8.1/lto-wrapper.exe
+Target: x86_64-w64-mingw32
+Configured with: ../../../src/gcc-4.8.1/configure --build=x86_64-w64-mingw32 --enable-targets=all --enable-languages=ada,c,c++,fortran,lto,objc,obj-c++ --enable-libgomp --enable-lto --enable-graphite --enable-cxx-flags=-DWINPTHREAD_STATIC --enable-libstdcxx-debug --enable-threads=posix --enable-version-specific-runtime-libs --enable-fully-dynamic-string --enable-libstdcxx-threads --enable-libstdcxx-time --with-gnu-ld --disable-werror --disable-nls --disable-win32-registry --prefix=/mingw64tdm --with-local-prefix=/mingw64tdm --with-pkgversion=tdm64-2 --with-bugurl=http://tdm-gcc.tdragon.net/bugs
+Thread model: posix
+gcc version 4.8.1 (tdm64-2)
+</code></pre>
+<p>Отладка:</p>
+<pre><code>user@LAPTOP-OIQUIP0K C:\Users\user\Documents\Projects\sound
+&gt; gdb.exe qks.exe
+GNU gdb (GDB) 7.7.50.20140303-cvs
+Copyright (C) 2014 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "i686-pc-mingw32".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+&lt;http://www.gnu.org/software/gdb/bugs/&gt;.
+Find the GDB manual and other documentation resources online at:
+&lt;http://www.gnu.org/software/gdb/documentation/&gt;.
+For help, type "help".
+Type "apropos word" to search for commands related to "word".
+
+This binary was built by Equation Solution &lt;http://www.Equation.com&gt;...
+Reading symbols from qks.exe...done.
+(gdb) b main
+Breakpoint 1 at 0x4015c5: file qks.c, line 59.
+(gdb) r -d -1 "C:\Users\user\Music\Radiohead\Creep.mp3"
+Starting program: C:\Users\user\Documents\Projects\sound\qks.exe -d -1 "C:\Users\user\Music\Radiohead\Creep.mp3"
+[New Thread 2708.0x16f4]
+[New Thread 2708.0x4c0]
+
+Breakpoint 1, main (argc=4, argv=0xab2390) at qks.c:59
+59              HINSTANCE bass=LoadLibrary("bass.dll"); // load BASS
+(gdb) n
+[New Thread 2708.0xd28]
+60              BASS_Init=GetProcAddress(bass,"BASS_Init"); // get BASS_Init
+(gdb)
+61              BASS_GetVersion=GetProcAddress(bass,"BASS_GetVersion");
+(gdb)
+62              BASS_Free=GetProcAddress(bass,"BASS_Free");
+(gdb)
+63              BASS_SetVolume=GetProcAddress(bass,"BASS_SetVolume");
+(gdb)
+64              BASS_SetConfig=GetProcAddress(bass,"BASS_SetConfig");
+(gdb)
+65              BASS_SampleFree=GetProcAddress(bass,"BASS_SampleFree");
+(gdb)
+66              BASS_SampleLoad=GetProcAddress(bass,"BASS_SampleLoad");
+(gdb)
+67              BASS_SampleGetChannel=GetProcAddress(bass,"BASS_SampleGetChannel");
+(gdb)
+68              BASS_ChannelPlay=GetProcAddress(bass,"BASS_ChannelPlay");
+(gdb)
+69              BASS_ChannelStop=GetProcAddress(bass,"BASS_ChannelStop");
+(gdb)
+70              BASS_GetVolume=GetProcAddress(bass,"BASS_GetVolume");
+(gdb)
+71              BASS_GetVersion=GetProcAddress(bass,"BASS_GetVersion");
+(gdb)
+72              BASS_GetCPU=GetProcAddress(bass,"BASS_GetCPU");
+(gdb)
+73              BASS_Pause=GetProcAddress(bass,"BASS_Pause");
+(gdb)
+74              BASS_Start=GetProcAddress(bass,"BASS_Start");
+(gdb)
+75              BASS_MusicFree=GetProcAddress(bass,"BASS_MusicFree");
+(gdb)
+76              BASS_MusicLoad=GetProcAddress(bass,"BASS_MusicLoad");
+(gdb)
+77              BASS_ChannelSetAttribute=GetProcAddress(bass,"BASS_ChannelSetAttribute");
+(gdb)
+78              BASS_StreamCreateFile=GetProcAddress(bass,"BASS_StreamCreateFile");
+(gdb)
+79              BASS_ErrorGetCode=GetProcAddress(bass,"BASS_ErrorGetCode");
+(gdb)
+80              BASS_StreamCreateURL=GetProcAddress(bass, "BASS_StreamCreateURL");
+(gdb)
+81              BASS_ChannelGetLength=GetProcAddress(bass, "BASS_ChannelGetLength");
+(gdb)
+82              BASS_StreamGetFilePosition=GetProcAddress(bass, "BASS_StreamGetFilePosition");
+(gdb)
+83              BASS_ChannelGetAttribute=GetProcAddress(bass, "BASS_ChannelGetAttribute");
+(gdb)
+84              BASS_ChannelGetTags=GetProcAddress(bass, "BASS_ChannelGetTags");
+(gdb)
+85              BASS_ChannelGetLength=GetProcAddress(bass, "BASS_ChannelGetLength");
+(gdb)
+86              BASS_ChannelBytes2Seconds=GetProcAddress(bass, "BASS_ChannelBytes2Seconds");
+(gdb)
+87              BASS_ChannelIsActive=GetProcAddress(bass, "BASS_ChannelIsActive");
+(gdb)
+88              BASS_ChannelGetLevel=GetProcAddress(bass, "BASS_ChannelGetLevel");
+(gdb)
+89              BASS_ChannelGetPosition=GetProcAddress(bass, "BASS_ChannelGetPosition");
+(gdb)
+90              BASS_ChannelSlideAttribute=GetProcAddress(bass, "BASS_ChannelSlideAttribute");
+(gdb)
+95          int a,device=-1;
+(gdb)
+97          printf("Simple console mode BASS example : MOD/MPx/OGG/WAV player\n"
+(gdb)
+101         if (HIWORD(BASS_GetVersion())!=BASSVERSION) {
+(gdb)
+0x744d59c6 in ?? ()
+(gdb) ni
+0x744b10f9 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45c5 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45c6 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45cc in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45d2 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45d4 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45d6 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45ee in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45f0 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b45f1 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b10fe in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b1101 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b1103 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b1104 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744d59cb in ?? ()
+(gdb)
+0x744d59d0 in ?? ()
+(gdb)
+0x00401976 in main (argc=4, argv=0xab2390) at qks.c:101
+101         if (HIWORD(BASS_GetVersion())!=BASSVERSION) {
+(gdb) n
+106         for (a=1;a&lt;argc;a++) {
+(gdb)
+107             if (!strcmp(argv[a],"-l")) {
+(gdb)
+110             } else if (!strcmp(argv[a],"-d") &amp;&amp; a+1&lt;argc) device=atoi(argv[++a]);
+(gdb)
+106         for (a=1;a&lt;argc;a++) {
+(gdb)
+107             if (!strcmp(argv[a],"-l")) {
+(gdb)
+110             } else if (!strcmp(argv[a],"-d") &amp;&amp; a+1&lt;argc) device=atoi(argv[++a]);
+(gdb)
+113         if (a!=argc-1) {
+(gdb)
+121         if (!BASS_Init(device,44100,0,0,NULL))
+(gdb)
+0x744d3dc5 in ?? ()
+(gdb) ni
+0x744d3dc6 in ?? ()
+(gdb)
+0x744d3dca in ?? ()
+(gdb)
+0x744d3dcd in ?? ()
+(gdb)
+0x744d3dd3 in ?? ()
+(gdb)
+0x744d3dd4 in ?? ()
+(gdb)
+0x744d3dd5 in ?? ()
+(gdb)
+0x744b462e in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b4630 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b4644 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b4646 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744d3dda in ?? ()
+(gdb)
+0x744d3ddc in ?? ()
+(gdb)
+0x744d3dde in ?? ()
+(gdb)
+0x744d3de0 in ?? ()
+(gdb)
+0x744d3de2 in ?? ()
+(gdb)
+0x744d3de3 in ?? ()
+(gdb)
+0x744d3da9 in ?? ()
+(gdb)
+0x744d3daa in ?? ()
+(gdb)
+0x744b470b in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+0x744b4710 in ?? () from C:\Users\user\Documents\Projects\sound\bass.dll
+(gdb)
+[New Thread 2708.0x109c]
+[New Thread 2708.0x1098]
+[New Thread 2708.0xcdc]
+[New Thread 2708.0x760]
+[New Thread 2708.0x1674]
+[New Thread 2708.0x1834]
+[New Thread 2708.0x390]
+[New Thread 2708.0x1314] &lt;-- здесь начинает играть музыка
+                             программу пришлось "убивать" через диспетчер
+                             задач, т.к. музыка играет заново снова и снова.   
+[Thread 2708.0xd28 exited with code 1]
+[Thread 2708.0x4c0 exited with code 1]
+[Thread 2708.0x109c exited with code 1]
+[Thread 2708.0xcdc exited with code 1]
+[Thread 2708.0x1098 exited with code 1]
+[Thread 2708.0x1674 exited with code 1]
+[Thread 2708.0x760 exited with code 1]
+[Thread 2708.0x1834 exited with code 1]
+[Thread 2708.0x390 exited with code 1]
+[Thread 2708.0x1314 exited with code 1]
+[Inferior 1 (process 2708) exited with code 01]
+</code></pre>
+<p>Система:</p>
+<pre><code>OS: Windows 10 x64
+CPU: AMD A9-9410 RADEON R5, COMPUTE CORES 2C+3G  2.90 GHz
+</code></pre>
+<p>Команды компиляции и запуска:</p>
+<pre><code>gcc.exe -g -std=c11 -m32 -Wall -Wextra -Wpedantic -lbass -mwindows qks.c -o qks.exe
+qks.exe -d -1 "C:\Users\user\Music\Eminem\Rap God.mp3"
+</code></pre>
+</blockquote>
+<h2>Answer 708803</h2>
+<p><a href="https://ru.stackoverflow.com/a/708803/">Source</a> - by <a href="https://ru.stackoverflow.com/users/184031/eugene-krivenja">Eugene Krivenja</a></p>
+<blockquote>
+<p>Может то, что от себя добавлено, должно так выглядеть:</p>
+<pre><code>#ifndef BASSDEF
+#ifdef WIN32
+#define BASSDEF(f) WINAPI f
+#else
+#define BASSDEF(f) f
+#endif
+#endif
+</code></pre>
+<p>Взято отсюда
+<a href="https://github.com/kusma/spaceflowers/blob/master/bassmod/bassmod.h" rel="nofollow noreferrer">https://github.com/kusma/spaceflowers/blob/master/bassmod/bassmod.h</a></p>
+<p>Или просто вот так:</p>
+<pre><code>#define BASSDEF(f) WINAPI f
+</code></pre>
+<p><a href="https://github.com/sonicretro/sadx-mod-loader/blob/master/extlib/bass/bass.h" rel="nofollow noreferrer">https://github.com/sonicretro/sadx-mod-loader/blob/master/extlib/bass/bass.h</a></p>
+</blockquote>
+<h2>Answer 709391</h2>
+<p><a href="https://ru.stackoverflow.com/a/709391/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Ну, предупреждение "assignment from incompatible pointer type" вполне логично. GetProcAddress возвращает указатель на функцию с неопределенным списком параметров, возвращающую int. Приведение к любым другим указателям выведет это предупреждение. Его можно игнорировать.</p>
+<p>Что касается Segmentation Fault, у меня ничего такого не наблюдается. BASS_GetVersion, BASS_GetDeviceInfo нормально работают. Либо вы не ту версию DLL-ки подкладываете (32-битную вместо 64-битной или наоборот), либо какая-то локальная проблема с вашей системой.</p>
+<p>UPD: На всякий случай, мой рабочий пример:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#define BASSDEF(f) (WINAPI *f) // define the functions as pointers
+#include "bass.h"
+#include &lt;conio.h&gt;
+
+void ListDevices()
+{
+    BASS_DEVICEINFO di;
+    int a;
+    for (a=1;BASS_GetDeviceInfo(a,&amp;di);a++) {
+        if (di.flags&amp;BASS_DEVICE_ENABLED) // enabled output device
+            printf("dev %d: %s\n",a,di.name);
+    }
+}
+
+void main(int argc, char **argv)
+{
+    HINSTANCE bass=LoadLibrary("BASS.DLL"); // load BASS
+    BASS_Init=GetProcAddress(bass,"BASS_Init");
+    BASS_GetVersion=GetProcAddress(bass,"BASS_GetVersion");
+    BASS_GetDeviceInfo=GetProcAddress(bass,"BASS_GetDeviceInfo");
+
+    // check the correct BASS was loaded
+    DWORD ver;
+    ver=BASS_GetVersion();
+    if (HIWORD(ver)!=BASSVERSION) {
+        printf("An incorrect version of BASS was loaded");
+        return;
+    }
+    else
+    {
+        printf("BASS version is %d\n\n",ver);
+    }
+
+    ListDevices();
+    system("pause");
+}
+</code></pre>
+<p>Компилируется и успешно работает (выводит список устройств), тестировалось на:</p>
+<ul>
+<li>Windows 7 x64</li>
+<li>GCC 3.4.2, 4.9.2 (32-битный режим)</li>
+<li>BASS 2.4</li>
+</ul>
+</blockquote>
+<h2>Answer 709577</h2>
+<p><a href="https://ru.stackoverflow.com/a/709577/">Source</a> - by <a href="https://ru.stackoverflow.com/users/2739/kovadim">KoVadim</a></p>
+<blockquote>
+<p>Есть такая штука - <a href="https://ru.wikipedia.org/wiki/%D0%94%D0%B2%D0%BE%D0%B8%D1%87%D0%BD%D1%8B%D0%B9_%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81_%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B9" rel="nofollow noreferrer">ABI</a> - то есть описание того, как функция/класс будет представлена в бинарном виде. Это очень важно, когда линкуются два разных куска кода (например, exe и статическая библиотка) или просто вызываются (например, обращение к dll). В некоторых случаях линковщик (а это его работа) может проверить, что интерфейс не совпадает и поднять панику. А может и не знать или проигнорировать.</p>
+<p>Если два куска кода не совместимы на уровне ABI, то может произойти все что угодно. Самый простой пример - вызывающая сторона ожидает параметры в регистрах, а вызываемая - в стеке. Что именно прочитается со стека - никто не знает. В лучшем случае упадет с Access violation.</p>
+<p>В случае чистого Си эту проблему достаточно хорошо решили (всякие stdcall, cdecl и подобное). А вот в случае с++ все сильно сложнее - есть классы, а им нужно хранить данные, которые никак не стандартизированы. Даже если использовать только gcc, он может использовать различное ABI. Из последнего, на что я лично натолкнулся, это сильно измененный ABI при переходе от 4.9.х на 5.4.х (он вроде после 5.2 поменялся). <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html" rel="nofollow noreferrer">Здесь</a> есть много деталей.</p>
+<p><strong>Теперь ближе к проблеме.</strong> По внешнему виду файла обычно сложно догадаться, какой версией компилятора он собран. Но её можно попробовать угадать. Судя по всему, там внутри все собрано с помощью vc6 (это очень древнее существо) и более-менее свежие gcc с ним поэтому и не совместимы. А старые - да. @VadimTagil просто повезло, что он угадал правильную версию.</p>
+<p><strong>Что делать?</strong> использовать gcc 3.4 как не очень, как по мне, поэтому, лучше взять сорцы и пересобрать их именно тем gcc, которым будет собираться все остальное. Благое дело, там есть makefile и студийный проект.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
