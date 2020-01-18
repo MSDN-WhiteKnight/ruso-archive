@@ -258,6 +258,62 @@ namespace ArchiveLoader
             Console.WriteLine("Success");
         }
 
+        static void SaveUserAnswers(string site, int userid)
+        {
+            string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
+            string postsdir = Path.Combine(datadir, "posts\\");
+            string path;
+
+            if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
+
+            SeApiClient client = new SeApiClient(APIURL, site);
+            Dictionary<int, object> answers = client.LoadUserAnswers(userid);
+            string postjson;
+
+            Console.WriteLine("Saving {0} answers...", answers.Count);
+
+            foreach (int key in answers.Keys)
+            {
+                path = Path.Combine(postsdir, "A" + key.ToString() + ".json");
+                postjson = JSON.Stringify(answers[key]);
+                File.WriteAllText(path, postjson, Encoding.UTF8);
+            }
+
+            Console.WriteLine("Saving questions...", answers.Count);
+
+            foreach (int key in answers.Keys)
+            {
+                SaveQuestion(site, (answers[key] as dynamic).question_id);
+            }            
+        }
+
+
+        static void SaveQuestionsForSavedAnswers(string site, string subdir)
+        {
+            string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
+            string postsdir = Path.Combine(datadir, subdir + "\\");            
+
+            Console.WriteLine("Loading questions of existing answers ({0}, {1})...", site, subdir);
+
+            PostSet posts = PostSet.LoadFromDir(postsdir, site);
+            Dictionary<int, Question> questions = posts.Questions;
+
+            Console.WriteLine("Answers without parent question: {0}", posts.SingleAnswers.Count);
+
+            foreach (int a in posts.SingleAnswers.Keys)
+            {
+                try
+                {
+                    SaveQuestion(site, posts.SingleAnswers[a].DataDynamic.question_id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.GetType() + ": " + ex.Message);
+                    System.Threading.Thread.Sleep(20 * 1000);
+                }
+            }
+        }
+
         static void Generate(string site, string subdir,string toc_title)
         {
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
@@ -353,6 +409,7 @@ namespace ArchiveLoader
             if (args.Length == 0)
             {
                 LoadData();
+                //SaveQuestionsForSavedAnswers("ru.stackoverflow.com", "posts");
 
                 if (!Console.IsInputRedirected)
                 {
@@ -368,6 +425,11 @@ namespace ArchiveLoader
             else if (args.Length >= 3 && args[0] == "savea")
             {
                 SaveSingleAnswer(args[1], Convert.ToInt32(args[2]));
+                Console.WriteLine("Done");
+            }
+            else if (args.Length >= 3 && args[0] == "sync")
+            {
+                SaveQuestionsForSavedAnswers(args[1], args[2]);
                 Console.WriteLine("Done");
             }
             else if (args.Length >= 1 && args[0] == "generate")

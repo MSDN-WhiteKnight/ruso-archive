@@ -190,5 +190,36 @@ namespace ArchiveLoader
         {
             return this.LoadPostsSequence("answers", ids);
         }
+
+        public Dictionary<int, object> LoadUserAnswers(int userid)
+        {
+            StringBuilder request = new StringBuilder(500);
+            request.Append(apiurl + "users/"+userid.ToString()+"/answers");                        
+            request.Append("?site=" + this.site);
+            request.Append("&filter=withbody&pagesize=100");
+
+            string rs = request.ToString();
+            int page = 1;
+            Dictionary<int, object> posts = new Dictionary<int, object>(500);
+
+            while (true)
+            {
+                Console.WriteLine("Loading user answers: page " + page.ToString());
+                string apires = DoRequest(rs+"&page="+page.ToString());
+                dynamic data = JSON.Parse(apires);
+                IEnumerable<object> items;
+                items = JSON.ToCollection(data.items);                
+
+                foreach (dynamic item in items)
+                {
+                    posts[item.answer_id] = item; 
+                }
+
+                if (data.has_more == false) break;
+                page++;
+            }
+
+            return posts;
+        }
     }
 }

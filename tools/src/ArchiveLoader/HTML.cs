@@ -46,8 +46,11 @@ namespace ArchiveLoader
 
         public static void RenderHeader(string title, TextWriter wr)
         {
+            string s = title.Replace("\\", "\\\\");
+            s = s.Replace("\"", "\\\"");
+
             wr.WriteLine("---");
-            wr.WriteLine("title: \"{0}\"", title);
+            wr.WriteLine("title: \"{0}\"", s);
             wr.WriteLine("---");
             wr.WriteLine("<p><i><a href=\"{0}\">RuSO Archive</a></i></p>", SiteURL);
             wr.WriteLine("<h1>{0}</h1>", title);
@@ -102,7 +105,9 @@ namespace ArchiveLoader
             foreach (int key in posts.Questions.Keys)
             {
                 string s = System.Net.WebUtility.HtmlDecode(posts.Questions[key].DataDynamic.title);
-                wr.WriteLine("  - name: \"{0}\"", s.Replace("\"","\\\""));
+                s = s.Replace("\\", "\\\\");
+                s = s.Replace("\"","\\\"");
+                wr.WriteLine("  - name: \"{0}\"", s);
                 wr.WriteLine("    href: {0}.md", key);
             }
 

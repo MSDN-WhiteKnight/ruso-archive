@@ -139,9 +139,7 @@ namespace ArchiveLoader
                     Console.WriteLine("Error reading file " + files[i]);
                     Console.WriteLine(ex.ToString());
                 }
-            }
-
-            //Console.WriteLine("{0} answers without parent question", single_answers.Count);
+            }                        
 
             return new PostSet { 
                 Questions = questions, SingleAnswers = single_answers, MarkdownQuestions = mdquestions, MarkdownAnswers = mdanswers 
