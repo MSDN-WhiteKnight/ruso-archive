@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>GetKeyboardState: &#1086;&#1087;&#1088;&#1077;&#1076;&#1077;&#1083;&#1077;&#1085;&#1080;&#1077; &#1089;&#1086;&#1089;&#1090;&#1086;&#1103;&#1085;&#1080;&#1103; &#1082;&#1083;&#1072;&#1074;&#1080;&#1096;&#1080; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="GetKeyboardState: &#1086;&#1087;&#1088;&#1077;&#1076;&#1077;&#1083;&#1077;&#1085;&#1080;&#1077; &#1089;&#1086;&#1089;&#1090;&#1086;&#1103;&#1085;&#1080;&#1103; &#1082;&#1083;&#1072;&#1074;&#1080;&#1096;&#1080; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>GetKeyboardState: определение состояния клавиши</h1>
+<p><a href="https://ru.stackoverflow.com/questions/767999/getkeyboardstate-%d0%be%d0%bf%d1%80%d0%b5%d0%b4%d0%b5%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-%d1%81%d0%be%d1%81%d1%82%d0%be%d1%8f%d0%bd%d0%b8%d1%8f-%d0%ba%d0%bb%d0%b0%d0%b2%d0%b8%d1%88%d0%b8">Source</a> - by <a href="https://ru.stackoverflow.com/users/238013/d-stark">D .Stark</a></p>
+<blockquote>
+<p>Не могу понять как работает функция <code>GetKeyboardState</code>. Вроде как должна определять состояние всех клавиш, но правильность результата зависит от места вызова... Если, например, скрыть окно, либо запускать функцию по таймеру, все значения окажутся равными 0. Если же назначить некоторой кнопке обработчик и при нажатии определять состояние, скажем, LeftShift, функция покажет верное значение.</p>
+<p>Ещё мне не ясно как обозначаются состояния клавиш. Понятно, что старший бит говорит о том нажата клавиша или нет, а вот младший - is key toggled. Что ещё за Toggled state?</p>
+<p><strong>UPD:</strong> Так же, на счёт toggled state, согласно моим наблюдениям вполне возможна ситуация когда клавиша не нажата, а старший бит равен 1 (младший 0). Не могу понять никак как это должно работать...</p>
+<pre><code>var keyboardState = new byte[256];
+GetKeyboardState(keyboardState);
+var keyStateBits = new System.Collections.BitArray(new byte[] { keyboardState[(uint)Keys.LShiftKey] });
+Debug.WriteLine("SHIFT key state: down - " + keyStateBits[0] + "; toggled - " + keyStateBits[7]);
+</code></pre>
+<p><strong>UPD2:</strong> В самом деле мне нужно сделать работоспособным этот код:</p>
+<pre><code>    [DllImport("user32.dll")]
+    static extern int ToUnicodeEx(
+        uint wVirtKey, 
+        uint wScanCode, 
+        byte[] lpKeyState, 
+        [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff, 
+        int cchBuff, 
+        uint wFlags, 
+        IntPtr dwhkl);
+
+    [DllImport("user32.dll")]
+    static extern bool GetKeyboardState(byte[] lpKeyState);
+
+    [DllImport("user32.dll")]
+    static extern uint MapVirtualKey(
+        uint uCode, 
+        uint uMapType);
+
+    [DllImport("user32.dll")]
+    static extern IntPtr GetKeyboardLayout(uint idThread);
+
+    public static string VKCodeToUnicode(uint vkCode) {
+
+        StringBuilder buf = new StringBuilder();
+        byte[] keyboardState = new byte[255];
+        if (!GetKeyboardState(keyboardState)) return string.Empty;
+
+        ToUnicodeEx(vkCode, MapVirtualKey(vkCode, 0), keyboardState, buf, 5, 0, GetKeyboardLayout(0));
+        return buf.ToString();
+    }
+</code></pre>
+<p>Если окно отображается и активно, всё работает. Но если окно скрыть (ну через ShowWindow SW_HIDE), код выдаёт неправильные значения (без учёта состояния клавиш клавиатуры управляющих регистром и текущего языка раскладки)... Как это решить?</p>
+</blockquote>
+<h2>Answer 768514</h2>
+<p><a href="https://ru.stackoverflow.com/a/768514/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p><code>GetKeyboardState</code> работает только в случаях, когда сообщение о нажатии клавиши дошло до очереди вашего процесса (т.е., когда ваше окно в фокусе). Для получения состояния клавиши напрямую используется функция <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms646293(v=vs.85).aspx" rel="nofollow noreferrer">GetAsyncKeyState</a>. Она не работает для переключаемых клавиш типа Caps Lock - для них нужно использовать <code>GetKeyState</code> (или, в C# <code>Control.IsKeyLocked</code>, который ее использует).</p>
+<pre><code>if ((GetAsyncKeyState(VK_CONTROL) &amp; 0x8000) != 0){
+    //нажата клавиша control
+}
+</code></pre>
+<p>Если нужно в течение длительного времени отслеживать нажатие каких-то клавиш, лучше использовать Keyboard Hook.</p>
+<p>Toggled state - состояние Вкл/Выкл для клавиш типа Caps Lock. Для всех остальных клавиш его значение не определено. </p>
+<p>C вызовом <code>GetKeyboardLayout(0)</code> похожая проблема - он возвращает раскладку для текущего потока, которая может не соответствовать реальной системной раскладке, если окно свернуто. Надо найти поток текущего активного окна, и брать его раскладку.</p>
+<hr>
+<p>Итоговый пример кода (C#):</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Runtime.InteropServices;
+
+public class Keyboard
+{
+    public const uint VK_CAPITAL = 0x14;
+
+    [DllImport("USER32.dll")]
+    public static extern short GetKeyState(int vKey);
+
+    [DllImport("user32.dll")]
+    public static extern short GetAsyncKeyState(int vKey);
+
+    [DllImport("user32.dll")]
+    public static extern int ToUnicodeEx(
+        uint wVirtKey,
+        uint wScanCode,
+        byte[] lpKeyState,
+        [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff,
+        int cchBuff,
+        uint wFlags,
+        IntPtr dwhkl);
+
+    [DllImport("user32.dll")]
+    public static extern bool GetKeyboardState(byte[] lpKeyState);
+
+    [DllImport("user32.dll")]
+    public static extern uint MapVirtualKey(
+        uint uCode,
+        uint uMapType);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetKeyboardLayout(uint idThread);
+
+    [DllImport("user32.dll")]
+    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetForegroundWindow();
+
+    public static string VKCodeToUnicode(uint vkCode)
+    {
+        StringBuilder buf = new StringBuilder();
+
+        byte[] keyboardState = new byte[255];            
+
+        short x;
+        byte y;            
+
+        for (int i = 0; i &lt; 255; i++)
+        {                
+            if (i == VK_CAPITAL)
+            {
+                x = GetKeyState(i);                                          
+            }
+            else
+            {
+                x = GetAsyncKeyState(i);                    
+            }
+            y = 0;
+            if ((x &amp; 0x8000) != 0) y = (byte)(y | 0x80);
+            if ((x &amp; 0x0001) != 0) y = (byte)(y | 0x01);
+            keyboardState[i] = y;
+        }
+
+        ToUnicodeEx(vkCode, MapVirtualKey(vkCode, 0), keyboardState, buf, 5, 0, 
+            GetKeyboardLayout(GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero)));
+        return buf.ToString();
+    }
+
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

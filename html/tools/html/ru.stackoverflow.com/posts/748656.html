@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1059;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1087;&#1088;&#1086;&#1082;&#1089;&#1080; &#1076;&#1083;&#1103; &#1084;&#1086;&#1076;&#1077;&#1084;&#1072; &#1085;&#1072; C# (&#1095;&#1077;&#1088;&#1077;&#1079; &#1088;&#1077;&#1077;&#1089;&#1090;&#1088;) | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1059;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1087;&#1088;&#1086;&#1082;&#1089;&#1080; &#1076;&#1083;&#1103; &#1084;&#1086;&#1076;&#1077;&#1084;&#1072; &#1085;&#1072; C# (&#1095;&#1077;&#1088;&#1077;&#1079; &#1088;&#1077;&#1077;&#1089;&#1090;&#1088;) | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Установить прокси для модема на C# (через реестр)</h1>
+<p><a href="https://ru.stackoverflow.com/questions/748656/%d0%a3%d1%81%d1%82%d0%b0%d0%bd%d0%be%d0%b2%d0%b8%d1%82%d1%8c-%d0%bf%d1%80%d0%be%d0%ba%d1%81%d0%b8-%d0%b4%d0%bb%d1%8f-%d0%bc%d0%be%d0%b4%d0%b5%d0%bc%d0%b0-%d0%bd%d0%b0-c-%d1%87%d0%b5%d1%80%d0%b5%d0%b7-%d1%80%d0%b5%d0%b5%d1%81%d1%82%d1%80">Source</a> - by <a href="https://ru.stackoverflow.com/users/274967/%d0%9c%d0%b0%d0%ba%d1%81%d0%b8%d0%bc-%d0%9c%d0%be%d0%bb%d1%87%d0%b0%d0%bd%d0%be%d0%b2">Максим Молчанов</a></p>
+<blockquote>
+<p>Всем здравствуйте! Подскажите пожалуйста как на C# установить прокси не для локальной сети, а для модема.</p>
+<p>Для локальной сети делаю так:</p>
+<pre><code>string proxy = "144.217.174.12:8888";
+RegistryKey reg_key;
+reg_key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+reg_key.SetValue("ProxyEnable", 1);
+reg_key.SetValue("ProxyServer", proxy);
+</code></pre>
+<p>В настройках браузера в результате:</p>
+<p><a href="https://i.stack.imgur.com/60xTx.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/60xTx.png" alt=""></a></p>
+<p>В реестре в разделе <code>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings</code>:</p>
+<p><a href="https://i.stack.imgur.com/232Hn.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/232Hn.png" alt=""></a></p>
+<p>Как мне сделать тоже самое только для настроек не локальной сети, а модема?Наверное есть раздел реестра, который отвечает за модемы,подскажите его пожалуйста, потому что код вроде бы будет такой же. Или поправьте,если я что-то не так думаю.
+То есть здесь:</p>
+<p><a href="https://i.stack.imgur.com/gijhX.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/gijhX.png" alt="введите сюда описание изображения"></a></p>
+<p>Мониторил кучу действий, который браузер делает в реестре, при подключении прокси к модему через окно, удалось выделить следующее:</p>
+<p><a href="https://i.stack.imgur.com/3QhrY.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/3QhrY.png" alt="введите сюда описание изображения"></a></p>
+<p>Код на C# работы с InternetSetOption</p>
+<pre><code> class Program
+{
+    public struct Struct_INTERNET_PROXY_INFO
+    {
+        public int dwAccessType;
+        public IntPtr proxy;
+        public IntPtr proxyBypass;
+    }
+
+    [DllImport("wininet.dll", SetLastError = true)]
+    private static extern bool InternetSetOption(IntPtr hInternet,int dwOption,IntPtr lpBuffer,int lpdwBufferLength);
+
+    private static void RefreshIESettings(string strProxy)
+    {
+        const int INTERNET_OPTION_PROXY = 38;
+        const int INTERNET_OPEN_TYPE_PROXY = 3;
+
+        Struct_INTERNET_PROXY_INFO struct_IPI;
+
+        struct_IPI.dwAccessType = INTERNET_OPEN_TYPE_PROXY;
+        struct_IPI.proxy = Marshal.StringToHGlobalAnsi(strProxy);
+        struct_IPI.proxyBypass = Marshal.StringToHGlobalAnsi("local");
+
+        IntPtr intptrStruct = Marshal.AllocCoTaskMem(Marshal.SizeOf(struct_IPI));
+        Marshal.StructureToPtr(struct_IPI, intptrStruct, true);
+        InternetSetOption(IntPtr.Zero, INTERNET_OPTION_PROXY, intptrStruct, Marshal.SizeOf(struct_IPI));
+    }
+    static void Main(string[] args)
+    {
+        RefreshIESettings("203.142.34.36:52335");
+    }   
+}
+</code></pre>
+</blockquote>
+<h2>Answer 749931</h2>
+<p><a href="https://ru.stackoverflow.com/a/749931/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Можно использовать функцию <a href="https://msdn.microsoft.com/ru-ru/library/windows/desktop/aa385114(v=vs.85).aspx" rel="nofollow noreferrer">InternetSetOption</a> с параметром <code>INTERNET_OPTION_PER_CONNECTION_OPTION</code>. Для получения необходимого результата нужно установить две опции: <code>INTERNET_PER_CONN_PROXY_SERVER</code> - имя прокси-сервера и <code>INTERNET_PER_CONN_FLAGS</code> - флаг, указывающий на использование явно заданного прокси-сервера. Затем нужно обновить настройки IE с помощью вызова <code>InternetSetOption</code> с параметром <code>INTERNET_OPTION_REFRESH</code>.</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Runtime.InteropServices;
+
+namespace InternetTest
+{
+    public class Internet
+    {        
+        public const uint INTERNET_OPTION_PER_CONNECTION_OPTION = 75;
+        public const uint INTERNET_OPTION_REFRESH = 37;
+        public const uint INTERNET_PER_CONN_FLAGS = 1;
+        public const uint INTERNET_PER_CONN_PROXY_SERVER = 2;
+        public const uint PROXY_TYPE_PROXY = 0x00000002;        
+
+        [DllImport("wininet.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern bool InternetSetOption(IntPtr hInternet, uint
+        dwOption, IntPtr lpBuffer, int dwBufferLength);
+
+        /*Установка значения прокси-сервера strProxy для подключения strCon*/
+        public static bool SetProxy(string strCon,string strProxy)
+        {
+            InternetPerConnOptionList optlist = new InternetPerConnOptionList();
+            IntPtr pstruct = Marshal.AllocCoTaskMem(Marshal.SizeOf(optlist));
+            INTERNET_PER_CONN_OPTION opt = new INTERNET_PER_CONN_OPTION();
+            bool res;
+
+            try
+            {
+                // proxy server   
+                optlist.dwSize = Marshal.SizeOf(typeof(InternetPerConnOptionList));
+                optlist.szConnection = Marshal.StringToHGlobalUni(strCon);
+                optlist.dwOptionCount = 1;
+                optlist.options = Marshal.AllocCoTaskMem(Marshal.SizeOf(opt));
+                opt.dwOption = INTERNET_PER_CONN_PROXY_SERVER;
+                opt.Value = Marshal.StringToHGlobalUni(strProxy);
+
+                Marshal.StructureToPtr(opt, optlist.options, true);
+                Marshal.StructureToPtr(optlist, pstruct, true);
+
+                res = InternetSetOption(IntPtr.Zero, INTERNET_OPTION_PER_CONNECTION_OPTION,
+                    pstruct, Marshal.SizeOf(optlist));
+                if (res == false) System.Diagnostics.Debug.WriteLine("Failed to set proxy server");
+
+                //flags
+                INTERNET_PER_CONN_OPTION2 opt2 = new INTERNET_PER_CONN_OPTION2();
+                opt2.dwOption = INTERNET_PER_CONN_FLAGS;
+                opt2.Value = PROXY_TYPE_PROXY;
+                Marshal.StructureToPtr(opt2, optlist.options, true);
+
+                res = InternetSetOption(IntPtr.Zero, INTERNET_OPTION_PER_CONNECTION_OPTION,
+                    pstruct, Marshal.SizeOf(optlist));
+                if (res == false) System.Diagnostics.Debug.WriteLine("Failed to set flags");
+
+                //refresh
+                res = InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH,
+                    IntPtr.Zero, 0);
+                if (res == false) System.Diagnostics.Debug.WriteLine("Failed to refresh IE settings");
+            }
+            finally
+            {                
+                if (opt.Value != IntPtr.Zero) Marshal.FreeHGlobal(opt.Value); 
+                if (optlist.options != IntPtr.Zero) Marshal.FreeCoTaskMem(optlist.options);
+                if(optlist.szConnection!=IntPtr.Zero)Marshal.FreeHGlobal(optlist.szConnection);
+                Marshal.FreeCoTaskMem(pstruct);
+            }
+
+            return res;
+        }
+
+    }    
+
+    /* СТРУКТУРЫ */
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    public struct InternetPerConnOptionList
+    {        
+        public int dwSize;        
+        public IntPtr szConnection;        
+        public int dwOptionCount;        
+        public int dwOptionError;
+        public IntPtr options;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    public struct INTERNET_PER_CONN_OPTION //первый вариант структуры (для указателя)
+    {
+        public uint dwOption;
+        public IntPtr Value;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    public struct INTERNET_PER_CONN_OPTION2 //второй вариант структуры (для DWORD)
+    {
+        public uint dwOption;
+        public uint Value;
+    }
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

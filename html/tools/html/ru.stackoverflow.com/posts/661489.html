@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1072; &#1092;&#1086;&#1088;&#1084;&#1072;&#1090;&#1072; &#1072;&#1091;&#1076;&#1080;&#1086;&#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; &#1074; Windows | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1072; &#1092;&#1086;&#1088;&#1084;&#1072;&#1090;&#1072; &#1072;&#1091;&#1076;&#1080;&#1086;&#1091;&#1089;&#1090;&#1088;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; &#1074; Windows | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Настройка формата аудиоустройства в Windows</h1>
+<p><a href="https://ru.stackoverflow.com/questions/661489/%d0%9d%d0%b0%d1%81%d1%82%d1%80%d0%be%d0%b9%d0%ba%d0%b0-%d1%84%d0%be%d1%80%d0%bc%d0%b0%d1%82%d0%b0-%d0%b0%d1%83%d0%b4%d0%b8%d0%be%d1%83%d1%81%d1%82%d1%80%d0%be%d0%b9%d1%81%d1%82%d0%b2%d0%b0-%d0%b2-windows">Source</a> - by <a href="https://ru.stackoverflow.com/users/248508/dmitry">Dmitry</a></p>
+<blockquote>
+<p>Я разрабатываю приложение для аудиоустройства, работающего по стандарту usb audio. Одной из задач является выбор формата воспроизведения: количество бит, частота дискретизации. Для задания формата, используя Windows Core Audio API, я написал следующий c++ код:</p>
+<pre><code>bool CPropPage::SetMode(int freq, int bits)
+{
+    static const int channels = 2;
+    PROPVARIANT varName;
+    IMMDevice* pDev = NULL;
+    IPropertyStore *pProps = NULL;
+    bool result = false;
+
+    if (!m_pEnumerator)
+        return false;
+
+    HRESULT hr = m_pEnumerator-&gt;GetDevice(m_devguid.c_str(), &amp;pDev);
+    if (hr != S_OK)
+        return false;
+
+    hr = pDev-&gt;OpenPropertyStore(STGM_WRITE, &amp;pProps);
+    if (hr != S_OK)
+        goto exit;
+
+    PropVariantInit(&amp;varName);
+    varName.vt = VT_BLOB;
+    varName.blob.cbSize = sizeof(WAVEFORMATEXTENSIBLE);
+    int alignment = channels * bits / 8;
+    WAVEFORMATEXTENSIBLE format = {
+        {
+            WAVE_FORMAT_EXTENSIBLE,
+            channels,
+            freq,
+            freq * alignment,
+            alignment,
+            bits,
+            (sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX))
+        },
+        {bits},
+        SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT,
+        KSDATAFORMAT_SUBTYPE_PCM
+    };
+    varName.blob.pBlobData = (BYTE*)&amp;format;
+
+    LogEntry("SetMode:%d %d\n", freq, bits);
+    hr = pProps-&gt;SetValue(
+        PKEY_AudioEngine_DeviceFormat, varName);
+    if (hr != S_OK)
+        goto exit;
+    LogEntry("SetMode ok\n");
+
+    LogAudioEngineFormat(pDev, &amp;format.Format);
+
+    result = true;
+
+exit:
+    if (pDev) pDev-&gt;Release();
+    if (pProps) pProps-&gt;Release();
+    return result;
+}
+</code></pre>
+<p>По сути, работа функции сводится к заданию свойства <code>PKEY_AudioEngine_DeviceFormat</code> объекта <code>IMMDevice</code>.</p>
+<p>Примечание. <code>m_pEnumerator</code> - указатель на объект COM-класса <code>IMMDeviceEnumerator</code>. <code>m_devguid</code> - GUID устройства.</p>
+<p>Результат работы функции: формат задается, и это видно в Панель управления -> Звук -> Свойства. Однако при этом невозможно воспроизвести ни один звук. Windows Media Player сообщает, что данный формат не поддерживается. (Задаваемый формат: 44100 Гц, 2 канала, 16 бит).
+При этом, если тот же самый формат задать через Панель управления -> Звук -> Свойства, все звуки, аудиофайлы воспроизводятся успешно.</p>
+<p>Что я делаю не так?</p>
+</blockquote>
+<h2>Answer 743709</h2>
+<p><a href="https://ru.stackoverflow.com/a/743709/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>У аудиоустройства, помимо задаваемого <code>PKEY_AudioEngine_DeviceFormat</code> формата вывода звука, есть внутренний формат обработки звука. (См. <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370811(v=vs.85).aspx" rel="nofollow noreferrer">Device Formats</a> ) Этот формат может иметь параметры, отличающиеся от формата вывода (обычно, он использует 32-битные IEEE Float сэмплы, независимо от формата сэмплов в выводе), но число каналов и частота дискретизации у них должны быть одинаковыми, иначе при попытке воспроизведения звука будет выводится ошибка. Таким образом, помимо установки <code>PKEY_AudioEngine_DeviceFormat</code>, нужно установить значения частоты дискретизации и числа каналов, соответствующие новому формату, в свойстве внутреннего формата (при этом не трогая остальные его поля!)</p>
+<p>Microsoft не предоставляют документированный API для установки внутреннего формата, видимо потому что они не хотят, чтобы программы без ведома пользователя его меняли. Ключи реестра также не документированы. Если воспользоваться <em>Process Monitor</em> и отследить изменения реестра при переключении формата в панели управления, можно выявить, какие свойства изменяются. (Если также иметь установленный <em>WinDBG</em>, можно увидеть по стеку, что служба Аудио вызывает метод <code>SetDeviceFormat</code> недокументированного интерфейса <a href="https://github.com/tartakynov/audioswitch/blob/master/IPolicyConfig.h" rel="nofollow noreferrer">IPolicyConfig</a>. Наверное, можно попробовать тоже его вызывать, но непонятно, что именно передавать в параметрах...) Итак, исследования показали, что внутренний формат хранится в следующих свойствах:</p>
+<p><strong>Windows 7</strong>:</p>
+<blockquote>
+  <p>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Render{...}\Properties<br>
+  {e4870e26-3cc5-4cd2-ba46-ca0a9a70ed04},0</p>
+</blockquote>
+<p><strong>Windows 10</strong>:</p>
+<blockquote>
+  <p>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Render{...}\Properties<br>
+  {e4870e26-3cc5-4cd2-ba46-ca0a9a70ed04},0<br>
+  {3d6e1656-2e50-4c4c-8d85-d0acae3c6c68},2<br>
+  {3d6e1656-2e50-4c4c-8d85-d0acae3c6c68},3<br>
+  {624f56de-fd24-473e-814a-de40aacaed16},3</p>
+</blockquote>
+<p>Вспомогательная функция для изменения свойства аудиоформата:</p>
+<pre><code>#define INITGUID
+#include &lt;stdio.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;Windows.h&gt;
+#include &lt;Objbase.h&gt;
+#include &lt;Shobjidl.h&gt;
+#include &lt;MMDeviceAPI.h&gt;
+#include &lt;Mmreg.h&gt;
+#include &lt;locale.h&gt;
+#include &lt;Functiondiscoverykeys_devpkey.h&gt;
+
+#pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "strmiids.lib")
+#pragma comment(lib, "quartz.lib")
+#pragma comment(lib, "uuid.lib")
+
+
+//property key для свойств, представляющих внутренний формат аудио
+DEFINE_PROPERTYKEY(PKEY_InternalAudioFormat, 0xe4870e26, 0x3cc5, 0x4cd2, 0xba, 0x46, 0xca, 0xa, 0x9a, 0x70, 0xed, 0x4, 0);
+DEFINE_PROPERTYKEY(PKEY_InternalAudioFormat2, 0x3d6e1656, 0x2e50, 0x4c4c, 0x8d, 0x85, 0xd0, 0xac, 0xae, 0x3c, 0x6c, 0x68, 2);
+DEFINE_PROPERTYKEY(PKEY_InternalAudioFormat3, 0x3d6e1656, 0x2e50, 0x4c4c, 0x8d, 0x85, 0xd0, 0xac, 0xae, 0x3c, 0x6c, 0x68, 3);
+DEFINE_PROPERTYKEY(PKEY_InternalAudioFormat4, 0x624f56de, 0xfd24, 0x473e, 0x81, 0x4a, 0xde, 0x40, 0xaa, 0xca, 0xed, 0x16, 3);
+
+/* Функция SetFormatProperty: Изменение свойства формата аудио в объекте IPropertyStore, свзянном с AudioEndpoint
+Параметры:
+ propertyStore - объект IPropertyStore, в котором необходимо изменить свойство
+ PROPERTYKEY - идентификатор свойства
+ freq - частота дискретизации (Гц)
+ channels - число каналов
+ bitsPerSample - битов на сэмпл (0 - не указано)
+*/
+bool SetFormatProperty(IPropertyStore* propertyStore,PROPERTYKEY pkey,int freq,int channels,int bitsPerSample){
+
+    HRESULT hr;
+    PROPVARIANT format;
+    PropVariantInit(&amp;format);
+    WAVEFORMATEXTENSIBLE wext;
+
+    hr = propertyStore-&gt;GetValue(pkey, &amp;format);//получаем текущее значение свойства
+    if(FAILED(hr)) {printf("Can't get property: HRESULT 0x%x\n",hr);return false;}
+
+    if(format.blob.cbSize!=sizeof(WAVEFORMATEXTENSIBLE)){
+        return false;
+    }
+
+    memcpy_s(&amp;wext,sizeof(wext),format.blob.pBlobData,sizeof(wext));//копируем значение в структуру
+
+    wext.Format.nChannels=channels;//число каналов
+    wext.Format.nSamplesPerSec=freq;//частота дискретизации
+
+    int new_bits=wext.Format.wBitsPerSample;//новое число бит на сэмпл
+    int new_valid_bits=wext.Samples.wValidBitsPerSample;//новое число используемых бит на сэмпл
+
+    if(bitsPerSample!=0){//если указано bitsPerSample, изменяем число бит
+            new_bits=bitsPerSample;
+            new_valid_bits=bitsPerSample;
+    }
+
+    PROPVARIANT varName={0};//переменная для нового значения свойства
+    PropVariantInit(&amp;varName);
+    varName.vt = VT_BLOB;
+    varName.blob.cbSize = sizeof(WAVEFORMATEXTENSIBLE);
+
+    int alignment = wext.Format.nChannels * new_bits / 8;//вычисляем размер блока
+
+    WAVEFORMATEXTENSIBLE fmt = { //заполняем параметры формата
+        {
+                WAVE_FORMAT_EXTENSIBLE,
+                wext.Format.nChannels,
+                wext.Format.nSamplesPerSec,
+                wext.Format.nSamplesPerSec * alignment,
+                alignment,
+                new_bits,
+                (sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX))
+        },
+        {new_valid_bits},
+        wext.dwChannelMask,
+        wext.SubFormat
+    };
+    varName.blob.pBlobData = (BYTE*)&amp;fmt;           
+
+    hr = propertyStore-&gt;SetValue(pkey, varName);//устанавливаем значение свойства
+    if (hr != S_OK)printf("SetValue failed. HRESULT: 0x%x\n",(int)hr);
+
+    PropVariantClear(&amp;format);
+    return (SUCCEEDED(hr));
+
+}
+</code></pre>
+<p>Пример кода для установки формата для устройства с указанным ID (запускать с правами администратора):</p>
+<pre><code>int _tmain(int argc, _TCHAR* argv[])
+{
+    DWORD dwMode = STGM_READWRITE;//режим доступа для Property store: Чтение и запись
+    wchar_t DeviceId[]=L"{0.0.0.00000000}.{ba946f3e-7cb9-4abf-a84c-a71bd014eb1c}";//ID нужного устройства
+
+    setlocale(LC_ALL,"Russian");    
+    CoInitialize(NULL);
+
+    TCHAR* pstr=NULL;
+    DWORD state;
+
+    IMMDeviceEnumerator *deviceEnumerator = NULL;
+    IMMDeviceCollection *deviceCollection = NULL;
+    IMMDevice* dev=NULL;
+    IPropertyStore *propertyStore=NULL;
+
+    WAVEFORMATEXTENSIBLE wext;
+    bool res;
+
+    //Create Device Enumerator
+    HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&amp;deviceEnumerator));
+    if(FAILED(hr)) {printf("CoCreateInstance fail: HRESULT 0x%x",hr);goto End;}
+
+    hr = deviceEnumerator-&gt;EnumAudioEndpoints(eRender,  DEVICE_STATE_ACTIVE, &amp;deviceCollection);
+    if(FAILED(hr)) {printf("EnumAudioEndpoints fail: HRESULT 0x%x\n",hr);goto End;}
+
+    UINT deviceCount;
+    hr = deviceCollection-&gt;GetCount(&amp;deviceCount);
+    if(FAILED(hr)) {printf("GetCount fail: HRESULT 0x%x\n",hr);goto End;}
+
+    //находим нужное устройство
+    for (UINT DeviceIndex = 0 ; DeviceIndex &lt; deviceCount; DeviceIndex++)
+    {
+        deviceCollection-&gt;Item(DeviceIndex,&amp;dev);
+        if(FAILED(hr)) {printf("Item fail: 0x%x\n",hr);goto Next;}
+
+        dev-&gt;GetId(&amp;pstr);
+        if(FAILED(hr)) {printf("Can't get device ID: HRESULT 0x%x\n",hr);goto Next;}
+
+        if(wcscmp(pstr,DeviceId)==0) { //устанавливаем свойства...
+
+            hr = dev-&gt;OpenPropertyStore(dwMode, &amp;propertyStore);        
+            if(FAILED(hr)) {printf("Can't open property store: HRESULT 0x%x\n",hr);goto Next;}
+
+            //формат вывода: заменяем частоту, число каналов и битность         
+            res=SetFormatProperty(propertyStore,PKEY_AudioEngine_DeviceFormat,44100,2,16);  
+            if(!res){printf("Can't set PKEY_AudioEngine_DeviceFormat!\n");goto Next;}
+
+            //внутренный формат: заменяем только частоту и число каналов            
+            SetFormatProperty(propertyStore,PKEY_InternalAudioFormat,44100,2,0);            
+            SetFormatProperty(propertyStore,PKEY_InternalAudioFormat2,44100,2,0);           
+            SetFormatProperty(propertyStore,PKEY_InternalAudioFormat3,44100,2,0);           
+            SetFormatProperty(propertyStore,PKEY_InternalAudioFormat4,44100,2,0);           
+        }       
+
+        /* ****************** */
+
+Next:   
+        if(dev!=NULL){dev-&gt;Release();dev=NULL;}
+        if(propertyStore!=NULL){propertyStore-&gt;Release();propertyStore=NULL;}
+
+    }//end for
+
+
+End:if(dev!=NULL){dev-&gt;Release();dev=NULL;}
+    if(propertyStore!=NULL){propertyStore-&gt;Release();propertyStore=NULL;}
+    if(deviceEnumerator!=NULL){deviceEnumerator-&gt;Release();deviceEnumerator=NULL;}
+    if(deviceCollection!=NULL){deviceCollection-&gt;Release();deviceCollection=NULL;}  
+
+    CoUninitialize();
+    system("PAUSE");
+    return 0;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

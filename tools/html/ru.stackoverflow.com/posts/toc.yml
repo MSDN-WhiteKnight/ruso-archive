@@ -87,14 +87,26 @@
     href: 268206.md
   - name: "Определить подключение usb-модема."
     href: 318423.md
+  - name: "Как распарсить HTML в .NET?"
+    href: 420354.md
+  - name: "Как узнать тип стороннего приложения C#?"
+    href: 471177.md
   - name: "Как получить VID:PID для USB Hub в Windows?"
     href: 472263.md
+  - name: "Windows: как определить драйвера, которые система загрузит для составного USB-устройства?"
+    href: 474722.md
   - name: "Как определить размер функции в программе?"
     href: 490470.md
+  - name: "Можно ли на языках C/C++ определить целочисленное переполнение?"
+    href: 513736.md
   - name: "Магия шрифтов по умолчанию в WPF"
     href: 546269.md
   - name: "Как получить микшер браузера (сменить громкость)?"
     href: 592948.md
+  - name: "Получение наглядного значения WMI Win32_Processor.Family вместо индекса"
+    href: 618516.md
+  - name: "Не запускается программа после смены debug на release"
+    href: 626160.md
   - name: "C# Chart видимое построение"
     href: 640112.md
   - name: "Как правильно организовать многопоточность?"
@@ -107,6 +119,8 @@
     href: 640980.md
   - name: "Как узнать, какой файл исправил chkdsk?"
     href: 641741.md
+  - name: "Как перенаправить поток в лог файл (!) И (!) вывести на консоль в .bat файлах?"
+    href: 642759.md
   - name: "OpenFileDialog (Console)"
     href: 643795.md
   - name: "Зависит ли время на создание объекта от количества его свойств и методов?"
@@ -117,18 +131,32 @@
     href: 649179.md
   - name: "Автоматическое появление кнопки при подключении флешки/дискового раздела"
     href: 650094.md
+  - name: "Получить местоположение процесса по его ID"
+    href: 654400.md
   - name: "Принудительная отмена задачи"
     href: 654754.md
+  - name: "Настройка формата аудиоустройства в Windows"
+    href: 661489.md
   - name: "Рисование на окне другого приложения с помощью WinAPI"
     href: 661585.md
   - name: "Отобразить подключенное звуковое устройство"
     href: 668189.md
+  - name: "После закрытия программы остаётся процесс в диспетчере задач"
+    href: 668502.md
   - name: "Размещение C# на сервере"
     href: 669902.md
+  - name: "Визуализация звука с помощью библиотеки BASS на C#"
+    href: 676450.md
+  - name: "Определение инжектированных библиотек"
+    href: 676492.md
   - name: "Как узнать доступен ли файл для открытия и записи?"
     href: 691071.md
+  - name: "Не могу программно убить ранее запущенный процесс"
+    href: 696333.md
   - name: "Получение полного имени устройства аудиозахвата"
     href: 696725.md
+  - name: "как получить список Assembly из нужного процесса"
+    href: 699154.md
   - name: "Что делает vctip.exe?"
     href: 700867.md
   - name: "Как проверить корректность имени создаваемого файла?"
@@ -155,10 +183,124 @@
     href: 723805.md
   - name: "Высококачественное масштабирование двумерных текстур"
     href: 727567.md
+  - name: "Пароль через CreateFile для PhysicalDrive1"
+    href: 731040.md
   - name: "Получить свойства звукового устройства с помощью MMDevice API"
     href: 733291.md
   - name: "QRcode по ссылке"
     href: 733579.md
+  - name: "Как называется параметр в реестре \"Уровни\" звука записывающих устройств"
+    href: 744435.md
+  - name: "Wav-формат. Почему размер данных не кратен размеру сэмпла?"
+    href: 744941.md
+  - name: "Установить прокси для модема на C# (через реестр)"
+    href: 748656.md
+  - name: "Как программно получить список всех свойств устройства в Device Manager'e?"
+    href: 752276.md
+  - name: "Как открыть карту сети в windows или построить её самому?"
+    href: 752409.md
+  - name: "Как узнать основные характеристики ПЭВМ?"
+    href: 753019.md
+  - name: "Не отрабатывает событие нового кадра NewFrame Aforge"
+    href: 753484.md
+  - name: "Поиск файла по номеру кластера на диске"
+    href: 753833.md
+  - name: "BSOD при работе программы под .NET 4.6.2"
+    href: 754438.md
+  - name: "О типах библиотек debug, release, debug dll, release dll"
+    href: 754786.md
+  - name: "Как проверить является ли процесс системным?"
+    href: 758190.md
+  - name: "Как узнать об использовании видеокарты приложением?"
+    href: 759022.md
+  - name: "Как определить файлы используемые сторонним процессом?"
+    href: 759165.md
+  - name: "WAV DATA как \"сидят данные\""
+    href: 760083.md
+  - name: "Передача по ссылке с последующим копированием vs передача по значению"
+    href: 760436.md
+  - name: "Чем отличается codePointCount от substring().length()?"
+    href: 762097.md
+  - name: "Как отловить нажатие клавиш в WPF-приложении, когда оно свёрнуто?"
+    href: 764352.md
+  - name: "C# Как узнать разрядности чужого exe или чужого процесса?"
+    href: 764547.md
+  - name: "Как получить все заголовки/названия разделов ресурсов PE файла (.exe)?"
+    href: 764987.md
+  - name: "Как открыть файл с помощью команды приложения?"
+    href: 767263.md
+  - name: "GetKeyboardState: определение состояния клавиши"
+    href: 767999.md
+  - name: "Получение содержимого ListView другого окна"
+    href: 768442.md
+  - name: "При установке свойства TopMost приложение воспринимается как троян"
+    href: 769043.md
+  - name: "Обратиться к макроопределениям GET_X_LPARAM и GET_Y_LPARAM"
+    href: 769516.md
+  - name: "Запоминаем адрес объекта в памяти, которая принадлежит окну"
+    href: 770669.md
+  - name: "c#. System.Windows.Forms.WebBrowser и код текста для IFrame"
+    href: 772547.md
+  - name: "Как получить событие LoadCompleted контрола WebBrowser, не вставляя данный контрол в XAML?"
+    href: 773014.md
+  - name: "Что такое WinRT и с чем его едят?"
+    href: 774883.md
+  - name: "Поддерживается ли функция localtime_s в трансляторе GCC?"
+    href: 775464.md
+  - name: "Как правильно задать строку подключения к БД"
+    href: 776652.md
+  - name: "Создание собственного Windows инсталлятора"
+    href: 776708.md
+  - name: "Windows Form, потеря иконки в task bar, при потере фокуса приложением"
+    href: 777940.md
+  - name: "C# Как достать информацию об устройствах компьютера не используя WMI"
+    href: 778618.md
+  - name: "Сколько памяти занимают объекты?"
+    href: 779090.md
+  - name: "Runtime Library error. Не запускается приложение"
+    href: 782030.md
+  - name: "Перегрузка операторов, необходимо иметь возможность извлечь реальный адрес локального поля"
+    href: 785708.md
+  - name: "IPAddress Control проблема отображения"
+    href: 787069.md
+  - name: "Передача значений в чужую консольную программу"
+    href: 787110.md
+  - name: "Откуда берется наименование папки с настройками приложения?"
+    href: 787805.md
+  - name: "Алгоритмы активного шумоподавления"
+    href: 790343.md
+  - name: "Пауза консоли в C++"
+    href: 790538.md
+  - name: "WASAPI Запись звука"
+    href: 793697.md
+  - name: "Разбор dll и добавление их в программу"
+    href: 794122.md
+  - name: "Построение графика произвольной функции c#"
+    href: 795993.md
+  - name: "Открытый OleDbConnection не дает завершится программу"
+    href: 796861.md
+  - name: "Проблемы с кодировкой c# sendkeys"
+    href: 797658.md
+  - name: "FileStream и пути длинною >260 символов"
+    href: 797949.md
+  - name: "Вывод информации о COM-порте"
+    href: 798054.md
+  - name: "Ошибки при работе с консолью в отдельном потоке"
+    href: 798256.md
+  - name: "Как узнать какой метод больше загружает процессор?"
+    href: 799074.md
+  - name: "Изменение громкости в скайпе"
+    href: 799293.md
+  - name: "Как реализовать нажатие клавиш Ctrl и Shift на языке С/C++"
+    href: 801076.md
+  - name: "Побайтная запись данных в структуру С#"
+    href: 801587.md
+  - name: "Как изменить кодировку в консоли Visual Studio 2017"
+    href: 803379.md
+  - name: "Работа с Русским языком в Visual Studio C++"
+    href: 804324.md
+  - name: "Вывод логов действий с файлами"
+    href: 805644.md
   - name: "Определение методов класса с одинаковой сигнатурой"
     href: 865803.md
   - name: "Как отловить все клавиши через низкоуровневый хук?"
@@ -293,148 +435,6 @@
     href: 998161.md
   - name: "Невозможно сделать реактивацию окна посредством Winapi - SetForegroundWindow"
     href: 999794.md
-  - name: "Answer 737667"
-    href: 737667.md
-  - name: "Answer 738668"
-    href: 738668.md
-  - name: "Answer 740938"
-    href: 740938.md
-  - name: "Answer 743709"
-    href: 743709.md
-  - name: "Answer 744771"
-    href: 744771.md
-  - name: "Answer 746793"
-    href: 746793.md
-  - name: "Answer 749931"
-    href: 749931.md
-  - name: "Answer 752867"
-    href: 752867.md
-  - name: "Answer 753705"
-    href: 753705.md
-  - name: "Answer 753935"
-    href: 753935.md
-  - name: "Answer 754466"
-    href: 754466.md
-  - name: "Answer 758249"
-    href: 758249.md
-  - name: "Answer 759191"
-    href: 759191.md
-  - name: "Answer 760563"
-    href: 760563.md
-  - name: "Answer 762100"
-    href: 762100.md
-  - name: "Answer 763170"
-    href: 763170.md
-  - name: "Answer 765818"
-    href: 765818.md
-  - name: "Answer 765851"
-    href: 765851.md
-  - name: "Answer 767071"
-    href: 767071.md
-  - name: "Answer 767413"
-    href: 767413.md
-  - name: "Answer 768514"
-    href: 768514.md
-  - name: "Answer 769179"
-    href: 769179.md
-  - name: "Answer 770375"
-    href: 770375.md
-  - name: "Answer 770402"
-    href: 770402.md
-  - name: "Answer 770680"
-    href: 770680.md
-  - name: "Answer 773005"
-    href: 773005.md
-  - name: "Answer 773093"
-    href: 773093.md
-  - name: "Answer 773870"
-    href: 773870.md
-  - name: "Answer 774866"
-    href: 774866.md
-  - name: "Answer 775215"
-    href: 775215.md
-  - name: "Answer 775831"
-    href: 775831.md
-  - name: "Answer 777174"
-    href: 777174.md
-  - name: "Answer 777950"
-    href: 777950.md
-  - name: "Answer 778117"
-    href: 778117.md
-  - name: "Answer 779065"
-    href: 779065.md
-  - name: "Answer 779212"
-    href: 779212.md
-  - name: "Answer 779662"
-    href: 779662.md
-  - name: "Answer 780170"
-    href: 780170.md
-  - name: "Answer 782384"
-    href: 782384.md
-  - name: "Answer 784746"
-    href: 784746.md
-  - name: "Answer 784952"
-    href: 784952.md
-  - name: "Answer 785821"
-    href: 785821.md
-  - name: "Answer 787084"
-    href: 787084.md
-  - name: "Answer 787210"
-    href: 787210.md
-  - name: "Answer 788087"
-    href: 788087.md
-  - name: "Answer 789447"
-    href: 789447.md
-  - name: "Answer 790434"
-    href: 790434.md
-  - name: "Answer 791813"
-    href: 791813.md
-  - name: "Answer 791821"
-    href: 791821.md
-  - name: "Answer 792908"
-    href: 792908.md
-  - name: "Answer 794133"
-    href: 794133.md
-  - name: "Answer 794355"
-    href: 794355.md
-  - name: "Answer 795275"
-    href: 795275.md
-  - name: "Answer 796077"
-    href: 796077.md
-  - name: "Answer 797408"
-    href: 797408.md
-  - name: "Answer 797931"
-    href: 797931.md
-  - name: "Answer 797965"
-    href: 797965.md
-  - name: "Answer 798047"
-    href: 798047.md
-  - name: "Answer 798312"
-    href: 798312.md
-  - name: "Answer 799280"
-    href: 799280.md
-  - name: "Answer 801047"
-    href: 801047.md
-  - name: "Answer 801449"
-    href: 801449.md
-  - name: "Answer 801807"
-    href: 801807.md
-  - name: "Answer 802885"
-    href: 802885.md
-  - name: "Answer 804536"
-    href: 804536.md
-  - name: "Answer 804823"
-    href: 804823.md
-  - name: "Answer 805195"
-    href: 805195.md
-  - name: "Answer 805933"
-    href: 805933.md
-  - name: "Answer 807267"
-    href: 807267.md
-  - name: "Answer 808129"
-    href: 808129.md
-  - name: "Answer 808189"
-    href: 808189.md
   - name: "Answer 809326"
     href: 809326.md
   - name: "Answer 809699"

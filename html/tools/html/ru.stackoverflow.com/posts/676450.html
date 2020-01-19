@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1042;&#1080;&#1079;&#1091;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; &#1079;&#1074;&#1091;&#1082;&#1072; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; &#1073;&#1080;&#1073;&#1083;&#1080;&#1086;&#1090;&#1077;&#1082;&#1080; BASS &#1085;&#1072; C# | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1042;&#1080;&#1079;&#1091;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; &#1079;&#1074;&#1091;&#1082;&#1072; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; &#1073;&#1080;&#1073;&#1083;&#1080;&#1086;&#1090;&#1077;&#1082;&#1080; BASS &#1085;&#1072; C# | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Визуализация звука с помощью библиотеки BASS на C#</h1>
+<p><a href="https://ru.stackoverflow.com/questions/676450/%d0%92%d0%b8%d0%b7%d1%83%d0%b0%d0%bb%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%b7%d0%b2%d1%83%d0%ba%d0%b0-%d1%81-%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e-%d0%b1%d0%b8%d0%b1%d0%bb%d0%b8%d0%be%d1%82%d0%b5%d0%ba%d0%b8-bass-%d0%bd%d0%b0-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/253604/doctor894">DocTor894</a></p>
+<blockquote>
+<p>Здравствуйте. Недавно занялся написанием плеера на C#. Хотелось бы сделать визуализацию звука, вроде графических образов WMP. Подскажите, как это можно реализовать?<a href="https://i.stack.imgur.com/gRKzV.jpg" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/gRKzV.jpg" alt="Как пример"></a></p>
+</blockquote>
+<h2>Answer 746793</h2>
+<p><a href="https://ru.stackoverflow.com/a/746793/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Для получения графического представления звука нужно использовать метод <a href="http://bass.radio42.com/help/html/a13cfef0-1056-bb94-81c4-a4fdf21bd463.htm" rel="nofollow noreferrer">BASS_ChannelGetData</a> с флагом <code>BASS_DATA_FFT...</code> Метод возвращает массив амплитуд для набора диапазонов частот. Из него нужно отбросить первый элемент (0 Гц - это постоянная составляющая), и построить график по относительным значениям амплитуды и частоты. </p>
+<p>Пример кода для вывода графика в Windows Forms (на форме нужно поместить элементы Button, Panel и Timer):</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Un4seen.Bass;
+
+namespace BassTest
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        int chan = 0;//номер потока
+        Single[] fft=null;//массив данных спектра
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int n=Bass.BASS_GetDevice();//получаем устройство по умолчанию
+            if (Bass.BASS_Init(n, 44100, 0, IntPtr.Zero) == false)
+            {
+                MessageBox.Show("BASS_Init failed");
+                return;
+            }
+
+            chan = Bass.BASS_StreamCreateFile(@"C:\MP3\file.mp3",
+                0, 0, BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_SAMPLE_LOOP);//создаем поток в режиме FLOAT
+
+            if (chan == 0)
+            {
+                MessageBox.Show("BASS_StreamCreateFile failed");
+                return;
+            }
+
+            bool f;
+            f = Bass.BASS_ChannelPlay(chan, false);//воспроизводим поток
+            if (f == false)
+            {
+                MessageBox.Show("BASS_ChannelPlay failed");
+                return;
+            }
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)//запускаем каждые 500 мс
+        {
+            if (chan == 0) return;
+            if (Bass.BASS_ChannelIsActive(chan) != BASSActive.BASS_ACTIVE_PLAYING) return;
+
+            fft = new Single[2048];//выделяем массив для данных            
+            Bass.BASS_ChannelGetData(chan, fft, (int)BASSData.BASS_DATA_FFT4096);//получаем спектр потока
+            fft[0] = 0.0f;//избавляемся от постоянной составляющей            
+
+            panel1.Refresh();//перерисовка графика
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)//построение графика
+        {
+            if (fft == null) return;            
+
+            PointF p1,p2;            
+            float max_y = 0;//максимальное значение амплитуды
+            float min_y=Single.MaxValue;//минимальное значение амплитуды
+            float max_x = fft.Length - 1;//максимальная частота, для которой амплитуда ненулевая
+
+            int i = 0;
+            max_x = 0;
+            foreach(float f in fft)//находим максимальные и минимальные значения
+            {
+                if (f &gt; max_y) max_y = f;
+                if (f &lt; min_y) min_y = f;
+
+                if (f &gt; 0.001f) max_x = (float)i;
+                i++;
+            }             
+
+            /*меняем направление оси Y, чтобы она смотрела вверх*/
+            e.Graphics.ScaleTransform(1.0f,-1.0f);
+            e.Graphics.TranslateTransform(0.0f, -1.0f * panel1.Height);
+
+            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+
+            float y;
+            p1 = new PointF(0.0f, 0.0f);//начальная точка
+
+            for (float x = 1; x &lt;= max_x; x++)
+            {                
+                y = fft[(int)x];
+
+                /*вычисляем координату следующей точки по относительной амплитуде*/
+                p2 = new PointF((x / max_x) * panel1.Width, panel1.Height * (y - min_y) / (max_y - min_y));
+
+                path.AddLine(p1, p2);//добавляем линию в график
+                p1 = p2;
+            }
+            e.Graphics.DrawPath(Pens.Black, path);
+
+        }
+    }
+}
+</code></pre>
+<p>Выглядит так (не настолько красиво, как в WMP, но уже что-то):</p>
+<p><a href="https://i.stack.imgur.com/1fI0P.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/1fI0P.png" alt="BASS FFT"></a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

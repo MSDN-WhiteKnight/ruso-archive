@@ -1,0 +1,555 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1088;&#1077;&#1072;&#1083;&#1080;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100; &#1085;&#1072;&#1078;&#1072;&#1090;&#1080;&#1077; &#1082;&#1083;&#1072;&#1074;&#1080;&#1096; Ctrl &#1080; Shift &#1085;&#1072; &#1103;&#1079;&#1099;&#1082;&#1077; &#1057;/C++ | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1088;&#1077;&#1072;&#1083;&#1080;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100; &#1085;&#1072;&#1078;&#1072;&#1090;&#1080;&#1077; &#1082;&#1083;&#1072;&#1074;&#1080;&#1096; Ctrl &#1080; Shift &#1085;&#1072; &#1103;&#1079;&#1099;&#1082;&#1077; &#1057;/C++ | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как реализовать нажатие клавиш Ctrl и Shift на языке С/C++</h1>
+<p><a href="https://ru.stackoverflow.com/questions/801076/%d0%9a%d0%b0%d0%ba-%d1%80%d0%b5%d0%b0%d0%bb%d0%b8%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c-%d0%bd%d0%b0%d0%b6%d0%b0%d1%82%d0%b8%d0%b5-%d0%ba%d0%bb%d0%b0%d0%b2%d0%b8%d1%88-ctrl-%d0%b8-shift-%d0%bd%d0%b0-%d1%8f%d0%b7%d1%8b%d0%ba%d0%b5-%d0%a1-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/260756/invzbl3">invzbl3</a></p>
+<blockquote>
+<p>Задание звучит так: </p>
+<blockquote>
+  <p>Написать программу, которая выводит в заданную позицию консоли
+  информацию про координаты мыши, состояние управляющих клавиш (ALT,
+  CTRL, SHIFT), скан-код и ASCII-код нажатой клавиши. Для вывода
+  результатов использовать функции <em>SetConsoleCursorPosition,(),
+  wsprintf(), WriteConsole()</em>.</p>
+</blockquote>
+<p>Перечитал <a href="http://www.cyberguru.ru/win32/win32-keyboard.html?showall=1" rel="nofollow noreferrer">документацию</a>, посмотрел примеры (последний слишком сумбурный). Так как клавиши символьные, то для их написания придется использовать ещё функцию <code>TranslateMessage</code>. </p>
+<p>Вопрос по реализации нажатия клавиш, каким образом лучше поступить. (Выделил блок кода, по которому вопрос).</p>
+<p>На данный момент имею такой код:</p>
+<pre><code>        #include "stdafx.h"
+        #include &lt;cstring&gt;
+        #include &lt;iostream&gt;
+        #include &lt;stdio.h&gt;
+        #include &lt;conio.h&gt;
+        #include &lt;windows.h&gt;
+        #include &lt;winuser.h&gt;
+
+
+        #define  STR_SIZE 256
+        #define BUFSIZE 65535
+        #define SHIFTED 0x8000
+
+
+        int main() {
+
+            setlocale(LC_ALL, "rus");
+            HANDLE hIn, hOut;
+            DWORD size = STR_SIZE;
+            char result[STR_SIZE];
+
+            FreeConsole();
+            AllocConsole();
+            SetConsoleOutputCP(1251);
+
+            hIn = GetStdHandle(STD_INPUT_HANDLE);
+            hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+            GetDC(NULL); // дескриптор стола
+            POINT p; // структура для координат
+            COORD cord; // структура COORD, которая указывает позицию курсора
+
+            cord.X = 0; // координата X структуры COORD
+            cord.Y = 0; // координата Y структуры COORD
+
+   //------------------------------------------------------------------
+
+
+            HWND hwndMain;
+            HACCEL haccl;
+            UINT uMsg;
+            UINT wParam;
+            LONG lParam;
+            HWND hwnd;
+            MSG msg;
+
+                    switch (wParam)
+                    {
+                    case 0x10:
+
+                             /*SHIFT key.*/
+                        printf("SHIFT pressed", wParam);
+
+                            break;
+
+                    case 0x11:
+
+                             /*CTRL key.*/
+                        printf("CTRL pressed", wParam);
+
+                            break;
+                    case 0x12:
+
+                             /*ALT key. */
+                        printf("ALT pressed", wParam);
+
+                            break;
+                    default:
+
+                        printf("OTHER pressed", wParam);
+                             /* Обработка воспроизводимых символов. */
+
+                            break;
+                    }
+
+                    while (GetMessage(&amp;msg, (HWND)NULL, 0, 0))
+                    {
+                        if (TranslateAccelerator(hwndMain, haccl, &amp;msg) == 0)
+                        {
+                            TranslateMessage(&amp;msg);
+                            DispatchMessage(&amp;msg);
+                        }
+                    }   
+    //-----------------------------------------------------------------------------
+
+            while (1) {
+                wsprintf(result, "Позиция курсора: ");
+                WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+                GetCursorPos(&amp;p);
+                wsprintf(result, "x = %4ld, y = %4ld\r\n", p.x, p.y);
+                WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cord);
+            }
+            return 0;
+        }
+</code></pre>
+<p>UPD:</p>
+<pre><code>#include "stdafx.h"
+#include &lt;stdlib.h&gt;
+#include &lt;locale.h&gt;  
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;tchar.h&gt;
+
+VOID ErrorExit(LPCSTR);
+VOID KeyEventProc(KEY_EVENT_RECORD);
+VOID MouseEventProc(MOUSE_EVENT_RECORD);
+
+#define  STR_SIZE 256
+#define BUFSIZE 65535
+#define SHIFTED 0x8000
+
+HANDLE hStdin;
+HANDLE hOut;
+DWORD fdwSaveOldMode;
+
+DWORD scan = 0; //скан-код последней клавиши
+wchar_t code = 0; //код символа последней клавиши
+bool alt, ctrl, shift; //состояние управляющих клавиш
+
+void PrintData() {
+    DWORD size = STR_SIZE;
+    char result[STR_SIZE];
+
+    //GetDC(NULL); // дескриптор стола
+    POINT p; // структура для координат
+    COORD cord; // структура COORD, которая указывает позицию курсора
+
+    cord.X = 0; // координата X структуры COORD
+    cord.Y = 0; // координата Y структуры COORD
+
+    SetConsoleCursorPosition(hOut, cord);
+    wsprintf(result, "Позиция курсора: ");
+    WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+    GetCursorPos(&amp;p);
+    wsprintf(result, "x = %4ld, y = %4ld\r\n", p.x, p.y);
+    WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+
+    if (scan != 0) {
+        wsprintf(result, "Последняя нажатая клавиша\nScan code: %4u\r\n", (UINT)scan);
+        WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+
+        wsprintf(result, "Character code: %4u\r\n", (UINT)code);
+        WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+
+
+        if (ctrl) wsprintf(result, "CTRL:(+) "); else  wsprintf(result, "CTRL:(-) ");
+        WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+
+        if (shift) wsprintf(result, "SHIFT:(+) "); else  wsprintf(result, "SHIFT:(-) ");
+        WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+
+        if (alt) wsprintf(result, "ALT:(+) "); else  wsprintf(result, "ALT:(-) ");
+        WriteConsole(hOut, result, strlen(result), nullptr, nullptr);
+    }
+}
+
+int main()
+{
+    //setlocale(LC_ALL, "Russian");
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    DWORD cNumRead, fdwMode, i;
+    INPUT_RECORD irInBuf[128];
+
+    // Get the standard input handle. 
+
+    hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Save the current input mode, to be restored on exit. 
+
+    if (!GetConsoleMode(hStdin, &amp;fdwSaveOldMode))
+        ErrorExit("GetConsoleMode");
+
+    // Enable the window and mouse input events. 
+
+    fdwMode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT;
+    if (!SetConsoleMode(hStdin, fdwMode))
+        ErrorExit("SetConsoleMode");
+
+    // Loop to read and handle input events. 
+
+    while (1)
+    {
+        // Wait for the events. 
+
+        if (!ReadConsoleInput(
+            hStdin,      // input buffer handle 
+            irInBuf,     // buffer to read into 
+            128,         // size of read buffer 
+            &amp;cNumRead)) // number of records read 
+            ErrorExit("ReadConsoleInput");
+
+        // Dispatch the events to the appropriate handler. 
+
+        for (i = 0; i &lt; cNumRead; i++)
+        {
+            switch (irInBuf[i].EventType)
+            {
+            case KEY_EVENT: // keyboard input 
+                KeyEventProc(irInBuf[i].Event.KeyEvent);
+                break;
+
+            case MOUSE_EVENT: // mouse input 
+                MouseEventProc(irInBuf[i].Event.MouseEvent);
+                break;
+
+            case WINDOW_BUFFER_SIZE_EVENT:
+            case FOCUS_EVENT:
+            case MENU_EVENT:
+                break;
+            }
+        }
+    }
+
+    // Restore input mode on exit.
+
+    SetConsoleMode(hStdin, fdwSaveOldMode);
+
+    return 0;
+}
+
+
+VOID KeyEventProc(KEY_EVENT_RECORD ker)
+{
+
+    if (ker.bKeyDown) {
+        scan = ker.wVirtualScanCode;
+        code = ker.uChar.UnicodeChar;
+
+        if ((ker.dwControlKeyState &amp; SHIFT_PRESSED) &gt; 0) shift = true; else shift = false;
+
+        if ((ker.dwControlKeyState &amp; LEFT_ALT_PRESSED) &gt; 0 ||
+            (ker.dwControlKeyState &amp; RIGHT_ALT_PRESSED) &gt; 0) alt = true;
+        else alt = false;
+
+        if ((ker.dwControlKeyState &amp; LEFT_CTRL_PRESSED) &gt; 0 ||
+            (ker.dwControlKeyState &amp; RIGHT_CTRL_PRESSED) &gt; 0) ctrl = true;
+        else ctrl = false;
+
+        PrintData();
+    }
+
+}
+
+VOID MouseEventProc(MOUSE_EVENT_RECORD mer)
+{
+    if (mer.dwEventFlags == MOUSE_MOVED) {
+        PrintData();
+    }
+}
+
+VOID ErrorExit(LPCSTR lpszMessage)
+{
+    fprintf(stderr, "%s\n", lpszMessage);
+
+    // Restore input mode on exit.
+    SetConsoleMode(hStdin, fdwSaveOldMode);
+
+    ExitProcess(0);
+}
+</code></pre>
+</blockquote>
+<h2>Answer 802885</h2>
+<p><a href="https://ru.stackoverflow.com/a/802885/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Система отправляет события клавиатуры для консольных приложений не в процесс консольного приложения, а в системный процесс, владеющий окном консоли (csrss или conhost в зависимости от ОС), создавать цикл обработки сообщений бесполезно. Чтобы обрабатывать такие события, нужно использовать специальные функции работы с консольным вводом:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;locale.h&gt;  
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;tchar.h&gt;
+
+VOID ErrorExit(LPSTR);
+VOID KeyEventProc(KEY_EVENT_RECORD); 
+VOID MouseEventProc(MOUSE_EVENT_RECORD);
+
+#define  STR_SIZE 256
+#define BUFSIZE 65535
+#define SHIFTED 0x8000
+
+HANDLE hStdin; 
+HANDLE hOut;
+DWORD fdwSaveOldMode;
+
+DWORD scan=0; //скан-код последней клавиши
+wchar_t code=0; //код символа последней клавиши
+bool alt,ctrl,shift; //состояние управляющих клавиш
+
+void PrintData(){
+
+    DWORD size = STR_SIZE;
+    TCHAR result[STR_SIZE];         
+
+    POINT p; // структура для координат
+    COORD cord; // структура COORD, которая указывает позицию курсора
+
+    cord.X = 0; // координата X структуры COORD
+    cord.Y = 0; // координата Y структуры COORD
+
+    SetConsoleCursorPosition(hOut, cord);
+    wsprintf(result, L"Позиция курсора: ");
+    WriteConsole(hOut, result, wcslen(result), nullptr, nullptr);
+    GetCursorPos(&amp;p);
+    wsprintf(result, L"x = %4ld, y = %4ld\r\n", p.x, p.y);
+    WriteConsole(hOut, result, wcslen(result), nullptr, nullptr);
+
+        if(scan!=0){
+        wsprintf(result, L"Последняя нажатая клавиша\nScan code: %4u, Character code: %4u\r\n", (UINT)scan,(UINT)code);
+        WriteConsole(hOut, result, wcslen(result), nullptr, nullptr);
+
+        if(ctrl) wsprintf(result,L"CTRL:(+) "); else  wsprintf(result,L"CTRL:(-) ");
+        WriteConsole(hOut, result, wcslen(result), nullptr, nullptr);
+
+        if(shift) wsprintf(result,L"SHIFT:(+) "); else  wsprintf(result,L"SHIFT:(-) ");
+        WriteConsole(hOut, result, wcslen(result), nullptr, nullptr);
+
+        if(alt) wsprintf(result,L"ALT:(+) "); else  wsprintf(result,L"ALT:(-) ");
+        WriteConsole(hOut, result, wcslen(result), nullptr, nullptr);
+        }     
+
+}
+
+
+int main() 
+{ 
+    setlocale(LC_ALL, "Russian");
+    DWORD cNumRead, fdwMode, i; 
+    INPUT_RECORD irInBuf[128];         
+
+    // Get the standard input handle. 
+
+    hStdin = GetStdHandle(STD_INPUT_HANDLE); 
+    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Save the current input mode, to be restored on exit. 
+
+    if (! GetConsoleMode(hStdin, &amp;fdwSaveOldMode) ) 
+        ErrorExit("GetConsoleMode"); 
+
+    // Enable the window and mouse input events. 
+
+    fdwMode = ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT; 
+    if (! SetConsoleMode(hStdin, fdwMode) ) 
+        ErrorExit("SetConsoleMode"); 
+
+    // Loop to read and handle input events. 
+
+    while (1) 
+    { 
+        // Wait for the events. 
+
+        if (! ReadConsoleInput( 
+                hStdin,      // input buffer handle 
+                irInBuf,     // buffer to read into 
+                128,         // size of read buffer 
+                &amp;cNumRead) ) // number of records read 
+            ErrorExit("ReadConsoleInput"); 
+
+        // Dispatch the events to the appropriate handler. 
+
+        for (i = 0; i &lt; cNumRead; i++) 
+        {
+            switch(irInBuf[i].EventType) 
+            { 
+                case KEY_EVENT: // keyboard input 
+                    KeyEventProc(irInBuf[i].Event.KeyEvent); 
+                    break; 
+
+                case MOUSE_EVENT: // mouse input 
+                    MouseEventProc(irInBuf[i].Event.MouseEvent); 
+                    break; 
+
+                case WINDOW_BUFFER_SIZE_EVENT: 
+                case FOCUS_EVENT: 
+                case MENU_EVENT:   
+                    break;                 
+            } 
+        }
+    } 
+
+    // Restore input mode on exit.
+
+    SetConsoleMode(hStdin, fdwSaveOldMode);
+
+    return 0; 
+}
+
+
+VOID KeyEventProc(KEY_EVENT_RECORD ker)
+{   
+
+    if(ker.bKeyDown){
+        scan=ker.wVirtualScanCode;
+        code=ker.uChar.UnicodeChar;
+
+        if((ker.dwControlKeyState &amp; SHIFT_PRESSED) &gt; 0) shift=true; else shift=false;
+
+        if((ker.dwControlKeyState &amp; LEFT_ALT_PRESSED) &gt; 0 || 
+            (ker.dwControlKeyState &amp; RIGHT_ALT_PRESSED) &gt; 0) alt=true; 
+        else alt=false;
+
+        if((ker.dwControlKeyState &amp; LEFT_CTRL_PRESSED) &gt; 0 || 
+            (ker.dwControlKeyState &amp; RIGHT_CTRL_PRESSED) &gt; 0) ctrl=true; 
+        else ctrl=false;
+
+        PrintData();
+    }
+
+}
+
+VOID MouseEventProc(MOUSE_EVENT_RECORD mer)
+{
+    if(mer.dwEventFlags == MOUSE_MOVED){
+        PrintData();
+    }    
+}
+
+VOID ErrorExit (LPSTR lpszMessage) 
+{ 
+    fprintf(stderr, "%s\n", lpszMessage); 
+
+    // Restore input mode on exit.
+    SetConsoleMode(hStdin, fdwSaveOldMode);
+
+    ExitProcess(0); 
+}
+</code></pre>
+<p><a href="https://docs.microsoft.com/en-us/windows/console/reading-input-buffer-events" rel="nofollow noreferrer">Reading Input Buffer Events - Microsoft Docs</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

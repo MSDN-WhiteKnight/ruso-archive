@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Wav-&#1092;&#1086;&#1088;&#1084;&#1072;&#1090;. &#1055;&#1086;&#1095;&#1077;&#1084;&#1091; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093; &#1085;&#1077; &#1082;&#1088;&#1072;&#1090;&#1077;&#1085; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088;&#1091; &#1089;&#1101;&#1084;&#1087;&#1083;&#1072;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Wav-&#1092;&#1086;&#1088;&#1084;&#1072;&#1090;. &#1055;&#1086;&#1095;&#1077;&#1084;&#1091; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093; &#1085;&#1077; &#1082;&#1088;&#1072;&#1090;&#1077;&#1085; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088;&#1091; &#1089;&#1101;&#1084;&#1087;&#1083;&#1072;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Wav-формат. Почему размер данных не кратен размеру сэмпла?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/744941/wav-%d1%84%d0%be%d1%80%d0%bc%d0%b0%d1%82-%d0%9f%d0%be%d1%87%d0%b5%d0%bc%d1%83-%d1%80%d0%b0%d0%b7%d0%bc%d0%b5%d1%80-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85-%d0%bd%d0%b5-%d0%ba%d1%80%d0%b0%d1%82%d0%b5%d0%bd-%d1%80%d0%b0%d0%b7%d0%bc%d0%b5%d1%80%d1%83-%d1%81%d1%8d%d0%bc%d0%bf%d0%bb%d0%b0">Source</a> - by <a href="https://ru.stackoverflow.com/users/212981/andrei-khotko">Andrei Khotko</a></p>
+<blockquote>
+<p>Пытаюсь прочитать Wav-файл. Считываю заголовок. </p>
+<p>Так получается, что размер данных (<code>Subchunk2Size</code>, для примера, он равен 178) всегда не кратен размеру блока (<code>BlockAlign</code>, равен 4). Количество каналов - 2. Если мы будем по очереди считывать по 2 байта из данных, то в конце концов у правого канала будет на 1 значение меньше. Почему так? И как правильно в таком случае разделить данные между двумя каналами?</p>
+<p>Класс, который читает Wav-файл (переделанный пример, взятый <a href="https://msdn.microsoft.com/ru-ru/library/ff827591.aspx" rel="nofollow noreferrer">отсюда</a>):</p>
+<pre><code>public class Parser
+{
+    public string FilePath { get; private set; } 
+
+    public Parser(string filePath)
+    {
+        FilePath = filePath;
+    }
+
+    public ParsingResult Parse()
+    {
+        var header = new WavHeader();
+        byte[] data;
+        using (var fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read))
+        {
+            using (var reader = new BinaryReader(fileStream))
+            {
+                header.ChunkId = reader.ReadInt32();
+                header.ChunkSize = reader.ReadInt32();
+                header.Format = reader.ReadInt32();
+                header.Subchunk1Id = reader.ReadInt32();
+                header.Subchunk1Size = reader.ReadInt32();
+                header.AudioFormat = reader.ReadInt16();
+                header.NumChannels = reader.ReadInt16();
+                header.SampleRate = reader.ReadInt32();
+                header.ByteRate = reader.ReadInt32();
+                header.BlockAlign = reader.ReadInt16();
+                header.BitsPerSample = reader.ReadInt16();
+
+                if (header.Subchunk1Size == 18)
+                {
+                    // Read extra values (Сюда при чтении моего файла не заходит)
+                    header.FmtExtraSize = reader.ReadInt16();
+                    reader.ReadBytes(header.FmtExtraSize);
+                }
+
+                header.Subchunk2Id = reader.ReadInt32();
+                header.Subchunk2Size = reader.ReadInt32();
+
+                data = reader.ReadBytes(header.Subchunk2Size);
+            }
+        }
+
+        var result = new ParsingResult(header, data);
+
+        return result;
+    }
+}
+</code></pre>
+<p>Класс <code>WavHeader</code>:</p>
+<pre><code>public struct WavHeader
+{
+    // WAV-формат начинается с RIFF-заголовка:
+
+    // Содержит символы "RIFF" в ASCII кодировке
+    // (0x52494646 в big-endian представлении)
+    public int ChunkId { get; set; }
+
+    // 36 + subchunk2Size, или более точно:
+    // 4 + (8 + subchunk1Size) + (8 + subchunk2Size)
+    // Это оставшийся размер цепочки, начиная с этой позиции.
+    // Иначе говоря, это размер файла - 8, то есть,
+    // исключены поля chunkId и chunkSize.
+    public int ChunkSize { get; set; }
+
+    // Содержит символы "WAVE"
+    // (0x57415645 в big-endian представлении)
+    public int Format { get; set; }
+
+    // Формат "WAVE" состоит из двух подцепочек: "fmt " и "data":
+    // Подцепочка "fmt " описывает формат звуковых данных:
+
+    // Содержит символы "fmt "
+    // (0x666d7420 в big-endian представлении)
+    public int Subchunk1Id { get; set; }
+
+    // 16 для формата PCM.
+    // Это оставшийся размер подцепочки, начиная с этой позиции.
+    public int Subchunk1Size { get; set; }
+
+    // Аудио формат, полный список можно получить здесь http://audiocoding.ru/wav_formats.txt
+    // Для PCM = 1 (то есть, Линейное квантование).
+    // Значения, отличающиеся от 1, обозначают некоторый формат сжатия.
+    public short AudioFormat { get; set; }
+
+    // Количество каналов. Моно = 1, Стерео = 2 и т.д.
+    public short NumChannels { get; set; }
+
+    // Частота дискретизации. 8000 Гц, 44100 Гц и т.д.
+    public int SampleRate { get; set; }
+
+    // sampleRate * numChannels * bitsPerSample/8
+    public int ByteRate { get; set; }
+
+    // numChannels * bitsPerSample/8
+    // Количество байт для одного сэмпла, включая все каналы.
+    public short BlockAlign { get; set; }
+
+    // Так называемая "глубиная" или точность звучания. 8 бит, 16 бит и т.д.
+    public short BitsPerSample { get; set; }
+
+    public int FmtExtraSize { get; set; }
+
+    // Подцепочка "data" содержит аудио-данные и их размер.
+
+    // Содержит символы "data"
+    // (0x64617461 в big-endian представлении)
+    public int Subchunk2Id { get; set; }
+
+    // numSamples * numChannels * bitsPerSample/8
+    // Количество байт в области данных.
+    public int Subchunk2Size { get; set; }
+}
+</code></pre>
+</blockquote>
+<h2>Answer 749749</h2>
+<p><a href="https://ru.stackoverflow.com/a/749749/">Source</a> - by <a href="https://ru.stackoverflow.com/users/212981/andrei-khotko">Andrei Khotko</a></p>
+<blockquote>
+<p>Итак, по совету пользователя <a href="https://ru.stackoverflow.com/users/2739/kovadim">KoVadim</a> я заглянул в hex-редактор, и к моему удивлению, содержимое wav-файла отличалось от того, чего я ожидал. </p>
+<p>Привожу содержимое wav-файла:
+<a href="https://i.stack.imgur.com/UPIxf.jpg" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/UPIxf.jpg" alt="введите сюда описание изображения"></a></p>
+<p>Если верить <a href="http://soundfile.sapp.org/doc/WaveFormat/" rel="nofollow noreferrer">этому источнику</a> и взглянуть на наш файл, то мы увидим, что в поле <code>AudioFormat</code>(на картинке отмечено синим) занесено значение 1, т.е. это PCM (формат без сжатия). Читаем дальше. После того, как прочитали поле <code>BitsPerSample</code> (на картинке зеленым) ожидается, что следующие 4 байта будут <code>data</code> (потому что в PCM, если верить источнику, не должно быть никаких дополнительных данных между <code>BitsPerSample</code> и <code>data</code>), но мы видим, что до поля <code>data</code> (подчеркнуто красным) идет дополнительная информация о треке, чего быть не должно. Не знаю, с чем именно связано это. Буду очень признателен, если мне объяснят, как правильно прочитать эти дополнительные данные и почему они лежат в данном файле.</p>
+<p>В итоге я решил проблему следующим способом: с помощью популярного аудио-редактора <code>Audacity</code> я перекодировал данный Wav-файл в следующий формат: </p>
+<p><a href="https://i.stack.imgur.com/Cl1aX.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/Cl1aX.png" alt="введите сюда описание изображения"></a></p>
+<p>После чего дополнительные данные исчезли из этого файла и я смог успешно прочитать все данные. </p>
+<p><a href="https://i.stack.imgur.com/o6Cb6.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/o6Cb6.png" alt="введите сюда описание изображения"></a></p>
+</blockquote>
+<h2>Answer 804823</h2>
+<p><a href="https://ru.stackoverflow.com/a/804823/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<blockquote>
+  <p>потому что в PCM, если верить источнику, не должно быть никаких дополнительных данных между BitsPerSample и data</p>
+</blockquote>
+<p>Вероятно, слишком поздно, но источник врет. Во-первых, PCM - это способ кодирования, а не формат файла (формат называется RIFF). Во-вторых, согласно спецификации данного формата, он может расширяться в последующих версиях добавлением новых блоков данных (в любом месте между старыми блоками), поэтому приложения для его считывания должны пропускать неизвестные им блоки, а не падать с ошибкой при их появлении. </p>
+<p>В данном случае, между заголовком файла и блоком DATA содержится блок INFO, который содержит текстовые сведения о композиции (отлично заметные кракозябры в HEX-редакторе). </p>
+<p>Таким образом, правильный алгоритм считывания блоков RIFF-файла выглядит как-то так:</p>
+<ol>
+<li>Считать <em>SubchunkID</em> и <em>SubchunkSize</em></li>
+<li>Если <em>SubchunkID</em> - не то, что ожидалось, пропустить <em>SubchunkSize</em> байтов и вернуться на шаг 1</li>
+<li>Иначе, считать и обработать массив байтов, равный <em>SubchunkSize</em></li>
+</ol>
+<p>Информацию о формате и ссылки на нормальную документацию можно найти здесь: <a href="http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html" rel="nofollow noreferrer">Audio File Format Specifications</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
