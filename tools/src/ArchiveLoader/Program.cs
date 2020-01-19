@@ -300,11 +300,15 @@ namespace ArchiveLoader
 
             Console.WriteLine("Answers without parent question: {0}", posts.SingleAnswers.Count);
 
+            int n = 0;
+
             foreach (int a in posts.SingleAnswers.Keys)
             {
                 try
                 {
                     SaveQuestion(site, posts.SingleAnswers[a].DataDynamic.question_id);
+                    n++;
+                    if (n > 70) break;
                 }
                 catch (Exception ex)
                 {
@@ -444,14 +448,28 @@ namespace ArchiveLoader
                 TextWriter wr = new StreamWriter("ArchiveLoader.log", true);
                 using (wr)
                 {
-                    Console.SetOut(wr);
-                    Console.SetError(wr);
-                    LoadData();
-                    Console.WriteLine("Done");
+                    try
+                    {
+                        Console.SetOut(wr);
+                        Console.SetError(wr);
+                        LoadData();
+                        Console.WriteLine("Done");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        throw;
+                    }
+                    finally
+                    {
+                        var standardOutput = new StreamWriter(Console.OpenStandardOutput());
+                        standardOutput.AutoFlush = true;
+                        Console.SetOut(standardOutput);
 
-                    var standardOutput = new StreamWriter(Console.OpenStandardOutput());
-                    standardOutput.AutoFlush = true;
-                    Console.SetOut(standardOutput);
+                        var standardError = new StreamWriter(Console.OpenStandardError());
+                        standardError.AutoFlush = true;
+                        Console.SetError(standardError);
+                    }
                 }
             }
             else
