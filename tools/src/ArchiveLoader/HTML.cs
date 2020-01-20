@@ -46,11 +46,12 @@ namespace ArchiveLoader
 
         public static void RenderHeader(string title, TextWriter wr)
         {
-            string s = title.Replace("\\", "\\\\");
-            s = s.Replace("\"", "\\\"");
+            string title_yml = System.Net.WebUtility.HtmlDecode(title);
+            title_yml = title_yml.Replace("\\", "\\\\");
+            title_yml = title_yml.Replace("\"", "\\\"");
 
             wr.WriteLine("---");
-            wr.WriteLine("title: \"{0}\"", s);
+            wr.WriteLine("title: \"{0}\"", title_yml);
             wr.WriteLine("---");
             wr.WriteLine("<p><i><a href=\"{0}\">RuSO Archive</a></i></p>", SiteURL);
             wr.WriteLine("<h1>{0}</h1>", title);
