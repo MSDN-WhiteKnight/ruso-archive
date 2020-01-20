@@ -343,6 +343,7 @@ ASALocalRun/
 /**/obj/
 
 #############
+/html/manifest.json
 *.pdf
 
 # NuGet
