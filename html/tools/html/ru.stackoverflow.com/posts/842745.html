@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1077;&#1088;&#1077;&#1093;&#1074;&#1072;&#1090; &#1080;&#1089;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1103; &#1087;&#1088;&#1080; &#1076;&#1077;&#1083;&#1077;&#1085;&#1080;&#1080; &#1085;&#1072; 0 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1077;&#1088;&#1077;&#1093;&#1074;&#1072;&#1090; &#1080;&#1089;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1103; &#1087;&#1088;&#1080; &#1076;&#1077;&#1083;&#1077;&#1085;&#1080;&#1080; &#1085;&#1072; 0 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Перехват исключения при делении на 0</h1>
+<p><a href="https://ru.stackoverflow.com/questions/842745/%d0%9f%d0%b5%d1%80%d0%b5%d1%85%d0%b2%d0%b0%d1%82-%d0%b8%d1%81%d0%ba%d0%bb%d1%8e%d1%87%d0%b5%d0%bd%d0%b8%d1%8f-%d0%bf%d1%80%d0%b8-%d0%b4%d0%b5%d0%bb%d0%b5%d0%bd%d0%b8%d0%b8-%d0%bd%d0%b0-0">Source</a> - by <a href="https://ru.stackoverflow.com/users/255680/%d0%90%d0%bb%d0%b5%d0%ba%d1%81%d0%b0%d0%bd%d0%b4%d1%80">Александр</a></p>
+<blockquote>
+<p>Пытаюсь отловить исключение через catch/try: </p>
+<pre><code>void TestCall()
+{
+    int b=0;
+    try
+    {
+
+        int a = 1/b;        
+    }
+    catch(...)
+    {
+        test(1);
+    }
+}
+</code></pre>
+<p>Выражение <code>int a = 1/b;</code> заведомо вызывает исключение деления на 0 и я хоч его поймать в блоке catch. Но Visual C++ упорно вызывает ошибку на нем и на catch не перекидывает. В чем секрет?</p>
+</blockquote>
+<h2>Answer 842747</h2>
+<p><a href="https://ru.stackoverflow.com/a/842747/">Source</a> - by <a href="https://ru.stackoverflow.com/users/272035/user7860670">user7860670</a></p>
+<blockquote>
+<p>Вы путаете исключения С++ и прочие исключения. В С++ исключения возникают исключительно при использовании оператора <code>throw</code>. Деление на 0 при использовании встроенного оператора <code>/</code> является неопределенным поведением:</p>
+<blockquote>
+  <p><strong>8.6 Multiplicative operators [expr.mul]</strong></p>
+  
+  <p>4 The binary / operator yields the quotient, and the binary % operator yields the remainder from the division of the first expression by the second. If the second operand of / or % is zero the behavior is undefined.</p>
+</blockquote>
+</blockquote>
+<h2>Answer 843517</h2>
+<p><a href="https://ru.stackoverflow.com/a/843517/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>В Windows деление на ноль генерирует исключение SEH с кодом <em>STATUS_INTEGER_DIVIDE_BY_ZERO</em> (0xC0000094). Чтобы обрабатывать его в стиле исключений С++, можно установить в Visual C++ параметр компилятора <a href="https://docs.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model" rel="nofollow noreferrer">/EHa</a>, или установить фильтр необработанных исключений:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;exception&gt;
+#include &lt;windows.h&gt;
+
+LONG WINAPI UnhandledExceptionFilter( struct _EXCEPTION_POINTERS *ExceptionInfo){
+
+    if(ExceptionInfo-&gt;ExceptionRecord-&gt;ExceptionCode == STATUS_INTEGER_DIVIDE_BY_ZERO)
+        throw std::exception("STATUS_INTEGER_DIVIDE_BY_ZERO");  
+
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{   
+    SetUnhandledExceptionFilter(&amp;UnhandledExceptionFilter); 
+
+    int b=0;
+    try
+    {
+        int a = 1/b;        
+    }
+    catch(std::exception ex)
+    {       
+        printf("Exception: %s\n",ex.what());
+    }   
+
+    return 0;
+}
+</code></pre>
+<p>(Второй способ работает только при запуске без отладки, так как отладчик студии принудительно прерывает программу на SEH-исключениях.)</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

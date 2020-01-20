@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>C#: &#1092;&#1080;&#1083;&#1100;&#1090;&#1088;&#1072;&#1094;&#1080;&#1103; ip-&#1072;&#1076;&#1088;&#1077;&#1089;&#1086;&#1074; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="C#: &#1092;&#1080;&#1083;&#1100;&#1090;&#1088;&#1072;&#1094;&#1080;&#1103; ip-&#1072;&#1076;&#1088;&#1077;&#1089;&#1086;&#1074; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>C#: фильтрация ip-адресов</h1>
+<p><a href="https://ru.stackoverflow.com/questions/830562/c-%d1%84%d0%b8%d0%bb%d1%8c%d1%82%d1%80%d0%b0%d1%86%d0%b8%d1%8f-ip-%d0%b0%d0%b4%d1%80%d0%b5%d1%81%d0%be%d0%b2">Source</a> - by <a href="https://ru.stackoverflow.com/users/286191/eriksongerson">eriksongerson</a></p>
+<blockquote>
+<p>В программе нужно получить свой ip адрес. Делаю это такой функцией:</p>
+<pre><code>public static string GetLocalIPAddress()
+{
+    var host = Dns.GetHostEntry(Dns.GetHostName());
+    foreach (var ip in host.AddressList)
+    {
+        if (ip.AddressFamily == AddressFamily.InterNetwork)
+        {
+            return ip.ToString();
+        }
+    }
+    return null;
+}
+</code></pre>
+<p>Но существует следующая проблема: Если на машине установлен виртуальный сетевой адаптер (например, от VirtualBox), то функция выдаёт его ip-адрес. </p>
+<p>Можно ли как-нибудь отфильтровать виртуальные адаптеры?</p>
+</blockquote>
+<h2>Answer 830696</h2>
+<p><a href="https://ru.stackoverflow.com/a/830696/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Добавьте ссылку на System.Management и используйте WMI-запрос к классу <em>Win32_NetworkAdapter</em>, у реальных интерфейсов должно быть <em>PhysicalAdapter=true</em>. Для получения Guid интерфейса можно использовать <code>NetworkInterface.GetAllNetworkInterfaces()</code>. Как-то так:</p>
+<pre><code>using System.Net;
+using System.Net.Sockets;
+using System.Net.NetworkInformation;
+using System.Management;
+
+...
+
+//Определяет, является ли адаптер физическим
+public static bool IsAdapterPhysical(string guid)
+{
+    ManagementObjectCollection mbsList = null;            
+
+    ManagementObjectSearcher mbs = new ManagementObjectSearcher(
+    "SELECT PhysicalAdapter FROM Win32_NetworkAdapter WHERE GUID = '" + guid + "'"
+    );
+    bool res = false;
+
+    using (mbs)
+    {
+        mbsList = mbs.Get();
+
+        foreach (ManagementObject mo in mbsList)
+        {                  
+            foreach (var p in mo.Properties)
+            {                        
+                if (p.Value != null)
+                {
+                    res = (bool)p.Value;
+                    break;
+                }
+                else res = false;                        
+            }                    
+        }
+        return res;
+    }
+
+}
+
+//Получает все локальные IP-адреса
+public static List&lt;IPAddress&gt; GetIpAddresses()
+{
+    List&lt;IPAddress&gt; res = new List&lt;IPAddress&gt;(10);
+
+    var ifs = NetworkInterface.GetAllNetworkInterfaces();
+
+    foreach (var interf in ifs)
+    {
+        var ipprop=interf.GetIPProperties();
+        if (ipprop == null) continue;
+        var unicast = ipprop.UnicastAddresses;
+        if (unicast == null) continue;
+
+        if (IsAdapterPhysical(interf.Id.ToString()))
+        {
+            //находим первый Unicast-адрес
+            foreach (var addr in unicast)
+            {
+                if (addr.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+                res.Add(addr.Address);
+                break;
+            }
+        }
+    }
+
+    return res;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; dll(c++) &#1082; &#1089;#? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100; dll(c++) &#1082; &#1089;#? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как подключить dll(c++) к с#?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/818413/%d0%9a%d0%b0%d0%ba-%d0%bf%d0%be%d0%b4%d0%ba%d0%bb%d1%8e%d1%87%d0%b8%d1%82%d1%8c-dllc-%d0%ba-%d1%81">Source</a> - by <a href="https://ru.stackoverflow.com/users/239394/%d0%90%d0%bb%d0%b5%d0%ba%d1%81%d0%b0%d0%bd%d0%b4%d1%80-%d0%9b%d0%b8">Александр Ли</a></p>
+<blockquote>
+<p>Знаю, что популярная проблема. Но нужно срочно, а я вообще не бум-бум.</p>
+<p>Нужно подключить вот эту функцию:</p>
+<pre><code>DLL_EXPORT int __stdcall EvalCRC(IStream* Data, IStream* Params, IStream* Output)
+{
+    if (!Data) return ERROR_NULL_DATA;
+
+    // Data - это входной поток с прошивкой, контрольку в которой нужно пересчитать
+    // Params и Output пока не используются и зарезервированы на будущее
+    int Result = PLUGIN_SUCCESS; // По-умолчанию возвращаем результат успешного выполнения
+
+    ULARGE_INTEGER size_;
+    LARGE_INTEGER larg_;
+
+    //ENCODE_START
+
+    larg_.QuadPart = 0;
+    Data-&gt;Seek(larg_, STREAM_SEEK_END, &amp;size_);
+
+    // Считаем КС прошивки
+    if (size_.QuadPart == VALIDFWSIZE1 || size_.QuadPart == VALIDFWSIZE2)
+    {
+        try
+        {
+            char arr[IDLEN+1];
+            ULONG ulong;
+            unsigned int caloffset;
+
+            switch(size_.QuadPart)
+            {
+                case VALIDFWSIZE1:
+                {
+                    // Калибровки
+                    larg_.QuadPart = CAL_POS1;
+                    Data-&gt;Seek(larg_ ,STREAM_SEEK_SET, &amp;size_);
+                    Data-&gt;Read(&amp;arr, sizeof(arr), &amp;ulong); // Вычитываем идентификатор
+                    arr[IDLEN]=0x00;
+
+                    if (CheckNumber(arr)) caloffset=CAL_POS1;
+                    else return ERROR_SIGNATURE;
+                }
+                break;
+                case VALIDFWSIZE2:
+                {
+                    // Фулл
+                    larg_.QuadPart = CAL_POS2;
+                    Data-&gt;Seek(larg_ ,STREAM_SEEK_SET, &amp;size_);
+                    Data-&gt;Read(&amp;arr, sizeof(arr), &amp;ulong); // Вычитываем идентификатор
+                    arr[IDLEN]=0x00;
+
+                    if (CheckNumber(arr)) caloffset=CAL_POS2;
+                    else
+                    {
+                        larg_.QuadPart = CAL_POS3;
+                        Data-&gt;Seek(larg_ ,STREAM_SEEK_SET, &amp;size_);
+                        Data-&gt;Read(&amp;arr, sizeof(arr), &amp;ulong); // Вычитываем идентификатор
+                        arr[IDLEN]=0x00;
+
+                        if (CheckNumber(arr)) caloffset=CAL_POS3;
+                        else return ERROR_SIGNATURE;
+                    }
+                }
+                break;
+            }
+
+            larg_.QuadPart = caloffset;
+            Data-&gt;Seek(larg_ ,STREAM_SEEK_SET, &amp;size_);
+            WORD wval=0;
+            for(unsigned int i=0;i&lt;(cRangeSize/2)-1;i++)
+            {
+                WORD wword;
+                Data-&gt;Read(&amp;wword, sizeof(WORD), &amp;ulong);
+                wword = (wword &gt;&gt; 8) | (wword &lt;&lt; 8); // Переворачиваем
+                if (i!=cCSPos/2) wval += wword; // Считаем все, кроме контрольных сумм
+            }
+
+            wval=0-wval;
+            larg_.QuadPart = caloffset+cCSPos;
+            Data-&gt;Seek(larg_ ,STREAM_SEEK_SET, &amp;size_);
+            wval = (wval &gt;&gt; 8) | (wval &lt;&lt; 8); // Переворачиваем
+            Data-&gt;Write(&amp;wval, sizeof(WORD), &amp;ulong);
+        }
+        catch(...)
+        {
+            Result = ERROR_EXCEPTION;
+        }
+    }
+    else Result = ERROR_INVALID_SIZE;
+
+    return Result;
+}
+</code></pre>
+<p>Пробовал по всякому, то типы данных не совпадают, то просто какие-то вылеты без ошибок и результатов. 
+Если это не сложно, подскажите, как должна выглядеть строка подключения?</p>
+</blockquote>
+<h2>Answer 818490</h2>
+<p><a href="https://ru.stackoverflow.com/a/818490/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Подключить то, допустим,  можно так (предполагая, что используется интерфейс IStream из COM Structured Storage):</p>
+<pre><code>using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+
+[DllImport("mylib.Dll")]
+static extern int EvalCRC(
+    IStream data, 
+    IStream parms, 
+    IStream output
+);
+</code></pre>
+<p>Только обычные потоки System.IO.Stream не реализуют COM-интерфейс IStream, чтобы с ними работать придется реализовать какую-то свою обертку. Можно <a href="https://referencesource.microsoft.com/#System.Windows.Forms/winforms/Managed/System/WinForms/UnsafeNativeMethods.cs,d4850b457dacb414" rel="nofollow noreferrer">позаимствовать из исходников .NET</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

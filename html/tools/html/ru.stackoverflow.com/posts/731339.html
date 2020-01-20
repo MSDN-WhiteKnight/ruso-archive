@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1091;&#1073;&#1088;&#1072;&#1090;&#1100; &#1087;&#1091;&#1089;&#1090;&#1091;&#1102; &#1086;&#1073;&#1083;&#1072;&#1089;&#1090;&#1100; &#1089;&#1083;&#1077;&#1074;&#1072; &#1080; &#1089;&#1087;&#1088;&#1072;&#1074;&#1072; &#1086;&#1090; &#1079;&#1072;&#1075;&#1086;&#1083;&#1086;&#1074;&#1082;&#1072; ListView | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1091;&#1073;&#1088;&#1072;&#1090;&#1100; &#1087;&#1091;&#1089;&#1090;&#1091;&#1102; &#1086;&#1073;&#1083;&#1072;&#1089;&#1090;&#1100; &#1089;&#1083;&#1077;&#1074;&#1072; &#1080; &#1089;&#1087;&#1088;&#1072;&#1074;&#1072; &#1086;&#1090; &#1079;&#1072;&#1075;&#1086;&#1083;&#1086;&#1074;&#1082;&#1072; ListView | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как убрать пустую область слева и справа от заголовка ListView</h1>
+<p><a href="https://ru.stackoverflow.com/questions/731339/%d0%9a%d0%b0%d0%ba-%d1%83%d0%b1%d1%80%d0%b0%d1%82%d1%8c-%d0%bf%d1%83%d1%81%d1%82%d1%83%d1%8e-%d0%be%d0%b1%d0%bb%d0%b0%d1%81%d1%82%d1%8c-%d1%81%d0%bb%d0%b5%d0%b2%d0%b0-%d0%b8-%d1%81%d0%bf%d1%80%d0%b0%d0%b2%d0%b0-%d0%be%d1%82-%d0%b7%d0%b0%d0%b3%d0%be%d0%bb%d0%be%d0%b2%d0%ba%d0%b0-listview">Source</a> - by <a href="https://ru.stackoverflow.com/users/31597/aldmi">Aldmi</a></p>
+<blockquote>
+<p>При разработке обычных десктопных приложений (на WPF), никогда не обращал внимание на специфическую отрисовку заголовка <code>ListView</code>.</p>
+<p>Области выделены красным.</p>
+<p><a href="https://i.stack.imgur.com/uD96q.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/uD96q.png" alt="выделение отрисовки заголовка ListView"></a></p>
+<p>Но тут возникла необходимость делать дополнительное окно, на которое выводятся <code>ListView</code> с 2-мя колонками.
+С этого окна, захватывается изображение попиксельно, специальным устройством и отправляются на светодиодные табло, и все мелкие детали там хорошо видны.</p>
+<pre><code>&lt;Window.Resources&gt;
+    &lt;Style x:Key="ListHeaderStyle8X2" TargetType="{x:Type GridViewColumnHeader}"&gt;
+        &lt;Setter Property="Template"&gt;
+            &lt;Setter.Value&gt;
+                &lt;ControlTemplate TargetType="{x:Type GridViewColumnHeader}"&gt;
+                    &lt;Border
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        BorderThickness="0,0,0,1"&gt;
+                        &lt;TextBlock
+                            x:Name="ContentHeader"
+                            Width="{TemplateBinding Width}"
+                            Padding="5,5,5,0"
+                            Background="Chartreuse"
+                            Text="{TemplateBinding Content}"
+                            TextAlignment="Center" /&gt;
+                    &lt;/Border&gt;
+                &lt;/ControlTemplate&gt;
+            &lt;/Setter.Value&gt;
+        &lt;/Setter&gt;
+        &lt;Setter Property="OverridesDefaultStyle" Value="True" /&gt;
+        &lt;Setter Property="Foreground" Value="Black" /&gt;
+        &lt;Setter Property="FontFamily" Value="Segoe UI" /&gt;
+        &lt;Setter Property="FontSize" Value="12" /&gt;
+    &lt;/Style&gt;
+&lt;/Window.Resources&gt;
+
+
+&lt;Grid&gt;
+    &lt;ListView Name="Table8X21" Background="DarkCyan"&gt;
+        &lt;ListView.View&gt;
+            &lt;GridView ColumnHeaderContainerStyle="{StaticResource ListHeaderStyle8X2}"&gt;
+                &lt;GridViewColumn Header="Номер"&gt;
+                    &lt;GridViewColumn.CellTemplate&gt;
+                        &lt;DataTemplate&gt;
+                            &lt;TextBlock Text="{Binding Path=TicketName}" /&gt;
+                        &lt;/DataTemplate&gt;
+                    &lt;/GridViewColumn.CellTemplate&gt;
+                &lt;/GridViewColumn&gt;
+
+                &lt;GridViewColumn Header="Касса"&gt;
+                    &lt;GridViewColumn.CellTemplate&gt;
+                        &lt;DataTemplate&gt;
+                            &lt;TextBlock Text="{Binding Path=CashierName}" /&gt;
+                        &lt;/DataTemplate&gt;
+                    &lt;/GridViewColumn.CellTemplate&gt;
+                &lt;/GridViewColumn&gt;
+            &lt;/GridView&gt;
+        &lt;/ListView.View&gt;
+    &lt;/ListView&gt;
+&lt;/Grid&gt;
+</code></pre>
+</blockquote>
+<h2>Answer 832680</h2>
+<p><a href="https://ru.stackoverflow.com/a/832680/">Source</a> - by <a href="https://ru.stackoverflow.com/users/218063/%d0%90%d0%bd%d0%b4%d1%80%d0%b5%d0%b9-nop">Андрей NOP</a></p>
+<blockquote>
+<p>Как верно заметили в комментариях, отступы в заголовке составляют 3 пикселя, но добавлять отрицательный отступ к <code>GridViewColumnHeader</code> неправильно, т. к. этот отступ будет у <em>каждого</em> столбца (т.е. столбцы будут перекрывать друг друга), а нам нужно устранить только отступ слева и справа у всей строки заголовка.</p>
+<p>Покопавшись, с помощью встроенных в Visual Studio инструментов Live Visual Tree и Live Property Explorer, в визуальном дереве окна, я выяснил, что из этих трех пикселей два дает <code>GridViewHeaderRowPresenter.Margin</code> и один — <code>ListBoxChrome.BorderThickness</code>.</p>
+<p>С <code>ListBoxChrome.BorderThickness</code> всё просто — он привязан к <code>BorderThickness</code> родителя, т. е. самого <code>ListView</code> и устраняется просто в разметке или стиле:</p>
+<pre><code>&lt;ListView Name="Table8X21" ... BorderThickness="0"&gt;
+</code></pre>
+<p>Также в Live Visual Tree видно, что <code>GridViewHeaderRowPresenter</code> лежит внутри <code>ScrollViewer</code>, открыв стандартный стиль <code>ListView</code>, можно найти только один <code>ScrollViewer</code>, у которого стиль задается вот так:</p>
+<pre><code>&lt;ScrollViewer ... Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}"&gt;
+</code></pre>
+<p>Этот стиль можно найти в документации Microsoft <a href="https://docs.microsoft.com/ru-ru/dotnet/framework/wpf/controls/listview-styles-and-templates#listview-controltemplate-examples" rel="nofollow noreferrer">здесь</a>.</p>
+<p>В этом стиле внутри шаблона можно увидеть такой фрагмент:</p>
+<pre><code>&lt;GridViewHeaderRowPresenter Margin="2,0,2,0" ...
+</code></pre>
+<p>Это и есть те два пикселя слева и справа.</p>
+<p>Наиболее простым решением видится скопировать этот стиль из документации целиком и добавить в ресурсы своего окна (или куда вам удобнее), а затем просто в нем убрать этот <code>Margin</code>. В итоге ресурс с ключом <code>GridView.GridViewScrollViewerStyleKey</code> будет перекрыт и будет использоваться локальный.</p>
+<p>В итоге у меня получилось вот что:</p>
+<p><a href="https://i.stack.imgur.com/VeS4v.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/VeS4v.png" alt="введите сюда описание изображения"></a></p>
+</blockquote>
+<h2>Answer 832683</h2>
+<p><a href="https://ru.stackoverflow.com/a/832683/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Заголовки <code>GridView</code> помещены в элемент <code>GridViewHeaderRowPresenter</code>, у которого в шаблоне по умолчанию задан <code>Margin = 2</code> с правой и левой стороны. Можно обработать у <code>Border</code> заголовка событие <code>Loaded</code> </p>
+<pre><code>&lt;Border        
+   Loaded="Border_Loaded"
+   ... /&gt;
+</code></pre>
+<p>и переопределить его:</p>
+<pre><code>private void Border_Loaded(object sender, RoutedEventArgs e)
+{
+     FrameworkElement p1 = (FrameworkElement)(((FrameworkElement)sender).TemplatedParent); // GridViewColumnHeader
+     FrameworkElement p2 = (FrameworkElement)p1.Parent; // GridViewHeaderRowPresenter           
+     p2.Margin = new Thickness(0);
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

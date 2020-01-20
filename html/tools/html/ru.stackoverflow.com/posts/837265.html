@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1083;&#1072;&#1089;&#1089; Font. &#1050;&#1072;&#1082; &#1080;&#1079;&#1084;&#1077;&#1085;&#1080;&#1090;&#1100; &#1088;&#1072;&#1089;&#1089;&#1090;&#1086;&#1103;&#1085;&#1080;&#1077; &#1084;&#1077;&#1078;&#1076;&#1091; &#1073;&#1091;&#1082;&#1074;&#1072;&#1084;&#1080; &#1080; &#1089;&#1076;&#1077;&#1083;&#1072;&#1090;&#1100; &#1084;&#1077;&#1085;&#1077;&#1077; &#1078;&#1080;&#1088;&#1085;&#1099;&#1084; &#1090;&#1077;&#1082;&#1089;&#1090;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1083;&#1072;&#1089;&#1089; Font. &#1050;&#1072;&#1082; &#1080;&#1079;&#1084;&#1077;&#1085;&#1080;&#1090;&#1100; &#1088;&#1072;&#1089;&#1089;&#1090;&#1086;&#1103;&#1085;&#1080;&#1077; &#1084;&#1077;&#1078;&#1076;&#1091; &#1073;&#1091;&#1082;&#1074;&#1072;&#1084;&#1080; &#1080; &#1089;&#1076;&#1077;&#1083;&#1072;&#1090;&#1100; &#1084;&#1077;&#1085;&#1077;&#1077; &#1078;&#1080;&#1088;&#1085;&#1099;&#1084; &#1090;&#1077;&#1082;&#1089;&#1090;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Класс Font. Как изменить расстояние между буквами и сделать менее жирным текст?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/837265/%d0%9a%d0%bb%d0%b0%d1%81%d1%81-font-%d0%9a%d0%b0%d0%ba-%d0%b8%d0%b7%d0%bc%d0%b5%d0%bd%d0%b8%d1%82%d1%8c-%d1%80%d0%b0%d1%81%d1%81%d1%82%d0%be%d1%8f%d0%bd%d0%b8%d0%b5-%d0%bc%d0%b5%d0%b6%d0%b4%d1%83-%d0%b1%d1%83%d0%ba%d0%b2%d0%b0%d0%bc%d0%b8-%d0%b8-%d1%81%d0%b4%d0%b5%d0%bb%d0%b0%d1%82%d1%8c-%d0%bc%d0%b5%d0%bd%d0%b5%d0%b5-%d0%b6%d0%b8%d1%80%d0%bd%d1%8b%d0%bc-%d1%82%d0%b5%d0%ba%d1%81%d1%82">Source</a> - by <a href="https://ru.stackoverflow.com/users/273902/optimus">Optimus</a></p>
+<blockquote>
+<p>Как увеличить расстояние между буквами и сделать еще менее жирным текст?</p>
+<pre><code>Font font = new Font("Courier New", 10, FontStyle.Regular);
+SolidBrush brush = new SolidBrush(Color.Black);
+graf.DrawString("Надпись", font, brush, 130, 16);
+</code></pre>
+<p><a href="https://i.stack.imgur.com/UrZJK.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/UrZJK.png" alt="введите сюда описание изображения"></a></p>
+</blockquote>
+<h2>Answer 837298</h2>
+<p><a href="https://ru.stackoverflow.com/a/837298/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<blockquote>
+  <p>Как увеличить расстояние между буквами</p>
+</blockquote>
+<p>Например, используя для рисования текста функции GDI вместо GDI+:</p>
+<pre><code>using System;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
+namespace WindowsFormsTest1
+{    
+    public partial class Form1 : Form
+    {
+        [DllImport("gdi32.dll")]
+        public static extern int SetTextCharacterExtra(
+            IntPtr hdc,    
+            int nCharExtra 
+        );
+
+        [DllImport("gdi32.dll")]
+        static extern bool TextOut(IntPtr hdc, int nXStart, int nYStart,
+            string lpString, int cbString);
+
+        [DllImport("gdi32.dll")]
+        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
+
+
+        IntPtr hfont;
+
+        public Form1()
+        {
+            InitializeComponent();
+            Font font = new Font("Courier New", 10, FontStyle.Regular);
+            hfont = Font.ToHfont();            
+        }          
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            IntPtr hdc = e.Graphics.GetHdc();
+
+            try
+            {
+                var res = SetTextCharacterExtra(hdc, 10); //расстояние между символами
+
+                IntPtr prev_font = SelectObject(hdc, hfont);
+                string str = "Надпись";
+                TextOut(hdc, 130, 16, str, str.Length);
+                SelectObject(hdc, prev_font);   
+            }
+            finally
+            {
+                e.Graphics.ReleaseHdc(hdc);
+            }      
+
+        }
+
+    }     
+
+}
+</code></pre>
+</blockquote>
+<h2>Answer 837420</h2>
+<p><a href="https://ru.stackoverflow.com/a/837420/">Source</a> - by <a href="https://ru.stackoverflow.com/users/184217/alexander-petrov">Alexander Petrov</a></p>
+<blockquote>
+<p>Скорее всего, объект <code>Graphics</code> был получен из класса изображения. Что-то вроде:</p>
+<pre><code>var img = new Bitmap(...);
+graf = Graphics.FromImage(img);
+</code></pre>
+<p>При этом у него заданы определённые значения свойств, которые приводят к рендерингу текста жирным и на вид слипшимся.</p>
+<p>Задайте свойство:</p>
+<pre><code>graf.TextRenderingHint = TextRenderingHint.AntiAlias;
+</code></pre>
+<p>Попробуйте разные значения.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

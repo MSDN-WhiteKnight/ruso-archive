@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1054;&#1096;&#1080;&#1073;&#1082;&#1072; &#1087;&#1088;&#1080; &#1079;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1077; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1099; &#1074;&#1093;&#1086;&#1076;&#1072; &#1085;&#1072; &#1089;&#1072;&#1081;&#1090;&#1077; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1054;&#1096;&#1080;&#1073;&#1082;&#1072; &#1087;&#1088;&#1080; &#1079;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1077; &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;&#1099; &#1074;&#1093;&#1086;&#1076;&#1072; &#1085;&#1072; &#1089;&#1072;&#1081;&#1090;&#1077; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Ошибка при загрузке страницы входа на сайте</h1>
+<p><a href="https://ru.stackoverflow.com/questions/828325/%d0%9e%d1%88%d0%b8%d0%b1%d0%ba%d0%b0-%d0%bf%d1%80%d0%b8-%d0%b7%d0%b0%d0%b3%d1%80%d1%83%d0%b7%d0%ba%d0%b5-%d1%81%d1%82%d1%80%d0%b0%d0%bd%d0%b8%d1%86%d1%8b-%d0%b2%d1%85%d0%be%d0%b4%d0%b0-%d0%bd%d0%b0-%d1%81%d0%b0%d0%b9%d1%82%d0%b5">Source</a> - by <a href="https://ru.stackoverflow.com/users/238013/d-stark">D .Stark</a></p>
+<blockquote>
+<p>Пытаемся получить корректный ответ от веб-сервера:</p>
+<pre><code>Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+socket.Connect(new IPEndPoint(ipAddress, 443));
+NetworkStream networkStream = new NetworkStream(socket);
+
+SslStream sslStream = new SslStream(networkStream);
+sslStream.ReadTimeout = -1;
+sslStream.WriteTimeout = -1;
+sslStream.AuthenticateAsClient(host);
+
+// Load login page.
+
+sbRequest = new StringBuilder();
+sbRequest.Append("GET /auth/login-page HTTP/1.1\r\n");
+sbRequest.Append($"Host: {host}\r\n\r\n");
+sslStream.Send(Encoding.UTF8.GetBytes(sbRequest.ToString()));
+sslStream.Flush();
+
+// Read web-server response.
+
+System.Threading.Thread.Sleep(200);
+
+// (read the first 1024 bytes - all headers and the page beginning)
+byte[] data = new byte[1024];
+sslStream.Read(data, 0, 1024);
+Console.WriteLine(Encoding.UTF8.GetString(data));
+</code></pre>
+<p>Итог общения:</p>
+<pre><code>REQUEST:
+--------------------------------------------------
+GET /auth/login-page HTTP/1.1
+Host: [host]
+
+--------------------------------------------------
+
+RESPONSE
+--------------------------------------------------
+HTTP/1.1 200 OK
+Server: nginx/1.6.2
+Date: Tue, 15 May 2018 17:35:40 GMT
+Content-Type: text/html; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+Vary: Cookie
+Strict-Transport-Security: max-age=15768000
+
+1f66
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
+    &lt;meta ...
+</code></pre>
+<p>Где, собственно, Content-Length? Что за "1f66"?..</p>
+<p>Дабы проверить как это делает браузер (ведь у него же всё получается), посмотрел Fiddler'ом как сайт отвечает на его запросы:</p>
+<pre><code>REQUEST:
+--------------------------------------------------
+GET /auth/login-page HTTP/1.1
+Host: [host]
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+DNT: 1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7
+
+--------------------------------------------------
+
+RESPONSE:
+--------------------------------------------------
+HTTP/1.1 200 OK
+Server: nginx/1.6.2
+Date: Tue, 15 May 2018 16:59:29 GMT
+Content-Type: text/html; charset=utf-8
+Connection: keep-alive
+Vary: Accept-Encoding
+Vary: Cookie
+Strict-Transport-Security: max-age=15768000
+Content-Length: 8992
+
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
+    &lt;meta ...
+</code></pre>
+<p>Сделал точно такой же запрос из своей программы, но ответ пришёл ещё хуже:</p>
+<pre><code>REQUEST:
+--------------------------------------------------
+GET /auth/login-page HTTP/1.1
+Host: [host]
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+DNT: 1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7
+
+--------------------------------------------------
+
+RESPONSE
+--------------------------------------------------
+HTTP/1.1 200 OK
+Server: nginx/1.6.2
+Date: Tue, 15 May 2018 17:44:32 GMT
+Content-Type: text/html; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+Vary: Cookie
+Strict-Transport-Security: max-age=15768000
+Content-Encoding: gzip
+
+8fc
+...
+</code></pre>
+<p>Кракозябры в конце. Видимо из-за <code>Content-Encoding: gzip</code>... Посылаем такой же запрос, а ответ приходить другой.</p>
+</blockquote>
+<h2>Answer 828336</h2>
+<p><a href="https://ru.stackoverflow.com/a/828336/">Source</a> - by <a href="https://ru.stackoverflow.com/users/9784/zergatul">Zergatul</a></p>
+<blockquote>
+<p>Вы получили ответ в кодировке <code>chuncked</code>, о чем сервер и сообщает вам в ответе:</p>
+<pre><code>Transfer-Encoding: chunked
+</code></pre>
+<p>Подробнее как это работает, можно прочитать например в <a href="https://ru.wikipedia.org/wiki/Chunked_transfer_encoding" rel="nofollow noreferrer">вики</a>.</p>
+<hr>
+<p>Браузер сообщает серверу, что он умеет декодировать <code>gzip</code>:</p>
+<pre><code>Accept-Encoding: gzip, deflate, br
+</code></pre>
+<p>Поэтому сервер и присылает сжатый контент. В C# есть удобный класс <code>System.IO.Compression.GZipStream</code>, можете без проблем "разархивировать" сжатые данные.</p>
+</blockquote>
+<h2>Answer 828628</h2>
+<p><a href="https://ru.stackoverflow.com/a/828628/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>При передаче в режиме chunked перед каждым фрагментом передается его размер в шестнадцатеричном виде. Соответственно, вместо Content Length нужно использовать это значение.</p>
+<blockquote>
+  <p>Браузер точно так же пишет. Мне в gzip приходит, а ему нет. Почему? </p>
+</blockquote>
+<p>Когда вы указываете <code>Accept-Encoding: gzip, deflate, br</code>, вы указываете предпочтительные форматы для передачи. Сервер может выбрать другой формат, если он считает сжатие нецелесообразным или из-за перегрузки не может его выполнять. Нет правила, что на один и тот же запрос в разные моменты времени должен придти один и тот же ответ. </p>
+<p>Из <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding" rel="nofollow noreferrer">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding</a></p>
+<blockquote>
+  <p>Even if both the client and the server supports the same compression
+  algorithms, the server may choose not to compress the body of a
+  response, if the identity value is also acceptable. Two common cases
+  lead to this:</p>
+  
+  <ul>
+  <li>The data to be sent is already compressed and a second compression won't lead to smaller data to be transmitted. </li>
+  <li>This may the case with some image formats; The server is overloaded and cannot afford the computational overhead induced by the
+  compression requirement. Typically, Microsoft recommends not to
+  compress if a server use more than 80 % of its computational power.</li>
+  </ul>
+</blockquote>
+<p>Чтобы явно требовать передачу со сжатием, нужно указать что-то такое:</p>
+<pre><code>Accept-Encoding: deflate, gzip, *;q=0
+</code></pre>
+<p>Чтобы наоборот, требовать обязательной передачи без сжатия - такое:</p>
+<pre><code>Accept-Encoding: identity, *;q=0
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

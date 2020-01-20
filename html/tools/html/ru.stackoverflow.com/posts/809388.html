@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1047;&#1072;&#1087;&#1088;&#1086;&#1089;&#1080;&#1090;&#1100; windows &#1072;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1102; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1047;&#1072;&#1087;&#1088;&#1086;&#1089;&#1080;&#1090;&#1100; windows &#1072;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1102; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Запросить windows авторизацию</h1>
+<p><a href="https://ru.stackoverflow.com/questions/809388/%d0%97%d0%b0%d0%bf%d1%80%d0%be%d1%81%d0%b8%d1%82%d1%8c-windows-%d0%b0%d0%b2%d1%82%d0%be%d1%80%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8e">Source</a> - by <a href="https://ru.stackoverflow.com/users/260772/%d0%9c%d0%b8%d1%88%d0%b0%d0%ba%d0%be%d0%b2-%d0%9c%d0%b0%d0%ba%d1%81%d0%b8%d0%bc">Мишаков Максим</a></p>
+<blockquote>
+<p>Я хочу запросить ввод пароля пользователя, когда он нажимает на кнопку. Можете подсказать метод, который вызовет стандартное диалоговое окно windows, пользователь введёт пароль, и, если он верный, мне вернётся <code>true</code>? <code>LogonUser</code> похоже на то что мне нужно, хотя там и не появляется окошка </p>
+</blockquote>
+<h2>Answer 809699</h2>
+<p><a href="https://ru.stackoverflow.com/a/809699/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Для отображения диалогового окна можно использовать функцию <em>CredUIPromptForWindowsCredentials</em>, а для проверки логина и пароля - <em>PrincipalContext</em> (добавить ссылку на <em>System.DirectoryServices.AccountManagement</em>).</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.DirectoryServices.AccountManagement;
+using System.Text;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
+namespace WinformsTest
+{
+    public partial class Form1 : Form
+    {
+        //https://www.pinvoke.net/default.aspx/credui.creduipromptforwindowscredentials
+        [DllImport("credui.dll", CharSet = CharSet.Unicode)]
+        private static extern uint CredUIPromptForWindowsCredentials(ref CREDUI_INFO notUsedHere,
+          int authError,
+          ref uint authPackage,
+          IntPtr InAuthBuffer,
+          uint InAuthBufferSize,
+          out IntPtr refOutAuthBuffer,
+          out uint refOutAuthBufferSize,
+          ref bool fSave,
+          uint flags);
+
+        [DllImport("credui.dll", CharSet = CharSet.Auto)]
+        private static extern bool CredUnPackAuthenticationBuffer(int dwFlags, IntPtr pAuthBuffer, uint cbAuthBuffer, 
+            StringBuilder pszUserName, ref int pcchMaxUserName, StringBuilder pszDomainName, 
+            ref int pcchMaxDomainame, StringBuilder pszPassword, ref int pcchMaxPassword
+            );
+
+        [DllImport("ole32.dll")]
+        public static extern void CoTaskMemFree(IntPtr ptr);
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        bool CheckCredentials()
+        {
+            bool save = false;
+            int errorcode = 0;
+            uint dialogReturn;
+            uint authPackage = 0;
+            IntPtr outCredBuffer;
+            uint outCredSize;
+
+            CREDUI_INFO credui = new CREDUI_INFO();
+            credui.cbSize = Marshal.SizeOf(credui);
+            credui.pszCaptionText = "Авторизация";
+            credui.pszMessageText = "Введите логин и пароль";
+            credui.hwndParent = this.Handle;
+
+            //Show dialog
+            dialogReturn = CredUIPromptForWindowsCredentials(ref credui,
+            errorcode, ref authPackage, (IntPtr)0, 0, out outCredBuffer, out outCredSize, ref save,
+            0x1 /*CREDUIWIN_GENERIC*/);
+
+            if (dialogReturn != 0) return false; //Cancel pressed
+
+            var usernameBuf = new StringBuilder(100);
+            var passwordBuf = new StringBuilder(100);
+            var domainBuf = new StringBuilder(100);
+
+            int maxUserName = 100;
+            int maxDomain = 100;
+            int maxPassword = 100;
+
+            //Validate credentials
+            if (CredUnPackAuthenticationBuffer(0, outCredBuffer, outCredSize, usernameBuf,
+                ref maxUserName, domainBuf, ref maxDomain, passwordBuf, ref maxPassword))
+            {
+                CoTaskMemFree(outCredBuffer);
+
+                using (PrincipalContext context = new PrincipalContext(ContextType.Machine)) 
+                {
+                    bool valid;
+                    try
+                    {
+                        valid = context.ValidateCredentials(usernameBuf.ToString(), passwordBuf.ToString());
+                    }
+                    catch (System.DirectoryServices.AccountManagement.PrincipalOperationException ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "Ошибка");
+                        valid = false;
+                    }
+                    return valid;
+                }
+            }
+            else throw new ApplicationException("CredUnPackAuthenticationBuffer failed");
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!CheckCredentials()) MessageBox.Show("Не удалось авторизоваться");                        
+
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct CREDUI_INFO
+    {
+        public int cbSize;
+        public IntPtr hwndParent;
+        public string pszMessageText;
+        public string pszCaptionText;
+        public IntPtr hbmBanner;
+    }
+
+
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
