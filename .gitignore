@@ -348,3 +348,6 @@ ASALocalRun/
 # NuGet
 *.dll
 *.nupkg
+
+# Generated files
+/tools/html/*.com/
