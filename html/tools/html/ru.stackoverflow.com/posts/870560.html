@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1057;&#1082;&#1074;&#1086;&#1079;&#1085;&#1072;&#1103; &#1072;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; &#1074; AD | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1057;&#1082;&#1074;&#1086;&#1079;&#1085;&#1072;&#1103; &#1072;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; &#1074; AD | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Сквозная авторизация в AD</h1>
+<p><a href="https://ru.stackoverflow.com/questions/870560/%d0%a1%d0%ba%d0%b2%d0%be%d0%b7%d0%bd%d0%b0%d1%8f-%d0%b0%d0%b2%d1%82%d0%be%d1%80%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d1%8f-%d0%b2-ad">Source</a> - by <a href="https://ru.stackoverflow.com/users/193923/polsok">polsok</a></p>
+<blockquote>
+<p>Как сделать сквозную авторизацию по имени пользователя в AD на компьютерах с Windows?</p>
+<p>Пример: пользователь заходит в приложение, вводит имя пользователя и пароль AD и от сервера получает данные связанные с этой учетной записью</p>
+</blockquote>
+<h2>Answer 872287</h2>
+<p><a href="https://ru.stackoverflow.com/a/872287/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Как-то так:</p>
+<pre><code>//Reference: System.DirectoryServices.AccountManagement
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Security.Principal;
+using System.DirectoryServices.AccountManagement;
+using System.Text;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication
+{
+    static class Program
+    {
+        //Проверяет, авторизован ли пользователь в домене
+        public static bool IsInDomain(string domain)
+        {
+            bool retval = false;
+            NetJoinStatus status = NetJoinStatus.NetSetupUnknownStatus;
+            IntPtr pDomain = IntPtr.Zero;
+            int result = NetGetJoinInformation(null, out pDomain, out status);
+
+            if (result != 0) throw new Win32Exception("NetGetJoinInformation failed");
+
+            if (pDomain != IntPtr.Zero)
+            {
+                string curr_domain = Marshal.PtrToStringUni(pDomain);
+
+                if (status == NetJoinStatus.NetSetupDomainName &amp;&amp;
+                    curr_domain.ToUpper().Trim() == domain.ToUpper().Trim())
+                {
+                    retval = true;
+                }
+                NetApiBufferFree(pDomain);
+            }
+
+            return retval;
+        }
+
+        //Выводит диалоговое окно ввода логина и пароля, и возвращает имя пользователя при успешной авторизации
+        static string EnterCredentials(string domain)
+        {
+
+            bool save = false;
+            int errorcode = 0;
+            uint dialogReturn;
+            uint authPackage = 0;
+            IntPtr outCredBuffer;
+            uint outCredSize;
+
+            CREDUI_INFO credui = new CREDUI_INFO();
+            credui.cbSize = Marshal.SizeOf(credui);
+            credui.pszCaptionText = "Авторизация";
+            credui.pszMessageText = "Введите логин и пароль";
+            credui.hwndParent = IntPtr.Zero;
+
+            //Show dialog
+            dialogReturn = CredUIPromptForWindowsCredentials(ref credui,
+            errorcode, ref authPackage, (IntPtr)0, 0, out outCredBuffer, out outCredSize, ref save,
+            0x1 /*CREDUIWIN_GENERIC*/);
+
+            if (dialogReturn != 0) return ""; //Cancel pressed
+
+            var usernameBuf = new StringBuilder(100);
+            var passwordBuf = new StringBuilder(100);
+            var domainBuf = new StringBuilder(100);
+
+            int maxUserName = 100;
+            int maxDomain = 100;
+            int maxPassword = 100;
+
+            //Validate credentials
+            if (CredUnPackAuthenticationBuffer(0, outCredBuffer, outCredSize, usernameBuf,
+                ref maxUserName, domainBuf, ref maxDomain, passwordBuf, ref maxPassword))
+            {
+                CoTaskMemFree(outCredBuffer);
+
+                using (PrincipalContext context = new PrincipalContext(ContextType.Domain, domain))
+                {
+                    bool valid;
+                    valid = context.ValidateCredentials(usernameBuf.ToString(), passwordBuf.ToString());
+
+                    if (valid) return usernameBuf.ToString();
+                    else return "";
+                }
+            }
+            else throw new ApplicationException("CredUnPackAuthenticationBuffer failed");
+
+        }
+
+
+        /// &lt;summary&gt;
+        /// The main entry point for the application.
+        /// &lt;/summary&gt;
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            string domain = "Domain"; 
+            string user = Environment.UserName;
+
+            bool logged = IsInDomain(domain);
+
+            if (logged)
+            {
+                MessageBox.Show("Здравствуйте, " + user + ". Вы уже авторизованы в " + domain);
+            }
+            else
+            {
+                user = EnterCredentials(domain);
+
+                if (user == "")
+                {
+                    MessageBox.Show("Не удалось авторизоваться");
+                    return;
+                }
+                else MessageBox.Show("Здравствуйте, " + user + ". Добро пожаловать в " + domain);
+            }
+
+            Application.Run(new Form1());
+        }
+
+
+        // *** WINAPI Functions ***
+
+        [DllImport("credui.dll", CharSet = CharSet.Unicode)]
+        private static extern uint CredUIPromptForWindowsCredentials(ref CREDUI_INFO notUsedHere,
+          int authError,
+          ref uint authPackage,
+          IntPtr InAuthBuffer,
+          uint InAuthBufferSize,
+          out IntPtr refOutAuthBuffer,
+          out uint refOutAuthBufferSize,
+          ref bool fSave,
+          uint flags);
+
+        [DllImport("credui.dll", CharSet = CharSet.Auto)]
+        private static extern bool CredUnPackAuthenticationBuffer(int dwFlags, IntPtr pAuthBuffer, uint cbAuthBuffer,
+            StringBuilder pszUserName, ref int pcchMaxUserName, StringBuilder pszDomainName,
+            ref int pcchMaxDomainame, StringBuilder pszPassword, ref int pcchMaxPassword
+            );
+
+        [DllImport("Netapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern int NetGetJoinInformation(string server, out IntPtr domain, out NetJoinStatus status);
+
+        [DllImport("Netapi32.dll")]
+        public static extern int NetApiBufferFree(IntPtr Buffer);
+
+        public enum NetJoinStatus
+        {
+            NetSetupUnknownStatus = 0,
+            NetSetupUnjoined,
+            NetSetupWorkgroupName,
+            NetSetupDomainName
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct CREDUI_INFO
+        {
+            public int cbSize;
+            public IntPtr hwndParent;
+            public string pszMessageText;
+            public string pszCaptionText;
+            public IntPtr hbmBanner;
+        }
+
+        [DllImport("ole32.dll")]
+        public static extern void CoTaskMemFree(IntPtr ptr);
+    }
+
+}
+</code></pre>
+<p><strong>Источники</strong></p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/926227/how-to-detect-if-machine-is-joined-to-domain-in-c?noredirect=1&amp;lq=1">How to detect if machine is joined to domain (in C#)?
+</a>  </li>
+<li><a href="https://stackoverflow.com/questions/40343218/validate-credentials-against-ad">C# Validate credentials against AD</a></li>
+</ul>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

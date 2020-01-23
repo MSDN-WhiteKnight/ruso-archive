@@ -1,0 +1,418 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1063;&#1077;&#1084; &#1074; .NET &#1084;&#1086;&#1078;&#1085;&#1086; &#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1080;&#1090;&#1100; &#1086;&#1088;&#1092;&#1086;&#1075;&#1088;&#1072;&#1092;&#1080;&#1102; &#1074; &#1088;&#1091;&#1089;&#1089;&#1082;&#1086;&#1084; &#1090;&#1077;&#1082;&#1089;&#1090;&#1077;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1063;&#1077;&#1084; &#1074; .NET &#1084;&#1086;&#1078;&#1085;&#1086; &#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1080;&#1090;&#1100; &#1086;&#1088;&#1092;&#1086;&#1075;&#1088;&#1072;&#1092;&#1080;&#1102; &#1074; &#1088;&#1091;&#1089;&#1089;&#1082;&#1086;&#1084; &#1090;&#1077;&#1082;&#1089;&#1090;&#1077;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Чем в .NET можно проверить орфографию в русском тексте?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/891355/%d0%a7%d0%b5%d0%bc-%d0%b2-net-%d0%bc%d0%be%d0%b6%d0%bd%d0%be-%d0%bf%d1%80%d0%be%d0%b2%d0%b5%d1%80%d0%b8%d1%82%d1%8c-%d0%be%d1%80%d1%84%d0%be%d0%b3%d1%80%d0%b0%d1%84%d0%b8%d1%8e-%d0%b2-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%be%d0%bc-%d1%82%d0%b5%d0%ba%d1%81%d1%82%d0%b5">Source</a> - by <a href="https://ru.stackoverflow.com/users/32793/iluxa1810">iluxa1810</a></p>
+<blockquote>
+<p>Нашел вот <a href="https://www.nuget.org/packages/Spell.Check/" rel="nofollow noreferrer">это</a>, но русского к сожалению нет...</p>
+<p>Интересуют бесплатные решения.</p>
+<p>Вроде, как-то воспользоваться API MS Office и получать результаты, но interop тормозной.</p>
+</blockquote>
+<h2>Answer 897845</h2>
+<p><a href="https://ru.stackoverflow.com/a/897845/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<h1>Windows 8 - 10</h1>
+<p>Можно использовать стандартный <a href="https://docs.microsoft.com/en-us/windows/desktop/intl/about-the-spell-checker-api" rel="nofollow noreferrer">Spell Checking API</a>. Словари для проверки орфографии устанавливаются с языковым пакетом, так что при наличии русскоязычной Windows русский язык будет поддерживаться.</p>
+<p>Объявим необходимые интерфейсы:</p>
+<pre><code>using System.Runtime.InteropServices;
+
+namespace ConsoleApplication1
+{
+    public class SpellCheckAPI
+    {
+        public enum WORDLIST_TYPE
+        {
+            WORDLIST_TYPE_IGNORE,
+            WORDLIST_TYPE_ADD,
+            WORDLIST_TYPE_EXCLUDE,
+            WORDLIST_TYPE_AUTOCORRECT,
+        }
+
+        public enum CORRECTIVE_ACTION
+        {
+            CORRECTIVE_ACTION_NONE,
+            CORRECTIVE_ACTION_GET_SUGGESTIONS,
+            CORRECTIVE_ACTION_REPLACE,
+            CORRECTIVE_ACTION_DELETE,
+        }
+
+        [Guid("B7C82D61-FBE8-4B47-9B27-6C0D2E0DE0A3")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        public interface ISpellingError
+        {
+            uint StartIndex { get; }
+
+            uint Length { get; }
+
+            SpellCheckAPI.CORRECTIVE_ACTION CorrectiveAction { get; }
+
+            string Replacement { [return: MarshalAs(UnmanagedType.LPWStr)] get; }
+        }
+
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("803E3BD4-2828-4410-8290-418D1D73C762")]
+        [ComImport]
+        public interface IEnumSpellingError
+        {
+            [return: MarshalAs(UnmanagedType.Interface)]
+            SpellCheckAPI.ISpellingError Next();
+        }
+
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("00000101-0000-0000-C000-000000000046")]
+        [ComImport]
+        public interface IEnumString
+        {
+            void Next([In] uint celt, [MarshalAs(UnmanagedType.LPWStr)] out string rgelt, out uint pceltFetched);
+
+            void Skip([In] uint celt);
+
+            void Reset();
+
+            void Clone([MarshalAs(UnmanagedType.Interface)] out SpellCheckAPI.IEnumString ppenum);
+        }
+
+        [Guid("432E5F85-35CF-4606-A801-6F70277E1D7A")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        public interface IOptionDescription
+        {
+            string Id { [return: MarshalAs(UnmanagedType.LPWStr)] get; }
+
+            string Heading { [return: MarshalAs(UnmanagedType.LPWStr)] get; }
+
+            string Description { [return: MarshalAs(UnmanagedType.LPWStr)] get; }
+
+            SpellCheckAPI.IEnumString Labels { [return: MarshalAs(UnmanagedType.Interface)] get; }
+        }
+
+        [Guid("0B83A5B0-792F-4EAB-9799-ACF52C5ED08A")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        public interface ISpellCheckerChangedEventHandler
+        {
+            void Invoke([MarshalAs(UnmanagedType.Interface), In] SpellCheckAPI.ISpellChecker sender);
+        }
+
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("B6FD0B71-E2BC-4653-8D05-F197E412770B")]
+        [ComImport]
+        public interface ISpellChecker
+        {
+            string languageTag { [return: MarshalAs(UnmanagedType.LPWStr)] get; }
+
+            [return: MarshalAs(UnmanagedType.Interface)]
+            SpellCheckAPI.IEnumSpellingError Check([MarshalAs(UnmanagedType.LPWStr), In] string text);
+
+            [return: MarshalAs(UnmanagedType.Interface)]
+            SpellCheckAPI.IEnumString Suggest([MarshalAs(UnmanagedType.LPWStr), In] string word);
+
+            void Add([MarshalAs(UnmanagedType.LPWStr), In] string word);
+
+            void Ignore([MarshalAs(UnmanagedType.LPWStr), In] string word);
+
+            void AutoCorrect([MarshalAs(UnmanagedType.LPWStr), In] string from, [MarshalAs(UnmanagedType.LPWStr), In] string to);
+
+            byte GetOptionValue([MarshalAs(UnmanagedType.LPWStr), In] string optionId);
+
+            SpellCheckAPI.IEnumString OptionIds { [return: MarshalAs(UnmanagedType.Interface)] get; }
+
+            string Id { [return: MarshalAs(UnmanagedType.LPWStr)] get; }
+
+            string LocalizedName { [return: MarshalAs(UnmanagedType.LPWStr)] get; }
+
+            uint add_SpellCheckerChanged([MarshalAs(UnmanagedType.Interface), In] SpellCheckAPI.ISpellCheckerChangedEventHandler handler);
+
+
+            void remove_SpellCheckerChanged([In] uint eventCookie);
+
+            [return: MarshalAs(UnmanagedType.Interface)]
+            SpellCheckAPI.IOptionDescription GetOptionDescription([MarshalAs(UnmanagedType.LPWStr), In] string optionId);
+
+            [return: MarshalAs(UnmanagedType.Interface)]
+            SpellCheckAPI.IEnumSpellingError ComprehensiveCheck([MarshalAs(UnmanagedType.LPWStr), In] string text);
+        }
+
+        [Guid("8E018A9D-2415-4677-BF08-794EA61F94BB")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        public interface ISpellCheckerFactory
+        {
+            SpellCheckAPI.IEnumString SupportedLanguages { [return: MarshalAs(UnmanagedType.Interface)] get; }
+
+
+            int IsSupported([MarshalAs(UnmanagedType.LPWStr), In] string languageTag);
+
+
+            [return: MarshalAs(UnmanagedType.Interface)]
+            SpellCheckAPI.ISpellChecker CreateSpellChecker([MarshalAs(UnmanagedType.LPWStr), In] string languageTag);
+        }
+
+        [Guid("AA176B85-0E12-4844-8E1A-EEF1DA77F586")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        public interface IUserDictionariesRegistrar
+        {
+            void RegisterUserDictionary([MarshalAs(UnmanagedType.LPWStr), In] string dictionaryPath, [MarshalAs(UnmanagedType.LPWStr), In] string languageTag);
+
+            void UnregisterUserDictionary([MarshalAs(UnmanagedType.LPWStr), In] string dictionaryPath, [MarshalAs(UnmanagedType.LPWStr), In] string languageTag);
+        }
+
+
+
+        [Guid("7AB36653-1796-484B-BDFA-E74F1DB7C1DC")]
+        [ComImport]
+        public class SpellCheckerFactoryClass
+        {
+        }
+    }
+} 
+</code></pre>
+<p>Тогда метод для проверки правописания можно реализовать так:</p>
+<pre><code>public static string SpellCheck(string s)
+{
+    SpellCheckAPI.SpellCheckerFactoryClass factory = null;
+    SpellCheckAPI.ISpellCheckerFactory ifactory = null;
+    SpellCheckAPI.ISpellChecker checker = null;
+    SpellCheckAPI.ISpellingError error = null;
+    SpellCheckAPI.IEnumSpellingError errors = null;
+    SpellCheckAPI.IEnumString suggestions = null;
+    StringBuilder sb = new StringBuilder(s.Length * 10);
+
+    try
+    {
+
+        factory = new SpellCheckAPI.SpellCheckerFactoryClass();
+        ifactory = (SpellCheckAPI.ISpellCheckerFactory)factory;
+
+        //проверим поддержку русского языка
+        int res = ifactory.IsSupported("ru-RU");
+        if (res == 0) { throw new Exception("Fatal error: russian language not supported!"); }
+
+        checker = ifactory.CreateSpellChecker("ru-RU");
+
+        errors = checker.Check(s);
+        while (true)
+        {
+            if (error != null) { Marshal.ReleaseComObject(error); error = null; }
+
+            error = errors.Next();
+            if (error == null) break;
+
+            //получаем слово с ошибкой
+            string word = s.Substring((int)error.StartIndex, (int)error.Length);
+            sb.AppendLine("Ошибка в слове: " + word);
+
+            //получаем рекомендуемое действие
+            switch (error.CorrectiveAction)
+            {
+                case SpellCheckAPI.CORRECTIVE_ACTION.CORRECTIVE_ACTION_DELETE:
+                    sb.AppendLine("Рекомендуемое действие: удалить");
+                    break;
+
+                case SpellCheckAPI.CORRECTIVE_ACTION.CORRECTIVE_ACTION_REPLACE:
+                    sb.AppendLine("Рекомендуемое действие: заменить на " + error.Replacement);
+                    break;
+
+                case SpellCheckAPI.CORRECTIVE_ACTION.CORRECTIVE_ACTION_GET_SUGGESTIONS:
+                    sb.AppendLine("Рекомендуемое действие: заменить на одно из следующих слов");
+
+                    if (suggestions != null) { Marshal.ReleaseComObject(suggestions); suggestions = null; }
+
+                    //получаем список слов, предложенных для замены
+                    suggestions = checker.Suggest(word);
+
+                    sb.Append("[ ");
+                    while (true)
+                    {
+                        string suggestion;
+                        uint count = 0;
+                        suggestions.Next(1, out suggestion, out count);
+                        if (count == 1) sb.Append(suggestion + " ");
+                        else break;
+                    }
+                    sb.Append("] ");
+                    sb.AppendLine();
+                    break;
+            }
+            sb.AppendLine();
+
+        }
+
+
+    }
+    finally
+    {
+        if (suggestions != null) { Marshal.ReleaseComObject(suggestions); }
+        if (factory != null) { Marshal.ReleaseComObject(factory); }
+        if (ifactory != null) { Marshal.ReleaseComObject(ifactory); }
+        if (checker != null) { Marshal.ReleaseComObject(checker); }
+        if (error != null) { Marshal.ReleaseComObject(error); }
+        if (errors != null) { Marshal.ReleaseComObject(errors); }
+    }
+
+    return sb.ToString();
+
+}
+</code></pre>
+<h1>Windows Vista - 7</h1>
+<p>Можно использовать TextBox из WPF, тесты показали, что он отлично работает в не-WPF проекте без необходимости создания цикла обработки сообщений и добавления его в окно. Нужно лишь добавить ссылки на PresentationCore, PresentationFramework, WindowsBase и System.Xaml, а также пометить поток STAThread. Из коробки русский язык не поддерживается, поэтому придется скачать словарь, например <a href="https://www.karamasoft.com/UltimateSpell/Dictionary.aspx" rel="nofollow noreferrer">здесь</a>, и добавить его как нестандартный. Файл словаря желательно перекодировать в UTF-16 LE с BOM (эта кодировка в блокноте обозначена как "Юникод"), так как словари в других кодировках похоже обрабатываются некорректно. </p>
+<p>Пример:</p>
+<pre><code>using System.Windows.Controls;
+
+//...
+
+public static string SpellCheckWPF(string s)
+{
+    StringBuilder sb = new StringBuilder(s.Length * 10);
+
+    TextBox textbox = new TextBox(); 
+    textbox.Text = s;        
+    textbox.Language = System.Windows.Markup.XmlLanguage.GetLanguage("en-US");
+    textbox.SpellCheck.IsEnabled = true;
+
+    //добавим нестандартный словарь из файла
+    textbox.SpellCheck.CustomDictionaries.Add(new Uri(@"ru-RU.dic", UriKind.Relative));
+
+    int index = 0;
+    while (true)
+    {
+        //находим ошибку            
+        index = textbox.GetNextSpellingErrorCharacterIndex(index, System.Windows.Documents.LogicalDirection.Forward);
+        if (index &gt; s.Length || index &lt; 0) break;
+
+        var error = textbox.GetSpellingError(index);
+        int len = textbox.GetSpellingErrorLength(index);
+
+        string word = textbox.Text.Substring(index, len);
+
+        sb.AppendFormat("Ошибка в слове {0}, рекомендуется заменить на одно из следующих слов: ", word);
+
+        //выводим список предлагаемых замен
+        foreach (string x in error.Suggestions)
+        {
+            sb.Append(x + "; ");
+        }
+        sb.AppendLine();
+
+        //переход к следующему слову
+        index += len;
+    }
+    return sb.ToString();
+}
+</code></pre>
+<p>Поскольку загрузка большого словаря занимает существенное время, нужно создать один TextBox, загрузить в него словарь один раз при запуске приложения и в последующем коде использовать его (а не грузить словарь каждый раз, когда нужно что-то проверить).</p>
+<p>Данный код не будет работать в Windows 8.1+ и .NET 4.6.1+, так как в этих версиях WPF также использует вышеописанный стандартный API. Механизм загрузки словарей в связи с этим сильно изменился, и большие словари не поддерживаются. Чтобы все нормально заработало в этом случае, нужно убрать нестандартный словарь и устанавливать в TextBox русский язык, а не английский.</p>
+<h1>Источники</h1>
+<p><a href="https://visualstudiomagazine.com/articles/2013/08/01/using-the-c-spell-checking-api.aspx" rel="nofollow noreferrer">Using the C++ Spell Checking API</a></p>
+<p><a href="https://blogs.msdn.microsoft.com/wpf/2015/10/29/wpf-in-net-4-6-1/" rel="nofollow noreferrer">WPF in .NET 4.6.1</a></p>
+<p><a href="https://support.microsoft.com/en-us/help/3088234/spelling-checker-isn-t-supported-in-the-net-4-6-1-in-some-conditions" rel="nofollow noreferrer">Spelling checker isn't supported in the .NET 4.6.1 in some conditions</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

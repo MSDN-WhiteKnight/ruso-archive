@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1056;&#1072;&#1073;&#1086;&#1090;&#1072; &#1089; Common Intermediate Language | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1056;&#1072;&#1073;&#1086;&#1090;&#1072; &#1089; Common Intermediate Language | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Работа с Common Intermediate Language</h1>
+<p><a href="https://ru.stackoverflow.com/questions/886982/%d0%a0%d0%b0%d0%b1%d0%be%d1%82%d0%b0-%d1%81-common-intermediate-language">Source</a> - by <a href="https://ru.stackoverflow.com/users/248572/kir-antipov">Kir_Antipov</a></p>
+<blockquote>
+<p>В последнее время достаточно интересно стало писать на <a href="https://en.wikipedia.org/wiki/Common_Intermediate_Language" rel="nofollow noreferrer">CIL</a>, дабы поближе ознакомиться со всем тем, с чем я работаю каждый день)</p>
+<p>В связи с этим появился вопрос: есть ли какая-нибудь <code>IDE</code> для разработки приложений на чистом <code>IL</code>, а также чем бы следовало вооружиться для более детального его изучения (ибо пока в моем арсенале есть только интуиция, с помощью которой я читал <code>IL</code> ранее, и <a href="https://en.wikipedia.org/wiki/List_of_CIL_instructions" rel="nofollow noreferrer">страничка со списком инструкций на Wikipedia</a>)</p>
+<p>Пока что я нашел только <a href="https://marketplace.visualstudio.com/items?itemName=ins0mniaque.ILSupport" rel="nofollow noreferrer">расширение для Visual Studio</a>, но оно позволяет лишь интегрировать инструкции на <code>IL</code> в код на <code>C#</code>, <code>F#</code> или <code>VB</code>, а это не совсем то, что мне хотелось бы видеть ¯\_(ツ)_/¯</p>
+</blockquote>
+<h2>Answer 888885</h2>
+<p><a href="https://ru.stackoverflow.com/a/888885/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<blockquote>
+  <p>есть ли какая-нибудь IDE для разработки приложений на чистом IL</p>
+</blockquote>
+<p>Как вариант, сделать саму Visual Studio такой IDE, пользуясь пользовательскими шаблонами. </p>
+<h1>I. Шаблон проекта</h1>
+<p>Создадим проект консольного приложения C#, назовем его, скажем, CilProject.</p>
+<p>В обозревателе решений в контекстном меню проекта вызовем пункт "Выгрузить проект". Там же у выгруженного проекта вызовем пункт "Изменить проект".</p>
+<p>Найдем в XML узел</p>
+<pre><code>&lt;Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets&gt;
+</code></pre>
+<p>И заменим его на следующий код:</p>
+<pre><code>  &lt;Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" /&gt;
+
+  &lt;Target Name="CreateManifestResourceNames" /&gt;
+
+  &lt;Target Name="CoreCompile" Inputs="$(MSBuildAllProjects);@(Compile);" Outputs="@(IntermediateAssembly);"&gt;
+    &lt;GetFrameworkPath&gt;
+      &lt;Output TaskParameter="Path" PropertyName="FrameworkPath" /&gt;
+    &lt;/GetFrameworkPath&gt;
+
+    &lt;PropertyGroup&gt;
+      &lt;IlAsmCommand&gt;&amp;quot;$(FrameworkPath)\Ilasm.exe&amp;quot; /NOLOGO /DLL /OUTPUT:&amp;quot;@(IntermediateAssembly)&amp;quot; &lt;/IlAsmCommand&gt;
+    &lt;/PropertyGroup&gt;
+
+    &lt;PropertyGroup Condition=" '$(Configuration)' == 'Debug' " &gt;
+      &lt;IlAsmCommand&gt;$(IlAsmCommand) /DEBUG &lt;/IlAsmCommand&gt;
+    &lt;/PropertyGroup&gt;
+
+    &lt;PropertyGroup Condition=" '$(Configuration)' == 'Release' " &gt;&lt;IlAsmCommand&gt;$(IlAsmCommand) /OPTIMIZE &lt;/IlAsmCommand&gt;&lt;/PropertyGroup&gt;
+
+    &lt;PropertyGroup Condition=" '$(AssemblyOriginatorKeyFile)' != '' " &gt;
+      &lt;IlAsmCommand&gt;$(IlAsmCommand) /KEY:&amp;quot;$(AssemblyOriginatorKeyFile)&amp;quot; &lt;/IlAsmCommand&gt;
+    &lt;/PropertyGroup&gt;
+
+    &lt;Exec Command="$(IlAsmCommand) @(Compile-&gt;'&amp;quot;%(FullPath)&amp;quot;', ' ')" 
+          Outputs="@(IntermediateAssembly)" /&gt;
+
+    &lt;CallTarget Targets="$(TargetsTriggeredByCompilation)" Condition="'$(TargetsTriggeredByCompilation)' != ''" /&gt;
+  &lt;/Target&gt;
+</code></pre>
+<p>Снова загрузим проект (в том же контекстном меню выберем пункт "Перезагрузить проект").</p>
+<p>Заменим AssemblyInfo.cs на AssemblyInfo.il:</p>
+<pre><code>.assembly CilProject { }
+</code></pre>
+<p>Заменим Program.cs на Program.il:</p>
+<pre><code>.method public static void Main() cil managed
+{
+     .entrypoint
+     .maxstack 1
+    ldstr "Hello, world!"
+    call void [mscorlib]System.Console::WriteLine(string)
+    call int32 [mscorlib]System.Console::Read()
+    pop
+    ret
+}
+</code></pre>
+<p>Для обоих .il файлов в свойствах установим <em>Действие при сборке</em> - <em>Компилировать</em>. После этого проект должен собираться и запускаться.</p>
+<p>В Visual Studio выберем <em>Проект - Экспорт шаблона - Шаблон проекта</em>, в диалоговом окне введем имя и описание и установим галку "Автоматически импортировать в Visual Studio". В результате должен получиться такой шаблон CilProject.csproj (для VS 2017 и .NET 4.0):</p>
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
+  &lt;Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" /&gt;
+  &lt;PropertyGroup&gt;
+    &lt;Configuration Condition=" '$(Configuration)' == '' "&gt;Debug&lt;/Configuration&gt;
+    &lt;Platform Condition=" '$(Platform)' == '' "&gt;AnyCPU&lt;/Platform&gt;
+    &lt;ProjectGuid&gt;{$guid1$}&lt;/ProjectGuid&gt;
+    &lt;OutputType&gt;Exe&lt;/OutputType&gt;
+    &lt;RootNamespace&gt;$safeprojectname$&lt;/RootNamespace&gt;
+    &lt;AssemblyName&gt;$safeprojectname$&lt;/AssemblyName&gt;
+    &lt;TargetFrameworkVersion&gt;v4.0&lt;/TargetFrameworkVersion&gt;
+    &lt;FileAlignment&gt;512&lt;/FileAlignment&gt;
+    &lt;Deterministic&gt;true&lt;/Deterministic&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "&gt;
+    &lt;PlatformTarget&gt;AnyCPU&lt;/PlatformTarget&gt;
+    &lt;DebugSymbols&gt;true&lt;/DebugSymbols&gt;
+    &lt;DebugType&gt;full&lt;/DebugType&gt;
+    &lt;Optimize&gt;false&lt;/Optimize&gt;
+    &lt;OutputPath&gt;bin\Debug\&lt;/OutputPath&gt;
+    &lt;DefineConstants&gt;DEBUG;TRACE&lt;/DefineConstants&gt;
+    &lt;ErrorReport&gt;prompt&lt;/ErrorReport&gt;
+    &lt;WarningLevel&gt;4&lt;/WarningLevel&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "&gt;
+    &lt;PlatformTarget&gt;AnyCPU&lt;/PlatformTarget&gt;
+    &lt;DebugType&gt;pdbonly&lt;/DebugType&gt;
+    &lt;Optimize&gt;true&lt;/Optimize&gt;
+    &lt;OutputPath&gt;bin\Release\&lt;/OutputPath&gt;
+    &lt;DefineConstants&gt;TRACE&lt;/DefineConstants&gt;
+    &lt;ErrorReport&gt;prompt&lt;/ErrorReport&gt;
+    &lt;WarningLevel&gt;4&lt;/WarningLevel&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;Reference Include="System" /&gt;
+  &lt;/ItemGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;Compile Include="Program.il" /&gt;
+    &lt;Compile Include="Properties\AssemblyInfo.il" /&gt;
+  &lt;/ItemGroup&gt;
+  &lt;Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" /&gt;
+  &lt;Target Name="CreateManifestResourceNames" /&gt;
+  &lt;Target Name="CoreCompile" Inputs="$(MSBuildAllProjects);@(Compile);" Outputs="@(IntermediateAssembly);"&gt;
+    &lt;GetFrameworkPath&gt;
+      &lt;Output TaskParameter="Path" PropertyName="FrameworkPath" /&gt;
+    &lt;/GetFrameworkPath&gt;
+    &lt;PropertyGroup&gt;
+      &lt;IlAsmCommand&gt;"$(FrameworkPath)\Ilasm.exe" /NOLOGO /OUTPUT:"@(IntermediateAssembly)" &lt;/IlAsmCommand&gt;
+    &lt;/PropertyGroup&gt;
+    &lt;PropertyGroup Condition=" '$(Configuration)' == 'Debug' "&gt;
+      &lt;IlAsmCommand&gt;$(IlAsmCommand) /DEBUG &lt;/IlAsmCommand&gt;
+    &lt;/PropertyGroup&gt;
+    &lt;PropertyGroup Condition=" '$(Configuration)' == 'Release' "&gt;
+      &lt;IlAsmCommand&gt;$(IlAsmCommand) /OPTIMIZE &lt;/IlAsmCommand&gt;
+    &lt;/PropertyGroup&gt;
+    &lt;PropertyGroup Condition=" '$(AssemblyOriginatorKeyFile)' != '' "&gt;
+      &lt;IlAsmCommand&gt;$(IlAsmCommand) /KEY:"$(AssemblyOriginatorKeyFile)" &lt;/IlAsmCommand&gt;
+    &lt;/PropertyGroup&gt;
+    &lt;Exec Command="$(IlAsmCommand) @(Compile-&gt;'&amp;quot;%(FullPath)&amp;quot;', ' ')" Outputs="@(IntermediateAssembly)" /&gt;
+    &lt;CallTarget Targets="$(TargetsTriggeredByCompilation)" Condition="'$(TargetsTriggeredByCompilation)' != ''" /&gt;
+  &lt;/Target&gt;
+&lt;/Project&gt;
+</code></pre>
+<p>Файл шаблона будет помещен в <code>(Мои документы)\Visual Studio 2017\Templates\ProjectTemplates</code>. После этого в окне создания проекта в категории Visual C# появится наш CilProject. </p>
+<p><a href="https://i.stack.imgur.com/qTAP1.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/qTAP1.png" alt="CilProject"></a></p>
+<p>Уже можно писать программы (ссылки на сборки вписывать в AssemblyInfo.il, а код добавлять в виде файлов .il с действием при сборке "Компилировать"). </p>
+<h1>II. Шаблон элемента</h1>
+<p>Для удобства создадим также шаблон класса. Добавим файл Class1.il:</p>
+<pre><code>.class public auto ansi beforefieldinit Class1
+       extends [mscorlib]System.Object
+{
+    .method public hidebysig static void Method() cil managed
+    {       
+        ret
+    }
+} 
+</code></pre>
+<p>В Visual Studio выберем <em>Проект - Экспорт шаблона - Шаблон элемента</em>, в диалоговом окне выберем файл <em>Class1.il</em>, установим галку "Автоматически импортировать в Visual Studio" и введем остальные параметры. Получим zip-файл с шаблоном в каталоге <code>(Мои документы)\Visual Studio 2017\Templates\ItemTemplates</code>, распакуем его и откроем файл .vstemplate. В нем найдем узел <code>&lt;ProjectItem...&gt;</code> и добавим в него атрибут <code>ItemType="Compile"</code>:</p>
+<pre><code>&lt;VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item"&gt;
+  &lt;TemplateData&gt;
+    &lt;DefaultName&gt;CilClass.il&lt;/DefaultName&gt;
+    &lt;Name&gt;CilClass&lt;/Name&gt;
+    &lt;Description&gt;Class (CIL)&lt;/Description&gt;
+    &lt;ProjectType&gt;CSharp&lt;/ProjectType&gt;
+    &lt;SortOrder&gt;10&lt;/SortOrder&gt;
+    &lt;Icon&gt;__TemplateIcon.ico&lt;/Icon&gt;
+  &lt;/TemplateData&gt;
+  &lt;TemplateContent&gt;
+    &lt;References /&gt;
+    &lt;ProjectItem ItemType="Compile" SubType="" TargetFileName="$fileinputname$.il" ReplaceParameters="true"&gt;Class1.il&lt;/ProjectItem&gt;
+  &lt;/TemplateContent&gt;
+&lt;/VSTemplate&gt;
+</code></pre>
+<p>Запакуем файлы в такой же ZIP-архив и поместим на место старого в каталоге <em>ItemTemplates</em>. Перезапустим студию, после этого в окне добавления элемента, в категории "Элементы Visual C#" появится наш шаблон класса. </p>
+<p><a href="https://i.stack.imgur.com/tHfzK.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/tHfzK.png" alt="CilClass"></a></p>
+<h1>Результат</h1>
+<p>Что-то такое:</p>
+<p><a href="https://i.stack.imgur.com/m2js9.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/m2js9.png" alt="IDE"></a></p>
+<p>Плюсы: работает отладка, вывод ошибок и предупреждений компилятора с указанием файла и строки, можно переключаться между конфигурациями Debug/Release.</p>
+<p>Минусы: не работают свойства проекта, функционал добавления ссылок через интерфейс студии, подсветка синтаксиса, проверка ошибок во время редактирования и многое другое.</p>
+<p>Итоговые файлы шаблонов: <a href="https://yadi.sk/d/iQZtbjkndUkCcw" rel="nofollow noreferrer">шаблон проекта</a>, <a href="https://yadi.sk/d/TcAYNnJcj5N2uQ" rel="nofollow noreferrer">шаблон элемента</a>. </p>
+<blockquote>
+  <p>чем бы следовало вооружиться для более детального его изучения</p>
+</blockquote>
+<p>Утилитой <a href="https://docs.microsoft.com/ru-ru/dotnet/framework/tools/ildasm-exe-il-disassembler" rel="nofollow noreferrer">IL Disassembler</a>, документацией класса <a href="https://docs.microsoft.com/en-us/dotnet/api/system.reflection.emit.opcodes?view=netframework-4.7.2" rel="nofollow noreferrer">System.Reflection.Emit.OpCodes</a>, третьим разделом <a href="http://www.ecma-international.org/publications/standards/Ecma-335.htm" rel="nofollow noreferrer">спецификации</a>. </p>
+<h1>Источники</h1>
+<p><a href="https://docs.microsoft.com/en-us/visualstudio/ide/creating-project-and-item-templates?view=vs-2017" rel="nofollow noreferrer">Visual Studio Project and item templates</a></p>
+<p><a href="https://stackoverflow.com/questions/27381941/how-can-i-load-a-template-i-have-created-in-visual-studio">How can i load a template I have created in Visual Studio?
+</a></p>
+<p><a href="https://stackoverflow.com/a/4076917/8674428">Are there any examples of compiling CIL code from within a Visual Studio project
+</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1091;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1089;&#1083;&#1091;&#1078;&#1073;&#1091; Windows &#1080;&#1079; &#1082;&#1086;&#1076;&#1072;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1091;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1089;&#1083;&#1091;&#1078;&#1073;&#1091; Windows &#1080;&#1079; &#1082;&#1086;&#1076;&#1072;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как установить службу Windows из кода?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/895892/%d0%9a%d0%b0%d0%ba-%d1%83%d1%81%d1%82%d0%b0%d0%bd%d0%be%d0%b2%d0%b8%d1%82%d1%8c-%d1%81%d0%bb%d1%83%d0%b6%d0%b1%d1%83-windows-%d0%b8%d0%b7-%d0%ba%d0%be%d0%b4%d0%b0">Source</a> - by <a href="https://ru.stackoverflow.com/users/250810/4l3x">4L3X</a></p>
+<blockquote>
+<p>Для WPF приложения нужно в фоновом режиме проверять, загружать и устанавливать обновления. Решил прибегнуть к службам, но хочу реализовать установку службы из самого приложения, без использования командной строки и утилит .NET Framework. На сайте Microsoft нашел только метод <code>installutil &lt;yourproject&gt;.exe</code>, опять же - утилита из .NET Framework. Как можно установить службу из кода?</p>
+</blockquote>
+<h2>Answer 897613</h2>
+<p><a href="https://ru.stackoverflow.com/a/897613/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Как-то так:</p>
+<pre><code>using System;
+using System.Runtime.InteropServices;
+
+namespace SvcInstaller
+{
+    class ServiceInstaller
+    {
+
+        #region DLLImport
+        [DllImport("advapi32.dll")]
+        public static extern IntPtr OpenSCManager(string lpMachineName, string lpSCDB, int scParameter);
+        [DllImport("Advapi32.dll")]
+        public static extern IntPtr CreateService(IntPtr SC_HANDLE, string lpSvcName, string lpDisplayName,
+        int dwDesiredAccess, int dwServiceType, int dwStartType, int dwErrorControl, string lpPathName,
+        string lpLoadOrderGroup, int lpdwTagId, string lpDependencies, string lpServiceStartName, string lpPassword);
+        [DllImport("advapi32.dll")]
+        public static extern void CloseServiceHandle(IntPtr SCHANDLE);
+        [DllImport("advapi32.dll")]
+        public static extern int StartService(IntPtr SVHANDLE, int dwNumServiceArgs, string lpServiceArgVectors);
+        [DllImport("advapi32.dll", SetLastError = true)]
+        public static extern IntPtr OpenService(IntPtr SCHANDLE, string lpSvcName, int dwNumServiceArgs);
+        [DllImport("advapi32.dll")]
+        public static extern int DeleteService(IntPtr SVHANDLE);
+
+        #endregion DLLImport               
+
+
+        /// &lt;summary&gt;
+        /// This method installs and runs the service in the service control manager.
+        /// &lt;/summary&gt;
+        /// &lt;param name="svcPath"&gt;The complete path of the service.&lt;/param&gt;
+        /// &lt;param name="svcName"&gt;Name of the service.&lt;/param&gt;
+        /// &lt;param name="svcDispName"&gt;Display name of the service.&lt;/param&gt;
+        /// &lt;returns&gt;True if the process went thro successfully. False if there was any error.&lt;/returns&gt;
+        public static bool InstallService(string svcPath, string svcName, string svcDispName)
+        {
+            #region Constants declaration.
+            int SC_MANAGER_CREATE_SERVICE = 0x0002;
+            int SERVICE_WIN32_OWN_PROCESS = 0x00000010;
+            //int SERVICE_DEMAND_START = 0x00000003;
+            int SERVICE_ERROR_NORMAL = 0x00000001;
+            int STANDARD_RIGHTS_REQUIRED = 0xF0000;
+            int SERVICE_QUERY_CONFIG = 0x0001;
+            int SERVICE_CHANGE_CONFIG = 0x0002;
+            int SERVICE_QUERY_STATUS = 0x0004;
+            int SERVICE_ENUMERATE_DEPENDENTS = 0x0008;
+            int SERVICE_START = 0x0010;
+            int SERVICE_STOP = 0x0020;
+            int SERVICE_PAUSE_CONTINUE = 0x0040;
+            int SERVICE_INTERROGATE = 0x0080;
+            int SERVICE_USER_DEFINED_CONTROL = 0x0100;
+            int SERVICE_ALL_ACCESS = (STANDARD_RIGHTS_REQUIRED |
+            SERVICE_QUERY_CONFIG |
+            SERVICE_CHANGE_CONFIG |
+            SERVICE_QUERY_STATUS |
+            SERVICE_ENUMERATE_DEPENDENTS |
+            SERVICE_START |
+            SERVICE_STOP |
+            SERVICE_PAUSE_CONTINUE |
+            SERVICE_INTERROGATE |
+            SERVICE_USER_DEFINED_CONTROL);
+            int SERVICE_AUTO_START = 0x00000002;
+            #endregion Constants declaration.
+            try
+            {
+                IntPtr sc_handle = OpenSCManager(null, null, SC_MANAGER_CREATE_SERVICE);
+                if (sc_handle.ToInt32() != 0)
+                {
+                    IntPtr sv_handle = CreateService(sc_handle, svcName, svcDispName, SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS, SERVICE_AUTO_START, SERVICE_ERROR_NORMAL, svcPath, null, 0, null, null, null);
+                    if (sv_handle.ToInt32() == 0)
+                    {
+                        CloseServiceHandle(sc_handle);
+                        return false;
+                    }
+                    else
+                    {
+                        //now trying to start the service
+                        int i = StartService(sv_handle, 0, null);
+                        // If the value i is zero, then there was an error starting the service.
+                        // note: error may arise if the service is already running or some other problem.
+                        if (i == 0)
+                        {
+                            //Console.WriteLine("Couldnt start service");
+                            return false;
+                        }
+                        //Console.WriteLine("Success");
+                        CloseServiceHandle(sc_handle);
+                        return true;
+                    }
+                }
+                else
+                    //Console.WriteLine("SCM not opened successfully");
+                    return false;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        /// &lt;summary&gt;
+        /// This method uninstalls the service from the service conrol manager.
+        /// &lt;/summary&gt;
+        /// &lt;param name="svcName"&gt;Name of the service to uninstall.&lt;/param&gt;
+        public static bool UnInstallService(string svcName)
+        {
+            int GENERIC_WRITE = 0x40000000;
+            IntPtr sc_hndl = OpenSCManager(null, null, GENERIC_WRITE);
+            if (sc_hndl.ToInt32() != 0)
+            {
+                int DELETE = 0x10000;
+                IntPtr svc_hndl = OpenService(sc_hndl, svcName, DELETE);
+                //Console.WriteLine(svc_hndl.ToInt32());
+                if (svc_hndl.ToInt32() != 0)
+                {
+                    int i = DeleteService(svc_hndl);
+                    if (i != 0)
+                    {
+                        CloseServiceHandle(sc_hndl);
+                        return true;
+                    }
+                    else
+                    {
+                        CloseServiceHandle(sc_hndl);
+                        return false;
+                    }
+                }
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+
+        static void Test()
+        {
+
+            string svcPath;
+            string svcName;
+            string svcDispName;
+
+            //path to the service that you want to install
+            svcPath = @"C:\build\service\Debug\Service.exe";
+            svcDispName = "Service Display Name";
+            svcName = "Service Name";
+
+            ServiceInstaller.InstallService(svcPath, svcName, svcDispName);            
+
+
+        }
+    }
+}
+</code></pre>
+<p>Источник: <a href="https://www.c-sharpcorner.com/article/installing-a-service-programmatically/" rel="nofollow noreferrer">https://www.c-sharpcorner.com/article/installing-a-service-programmatically/</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
