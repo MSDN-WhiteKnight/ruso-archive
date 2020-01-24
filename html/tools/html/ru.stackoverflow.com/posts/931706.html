@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>C# &#1080; &#1079;&#1072;&#1087;&#1080;&#1089;&#1100; &#1074; .rtf-&#1096;&#1072;&#1073;&#1083;&#1086;&#1085; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="C# &#1080; &#1079;&#1072;&#1087;&#1080;&#1089;&#1100; &#1074; .rtf-&#1096;&#1072;&#1073;&#1083;&#1086;&#1085; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>C# и запись в .rtf-шаблон</h1>
+<p><a href="https://ru.stackoverflow.com/questions/931706/c-%d0%b8-%d0%b7%d0%b0%d0%bf%d0%b8%d1%81%d1%8c-%d0%b2-rtf-%d1%88%d0%b0%d0%b1%d0%bb%d0%be%d0%bd">Source</a> - by <a href="https://ru.stackoverflow.com/users/291056/aleks-keller">Aleks Keller</a></p>
+<blockquote>
+<p>коллеги.</p>
+<p>Есть БД MySQL с русским текстом.
+Есть приложение C# WinForms x86 .net 3.5.
+Есть файл <code>.rtf</code> с вставками вида #template# и русским текстом.</p>
+<p>Задача: записать текст из БД в нужные места в файле.
+Читаю через <code>File.ReadAllText</code>, затем склеиваю строки и пишу обратно через <code>File.WriteAllText</code> в новый файл. </p>
+<p>И получаю кракозябры вместо вставленного текста. При этом тот текст, что был, остаётся в порядке. </p>
+<p>Пробовал читать в одной кодировке, писать в другой... Один пёс. </p>
+<p>Может, кто-то сталкивался с этим <code>.rtf</code> - какую комбинацию кодировок посоветуете для базы данных, самого файла, <code>File.ReadAllText</code> и <code>File.WriteAllText</code>? Или может юзать <code>File.Write/ReadAllBytes</code>. Или перекодировать на лету вставляемые куски текста? </p>
+<p>Заранее спасибо.</p>
+<p>Я до сих пор не въехал, какая родная кодировка у <code>.rtf</code> - 1251 или 1252.</p>
+<p>UPD:
+Код:</p>
+<pre><code>string agreementTemplate = File.ReadAllText("PaymentTemplate.rtf", Encoding.GetEncoding(1251));
+agreementTemplate = agreementTemplate.Replace("#klientName#", CurrentCredit.Client);
+agreementTemplate = agreementTemplate.Replace("#klientAdr#", CurrentCredit.ClientAdr);
+File.WriteAllText("Сведения о платежах для договора №" + CurrentCredit.Number + ".doc", agreementTemplate, Encoding.GetEncoding(1251));
+</code></pre>
+<p>Результат:
+Андрей Семёнов
+óë. Ëåíèíà, 24</p>
+<p>Добавил новый файл для примера.
+При загрузке:
+"{\rtf1\ansi\ansicpg1251\deff0{\fonttbl{\f0\fnil\fcharset204 Calibri;}{\f1\fnil\fcharset0 Calibri;}}\r\n\viewkind4\uc1\pard\sa200\sl276\slmult1\lang1049\f0\fs22\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\b\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\ul\b0\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\b\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\ulnone\b0\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2: \lang1033\f1 #replace#\par\r\n\lang1049\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\par\r\n\par\r\n}\r\n"</p>
+<p>После замены replace на русский текст</p>
+<p>"{\rtf1\ansi\ansicpg1251\deff0{\fonttbl{\f0\fnil\fcharset204 Calibri;}{\f1\fnil\fcharset0 Calibri;}}\r\n\viewkind4\uc1\pard\sa200\sl276\slmult1\lang1049\f0\fs22\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\b\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\ul\b0\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\b\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\ulnone\b0\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2: \lang1033\f1\'c0\'ed\'e4\'f0\'e5\'e9 \'d1\'e5\'ec\'b8\'ed\'ee\'e2\par\r\n\lang1049\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\lang1049\f0\'d0\'f3\'f1\'f1\'ea\'e8\'e9 \'f2\'e5\'ea\'f1\'f2\lang1033\f1\par\r\n\par\r\n\par\r\n}\r\n"</p>
+<p>Содержимое файла</p>
+<p>Русский текст
+Русский текст (жирным)
+Русский текст (подчёркнутым)
+Русский текст (жирным подч)
+Русский текст
+Русский текст: #replace#
+Русский текст
+Русский текст</p>
+<p>Обновление: решение проблемы, как обычно, с помощью костылей. Вместо шаблона вида "#replace#" делаем шаблон КИРИЛЛИЦЕЙ вида "ИмяКлиента". </p>
+<p>То есть текст в шаблоне: "клиент, в лице ИмяКлиента, обязывается..."</p>
+<p>Затем, с помощью функции, предложенной nick_n_a, делаем такую кракозябру:</p>
+<pre><code>templateStr = loadfile...
+templateStr = templateStr.Replace(ToRtf("ИмяКлиента"), ToRtf(CurrentCredit.Name));
+</code></pre>
+<p>где CurrentCredit.Name - русский текст из БД
+На кодировку ложим болт ибо теперь неважно.</p>
+<p>В общем, оно работает. Но... сами понимаете. Кто придумает что-то лучше - милости просим)</p>
+<p>ЗЫ: правда, на основных файлах ещё не проверял, если что - вернусь)</p>
+</blockquote>
+<h2>Answer 931876</h2>
+<p><a href="https://ru.stackoverflow.com/a/931876/">Source</a> - by <a href="https://ru.stackoverflow.com/users/17974/nick-n-a">nick_n_a</a></p>
+<blockquote>
+<p>Для вставки текста RTF в шаблон я использовал такое приведение</p>
+<pre><code>  public static string toRTF(string value)
+        {  /*Конвертирует текст, в текст пригодный для RTF документа */
+            //                                                                                                             FF
+            string syms = @"ЎўЈЈ¤Ґ¦§Ё©Є«¬­®Ї°±Ііґµ¶•ё№є»јЅѕїАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя";                      
+            string rep_1 = @"0123456789abcdef";
+            int j = 0;
+            int k = 0;
+            while (j &lt; value.Length)
+            {
+                if (syms.IndexOf(value[j]) &gt;= 0)
+                {
+                    k = syms.IndexOf(value[j]);
+                    value = value.Replace(value[j].ToString(), "\\'" + rep_1[(k / 16) + 10].ToString() + rep_1[k &amp; 15].ToString());
+                };
+                j++;
+            };
+            value = value.Replace("\\n", "\\par;");
+            return value;
+        }
+</code></pre>
+<p>Да.. пожалуй хранить и копировать таблицу сложно... вариант 2 - без таблицы</p>
+<pre><code>  public static string toRTF(string value)
+        {  /*Конвертирует текст, в текст пригодный для RTF документа */
+            byte[] t = new byte[1];
+            int j = 0;                
+            while (j &lt; value.Length)
+            {
+                if (value[j] &gt;= '\x7F')
+                {
+                    System.Text.Encoding.GetEncoding(1251).GetBytes(value,j,1,t,0);                      
+                    value = value.Replace(value[j].ToString(), "\\'" + t[0].ToString('x'));
+                };
+                j++;
+            };
+            value = value.Replace("\\n", "\\par;");
+            return value;
+        }
+</code></pre>
+<p>Т.е. буква я маленькая имеет код  <code>\'FF</code>. Плюс... шаблон должен содержать метку 1251, т.е. в файле с поддержкой 1251 заголовок должен быть такой</p>
+<pre><code> {\rtf1\adeflang1025\ansi\ansicpg1251\
+</code></pre>
+<p>Еще я заменяю возврат каретки на <code>\par;</code> потому что текст так переносится в rtf. </p>
+<p>Текст можно вообще не преобразовывать, оставить как есть и лишь перенести в кодировку 1251, если есть уверенность, что ваш файл будут открывать исключительно в среде windows. Некоторые "неродные" редакторы не понимают файлы без указанного перевода.</p>
+<p>P.S. RTF не самый простой формат, не могу рассказать подробно о его деталях. Приведенный код использую в одном из проэктов. Преобразование в heх можно реализовать лучше.. но так уже получилось - не само оптимально. В вики внизу есть ссылка на спецификацию <a href="http://ru.wikipedia.org/wiki/Rich_Text_Format" rel="nofollow noreferrer">http://ru.wikipedia.org/wiki/Rich_Text_Format</a>, если есть сложности - думаю спецификацикация даст ответ на ваши вопросы.</p>
+</blockquote>
+<h2>Answer 932127</h2>
+<p><a href="https://ru.stackoverflow.com/a/932127/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Если вас не интересует поддержка старого ПО, можно закодировать в Unicode, тогда проблемы кодировки не будет. Для этого пропустите строку через такой метод:</p>
+<pre><code>static string RtfEncode(string input)
+{
+    StringBuilder sb = new StringBuilder(input.Length * 4);
+
+    foreach (var c in input)
+    {
+        if (c &gt; 127) //заменяем не-ASCII символы на их Unicode представление
+        {
+            string escape = "\\u" + ((Int16)c).ToString() + "?";
+            sb.Append(escape);
+        }
+        else //ASCII добавляем без изменений
+        {
+            sb.Append(c);
+        }
+    }
+
+    return sb.ToString();
+}
+</code></pre>
+<p>Тогда замену можно произвести как-то так:</p>
+<pre><code>string template = "#template#";
+string word = "Иванов И.А.";
+string contents = File.ReadAllText(input_file);
+
+word = RtfEncode(word);
+contents = contents.Replace(template, word);
+File.WriteAllText(output_file, contents);
+</code></pre>
+<p>О кодировке не нужно заботиться, так как после RtfEncode задействованы только ASCII символы. При таком способе ничего не должно нарушиться, при условии что маркер замены в шаблоне никак не пересекает границы управляющих конструкций RTF. (Отредактируйте шаблон в блокноте, и убедитесь, что строка замены представлена именно так, как вы ожидаете.)</p>
+</blockquote>
+<h2>Answer 935834</h2>
+<p><a href="https://ru.stackoverflow.com/a/935834/">Source</a> - by <a href="https://ru.stackoverflow.com/users/291056/aleks-keller">Aleks Keller</a></p>
+<blockquote>
+<p>Как всё заработало в итоге.</p>
+<pre><code>//виртуальный буфер (глобальная переменная)
+private RichTextBox _richTextBox = new RichTextBox();
+
+//название файла для сохранения
+string target = "Договор №" + CurrentCredit.Number + ".doc";
+//грузим шаблон в RichTextBox - контрол сам порешает за все кодировки
+_richTextBox.LoadFile(Storage.AgreementTemplateFile, RichTextBoxStreamType.RichText);
+//магия
+Replace("#nomer#", CurrentCredit.Number.ToString());
+//при сохранении о кодировке опять-таки позаботится RichTextBox
+_richTextBox.SaveFile(target);
+
+//главное - функция Replace:
+
+private void Replace(string from, string to)
+{
+    int start = _richTextBox.Find(from, 0, RichTextBoxFinds.None);
+    _richTextBox.Select(start, from.Length);
+    _richTextBox.SelectedText = to;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

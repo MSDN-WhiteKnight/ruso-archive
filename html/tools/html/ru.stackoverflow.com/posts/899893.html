@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1088;&#1072;&#1073;&#1086;&#1090;&#1072; &#1075;&#1086;&#1088;&#1103;&#1095;&#1080;&#1093; &#1082;&#1083;&#1072;&#1074;&#1080;&#1096; &#1087;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1099; &#1074; &#1089;&#1074;&#1077;&#1088;&#1085;&#1091;&#1090;&#1086;&#1084; &#1088;&#1077;&#1078;&#1080;&#1084;&#1077; c# | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1088;&#1072;&#1073;&#1086;&#1090;&#1072; &#1075;&#1086;&#1088;&#1103;&#1095;&#1080;&#1093; &#1082;&#1083;&#1072;&#1074;&#1080;&#1096; &#1087;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1099; &#1074; &#1089;&#1074;&#1077;&#1088;&#1085;&#1091;&#1090;&#1086;&#1084; &#1088;&#1077;&#1078;&#1080;&#1084;&#1077; c# | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>работа горячих клавиш программы в свернутом режиме c#</h1>
+<p><a href="https://ru.stackoverflow.com/questions/899893/%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%b0-%d0%b3%d0%be%d1%80%d1%8f%d1%87%d0%b8%d1%85-%d0%ba%d0%bb%d0%b0%d0%b2%d0%b8%d1%88-%d0%bf%d1%80%d0%be%d0%b3%d1%80%d0%b0%d0%bc%d0%bc%d1%8b-%d0%b2-%d1%81%d0%b2%d0%b5%d1%80%d0%bd%d1%83%d1%82%d0%be%d0%bc-%d1%80%d0%b5%d0%b6%d0%b8%d0%bc%d0%b5-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/308222/%d0%90%d0%bb%d0%b5%d0%ba%d1%81%d0%b5%d0%b9-%d0%9c%d0%b8%d0%bb%d1%8e%d0%ba%d0%be%d0%b2">Алексей Милюков</a></p>
+<blockquote>
+<p>Как заставить работать горячие клавиши приложения, когда оно свернуто в трее, а в это время работает что-то другое?</p>
+</blockquote>
+<h2>Answer 901192</h2>
+<p><a href="https://ru.stackoverflow.com/a/901192/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Используйте функцию <a href="https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-registerhotkey" rel="nofollow noreferrer">RegisterHotKey</a>:</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+        //необходимые константы
+        public const int MOD_ALT = 0x1;
+        public const int MOD_CONTROL = 0x2;
+        public const int MOD_SHIFT = 0x4;
+        public const int MOD_WIN = 0x8;
+        public const int WM_HOTKEY = 0x312;        
+
+        //обработчик сообщений для окна
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_HOTKEY)
+            {
+                textBox1.Text += DateTime.Now.ToString() + ". Hotkey pressed, ID = 0x" + m.WParam.ToString("X");
+                textBox1.Text += Environment.NewLine;
+                m.Result = (IntPtr)0;
+                return;
+            }
+
+            base.WndProc(ref m);
+        }
+
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            bool res = RegisterHotKey(this.Handle, 1, 0, (uint)Keys.F1);//регистрируем горячую клавишу
+            if (res == false) MessageBox.Show("RegisterHotKey failed");
+        }
+    }
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

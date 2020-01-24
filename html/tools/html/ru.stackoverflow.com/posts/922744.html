@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1089;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1080;&#1089;&#1082;&#1086;&#1074; &#1095;&#1077;&#1088;&#1077;&#1079; WINAPI &#1085;&#1072; &#1091;&#1076;&#1072;&#1083;&#1077;&#1085;&#1085;&#1086;&#1084; &#1089;&#1077;&#1088;&#1074;&#1077;&#1088;&#1077; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1089;&#1087;&#1080;&#1089;&#1086;&#1082; &#1076;&#1080;&#1089;&#1082;&#1086;&#1074; &#1095;&#1077;&#1088;&#1077;&#1079; WINAPI &#1085;&#1072; &#1091;&#1076;&#1072;&#1083;&#1077;&#1085;&#1085;&#1086;&#1084; &#1089;&#1077;&#1088;&#1074;&#1077;&#1088;&#1077; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Получить список дисков через WINAPI на удаленном сервере</h1>
+<p><a href="https://ru.stackoverflow.com/questions/922744/%d0%9f%d0%be%d0%bb%d1%83%d1%87%d0%b8%d1%82%d1%8c-%d1%81%d0%bf%d0%b8%d1%81%d0%be%d0%ba-%d0%b4%d0%b8%d1%81%d0%ba%d0%be%d0%b2-%d1%87%d0%b5%d1%80%d0%b5%d0%b7-winapi-%d0%bd%d0%b0-%d1%83%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%bd%d0%be%d0%bc-%d1%81%d0%b5%d1%80%d0%b2%d0%b5%d1%80%d0%b5">Source</a> - by <a href="https://ru.stackoverflow.com/users/32793/iluxa1810">iluxa1810</a></p>
+<blockquote>
+<p>Можно ли через WinAPI получить список дисков или эта задача решается только с помощью WMI?</p>
+<p>P.S Информация просто интереса ради. Так как <code>Total Commander</code>, например, получает лейблы расшаренных дисков. Возможно, через WMI но все же может быть есть какая-то WinApi функция.</p>
+</blockquote>
+<h2>Answer 922784</h2>
+<p><a href="https://ru.stackoverflow.com/a/922784/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Физические диски можно получить через Setup API. Как-то так (С++):</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;locale.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;Setupapi.h&gt;
+#include &lt;LM.h&gt;
+#define INITGUID
+#include &lt;Devpkey.h&gt;
+
+#pragma comment(lib,"Setupapi.lib")
+#pragma comment(lib,"Netapi32.lib")
+
+void ErrorMes(LPCTSTR lpszFunction)
+{
+    // Retrieve the system error message for the last-error code
+
+    LPVOID lpMsgBuf;
+    LPVOID lpDisplayBuf;
+    DWORD dw = GetLastError();
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR)&amp;lpMsgBuf,
+        0, NULL);
+
+    // Display the error message 
+
+    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
+        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen(lpszFunction) + 40) * sizeof(TCHAR));
+    wprintf(L"%s failed with error %d: %s",
+        lpszFunction, dw, (LPSTR)lpMsgBuf);
+
+    LocalFree(lpMsgBuf);
+    LocalFree(lpDisplayBuf);
+}
+
+void PrintDisks(const GUID * guidInterface) {
+
+    DEVPROPTYPE dpt = 0;
+    wchar_t buffer[1024] = L"";
+
+    DWORD RequiredSize = 0;
+    SP_DEVINFO_DATA devinfo = { 0 };
+    SP_DEVICE_INTERFACE_DATA deviceInterface = { 0 };
+    PSP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetail = NULL;
+    BOOL res;
+
+    USE_INFO_2 info;
+    info.ui2_asg_type = USE_WILDCARD;
+    info.ui2_local = NULL;
+    info.ui2_domainname = (LPWSTR)L"DOMEN";
+    info.ui2_username = (LPWSTR)L"User";
+    info.ui2_password = (LPWSTR)L"123";
+    info.ui2_remote = (LPWSTR)L"\\\\server\\IPC$";  
+
+    DWORD parm = 0;
+    DWORD dwRes = NetUseAdd(NULL, 2, (LPBYTE)&amp;info, &amp;parm);
+    if(dwRes != NERR_Success)printf("NetUseAdd failed: %u (%u)\n",dwRes,parm);  
+
+    HDEVINFO deviceInfoHandle = SetupDiGetClassDevsEx(guidInterface, 0, 0, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE,
+        NULL, L"\\\\server",NULL);
+
+    if (deviceInfoHandle != INVALID_HANDLE_VALUE)
+    {
+        int deviceIndex = 0;
+        while (true)
+        {
+            ZeroMemory(&amp;deviceInterface, sizeof(deviceInterface));
+            deviceInterface.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
+
+            //получение всех дисков
+            if (SetupDiEnumDeviceInterfaces(deviceInfoHandle, 0, guidInterface, deviceIndex, &amp;deviceInterface))
+            {
+                DWORD cbRequired = 0;
+
+                SetupDiGetDeviceInterfaceDetail(deviceInfoHandle, &amp;deviceInterface, 0, 0, &amp;cbRequired, 0);
+                if (ERROR_INSUFFICIENT_BUFFER == GetLastError())
+                {
+                    deviceInterfaceDetail = (PSP_DEVICE_INTERFACE_DETAIL_DATA)(new char[cbRequired]);
+                    memset(deviceInterfaceDetail, 0, cbRequired);
+                    deviceInterfaceDetail-&gt;cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
+
+                    if (!SetupDiGetDeviceInterfaceDetail(deviceInfoHandle, &amp;deviceInterface,
+                        deviceInterfaceDetail, cbRequired, &amp;cbRequired, 0))
+                    {
+                        goto Next;
+                    }
+
+                    // Initialize the structure before using it.
+                    memset(deviceInterfaceDetail, 0, cbRequired);
+                    deviceInterfaceDetail-&gt;cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
+
+                    // Call the API a second time to retrieve the actual
+                    // device path string.
+                    BOOL status = SetupDiGetDeviceInterfaceDetail(
+                        deviceInfoHandle,  // Handle to device information set
+                        &amp;deviceInterface,     // Pointer to current node in devinfo set
+                        deviceInterfaceDetail,   // Pointer to buffer to receive device path
+                        cbRequired,   // Length of user-allocated buffer
+                        &amp;cbRequired,  // Pointer to arg to receive required buffer length
+                        NULL);        // Not interested in additional data
+
+
+                    //получение информации о устройстве 
+                    ZeroMemory(&amp;devinfo, sizeof(devinfo));
+                    devinfo.cbSize = sizeof(SP_DEVINFO_DATA);
+                    BOOL success = SetupDiEnumDeviceInfo(deviceInfoHandle, deviceIndex, &amp;devinfo);
+                    if (success == FALSE) { ErrorMes(L"SetupDiEnumDeviceInfo"); goto Next; }
+
+                    res = SetupDiGetDeviceProperty(deviceInfoHandle, &amp;devinfo,
+                        &amp;DEVPKEY_NAME, &amp;dpt, (PBYTE)buffer, 1000, NULL, 0);
+                    if (res == FALSE) { ErrorMes(L"SetupDiGetDeviceProperty"); goto Next; }
+
+                    wprintf(L"%s: %s\n", buffer, deviceInterfaceDetail-&gt;DevicePath);
+                }
+            }
+            else
+            {
+                break;
+            }
+
+        Next:
+            if (deviceInterfaceDetail != NULL) {
+                delete[] deviceInterfaceDetail;
+                deviceInterfaceDetail = NULL;
+            }
+
+
+
+            deviceIndex++; //следующее устройство
+        }
+
+        SetupDiDestroyDeviceInfoList(deviceInfoHandle);
+    }
+    else ErrorMes(L"SetupDiGetClassDevsEx");
+
+}
+
+int __cdecl main(int argc, char **argv)
+{
+    setlocale(LC_ALL, "Russian");
+    PrintDisks(&amp;GUID_DEVINTERFACE_DISK);
+    PrintDisks(&amp;GUID_DEVINTERFACE_CDROM);
+    getchar();
+    return 0;
+
+}
+</code></pre>
+<p>Однако, этот способ не работает на Windows 10. Удаленный диспетчер устройств в ней был исключен, а вместе с ним и используемые им API.</p>
+<p>Список букв разделов можно получить, подключившись к удаленному реестру, он хранится в ветке <code>HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices</code>. Способа получить метки разделов для удаленного компьютера вроде нет.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
