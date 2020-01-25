@@ -17,79 +17,87 @@ namespace ArchiveLoader
 
         public static PostSet LoadFromDir(string path, string site)
         {
-            Dictionary<int, Question> questions = new Dictionary<int, Question>();
-            Dictionary<int, Answer> answers = new Dictionary<int, Answer>();
-            Dictionary<int, Answer> single_answers = new Dictionary<int, Answer>();
-
-            Dictionary<int, string> mdquestions =new Dictionary<int,string>();
-            Dictionary<int, string> mdanswers = new Dictionary<int, string>();
+            Dictionary<int, Question> questions;
+            Dictionary<int, Answer> answers;
+            Dictionary<int, Answer> single_answers;
+            Dictionary<int, string> mdquestions;
+            Dictionary<int, string> mdanswers;
 
             string[] files = Directory.GetFiles(path, "Q*.json");
+            questions = new Dictionary<int, Question>(files.Length);
+            JSON parser = new JSON();
 
-            for (int i = 0; i < files.Length; i++)
+            using (parser)
             {
-                string file = Path.GetFileNameWithoutExtension(files[i]);
-                string idstr = file.Substring(1);
-                int id;
-
-                if (!Int32.TryParse(idstr, out id))
+                for (int i = 0; i < files.Length; i++)
                 {
-                    Console.WriteLine("Bad question id = {0} in file {1}", idstr, files[i]);
-                    continue;
-                }
+                    string file = Path.GetFileNameWithoutExtension(files[i]);
+                    string idstr = file.Substring(1);
+                    int id;
 
-                try
-                {
-                    string json = File.ReadAllText(files[i], Encoding.UTF8);
-                    Question q = new Question(site, id, JSON.Parse(json));
-                    questions[id] = q;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error reading file " + files[i]);
-                    Console.WriteLine(ex.ToString());
-                }
-            }
-
-            files = Directory.GetFiles(path, "A*.json");
-
-            for (int i = 0; i < files.Length; i++)
-            {
-                string file = Path.GetFileNameWithoutExtension(files[i]);
-                string idstr = file.Substring(1);
-                int id;
-
-                if (!Int32.TryParse(idstr, out id))
-                {
-                    Console.WriteLine("Bad answer id = {0} in file {1}", idstr, files[i]);
-                    continue;
-                }
-
-                try
-                {
-                    string json = File.ReadAllText(files[i], Encoding.UTF8);
-                    Answer a = new Answer(site, id, JSON.Parse(json));
-                    answers[id] = a;
-
-                    int qid = a.DataDynamic.question_id;
-
-                    if (questions.ContainsKey(qid))
+                    if (!Int32.TryParse(idstr, out id))
                     {
-                        questions[qid].AddAnswer(a);
+                        Console.WriteLine("Bad question id = {0} in file {1}", idstr, files[i]);
+                        continue;
                     }
-                    else
-                    {                        
-                        single_answers[id] = a;
+
+                    try
+                    {
+                        string json = File.ReadAllText(files[i], Encoding.UTF8);
+                        Question q = new Question(site, id, parser.JsonParse(json));
+                        questions[id] = q;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error reading file " + files[i]);
+                        Console.WriteLine(ex.ToString());
                     }
                 }
-                catch (Exception ex)
+
+                files = Directory.GetFiles(path, "A*.json");
+                answers = new Dictionary<int, Answer>(files.Length);
+                single_answers = new Dictionary<int, Answer>(files.Length);
+
+                for (int i = 0; i < files.Length; i++)
                 {
-                    Console.WriteLine("Error reading file " + files[i]);
-                    Console.WriteLine(ex.ToString());
+                    string file = Path.GetFileNameWithoutExtension(files[i]);
+                    string idstr = file.Substring(1);
+                    int id;
+
+                    if (!Int32.TryParse(idstr, out id))
+                    {
+                        Console.WriteLine("Bad answer id = {0} in file {1}", idstr, files[i]);
+                        continue;
+                    }
+
+                    try
+                    {
+                        string json = File.ReadAllText(files[i], Encoding.UTF8);
+                        Answer a = new Answer(site, id, parser.JsonParse(json));
+                        answers[id] = a;
+
+                        int qid = a.DataDynamic.question_id;
+
+                        if (questions.ContainsKey(qid))
+                        {
+                            questions[qid].AddAnswer(a);
+                        }
+                        else
+                        {
+                            single_answers[id] = a;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error reading file " + files[i]);
+                        Console.WriteLine(ex.ToString());
+                    }
                 }
-            }
+
+            }//end using
 
             files = Directory.GetFiles(path, "Q*.md");
+            mdquestions = new Dictionary<int, string>(files.Length);
 
             for (int i = 0; i < files.Length; i++)
             {
@@ -105,7 +113,7 @@ namespace ArchiveLoader
 
                 try
                 {
-                    string md = File.ReadAllText(files[i], Encoding.UTF8);                    
+                    string md = File.ReadAllText(files[i], Encoding.UTF8);
                     mdquestions[id] = md;
                 }
                 catch (Exception ex)
@@ -116,6 +124,7 @@ namespace ArchiveLoader
             }
 
             files = Directory.GetFiles(path, "A*.md");
+            mdanswers = new Dictionary<int, string>(files.Length);            
 
             for (int i = 0; i < files.Length; i++)
             {
@@ -139,10 +148,14 @@ namespace ArchiveLoader
                     Console.WriteLine("Error reading file " + files[i]);
                     Console.WriteLine(ex.ToString());
                 }
-            }                        
+            }
 
-            return new PostSet { 
-                Questions = questions, SingleAnswers = single_answers, MarkdownQuestions = mdquestions, MarkdownAnswers = mdanswers 
+            return new PostSet
+            {
+                Questions = questions,
+                SingleAnswers = single_answers,
+                MarkdownQuestions = mdquestions,
+                MarkdownAnswers = mdanswers
             };
         }
     }
