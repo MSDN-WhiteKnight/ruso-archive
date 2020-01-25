@@ -6,47 +6,58 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace ArchiveLoader
 {
-    public static class JSON
+    public class JSON:IDisposable
     {
-        
+        dynamic html = null;
+        dynamic JsonObject = null;
+
+        public JSON()
+        {
+            html = Activator.CreateInstance(Type.GetTypeFromProgID("htmlfile"));
+            html.open();
+            html.write("<html><head><meta http-equiv=\"x-ua-compatible\" content=\"IE=9\" /></head><body></body></html>");
+            JsonObject = html.defaultView.JSON;
+        }
+
+        public object JsonParse(string str)
+        {
+            if (JsonObject == null) throw new ObjectDisposedException("JsonObject");
+
+            return JsonObject.parse(str);            
+        }
+
+        public string JsonStringify(object val)
+        {
+            if (JsonObject == null) throw new ObjectDisposedException("JsonObject");
+
+            return JsonObject.stringify(val);            
+        }
+
+        public void Dispose()
+        {
+            if (html != null) { Marshal.ReleaseComObject(html); html = null; }
+            if (JsonObject != null) { Marshal.ReleaseComObject(JsonObject); JsonObject = null; }
+        }
+
+
         public static object Parse(string str)
         {
-            dynamic html=null;
-            dynamic JsonObject = null;
-            try
-            {
-                html = Activator.CreateInstance(Type.GetTypeFromProgID("htmlfile"));
-                html.open();
-                html.write("<html><head><meta http-equiv=\"x-ua-compatible\" content=\"IE=9\" /></head><body></body></html>");
+            JSON inst = new JSON();
 
-                JsonObject = html.defaultView.JSON;
-                return JsonObject.parse(str);
-            }
-            finally
+            using (inst)
             {
-                if (html != null) Marshal.ReleaseComObject(html);
-                if (JsonObject != null) Marshal.ReleaseComObject(JsonObject);
-            }
+                return inst.JsonParse(str);
+            }            
         }
 
         public static string Stringify(object val)
         {
-            dynamic html = null;
-            dynamic JsonObject = null;
-            try
-            {
-                html = Activator.CreateInstance(Type.GetTypeFromProgID("htmlfile"));
-                html.open();
-                html.write("<html><head><meta http-equiv=\"x-ua-compatible\" content=\"IE=9\" /></head><body></body></html>");
+            JSON inst = new JSON();
 
-                JsonObject = html.defaultView.JSON;
-                return JsonObject.stringify(val);
-            }
-            finally
+            using (inst)
             {
-                if (html != null) Marshal.ReleaseComObject(html);
-                if (JsonObject != null) Marshal.ReleaseComObject(JsonObject);
-            }
+                return inst.JsonStringify(val);
+            }            
         }
 
         static object GetProperty(IDispatch dispatchObject, string property)
@@ -170,7 +181,6 @@ namespace ArchiveLoader
             ushort wReserved2;
             ushort wReserved3;
             public IntPtr p;
-        }
-
+        }        
     }
 }
