@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1047;&#1072;&#1087;&#1080;&#1089;&#1100; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093; &#1074; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1099;&#1081; Excel &#1092;&#1072;&#1081;&#1083; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; COM OLE C++ | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1047;&#1072;&#1087;&#1080;&#1089;&#1100; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093; &#1074; &#1086;&#1090;&#1082;&#1088;&#1099;&#1090;&#1099;&#1081; Excel &#1092;&#1072;&#1081;&#1083; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; COM OLE C++ | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Запись данных в открытый Excel файл с помощью COM OLE C++</h1>
+<p><a href="https://ru.stackoverflow.com/questions/938498/%d0%97%d0%b0%d0%bf%d0%b8%d1%81%d1%8c-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85-%d0%b2-%d0%be%d1%82%d0%ba%d1%80%d1%8b%d1%82%d1%8b%d0%b9-excel-%d1%84%d0%b0%d0%b9%d0%bb-%d1%81-%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e-com-ole-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/322772/optimus1">Optimus1</a></p>
+<blockquote>
+<p>Подскажите пожалуйста, есть ли у кого пример кода чтения и записи данных из/в открытый ексель файл с помощью COM/OLE на чистом С++.</p>
+<p>Есть микрософтовский пример: 
+<a href="https://support.microsoft.com/en-us/help/216686/how-to-automate-excel-from-c-without-using-mfc-or-import" rel="nofollow noreferrer">https://support.microsoft.com/en-us/help/216686/how-to-automate-excel-from-c-without-using-mfc-or-import</a></p>
+<p>Он создает ексель файл и записывает в него данные, но как записать данные в уже в Открытый ексель файл, как этот ексель файл отловить, такого примера нет, а доработать/изменить микрософтовский примера под свою задачу, для меня на данный момент, к сожалению совершенно не возможно, настолько там все сложно.</p>
+<p>Может кто нибудь делал нечто подобное.</p>
+</blockquote>
+<h2>Answer 939486</h2>
+<p><a href="https://ru.stackoverflow.com/a/939486/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Для подключения к запущенному экземпляру Excel необходимо использовать вызов GetActiveObject вместо CoCreateInstance. Далее, для получения доступа к открытому документу нужно заменить вызов метода Add на вызов свойства Item с индексом 1. Получаем такой код:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;ole2.h&gt; // OLE2 Definitions
+
+// AutoWrap() - Automation helper function...
+HRESULT AutoWrap(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLESTR ptName, int cArgs...) {
+    // Begin variable-argument list...
+    va_list marker;
+    va_start(marker, cArgs);
+
+    if (!pDisp) {
+        MessageBoxA(NULL, "NULL IDispatch passed to AutoWrap()", "Error", 0x10010);
+        _exit(0);
+    }
+
+    // Variables used...
+    DISPPARAMS dp = { NULL, NULL, 0, 0 };
+    DISPID dispidNamed = DISPID_PROPERTYPUT;
+    DISPID dispID;
+    HRESULT hr;
+    char buf[200];
+    char szName[200];
+
+
+    // Convert down to ANSI
+    WideCharToMultiByte(CP_ACP, 0, ptName, -1, szName, 256, NULL, NULL);
+
+    // Get DISPID for name passed...
+    hr = pDisp-&gt;GetIDsOfNames(IID_NULL, &amp;ptName, 1, LOCALE_USER_DEFAULT, &amp;dispID);
+    if (FAILED(hr)) {
+        printf("IDispatch::GetIDsOfNames(\"%s\") failed w/err 0x%08lx", szName, hr);        
+        getchar();
+        _exit(0);
+        return hr;
+    }
+
+
+    // Allocate memory for arguments...
+    VARIANT *pArgs = new VARIANT[cArgs + 1];
+    // Extract arguments...
+    for (int i = 0; i &lt; cArgs; i++) {
+        pArgs[i] = va_arg(marker, VARIANT);
+    }
+
+    // Build DISPPARAMS
+    dp.cArgs = cArgs;
+    dp.rgvarg = pArgs;
+
+    // Handle special-case for property-puts!
+    if (autoType &amp; DISPATCH_PROPERTYPUT) {
+        dp.cNamedArgs = 1;
+        dp.rgdispidNamedArgs = &amp;dispidNamed;
+    }
+
+    // Make the call!
+    hr = pDisp-&gt;Invoke(dispID, IID_NULL, LOCALE_SYSTEM_DEFAULT, autoType, &amp;dp, pvResult, NULL, NULL);
+    if (FAILED(hr)) {
+        printf("IDispatch::Invoke(\"%s\"=%08lx) failed w/err 0x%08lx", szName, dispID, hr);     
+        getchar();
+        _exit(0);
+        return hr;
+    }
+    // End variable-argument section...
+    va_end(marker);
+
+    delete[] pArgs;
+
+    return hr;
+}
+
+int  main(int argc, char **argv)
+{
+    // Initialize COM for this thread...
+    CoInitialize(NULL);
+
+    // Get CLSID for our server...
+    CLSID clsid;
+    HRESULT hr = CLSIDFromProgID(L"Excel.Application", &amp;clsid);
+
+    if (FAILED(hr)) {
+        ::MessageBoxA(NULL, "CLSIDFromProgID() failed", "Error", 0x10010);
+        return -1;
+    }
+
+    IUnknown* pUnk;
+    hr = GetActiveObject(clsid, NULL, &amp;pUnk);
+    if (FAILED(hr)) {
+        ::MessageBoxA(NULL, "GetActiveObject failed!", "Error", 0x10010);
+        return -2;
+    }
+
+    IDispatch *pXlApp;
+    hr = pUnk-&gt;QueryInterface(IID_IDispatch, (void**)&amp;pXlApp);
+
+    if (FAILED(hr)) {
+        ::MessageBoxA(NULL, "QueryInterface failed!", "Error", 0x10010);
+        return -2;
+    }
+
+    // Make it visible (i.e. app.visible = 1)
+    {
+
+        VARIANT x;
+        x.vt = VT_I4;
+        x.lVal = 1;
+        AutoWrap(DISPATCH_PROPERTYPUT, NULL, pXlApp, (LPOLESTR)L"Visible", 1, x);
+    }
+
+    // Get Workbooks collection
+    IDispatch *pXlBooks;
+    {
+        VARIANT result;
+        VariantInit(&amp;result);
+        AutoWrap(DISPATCH_PROPERTYGET, &amp;result, pXlApp, (LPOLESTR)L"Workbooks", 0);
+        pXlBooks = result.pdispVal;
+    }   
+
+    //Open workbook
+    IDispatch *pXlBook;
+    {
+        VARIANT result;
+        VariantInit(&amp;result);
+
+        VARIANT index;
+        VariantInit(&amp;index);
+        index.vt = VT_INT;
+        index.intVal = 1;       
+
+        AutoWrap(DISPATCH_PROPERTYGET, &amp;result, pXlBooks, (LPOLESTR)L"Item",1, index);
+        pXlBook = result.pdispVal;
+        VariantClear(&amp;index);
+    }   
+
+    // Create a 15x15 safearray of variants...
+    VARIANT arr;
+    arr.vt = VT_ARRAY | VT_VARIANT;
+    {
+        SAFEARRAYBOUND sab[2];
+        sab[0].lLbound = 1; sab[0].cElements = 15;
+        sab[1].lLbound = 1; sab[1].cElements = 15;
+        arr.parray = SafeArrayCreate(VT_VARIANT, 2, sab);
+    }
+
+    // Fill safearray with some values...
+    for (int i = 1; i &lt;= 15; i++) {
+        for (int j = 1; j &lt;= 15; j++) {
+            // Create entry value for (i,j)
+            VARIANT tmp;
+            tmp.vt = VT_I4;
+            tmp.lVal = i * j;
+            // Add to safearray...
+            long indices[] = { i,j };
+            SafeArrayPutElement(arr.parray, indices, (void *)&amp;tmp);
+        }
+    }
+
+    // Get ActiveSheet object
+    IDispatch *pXlSheet;
+    {
+        VARIANT result;
+        VariantInit(&amp;result);
+        AutoWrap(DISPATCH_PROPERTYGET, &amp;result, pXlApp, (LPOLESTR)L"ActiveSheet", 0);
+        pXlSheet = result.pdispVal;
+    }
+
+    // Get Range object for the Range A1:O15...
+    IDispatch *pXlRange;
+    {
+        VARIANT parm;
+        parm.vt = VT_BSTR;
+        parm.bstrVal = ::SysAllocString(L"A1:O15");
+
+        VARIANT result;
+        VariantInit(&amp;result);
+        AutoWrap(DISPATCH_PROPERTYGET, &amp;result, pXlSheet, (LPOLESTR)L"Range", 1, parm);
+        VariantClear(&amp;parm);
+
+        pXlRange = result.pdispVal;
+    }
+
+    // Set range with our safearray...
+    AutoWrap(DISPATCH_PROPERTYPUT, NULL, pXlRange, (LPOLESTR)L"Value", 1, arr);
+
+    // Save workbook
+    VARIANT var_result;
+    VariantInit(&amp;var_result);
+    AutoWrap(DISPATCH_METHOD, &amp;var_result, pXlBook, (LPOLESTR)L"Save", 0);
+    VariantClear(&amp;var_result);
+
+    // Release references...
+    pUnk-&gt;Release();
+    pXlRange-&gt;Release();
+    pXlSheet-&gt;Release();
+    pXlBook-&gt;Release();
+    pXlBooks-&gt;Release();
+    pXlApp-&gt;Release();
+    VariantClear(&amp;arr);
+
+    printf("All done! Press any key to exit\n");
+    getchar();
+
+    // Uninitialize COM for this thread...
+    CoUninitialize();
+    return 0;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
