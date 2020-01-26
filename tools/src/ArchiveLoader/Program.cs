@@ -454,6 +454,7 @@ namespace ArchiveLoader
                         wr.AutoFlush = true;
                         Console.SetOut(wr);
                         Console.SetError(wr);
+                        Console.WriteLine(" Pulling latest changes from remote repository: {0}", DateTime.Now);
                         Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git pull"));
                         LoadData();
                         Console.WriteLine("Done");
