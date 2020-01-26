@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using Integration.Git;
 
 namespace ArchiveLoader
 {   
@@ -413,7 +414,7 @@ namespace ArchiveLoader
             if (args.Length == 0)
             {
                 LoadData();
-                //SaveQuestionsForSavedAnswers("ru.stackoverflow.com", "posts");
+                //Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git status"));
 
                 if (!Console.IsInputRedirected)
                 {
@@ -445,13 +446,16 @@ namespace ArchiveLoader
             }
             else if (args.Length >= 1 && args[0] == "load")
             {
-                TextWriter wr = new StreamWriter("ArchiveLoader.log", true);
+                StreamWriter wr = new StreamWriter("ArchiveLoader.log", true);
                 using (wr)
                 {
                     try
                     {
+                        wr.AutoFlush = true;
                         Console.SetOut(wr);
                         Console.SetError(wr);
+                        Console.WriteLine(" Pulling latest changes from remote repository: {0}", DateTime.Now);
+                        Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git pull"));
                         LoadData();
                         Console.WriteLine("Done");
                     }
