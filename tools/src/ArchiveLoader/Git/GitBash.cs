@@ -79,8 +79,10 @@ namespace Integration.Git
         {
             try
             {
-                GitBash gb = new GitBash(GitBash.GetPath(), command);
-                return gb.Run();
+                using (GitBash gb = new GitBash(GitBash.GetPath(), command))
+                {
+                    return gb.Run();
+                }
             }
             catch (Exception ex)
             {
