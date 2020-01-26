@@ -14,7 +14,7 @@ namespace Integration.Git
         public GitBash(string path, string command)
         {
             ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = path;//"C:\\Program Files\\Git\\bin\\sh.exe"
+            psi.FileName = path;
             psi.WorkingDirectory = Environment.CurrentDirectory;
             psi.Arguments = "-x -c \"" + command + "\"";
             psi.UseShellExecute = false;
@@ -62,13 +62,30 @@ namespace Integration.Git
 
         public static string GetPath()
         {
-            return "C:\\Program Files\\Git\\bin\\sh.exe";
+            string path = "";
+            string val = Environment.GetEnvironmentVariable("GITBASH_PATH");
+
+            if (String.IsNullOrEmpty(val))
+            {                
+                path = "C:\\Program Files\\Git\\bin\\sh.exe";
+                Console.WriteLine("Warning: GITBASH_PATH is not set, using default path C:\\Program Files\\Git\\bin");
+            }
+            else path = Path.Combine(val, "sh.exe"); 
+
+            return path;
         }
 
         public static string ExecuteCommand(string command)
         {
-            GitBash gb = new GitBash(GitBash.GetPath(), command);
-            return gb.Run();
+            try
+            {
+                GitBash gb = new GitBash(GitBash.GetPath(), command);
+                return gb.Run();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
         }
     }
 }

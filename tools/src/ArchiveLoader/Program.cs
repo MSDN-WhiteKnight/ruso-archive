@@ -413,8 +413,8 @@ namespace ArchiveLoader
         {
             if (args.Length == 0)
             {
-                //LoadData();
-                Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git status"));               
+                LoadData();
+                //Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git status"));
 
                 if (!Console.IsInputRedirected)
                 {
@@ -446,13 +446,15 @@ namespace ArchiveLoader
             }
             else if (args.Length >= 1 && args[0] == "load")
             {
-                TextWriter wr = new StreamWriter("ArchiveLoader.log", true);
+                StreamWriter wr = new StreamWriter("ArchiveLoader.log", true);
                 using (wr)
                 {
                     try
                     {
+                        wr.AutoFlush = true;
                         Console.SetOut(wr);
                         Console.SetError(wr);
+                        Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git pull"));
                         LoadData();
                         Console.WriteLine("Done");
                     }
