@@ -25,15 +25,15 @@ namespace Integration.Git
             this.pr = new Process();
             this.pr.StartInfo = psi;
             this.pr.OutputDataReceived += pr_DataReceived;
-            this.pr.ErrorDataReceived += pr_DataReceived;
-            this.pr.BeginOutputReadLine();
-            this.pr.BeginErrorReadLine();
+            this.pr.ErrorDataReceived += pr_DataReceived;            
             this.resultbuilder = new StringBuilder(500);
         }
 
         public void Start()
         {
-            this.pr.Start();            
+            this.pr.Start();
+            this.pr.BeginOutputReadLine();
+            this.pr.BeginErrorReadLine();
         }
 
         public void WaitForExit()

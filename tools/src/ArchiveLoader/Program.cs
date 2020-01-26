@@ -414,7 +414,7 @@ namespace ArchiveLoader
             if (args.Length == 0)
             {
                 //LoadData();
-                Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git pull"));               
+                Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git status"));               
 
                 if (!Console.IsInputRedirected)
                 {
