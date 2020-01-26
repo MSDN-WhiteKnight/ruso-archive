@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
+    <Compile Include="Git\GitBash.cs" />
     <Compile Include="HTML.cs" />
     <Compile Include="JSON.cs" />
     <Compile Include="Post.cs" />

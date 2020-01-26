@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using Integration.Git;
 
 namespace ArchiveLoader
 {   
@@ -412,8 +413,8 @@ namespace ArchiveLoader
         {
             if (args.Length == 0)
             {
-                LoadData();
-                //SaveQuestionsForSavedAnswers("ru.stackoverflow.com", "posts");
+                //LoadData();
+                Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git pull"));               
 
                 if (!Console.IsInputRedirected)
                 {
