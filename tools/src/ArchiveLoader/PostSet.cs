@@ -10,8 +10,8 @@ namespace ArchiveLoader
     {
         public Dictionary<int, Question> Questions { get; set; }
         public Dictionary<int, Answer> SingleAnswers { get; set; }
-        public Dictionary<int, string> MarkdownQuestions { get; set; }
-        public Dictionary<int, string> MarkdownAnswers { get; set; }
+        public Dictionary<int, QuestionMarkdown> MarkdownQuestions { get; set; }
+        public Dictionary<int, AnswerMarkdown> MarkdownAnswers { get; set; }
 
         protected PostSet() { }
 
@@ -20,8 +20,9 @@ namespace ArchiveLoader
             Dictionary<int, Question> questions;
             Dictionary<int, Answer> answers;
             Dictionary<int, Answer> single_answers;
-            Dictionary<int, string> mdquestions;
-            Dictionary<int, string> mdanswers;
+            Dictionary<int, QuestionMarkdown> mdquestions;
+            Dictionary<int, AnswerMarkdown> mdanswers;
+            Dictionary<int, AnswerMarkdown> md_single_answers;
 
             string[] files = Directory.GetFiles(path, "Q*.json");
             questions = new Dictionary<int, Question>(files.Length);
@@ -97,7 +98,7 @@ namespace ArchiveLoader
             }//end using
 
             files = Directory.GetFiles(path, "Q*.md");
-            mdquestions = new Dictionary<int, string>(files.Length);
+            mdquestions = new Dictionary<int, QuestionMarkdown>(files.Length);
 
             for (int i = 0; i < files.Length; i++)
             {
@@ -113,8 +114,12 @@ namespace ArchiveLoader
 
                 try
                 {
-                    string md = File.ReadAllText(files[i], Encoding.UTF8);
-                    mdquestions[id] = md;
+                    TextReader read = new StreamReader(files[i], Encoding.UTF8);
+
+                    using (read)
+                    {
+                        mdquestions[id] = QuestionMarkdown.FromMarkdown(site, read);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -124,7 +129,8 @@ namespace ArchiveLoader
             }
 
             files = Directory.GetFiles(path, "A*.md");
-            mdanswers = new Dictionary<int, string>(files.Length);            
+            mdanswers = new Dictionary<int, AnswerMarkdown>(files.Length);
+            md_single_answers = new Dictionary<int, AnswerMarkdown>(files.Length);
 
             for (int i = 0; i < files.Length; i++)
             {
@@ -140,8 +146,23 @@ namespace ArchiveLoader
 
                 try
                 {
-                    string md = File.ReadAllText(files[i], Encoding.UTF8);
-                    mdanswers[id] = md;
+                    TextReader read = new StreamReader(files[i], Encoding.UTF8);
+
+                    using (read)
+                    {
+                        mdanswers[id] = AnswerMarkdown.FromMarkdown(site,read);
+                    }
+
+                    int qid = mdanswers[id].QuestionId;
+
+                    if (mdquestions.ContainsKey(qid))
+                    {
+                        mdquestions[qid].AddAnswer(mdanswers[id]);
+                    }
+                    else
+                    {
+                        md_single_answers[id] = mdanswers[id];
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -155,7 +176,7 @@ namespace ArchiveLoader
                 Questions = questions,
                 SingleAnswers = single_answers,
                 MarkdownQuestions = mdquestions,
-                MarkdownAnswers = mdanswers
+                MarkdownAnswers = md_single_answers
             };
         }
     }

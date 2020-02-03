@@ -45,14 +45,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Answer.cs" />
+    <Compile Include="AnswerMarkdown.cs" />
     <Compile Include="Git\GitBash.cs" />
     <Compile Include="HTML.cs" />
     <Compile Include="JSON.cs" />
     <Compile Include="Post.cs" />
+    <Compile Include="PostMarkdown.cs" />
     <Compile Include="PostSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />
+    <Compile Include="QuestionMarkdown.cs" />
     <Compile Include="SeApiClient.cs" />
   </ItemGroup>
   <ItemGroup>

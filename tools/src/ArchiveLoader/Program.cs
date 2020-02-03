@@ -374,7 +374,7 @@ namespace ArchiveLoader
 
                 using (wr)
                 {
-                    wr.Write(posts.MarkdownQuestions[q]);
+                    posts.MarkdownQuestions[q].GenerateHTML(wr);
                 }
             }
 
@@ -387,7 +387,9 @@ namespace ArchiveLoader
 
                 using (wr)
                 {
-                    wr.Write(posts.MarkdownAnswers[a]);
+                    HTML.RenderHeader(a, wr);
+                    posts.MarkdownAnswers[a].GenerateHTML(wr);
+                    HTML.RenderBottom(wr);                    
                 }
             }
 
@@ -414,7 +416,7 @@ namespace ArchiveLoader
             if (args.Length == 0)
             {
                 LoadData();
-                //Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git status"));
+                //Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
 
                 if (!Console.IsInputRedirected)
                 {
