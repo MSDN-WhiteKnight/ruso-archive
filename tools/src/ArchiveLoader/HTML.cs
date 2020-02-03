@@ -26,6 +26,20 @@ namespace ArchiveLoader
             return ownerstr;
         }
 
+        public static string GetOwnerString(PostMarkdown post)
+        {            
+            string ownerstr;
+
+            if (!String.IsNullOrEmpty(post.UserName))
+            {
+                if (!String.IsNullOrEmpty(post.UserLink)) ownerstr = String.Format("<a href=\"{0}\">{1}</a>", post.UserLink, post.UserName);
+                else ownerstr = post.UserName;
+            }
+            else ownerstr = "(unknown person)";
+
+            return ownerstr;
+        }
+
         public static void RenderPost(object post, TextWriter wr)
         {
             dynamic data = post as dynamic;            
@@ -37,6 +51,18 @@ namespace ArchiveLoader
             wr.WriteLine(data.body);
             wr.WriteLine("</blockquote>");
             RenderBottom(wr);            
+        }
+
+        public static void RenderPost(PostMarkdown post, TextWriter wr)
+        {            
+            string ownerstr = GetOwnerString(post);
+
+            RenderHeader(post.Id, wr);
+            wr.WriteLine("<p>Source: <a href=\"{0}\">{1}</a> - by {2}</p>", post.Link, post.Link, ownerstr);
+            wr.WriteLine("<blockquote>");
+            wr.WriteLine(post.Body);
+            wr.WriteLine("</blockquote>");
+            RenderBottom(wr);
         }
 
         public static void RenderHeader(int postid, TextWriter wr)
@@ -78,7 +104,7 @@ namespace ArchiveLoader
 
             foreach (int key in posts.MarkdownQuestions.Keys)
             {
-                wr.WriteLine("<p><a href=\"{0}.md\">Question {1}</a></p>", key, key);
+                wr.WriteLine("<p><a href=\"{0}.md\">{1}</a></p>", key, posts.MarkdownQuestions[key].Title);
             }
 
             if (posts.SingleAnswers.Count + posts.MarkdownAnswers.Count > 0) wr.WriteLine("<h2>Answers</h2>");
@@ -114,7 +140,10 @@ namespace ArchiveLoader
 
             foreach (int key in posts.MarkdownQuestions.Keys)
             {
-                wr.WriteLine("  - name: \"Question {0}\"", key);
+                string s = System.Net.WebUtility.HtmlDecode(posts.MarkdownQuestions[key].Title);
+                s = s.Replace("\\", "\\\\");
+                s = s.Replace("\"", "\\\"");
+                wr.WriteLine("  - name: \"{0}\"", s);
                 wr.WriteLine("    href: {0}.md", key);
             }
 
