@@ -443,7 +443,7 @@ namespace ArchiveLoader
         {
             if (args.Length == 0)
             {
-                LoadDataMarkdown();                
+                LoadDataMarkdown();
                 //ConvertToMarkdown("ru.meta.stackoverflow.com", "deleted.json", "deleted");
 
                 if (!Console.IsInputRedirected)
