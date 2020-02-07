@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>C/C++, GetLastError() &#1080; errno() | RuSO Archive </title>
+    <title>Post 1075668 | RuSO Archive </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="C/C++, GetLastError() &#1080; errno() | RuSO Archive ">
+    <meta name="title" content="Post 1075668 | RuSO Archive ">
     <meta name="generator" content="docfx 2.40.12.0">
     
     <link rel="shortcut icon" href="../../../../favicon.ico">
@@ -69,17 +69,23 @@
             <article class="content wrap" id="_content" data-uid="">
 
 <p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
-<h1>C/C++, GetLastError() и errno()</h1>
-<p><a href="https://ru.stackoverflow.com/questions/881151/c-c-getlasterror-%d0%b8-errno">Source</a> - by <a href="" ""="">user294535</a></p>
+<h1>Post 1075668</h1>
+<h2>Answer 1075668</h2>
+<p><a href="https://ru.stackoverflow.com/a/1075668/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
 <blockquote>
-<p>Я бы хотел разобраться в том, каким образом названные функции реализуют сохранение информации о последней возникшей ошибке <strong>в текущем вызывающем потоке</strong>.</p>
-<p>Как это реализуется?</p>
-<p>И каким способом можно реализовать аналогичный функционал? Ну, например, предоставить для своей библиотеки аналог <strong>GetLastError()</strong>/<strong>errno()</strong>.</p>
+<blockquote>
+  <p>У меня есть строка str = "\U0001f973". Это escape sequence для эмодзи 🥳. Я хочу получить в этой строке не escape sequence, а именно сам эмодзи.</p>
 </blockquote>
-<h2>Answer 881159</h2>
-<p><a href="https://ru.stackoverflow.com/a/881159/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
-<blockquote>
-<p>Начиная с 11 стандарта (обоих языков) можно использовать спецификатор хранения <a href="https://en.cppreference.com/w/c/thread/thread_local" rel="nofollow noreferrer">thread_local</a>. При использовании компиляторов, которые его не поддерживают - аналогичные функции ОС, например <a href="https://docs.microsoft.com/en-us/windows/desktop/procthread/using-thread-local-storage" rel="nofollow noreferrer">Thread Local Storage</a> в WinAPI. Пример использования TLS в библиотеке можно посмотреть здесь: <a href="https://docs.microsoft.com/ru-ru/windows/desktop/Dlls/using-thread-local-storage-in-a-dynamic-link-library" rel="nofollow noreferrer">Using Thread Local Storage in a Dynamic-Link Library</a> </p>
+<p>Проблема в том, что escape sequence - это и есть представление "самого эмодзи", только в файле исходного кода. Строка str во время выполнения и будет содержать этот эмодзи. Ваш код для unescape правилен для ситуации, когда в строке было бы, допустим, <code>"\\U0001f973"</code>. В данном случае это просто не нужно.</p>
+<p>Но вопрос - как проверить на практике, что в строке действительно нужный символ? Ведь в консоли шрифт с высокой вероятностью не позволит вывести эмодзи. Один из способов - сформировать HTML такого вида:</p>
+<pre><code>string str = "\U0001f973";
+File.WriteAllText(
+    "test.html",
+    "&lt;html&gt;&lt;head&gt;&lt;meta charset=\"utf-8\"/&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Your string is: " + str+"&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+    Encoding.UTF8);
+</code></pre>
+<p>Тогда в любом современном браузере вы сможете увидеть его:</p>
+<p><a href="https://i.stack.imgur.com/EnkQB.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/EnkQB.png" alt="screenshot"></a></p>
 </blockquote>
 <hr>
 <p><i>Content is retrieved from StackExchange API. </i></p>

@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>C/C++, GetLastError() &#1080; errno() | RuSO Archive </title>
+    <title>Post 1072668 | RuSO Archive </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="C/C++, GetLastError() &#1080; errno() | RuSO Archive ">
+    <meta name="title" content="Post 1072668 | RuSO Archive ">
     <meta name="generator" content="docfx 2.40.12.0">
     
     <link rel="shortcut icon" href="../../../../favicon.ico">
@@ -69,17 +69,32 @@
             <article class="content wrap" id="_content" data-uid="">
 
 <p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
-<h1>C/C++, GetLastError() и errno()</h1>
-<p><a href="https://ru.stackoverflow.com/questions/881151/c-c-getlasterror-%d0%b8-errno">Source</a> - by <a href="" ""="">user294535</a></p>
+<h1>Post 1072668</h1>
+<h2>Answer 1072668</h2>
+<p><a href="https://ru.stackoverflow.com/a/1072668/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
 <blockquote>
-<p>Я бы хотел разобраться в том, каким образом названные функции реализуют сохранение информации о последней возникшей ошибке <strong>в текущем вызывающем потоке</strong>.</p>
-<p>Как это реализуется?</p>
-<p>И каким способом можно реализовать аналогичный функционал? Ну, например, предоставить для своей библиотеки аналог <strong>GetLastError()</strong>/<strong>errno()</strong>.</p>
+<blockquote>
+  <p>Я пишу так:</p>
 </blockquote>
-<h2>Answer 881159</h2>
-<p><a href="https://ru.stackoverflow.com/a/881159/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
-<blockquote>
-<p>Начиная с 11 стандарта (обоих языков) можно использовать спецификатор хранения <a href="https://en.cppreference.com/w/c/thread/thread_local" rel="nofollow noreferrer">thread_local</a>. При использовании компиляторов, которые его не поддерживают - аналогичные функции ОС, например <a href="https://docs.microsoft.com/en-us/windows/desktop/procthread/using-thread-local-storage" rel="nofollow noreferrer">Thread Local Storage</a> в WinAPI. Пример использования TLS в библиотеке можно посмотреть здесь: <a href="https://docs.microsoft.com/ru-ru/windows/desktop/Dlls/using-thread-local-storage-in-a-dynamic-link-library" rel="nofollow noreferrer">Using Thread Local Storage in a Dynamic-Link Library</a> </p>
+<p>Не надо. Пишите так: <a href="https://ru.stackoverflow.com/a/963930/240512">https://ru.stackoverflow.com/a/963930/240512</a></p>
+<p>Что касается остановки потока, проще всего это сделать какой-нибудь атомарной переменной-флагом:</p>
+<pre class="lang-cpp prettyprint-override"><code>std::atomic&lt;bool&gt; should_stop=false;
+
+void spray()
+{
+    mouse_event((0x0001), 1, 4, 0, 0);
+    Sleep(100);    
+    if(should_stop) return;
+    mouse_event((0x0001), 1, 4, 0, 0);
+    Sleep(100);
+    if(should_stop) return;
+    //...    
+}
+
+//...
+
+should_stop = true; //остановить поток
+</code></pre>
 </blockquote>
 <hr>
 <p><i>Content is retrieved from StackExchange API. </i></p>
