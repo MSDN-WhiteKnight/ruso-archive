@@ -135,6 +135,8 @@ namespace ArchiveLoader
 
                     param_val = param_val.Trim();
 
+                    if (param_val == "\"\"") param_val = "";
+
                     if (param_val.Length > 2)
                     {
                         if (param_val[0] == '"') param_val = param_val.Substring(1);
