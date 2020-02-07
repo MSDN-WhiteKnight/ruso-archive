@@ -228,16 +228,26 @@ namespace ArchiveLoader
                 throw new Exception("Failed to load question "+id.ToString()+" from "+site);
             }
 
-            path = Path.Combine(postsdir, "Q"+id.ToString() + ".json");
-            File.WriteAllText(path, q, Encoding.UTF8);
+            path = Path.Combine(postsdir, "Q"+id.ToString() + ".md");
+            TextWriter wr = new StreamWriter(path, false, Encoding.UTF8);
+            using (wr)
+            {
+                QuestionMarkdown post = QuestionMarkdown.FromJsonData(site, q);
+                post.ToMarkdown(wr);
+            }
 
             Dictionary<int, string> answers = client.LoadQuestionAnswers(id);
             Console.WriteLine("Saving {0} answers...", answers.Count);
 
             foreach (int key in answers.Keys)
             {
-                path = Path.Combine(postsdir, "A" + key.ToString() + ".json");
-                File.WriteAllText(path, answers[key], Encoding.UTF8);
+                path = Path.Combine(postsdir, "A" + key.ToString() + ".md");
+                wr = new StreamWriter(path, false, Encoding.UTF8);
+                using (wr)
+                {
+                    AnswerMarkdown post = AnswerMarkdown.FromJsonData(site, answers[key]);
+                    post.ToMarkdown(wr);
+                }
             }
         }
 
@@ -258,8 +268,14 @@ namespace ArchiveLoader
                 throw new Exception("Failed to load answer " + id.ToString() + " from " + site);
             }
 
-            path = Path.Combine(postsdir, "A" + id.ToString() + ".json");
-            File.WriteAllText(path, a, Encoding.UTF8);
+            path = Path.Combine(postsdir, "A" + id.ToString() + ".md");
+
+            TextWriter wr = new StreamWriter(path, false, Encoding.UTF8);
+            using (wr)
+            {
+                AnswerMarkdown post = AnswerMarkdown.FromJsonData(site, a);
+                post.ToMarkdown(wr);
+            }
 
             Console.WriteLine("Success");
         }
@@ -273,26 +289,21 @@ namespace ArchiveLoader
             if (!Directory.Exists(postsdir)) Directory.CreateDirectory(postsdir);
 
             SeApiClient client = new SeApiClient(APIURL, site);
-            Dictionary<int, object> answers = client.LoadUserAnswers(userid);
-            string postjson;
+            Dictionary<int, object> answers = client.LoadUserAnswers(userid);            
 
             Console.WriteLine("Saving {0} answers...", answers.Count);
 
             foreach (int key in answers.Keys)
             {
-                path = Path.Combine(postsdir, "A" + key.ToString() + ".json");
-                postjson = JSON.Stringify(answers[key]);
-                File.WriteAllText(path, postjson, Encoding.UTF8);
-            }
-
-            Console.WriteLine("Saving questions...", answers.Count);
-
-            foreach (int key in answers.Keys)
-            {
-                SaveQuestion(site, (answers[key] as dynamic).question_id);
+                path = Path.Combine(postsdir, "A" + key.ToString() + ".md");
+                TextWriter wr = new StreamWriter(path, false,Encoding.UTF8);
+                using (wr)
+                {
+                    AnswerMarkdown post = AnswerMarkdown.FromJsonData(site, answers[key]);
+                    post.ToMarkdown(wr);
+                }
             }            
         }
-
 
         static void SaveQuestionsForSavedAnswers(string site, string subdir)
         {
@@ -444,7 +455,7 @@ namespace ArchiveLoader
             if (args.Length == 0)
             {
                 LoadDataMarkdown();
-                //ConvertToMarkdown("ru.meta.stackoverflow.com", "deleted.json", "deleted");
+                //ConvertToMarkdown("ru.stackoverflow.com", "posts.json", "posts");
 
                 if (!Console.IsInputRedirected)
                 {
@@ -460,6 +471,11 @@ namespace ArchiveLoader
             else if (args.Length >= 3 && args[0] == "savea")
             {
                 SaveSingleAnswer(args[1], Convert.ToInt32(args[2]));
+                Console.WriteLine("Done");
+            }
+            else if (args.Length >= 3 && args[0] == "saveu")
+            {
+                SaveUserAnswers(args[1], Convert.ToInt32(args[2]));
                 Console.WriteLine("Done");
             }
             else if (args.Length >= 3 && args[0] == "sync")
@@ -512,6 +528,7 @@ namespace ArchiveLoader
                 Console.WriteLine(" Usage: ");
                 Console.WriteLine("ArchiveLoader saveq [site] [question_id] | Save question and its answers");
                 Console.WriteLine("ArchiveLoader savea [site] [question_id] | Save single answer");
+                Console.WriteLine("ArchiveLoader saveu [site] [user_id]     | Save all answers of user");
                 Console.WriteLine("ArchiveLoader generate                   | Generate website");
                 Console.WriteLine();
 

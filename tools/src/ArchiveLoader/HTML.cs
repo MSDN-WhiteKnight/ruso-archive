@@ -19,7 +19,7 @@ namespace ArchiveLoader
 
             if (owner != null)
             {
-                if (owner_link != null) ownerstr = String.Format("<a href=\"{0}\">{1}</a>", owner_link, owner.display_name);
+                if (!String.IsNullOrEmpty(owner_link)) ownerstr = String.Format("<a href=\"{0}\">{1}</a>", owner_link, owner.display_name);
                 else ownerstr = owner.display_name;
             }
             else ownerstr = "(unknown person)";
@@ -29,10 +29,14 @@ namespace ArchiveLoader
         public static string GetOwnerString(PostMarkdown post)
         {            
             string ownerstr;
+            string link = post.UserLink;
+
+            if (link == null) link = "";
+            else link = link.Trim();
 
             if (!String.IsNullOrEmpty(post.UserName))
             {
-                if (!String.IsNullOrEmpty(post.UserLink)) ownerstr = String.Format("<a href=\"{0}\">{1}</a>", post.UserLink, post.UserName);
+                if (link != "") ownerstr = String.Format("<a href=\"{0}\">{1}</a>", link, post.UserName);
                 else ownerstr = post.UserName;
             }
             else ownerstr = "(unknown person)";
