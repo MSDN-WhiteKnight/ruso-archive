@@ -3,7 +3,7 @@
 [Website view](https://msdn-whiteknight.github.io/ruso-archive/html/)
 
 - [Messages deleted from main site](deleted-messages/main.md)
-- [Messages deleted from meta (2016-2019)](deleted-messages/meta.md)
+- [Messages deleted from meta (2016-2018)](deleted-messages/meta.md)
 - [Messages deleted from meta (2019+)](https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/)
 - [Deleted chat 2019-04-05](deleted-messages/chat-20190405.txt)
 
