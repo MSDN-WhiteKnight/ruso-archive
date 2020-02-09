@@ -120,7 +120,7 @@ namespace ArchiveLoader
 
             foreach (int key in posts.MarkdownAnswers.Keys)
             {
-                wr.WriteLine("<p><a href=\"{0}.md\">Answer {1}</a></p>", key, key);
+                wr.WriteLine("<p><a href=\"{0}.md\">{1}</a></p>", key, posts.MarkdownAnswers[key].Title);
             }
 
             RenderBottom(wr);
@@ -159,7 +159,10 @@ namespace ArchiveLoader
 
             foreach (int key in posts.MarkdownAnswers.Keys)
             {
-                wr.WriteLine("  - name: \"Answer {0}\"", key);
+                string s = posts.MarkdownAnswers[key].Title;
+                s = s.Replace("\\", "\\\\");
+                s = s.Replace("\"", "\\\"");
+                wr.WriteLine("  - name: \"{0}\"", s);
                 wr.WriteLine("    href: {0}.md", key);
             }
         }

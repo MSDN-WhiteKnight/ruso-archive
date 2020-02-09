@@ -172,15 +172,31 @@ namespace ArchiveLoader
             res.Body = sbBody.ToString();
             res.PostType = "answer";
             res.data = res;
+
+            if (String.IsNullOrEmpty(res.Title))
+            {
+                res.Title = "Answer " + res.id.ToString();
+            }
+
             return res;
         }
 
         public void GenerateHTML(TextWriter wr)
         {
             string ownerstr = HTML.GetOwnerString(this);
+            string link;
+
+            if (String.IsNullOrEmpty(this.Link))
+            {
+                link = String.Format("https://{0}/a/{1}/", this.site, this.Id);
+            }
+            else
+            {
+                link = this.Link;
+            }
 
             wr.WriteLine("<h2>Answer {0}</h2>", this.Id);
-            wr.WriteLine("<p><a href=\"https://{0}/a/{1}/\">Source</a> - by {2}</p>", this.site, this.Id, ownerstr);
+            wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", link, ownerstr);
             wr.WriteLine("<blockquote>");
             wr.WriteLine(this.Body);
             wr.WriteLine("</blockquote>");

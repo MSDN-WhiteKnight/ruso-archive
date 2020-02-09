@@ -403,7 +403,7 @@ namespace ArchiveLoader
 
                 using (wr)
                 {
-                    HTML.RenderHeader(a, wr);
+                    HTML.RenderHeader(posts.MarkdownAnswers[a].Title, wr);
                     posts.MarkdownAnswers[a].GenerateHTML(wr);
                     HTML.RenderBottom(wr);                    
                 }
@@ -454,8 +454,8 @@ namespace ArchiveLoader
         {
             if (args.Length == 0)
             {
-                LoadDataMarkdown();
-                //ConvertToMarkdown("ru.stackoverflow.com", "posts.json", "posts");
+                //LoadDataMarkdown();
+                Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
 
                 if (!Console.IsInputRedirected)
                 {
