@@ -454,8 +454,8 @@ namespace ArchiveLoader
         {
             if (args.Length == 0)
             {
-                //LoadDataMarkdown();
-                Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
+                LoadDataMarkdown();
+                //Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
 
                 if (!Console.IsInputRedirected)
                 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -106,8 +107,12 @@ namespace ArchiveLoader
                 wr.WriteLine("<p><a href=\"{0}.md\">{1}</a></p>", key, posts.Questions[key].DataDynamic.title);
             }
 
-            foreach (int key in posts.MarkdownQuestions.Keys)
+            List<int> keys = posts.MarkdownQuestions.Keys.ToList();
+            keys.Sort();
+
+            for(int i = keys.Count-1;i>=0;i--)
             {
+                int key = keys[i];
                 wr.WriteLine("<p><a href=\"{0}.md\">{1}</a></p>", key, posts.MarkdownQuestions[key].Title);
             }
 
@@ -118,8 +123,12 @@ namespace ArchiveLoader
                 wr.WriteLine("<p><a href=\"{0}.md\">Answer {1}</a></p>", key, key);
             }
 
-            foreach (int key in posts.MarkdownAnswers.Keys)
+            keys = posts.MarkdownAnswers.Keys.ToList();
+            keys.Sort();
+
+            for (int i = keys.Count - 1; i >= 0; i--)
             {
+                int key = keys[i];
                 wr.WriteLine("<p><a href=\"{0}.md\">{1}</a></p>", key, posts.MarkdownAnswers[key].Title);
             }
 
@@ -142,8 +151,12 @@ namespace ArchiveLoader
                 wr.WriteLine("    href: {0}.md", key);
             }
 
-            foreach (int key in posts.MarkdownQuestions.Keys)
+            List<int> keys = posts.MarkdownQuestions.Keys.ToList();
+            keys.Sort();
+
+            for (int i = keys.Count - 1; i >= 0; i--)
             {
+                int key = keys[i];
                 string s = System.Net.WebUtility.HtmlDecode(posts.MarkdownQuestions[key].Title);
                 s = s.Replace("\\", "\\\\");
                 s = s.Replace("\"", "\\\"");
@@ -157,8 +170,12 @@ namespace ArchiveLoader
                 wr.WriteLine("    href: {0}.md", key);
             }
 
-            foreach (int key in posts.MarkdownAnswers.Keys)
+            keys = posts.MarkdownAnswers.Keys.ToList();
+            keys.Sort();
+
+            for (int i = keys.Count - 1; i >= 0; i--)
             {
+                int key = keys[i];
                 string s = posts.MarkdownAnswers[key].Title;
                 s = s.Replace("\\", "\\\\");
                 s = s.Replace("\"", "\\\"");
