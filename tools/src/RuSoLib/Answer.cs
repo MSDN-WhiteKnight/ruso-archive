@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArchiveLoader
+namespace RuSoLib
 {
     public class Answer:Post
     {        

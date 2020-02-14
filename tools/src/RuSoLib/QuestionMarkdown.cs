@@ -3,23 +3,24 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ArchiveLoader
+namespace RuSoLib
 {
-    public class PostMarkdown : Post
-    {
-        public string PostType { get; set; }
-        public string Title { get; set; }
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string UserLink { get; set; }
-        public string Link { get; set; }
-        public string Body { get; set; }
-        public int Score { get; set; }
+    public class QuestionMarkdown : PostMarkdown
+    {        
+        List<AnswerMarkdown> answers = new List<AnswerMarkdown>();
 
-        public static PostMarkdown FromJsonData(string siteval, object data)
+        public void AddAnswer(AnswerMarkdown a)
         {
-            PostMarkdown res = new PostMarkdown();
-            res.site = siteval;            
+            this.answers.Add(a);
+            a.Parent = this;
+        }
+
+        public IEnumerable<AnswerMarkdown> Answers { get { return this.answers; } }
+
+        public static new QuestionMarkdown FromJsonData(string siteval, object data)
+        {
+            QuestionMarkdown res = new QuestionMarkdown();
+            res.site = siteval;
 
             dynamic owner = JSON.GetPropertyValue(data, "owner");
 
@@ -49,17 +50,21 @@ namespace ArchiveLoader
                 res.UserId = "";
             }
 
-            res.Score = (data as dynamic).score;
-            res.PostType = (data as dynamic).post_type;
-            res.id = (data as dynamic).post_id;
-            res.Title = "Post "+res.id.ToString();
+            dynamic score = JSON.GetPropertyValue(data, "score");
+
+            if (score != null) res.Score = score;
+            else res.Score = 0;
+            
+            res.PostType = "question";
+            res.id = (data as dynamic).question_id;
+            res.Title = (data as dynamic).title;
             res.Link = (data as dynamic).link;
             res.Body = (data as dynamic).body;
             res.data = res;
             return res;
         }
 
-        public void ToMarkdown(TextWriter target)
+        public new void ToMarkdown(TextWriter target)
         {
             target.WriteLine("---");
 
@@ -77,19 +82,19 @@ namespace ArchiveLoader
             target.WriteLine("\"" + this.UserLink + "\"");
             target.Write("se.link: ");
             target.WriteLine("\"" + this.Link + "\"");
-            target.Write("se.post_id: ");
-            target.WriteLine(this.Id);
+            target.Write("se.question_id: ");
+            target.WriteLine(this.Id);            
             target.Write("se.post_type: ");
             target.WriteLine(this.PostType);
             target.Write("se.score: ");
-            target.WriteLine(this.Score);
+            target.WriteLine(this.Score);            
             target.WriteLine("---");
             target.Write(this.Body);
         }
 
-        public static PostMarkdown FromMarkdown(string siteval, TextReader src)
+        public static new QuestionMarkdown FromMarkdown(string siteval, TextReader src)
         {
-            PostMarkdown res = new PostMarkdown();
+            QuestionMarkdown res = new QuestionMarkdown();
             res.site = siteval;
 
             bool reading_yml = false;
@@ -148,8 +153,7 @@ namespace ArchiveLoader
                         case "se.owner.display_name": res.UserName = param_val; continue;
                         case "se.owner.link": res.UserLink = param_val; continue;
                         case "se.link": res.Link = param_val; continue;                        
-                        case "se.post_id": res.id = Int32.Parse(param_val); continue;
-                        case "se.post_type": res.PostType = param_val; continue;
+                        case "se.question_id": res.id = Int32.Parse(param_val); continue;
                         case "se.score": res.Score = Int32.Parse(param_val); continue;
                     }
                 }
@@ -159,17 +163,36 @@ namespace ArchiveLoader
                 }
             }
 
-            res.Body = sbBody.ToString();            
+            res.Body = sbBody.ToString();
+            res.PostType = "question";
             res.data = res;
             return res;
         }
 
-        public static Dictionary<int,PostMarkdown> LoadFromJsonDir(string path, string site)
-        {
-            Dictionary<int, PostMarkdown> posts;            
+        public void GenerateHTML(TextWriter wr)
+        {            
+            string ownerstr = HTML.GetOwnerString(this);
 
-            string[] files = Directory.GetFiles(path, "*.json");
-            posts = new Dictionary<int, PostMarkdown>(files.Length);
+            HTML.RenderHeader(this.Title, wr);
+            wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", this.Link, ownerstr);
+            wr.WriteLine("<blockquote>");
+            wr.WriteLine(this.Body);
+            wr.WriteLine("</blockquote>");
+
+            foreach (AnswerMarkdown a in this.Answers)
+            {
+                a.GenerateHTML(wr);
+            }
+
+            HTML.RenderBottom(wr);
+        }
+
+        public static new Dictionary<int, QuestionMarkdown> LoadFromJsonDir(string path, string site)
+        {
+            Dictionary<int, QuestionMarkdown> posts;
+
+            string[] files = Directory.GetFiles(path, "Q*.json");
+            posts = new Dictionary<int, QuestionMarkdown>(files.Length);
             JSON parser = new JSON();
 
             using (parser)
@@ -177,38 +200,38 @@ namespace ArchiveLoader
                 for (int i = 0; i < files.Length; i++)
                 {
                     string file = Path.GetFileNameWithoutExtension(files[i]);
-                    string idstr = file;
+                    string idstr = file.Substring(1);
                     int id;
 
                     if (!Int32.TryParse(idstr, out id))
                     {
-                        Console.WriteLine("Bad post id = {0} in file {1}", idstr, files[i]);
+                        Console.WriteLine("Bad question id = {0} in file {1}", idstr, files[i]);
                         continue;
                     }
 
                     try
                     {
-                        string json = File.ReadAllText(files[i], Encoding.UTF8);                        
-                        posts[id] = PostMarkdown.FromJsonData(site, parser.JsonParse(json));
+                        string json = File.ReadAllText(files[i], Encoding.UTF8);
+                        posts[id] = QuestionMarkdown.FromJsonData(site, parser.JsonParse(json));
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine("Error reading file " + files[i]);
                         Console.WriteLine(ex.ToString());
                     }
-                }                
+                }
 
             }//end using
 
             return posts;
         }
 
-        public static void SaveToDir(string dir, IEnumerable<PostMarkdown> posts)
+        public static void SaveToDir(string dir, IEnumerable<QuestionMarkdown> posts)
         {
-            foreach (PostMarkdown post in posts)
+            foreach (QuestionMarkdown post in posts)
             {
-                string path = Path.Combine(dir, post.Id.ToString() + ".md");
-                StreamWriter wr = new StreamWriter(path, false,Encoding.UTF8);
+                string path = Path.Combine(dir, "Q" + post.Id.ToString() + ".md");
+                StreamWriter wr = new StreamWriter(path, false, Encoding.UTF8);
 
                 using (wr)
                 {
