@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("RuSoLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("RuSO Archive Common class library")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RuSoLib")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCompany("RUSO Community")]
+[assembly: AssemblyProduct("RUSO Archive Tools")]
+[assembly: AssemblyCopyright("Copyright © MSDN.WhiteKnight 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
