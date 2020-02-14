@@ -174,7 +174,16 @@ namespace RuSoLib
             string ownerstr = HTML.GetOwnerString(this);
 
             HTML.RenderHeader(this.Title, wr);
-            wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", this.Link, ownerstr);
+
+            if (HTML.EnableAttribution)
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", this.Link, ownerstr);
+            }
+            else
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Link</a></p>", this.Link);
+            }
+
             wr.WriteLine("<blockquote>");
             wr.WriteLine(this.Body);
             wr.WriteLine("</blockquote>");

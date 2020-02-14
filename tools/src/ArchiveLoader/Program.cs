@@ -215,10 +215,15 @@ namespace ArchiveLoader
         [STAThread]
         static void Main(string[] args)
         {
+            HTML.SiteURL = "https://github.com/MSDN-WhiteKnight/ruso-archive/";
+            HTML.SiteTitle = "RuSO Archive";
+            HTML.LicenseURL = "https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE";
+            HTML.EnableAttribution = true;
+
             if (args.Length == 0)
             {
                 LoadDataMarkdown();
-                //Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
+                //Archive.SelectUserAnswers("ru.stackoverflow.com", "posts", "myposts", 240512);
 
                 if (!Console.IsInputRedirected)
                 {

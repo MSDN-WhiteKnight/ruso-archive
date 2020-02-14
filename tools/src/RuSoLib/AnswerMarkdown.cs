@@ -196,7 +196,16 @@ namespace RuSoLib
             }
 
             wr.WriteLine("<h2>Answer {0}</h2>", this.Id);
-            wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", link, ownerstr);
+
+            if (HTML.EnableAttribution)
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", link, ownerstr);
+            }
+            else
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Link</a></p>", link);
+            }
+
             wr.WriteLine("<blockquote>");
             wr.WriteLine(this.Body);
             wr.WriteLine("</blockquote>");

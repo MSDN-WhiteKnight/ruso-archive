@@ -10,7 +10,7 @@ namespace RuSoLib
     public static class Archive
     {
         public const string APIURL = "https://api.stackexchange.com/2.2/";
-
+        
         public static void SaveQuestion(string site, int id)
         {
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
@@ -114,15 +114,15 @@ namespace RuSoLib
             PostSet posts = PostSet.LoadFromDir(postsdir, site);
             Dictionary<int, Question> questions = posts.Questions;
 
-            Console.WriteLine("Answers without parent question: {0}", posts.SingleAnswers.Count);
+            Console.WriteLine("Answers without parent question: {0}", posts.MarkdownAnswers.Count);
 
             int n = 0;
 
-            foreach (int a in posts.SingleAnswers.Keys)
+            foreach (int a in posts.MarkdownAnswers.Keys)
             {
                 try
                 {
-                    SaveQuestion(site, posts.SingleAnswers[a].DataDynamic.question_id);
+                    SaveQuestion(site, posts.MarkdownAnswers[a].QuestionId);
                     n++;
                     if (n > 70) break;
                 }
@@ -246,6 +246,58 @@ namespace RuSoLib
             Dictionary<int, AnswerMarkdown> answers = AnswerMarkdown.LoadFromJsonDir(postsdir, site);
             Console.WriteLine("Answers: {0}", answers.Count);
             AnswerMarkdown.SaveToDir(targetdir, answers.Values);
+        }
+
+        public static void SelectUserAnswers(string site, string subdir, string target, int userid)
+        {
+            string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
+            string postsdir = Path.Combine(datadir, subdir + "\\");
+            string targetdir = Path.Combine(datadir, target + "\\");            
+            string path;            
+                        
+            if (!Directory.Exists(targetdir)) Directory.CreateDirectory(targetdir);
+
+            Console.WriteLine("Copying answers of user {0} to {1}...", userid, targetdir);
+
+            PostSet posts = PostSet.LoadFromDir(postsdir, site);
+            
+            Console.WriteLine("Answers: {0}", posts.AllMarkdownAnswers.Count);
+
+            int c = 0;
+
+            foreach (int a in posts.AllMarkdownAnswers.Keys)
+            {
+                AnswerMarkdown answer = posts.AllMarkdownAnswers[a];
+                if (answer.UserId.Trim() != userid.ToString().Trim()) continue;
+
+                try
+                {
+                    QuestionMarkdown question = answer.Parent;
+
+                    if (question != null)
+                    {
+                        if (String.IsNullOrEmpty(question.Title)) question.Title = "Question " + answer.QuestionId.ToString();
+
+                        answer.Title = "Ответ на \"" + question.Title.ToString() + "\"";
+                    }
+
+                    path = Path.Combine(targetdir, "A" + a.ToString() + ".md");
+
+                    using (TextWriter wr = new StreamWriter(path, false, Encoding.UTF8))
+                    {
+                        answer.ToMarkdown(wr);
+                    }
+
+                    c++;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error on anser " + a.ToString());
+                    Console.WriteLine(ex.GetType() + ": " + ex.Message);
+                }
+            }
+
+            Console.WriteLine("Copied: {0}", c);
         }
 
     }

@@ -8,16 +8,44 @@ namespace RuSoLib
 {
     public static class HTML
     {
-        public const string SiteURL = "https://github.com/MSDN-WhiteKnight/ruso-archive/";
-        public const string LicenseURL = "https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE";
+        static string _SiteURL = "https://github.com/MSDN-WhiteKnight/ruso-archive/";
+
+        public static string SiteURL
+        {
+            get { return _SiteURL; }
+            set { _SiteURL = value; }
+        }
+
+        static string _SiteTitle = "RuSO Archive";
+
+        public static string SiteTitle
+        {
+            get { return _SiteTitle; }
+            set { _SiteTitle = value; }
+        }
+
+        static string _LicenseURL = "https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE";
+
+        public static string LicenseURL
+        {
+            get { return _LicenseURL; }
+            set { _LicenseURL = value; }
+        }
+
+        static bool _EnableAttribution = true;
+
+        public static bool EnableAttribution
+        {
+            get { return _EnableAttribution; }
+            set { _EnableAttribution = value; }
+        }
 
         public static string GetOwnerString(object post)
         {
             dynamic owner = JSON.GetPropertyValue(post, "owner");
             dynamic owner_link = JSON.GetPropertyValue(owner, "link");
             string ownerstr;
-
-
+            
             if (owner != null)
             {
                 if (!String.IsNullOrEmpty(owner_link)) ownerstr = String.Format("<a href=\"{0}\">{1}</a>", owner_link, owner.display_name);
@@ -50,8 +78,17 @@ namespace RuSoLib
             dynamic data = post as dynamic;            
             string ownerstr = GetOwnerString(post);
 
-            RenderHeader(data.post_id, wr);            
-            wr.WriteLine("<p>Source: <a href=\"{0}\">{1}</a> - by {2}</p>",data.link, data.link, ownerstr);
+            RenderHeader(data.post_id, wr);
+
+            if (EnableAttribution)
+            {
+                wr.WriteLine("<p>Source: <a href=\"{0}\">{1}</a> - by {2}</p>", data.link, data.link, ownerstr);
+            }
+            else
+            {
+                wr.WriteLine("<p>Link: <a href=\"{0}\">{1}</a></p>", data.link);
+            }
+
             wr.WriteLine("<blockquote>");
             wr.WriteLine(data.body);
             wr.WriteLine("</blockquote>");
@@ -63,7 +100,16 @@ namespace RuSoLib
             string ownerstr = GetOwnerString(post);
 
             RenderHeader(post.Id, wr);
-            wr.WriteLine("<p>Source: <a href=\"{0}\">{1}</a> - by {2}</p>", post.Link, post.Link, ownerstr);
+
+            if (EnableAttribution)
+            {
+                wr.WriteLine("<p>Source: <a href=\"{0}\">{1}</a> - by {2}</p>", post.Link, post.Link, ownerstr);
+            }
+            else
+            {
+                wr.WriteLine("<p>Link: <a href=\"{0}\">{1}</a></p>", post.Link);
+            }
+
             wr.WriteLine("<blockquote>");
             wr.WriteLine(post.Body);
             wr.WriteLine("</blockquote>");
@@ -84,7 +130,7 @@ namespace RuSoLib
             wr.WriteLine("---");
             wr.WriteLine("title: \"{0}\"", title_yml);
             wr.WriteLine("---");
-            wr.WriteLine("<p><i><a href=\"{0}\">RuSO Archive</a></i></p>", SiteURL);
+            wr.WriteLine("<p><i><a href=\"{0}\">{1}</a></i></p>", SiteURL, SiteTitle);
             wr.WriteLine("<h1>{0}</h1>", title);
         }
 

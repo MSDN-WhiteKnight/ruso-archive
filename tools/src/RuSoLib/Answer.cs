@@ -25,7 +25,15 @@ namespace RuSoLib
             string ownerstr = HTML.GetOwnerString(data);
                         
             wr.WriteLine("<h2>Answer {0}</h2>", data.answer_id);
-            wr.WriteLine("<p><a href=\"https://{0}/a/{1}/\">Source</a> - by {2}</p>", this.site, data.answer_id, ownerstr);
+            if (HTML.EnableAttribution)
+            {
+                wr.WriteLine("<p><a href=\"https://{0}/a/{1}/\">Source</a> - by {2}</p>", this.site, data.answer_id, ownerstr);
+            }
+            else
+            {
+                wr.WriteLine("<p><a href=\"https://{0}/a/{1}/\">Link</a></p>", this.site, data.answer_id);
+            }
+
             wr.WriteLine("<blockquote>");
             wr.WriteLine(data.body);
             wr.WriteLine("</blockquote>");             
