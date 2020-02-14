@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ArchiveLoader
+namespace RuSoLib
 {
     public class PostSet
     {
@@ -12,6 +12,7 @@ namespace ArchiveLoader
         public Dictionary<int, Answer> SingleAnswers { get; set; }
         public Dictionary<int, QuestionMarkdown> MarkdownQuestions { get; set; }
         public Dictionary<int, AnswerMarkdown> MarkdownAnswers { get; set; }
+        public Dictionary<int, AnswerMarkdown> AllMarkdownAnswers { get; set; }
 
         protected PostSet() { }
 
@@ -176,7 +177,8 @@ namespace ArchiveLoader
                 Questions = questions,
                 SingleAnswers = single_answers,
                 MarkdownQuestions = mdquestions,
-                MarkdownAnswers = md_single_answers
+                MarkdownAnswers = md_single_answers,
+                AllMarkdownAnswers = mdanswers
             };
         }
     }

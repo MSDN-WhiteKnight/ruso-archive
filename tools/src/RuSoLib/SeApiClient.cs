@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Net;
 
-namespace ArchiveLoader
+namespace RuSoLib
 {
-    class SeApiClient
+    public class SeApiClient
     {
         string apiurl;
         string site;        

@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3F78BE12-48DC-47E0-81D2-A57C35963AE3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C27EB875-846F-493B-9814-3D6B5025F9E3}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArchiveLoader</RootNamespace>
-    <AssemblyName>ArchiveLoader</AssemblyName>
+    <RootNamespace>RuSoLib</RootNamespace>
+    <AssemblyName>RuSoLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,40 +20,37 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Git\GitBash.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Archive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RuSoLib\RuSoLib.csproj">
-      <Project>{c27eb875-846f-493b-9814-3d6b5025f9e3}</Project>
-      <Name>RuSoLib</Name>
-    </ProjectReference>
+    <Compile Include="Answer.cs" />
+    <Compile Include="AnswerMarkdown.cs" />
+    <Compile Include="HTML.cs" />
+    <Compile Include="JSON.cs" />
+    <Compile Include="Post.cs" />
+    <Compile Include="PostMarkdown.cs" />
+    <Compile Include="PostSet.cs" />
+    <Compile Include="Question.cs" />
+    <Compile Include="QuestionMarkdown.cs" />
+    <Compile Include="SeApiClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

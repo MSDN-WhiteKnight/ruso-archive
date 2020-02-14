@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
-namespace ArchiveLoader
+namespace RuSoLib
 {
     public class JSON:IDisposable
     {

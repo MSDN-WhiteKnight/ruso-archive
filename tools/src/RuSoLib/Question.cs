@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ArchiveLoader
+namespace RuSoLib
 {
     public class Question : Post
     {
@@ -35,8 +35,17 @@ namespace ArchiveLoader
             dynamic data = this.DataDynamic;            
             string ownerstr = HTML.GetOwnerString(data);
 
-            HTML.RenderHeader(data.title, wr);            
-            wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", data.link, ownerstr);
+            HTML.RenderHeader(data.title, wr);
+
+            if (HTML.EnableAttribution)
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", data.link, ownerstr);
+            }
+            else
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Link</a></p>", data.link);
+            }
+
             wr.WriteLine("<blockquote>");
             wr.WriteLine(data.body);
             wr.WriteLine("</blockquote>");

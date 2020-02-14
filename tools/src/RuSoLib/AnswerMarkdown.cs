@@ -3,23 +3,17 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ArchiveLoader
+namespace RuSoLib
 {
-    public class QuestionMarkdown : PostMarkdown
-    {        
-        List<AnswerMarkdown> answers = new List<AnswerMarkdown>();
+    public class AnswerMarkdown : PostMarkdown
+    {
+        public int QuestionId { get; set; }
+        public QuestionMarkdown Parent { get; set; }                
+        public bool IsAccepted { get; set; }
 
-        public void AddAnswer(AnswerMarkdown a)
+        public static new AnswerMarkdown FromJsonData(string siteval, object data)
         {
-            this.answers.Add(a);
-            a.Parent = this;
-        }
-
-        public IEnumerable<AnswerMarkdown> Answers { get { return this.answers; } }
-
-        public static new QuestionMarkdown FromJsonData(string siteval, object data)
-        {
-            QuestionMarkdown res = new QuestionMarkdown();
+            AnswerMarkdown res = new AnswerMarkdown();
             res.site = siteval;
 
             dynamic owner = JSON.GetPropertyValue(data, "owner");
@@ -54,11 +48,12 @@ namespace ArchiveLoader
 
             if (score != null) res.Score = score;
             else res.Score = 0;
-            
-            res.PostType = "question";
-            res.id = (data as dynamic).question_id;
-            res.Title = (data as dynamic).title;
-            res.Link = (data as dynamic).link;
+
+            res.IsAccepted = (data as dynamic).is_accepted;
+            res.PostType = "answer";
+            res.id = (data as dynamic).answer_id;
+            res.QuestionId = (data as dynamic).question_id;
+            res.Title = "Answer " + res.id.ToString();            
             res.Body = (data as dynamic).body;
             res.data = res;
             return res;
@@ -80,21 +75,30 @@ namespace ArchiveLoader
             target.WriteLine("\"" + this.UserName + "\"");
             target.Write("se.owner.link: ");
             target.WriteLine("\"" + this.UserLink + "\"");
-            target.Write("se.link: ");
-            target.WriteLine("\"" + this.Link + "\"");
+
+            if (!String.IsNullOrEmpty(this.Link))
+            {
+                target.Write("se.link: ");
+                target.WriteLine("\"" + this.Link + "\"");
+            }
+
+            target.Write("se.answer_id: ");
+            target.WriteLine(this.Id);
             target.Write("se.question_id: ");
-            target.WriteLine(this.Id);            
+            target.WriteLine(this.QuestionId);
             target.Write("se.post_type: ");
             target.WriteLine(this.PostType);
             target.Write("se.score: ");
-            target.WriteLine(this.Score);            
+            target.WriteLine(this.Score);
+            target.Write("se.is_accepted: ");
+            target.WriteLine(this.IsAccepted);
             target.WriteLine("---");
             target.Write(this.Body);
         }
 
-        public static new QuestionMarkdown FromMarkdown(string siteval, TextReader src)
+        public static new AnswerMarkdown FromMarkdown(string siteval, TextReader src)
         {
-            QuestionMarkdown res = new QuestionMarkdown();
+            AnswerMarkdown res = new AnswerMarkdown();
             res.site = siteval;
 
             bool reading_yml = false;
@@ -152,8 +156,10 @@ namespace ArchiveLoader
                         case "se.owner.user_id": res.UserId = param_val; continue;
                         case "se.owner.display_name": res.UserName = param_val; continue;
                         case "se.owner.link": res.UserLink = param_val; continue;
-                        case "se.link": res.Link = param_val; continue;                        
-                        case "se.question_id": res.id = Int32.Parse(param_val); continue;
+                        case "se.link": res.Link = param_val; continue;
+                        case "se.is_accepted": res.IsAccepted = Boolean.Parse(param_val); continue;
+                        case "se.answer_id": res.id = Int32.Parse(param_val); continue;
+                        case "se.question_id": res.QuestionId = Int32.Parse(param_val); continue;
                         case "se.score": res.Score = Int32.Parse(param_val); continue;
                     }
                 }
@@ -164,35 +170,53 @@ namespace ArchiveLoader
             }
 
             res.Body = sbBody.ToString();
-            res.PostType = "question";
+            res.PostType = "answer";
             res.data = res;
+
+            if (String.IsNullOrEmpty(res.Title))
+            {
+                res.Title = "Answer " + res.id.ToString();
+            }
+
             return res;
         }
 
         public void GenerateHTML(TextWriter wr)
-        {            
+        {
             string ownerstr = HTML.GetOwnerString(this);
+            string link;
 
-            HTML.RenderHeader(this.Title, wr);
-            wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", this.Link, ownerstr);
+            if (String.IsNullOrEmpty(this.Link))
+            {
+                link = String.Format("https://{0}/a/{1}/", this.site, this.Id);
+            }
+            else
+            {
+                link = this.Link;
+            }
+
+            wr.WriteLine("<h2>Answer {0}</h2>", this.Id);
+
+            if (HTML.EnableAttribution)
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Source</a> - by {1}</p>", link, ownerstr);
+            }
+            else
+            {
+                wr.WriteLine("<p><a href=\"{0}\">Link</a></p>", link);
+            }
+
             wr.WriteLine("<blockquote>");
             wr.WriteLine(this.Body);
             wr.WriteLine("</blockquote>");
-
-            foreach (AnswerMarkdown a in this.Answers)
-            {
-                a.GenerateHTML(wr);
-            }
-
-            HTML.RenderBottom(wr);
         }
 
-        public static new Dictionary<int, QuestionMarkdown> LoadFromJsonDir(string path, string site)
+        public static new Dictionary<int, AnswerMarkdown> LoadFromJsonDir(string path, string site)
         {
-            Dictionary<int, QuestionMarkdown> posts;
+            Dictionary<int, AnswerMarkdown> posts;
 
-            string[] files = Directory.GetFiles(path, "Q*.json");
-            posts = new Dictionary<int, QuestionMarkdown>(files.Length);
+            string[] files = Directory.GetFiles(path, "A*.json");
+            posts = new Dictionary<int, AnswerMarkdown>(files.Length);
             JSON parser = new JSON();
 
             using (parser)
@@ -205,14 +229,14 @@ namespace ArchiveLoader
 
                     if (!Int32.TryParse(idstr, out id))
                     {
-                        Console.WriteLine("Bad question id = {0} in file {1}", idstr, files[i]);
+                        Console.WriteLine("Bad answer id = {0} in file {1}", idstr, files[i]);
                         continue;
                     }
 
                     try
                     {
                         string json = File.ReadAllText(files[i], Encoding.UTF8);
-                        posts[id] = QuestionMarkdown.FromJsonData(site, parser.JsonParse(json));
+                        posts[id] = AnswerMarkdown.FromJsonData(site, parser.JsonParse(json));
                     }
                     catch (Exception ex)
                     {
@@ -226,11 +250,11 @@ namespace ArchiveLoader
             return posts;
         }
 
-        public static void SaveToDir(string dir, IEnumerable<QuestionMarkdown> posts)
+        public static void SaveToDir(string dir, IEnumerable<AnswerMarkdown> posts)
         {
-            foreach (QuestionMarkdown post in posts)
+            foreach (AnswerMarkdown post in posts)
             {
-                string path = Path.Combine(dir, "Q" + post.Id.ToString() + ".md");
+                string path = Path.Combine(dir, "A"+post.Id.ToString() + ".md");
                 StreamWriter wr = new StreamWriter(path, false, Encoding.UTF8);
 
                 using (wr)
@@ -239,5 +263,6 @@ namespace ArchiveLoader
                 }
             }
         }
+
     }
 }
