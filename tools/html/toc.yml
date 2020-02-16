@@ -1,5 +1,7 @@
 - name: "Архив"
   items:
+  - name: "Удаленные сообщения: Main"
+    href: ru.stackoverflow.com/deleted/
   - name: "Удаленные сообщения: Meta"
     href: ru.meta.stackoverflow.com/deleted/
   - name: "Сохраненные сообщения: Main"

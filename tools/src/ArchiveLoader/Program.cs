@@ -256,6 +256,7 @@ namespace ArchiveLoader
                 Archive.Generate("ru.meta.stackoverflow.com", "posts", "Posts");
                 Archive.Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
                 Archive.Generate("ru.stackoverflow.com", "posts", "Posts");
+				Archive.Generate("ru.stackoverflow.com", "deleted", "Deleted posts");
                 Console.WriteLine("Done");
             }
             else if (args.Length >= 1 && args[0] == "load")

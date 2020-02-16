@@ -2,6 +2,7 @@
 
 ## Удаленные сообщения
 
+- [Main](ru.stackoverflow.com/deleted/index.md)
 - [Meta](ru.meta.stackoverflow.com/deleted/index.md)
 
 ## Сохраненные сообщения
