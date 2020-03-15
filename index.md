@@ -18,4 +18,3 @@
 ## См. также
 
 - [Исходники на GitHub](https://github.com/MSDN-WhiteKnight/ruso-archive)
-- [Альтернативный чат ru.stackoverflow.com в Zulip](https://freedom.zulipchat.com)
