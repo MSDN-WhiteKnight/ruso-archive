@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -31,7 +31,8 @@ namespace RuSoLib
             TextWriter wr = new StreamWriter(path, false, Encoding.UTF8);
             using (wr)
             {
-                QuestionMarkdown post = QuestionMarkdown.FromJsonData(site, q);
+                dynamic data = JSON.Parse(q);
+                QuestionMarkdown post = QuestionMarkdown.FromJsonData(site, data);
                 post.ToMarkdown(wr);
             }
 
@@ -44,7 +45,8 @@ namespace RuSoLib
                 wr = new StreamWriter(path, false, Encoding.UTF8);
                 using (wr)
                 {
-                    AnswerMarkdown post = AnswerMarkdown.FromJsonData(site, answers[key]);
+                    dynamic data = JSON.Parse(answers[key]);
+                    AnswerMarkdown post = AnswerMarkdown.FromJsonData(site, data);
                     post.ToMarkdown(wr);
                 }
             }
@@ -72,7 +74,8 @@ namespace RuSoLib
             TextWriter wr = new StreamWriter(path, false, Encoding.UTF8);
             using (wr)
             {
-                AnswerMarkdown post = AnswerMarkdown.FromJsonData(site, a);
+                dynamic data = JSON.Parse(a);
+                AnswerMarkdown post = AnswerMarkdown.FromJsonData(site, data);
                 post.ToMarkdown(wr);
             }
 
