@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1053;&#1072;&#1089;&#1083;&#1077;&#1076;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; ComObject &#1080;&#1085;&#1090;&#1077;&#1088;&#1092;&#1077;&#1081;&#1089;&#1086;&#1074; &#1080; &#1085;&#1072;&#1079;&#1085;&#1072;&#1095;&#1077;&#1085;&#1080;&#1077; &#1072;&#1090;&#1090;&#1088;&#1080;&#1073;&#1091;&#1090;&#1086;&#1074; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1053;&#1072;&#1089;&#1083;&#1077;&#1076;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; ComObject &#1080;&#1085;&#1090;&#1077;&#1088;&#1092;&#1077;&#1081;&#1089;&#1086;&#1074; &#1080; &#1085;&#1072;&#1079;&#1085;&#1072;&#1095;&#1077;&#1085;&#1080;&#1077; &#1072;&#1090;&#1090;&#1088;&#1080;&#1073;&#1091;&#1090;&#1086;&#1074; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Наследование ComObject интерфейсов и назначение аттрибутов</h1>
+<p><a href="https://ru.stackoverflow.com/questions/911112/%d0%9d%d0%b0%d1%81%d0%bb%d0%b5%d0%b4%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5-comobject-%d0%b8%d0%bd%d1%82%d0%b5%d1%80%d1%84%d0%b5%d0%b9%d1%81%d0%be%d0%b2-%d0%b8-%d0%bd%d0%b0%d0%b7%d0%bd%d0%b0%d1%87%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b0%d1%82%d1%82%d1%80%d0%b8%d0%b1%d1%83%d1%82%d0%be%d0%b2">Source</a> - by <a href="https://ru.stackoverflow.com/users/206435/%e3%83%92%e3%83%9f%e3%82%b3">ヒミコ</a></p>
+<blockquote>
+<p>Есть ли необходимость повторно указывать аттрибут типа интерфейса <code>Com</code>, если он наследуется от другого <code>Com</code> интерфейса, в котором уже был задан тип?</p>
+<p>Пример:</p>
+<pre><code>[ComImport]
+[Guid("aec22fb8-76f3-4639-9be0-28eb43a67a2e")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+public interface IDXGIObject
+{
+    long SetPrivateData([In] ref Guid name, [In] uint dataSize, IntPtr dataPtr);
+
+    long SetPrivateDataInterface([In] ref Guid name, [In] [MarshalAs(UnmanagedType.IUnknown)]
+        object unknownInterfaceObject);
+
+    long GetPrivateData([In] ref Guid name, out int dataSize, out IntPtr dataPtr);
+
+    long GetParent([In] ref Guid rIId, [Out] out object pParent);
+}
+</code></pre>
+<p>Далее, его наследником будет <code>IDXGIFactory</code>:</p>
+<pre><code>/// &lt;inheritdoc cref="IDXGIObject"/&gt; /&gt;
+/// &lt;summary&gt;
+///     An IDXGIFactory interface implements methods for generating DXGI objects (which handle fullscreen transitions).
+/// &lt;/summary&gt;
+[ComImport]
+[Guid("7b7166ec-21c7-44ae-b21a-c9ae321ae369")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+public interface IDXGIFactory : IDXGIObject
+{
+    /// &lt;summary&gt;
+    ///     Enumerates the adapters (video cards).
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult EnumAdapters(uint numAdapter, [MarshalAs(UnmanagedType.IUnknown)] out object adapter);
+
+    /// &lt;summary&gt;
+    ///     Allows DXGI to monitor an application's message queue for the alt-enter key sequence (which causes the application
+    ///     to switch from windowed to fullscreen or vice versa).
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult MakeWindowAssociation(IntPtr windowHandle, uint flags);
+
+    /// &lt;summary&gt;
+    ///     Get the window through which the user controls the transition to and from fullscreen.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult GetWindowAssociation(out IntPtr outHandleWindow);
+
+    /// &lt;summary&gt;
+    ///     Creates a swap chain.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult CreateSwapChain(IntPtr lpIUnknown, IntPtr ptr, out IntPtr outPtr);
+
+    /// &lt;summary&gt;
+    ///     Create an adapter interface that represents a software adapter.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult CreateSoftwareAdapter(IntPtr moduleHandle, out IntPtr outPtr);
+}
+</code></pre>
+<p>Есть ли необходимость вновь писать аттрибут</p>
+<pre><code>[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+</code></pre>
+<p>для интерфейса наследника, если он тоже по сути является <code>IUnknown</code>?</p>
+</blockquote>
+<h2>Answer 911525</h2>
+<p><a href="https://ru.stackoverflow.com/a/911525/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Нужно, так как <a href="https://docs.microsoft.com/ru-ru/dotnet/api/system.runtime.interopservices.interfacetypeattribute?view=netframework-4.7.2" rel="nofollow noreferrer">InterfaceTypeAttribute</a> определен как не наследуемый:</p>
+<blockquote>
+  <p>[System.AttributeUsage(System.AttributeTargets.Interface, <strong>Inherited=false</strong>)]<br>
+  [System.Runtime.InteropServices.ComVisible(true)]<br>
+  public sealed class InterfaceTypeAttribute : Attribute  </p>
+</blockquote>
+</blockquote>
+<h2>Answer 912842</h2>
+<p><a href="https://ru.stackoverflow.com/a/912842/">Source</a> - by <a href="https://ru.stackoverflow.com/users/206435/%e3%83%92%e3%83%9f%e3%82%b3">ヒミコ</a></p>
+<blockquote>
+<p>Путем некоторых манипуляций удалось выяснить, в обязательном порядке стоит соблюдать следующие правила:</p>
+<ol>
+<li><p>Наследуемый объект должен переопределять декларацию интерфейса от которого наследуется, перед методами текущего метода, т.е. до их объявлений. (Спасибо за подсказку <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">@MSDN.WhiteKnight</a>).</p></li>
+<li><p>Интерфейс наследник в обязательном порядке должен иметь атрибут <code>[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]</code>, иначе будем иметь проблемы с доступом к памяти.</p></li>
+<li><p>Интерфейс наследник наследуется от интерфейса который для него является базовым лишь для удобства работы с данными интерфейсами.</p></li>
+</ol>
+<p>Таким образом, базовый интерфейс к примеру в данном случае это <code>IDXGIObject</code> выглядит так:</p>
+<pre><code>/// &lt;summary&gt;
+///     An IDXGIObject interface is a base interface for all DXGI objects; IDXGIObject supports associating caller-defined
+///     (private data) with an object and retrieval of an interface to the parent object.
+/// &lt;/summary&gt;
+[Guid("aec22fb8-76f3-4639-9be0-28eb43a67a2e")]
+[ComImport]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+public interface IDXGIObject
+{
+    /// &lt;summary&gt;
+    ///     Sets an IUnknown interface as private data; this associates application-defined data with the object.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult SetPrivateData(ref Guid name, uint dataSize, IntPtr dataPtr);
+
+    /// &lt;summary&gt;
+    ///     Set an interface in the object's private data.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult SetPrivateDataInterface(ref Guid name,
+        [MarshalAs(UnmanagedType.IUnknown)] object unknownInterfaceObject);
+
+    /// &lt;summary&gt;
+    ///     Get a pointer to the object's data.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult GetPrivateData(ref Guid name, out int dataSize, out IntPtr dataPtr);
+
+    /// &lt;summary&gt;
+    ///     Gets the parent of the object.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult GetParent(ref Guid rIId, out object pParent);
+}
+</code></pre>
+<p>Далее от него к примеру наследуется <code>IDXGIFactory</code> определение необходимо задавать строго вот так:</p>
+<pre><code>/// &lt;inheritdoc /&gt;
+/// &lt;summary&gt;
+///     An &lt;see cref="T:Himiko.DXGI.Interfaces.IDXGIFactory" /&gt; interface implements methods for generating DXGI objects (which handle fullscreen
+///     transitions).
+/// &lt;/summary&gt;
+[Guid("7b7166ec-21c7-44ae-b21a-c9ae321ae369")]
+[ComImport]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+public interface IDXGIFactory : IDXGIObject
+{
+    /// &lt;summary&gt;
+    ///     Sets an IUnknown interface as private data; this associates application-defined data with the object.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    new HResult SetPrivateData(ref Guid name, uint dataSize, IntPtr dataPtr);
+
+    /// &lt;summary&gt;
+    ///     Set an interface in the object's private data.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    new HResult SetPrivateDataInterface(ref Guid name,
+        [MarshalAs(UnmanagedType.IUnknown)] object unknownInterfaceObject);
+
+    /// &lt;summary&gt;
+    ///     Get a pointer to the object's data.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    new HResult GetPrivateData(ref Guid name, out int dataSize, out IntPtr dataPtr);
+
+    /// &lt;summary&gt;
+    ///     Gets the parent of the object.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    new HResult GetParent(ref Guid rIId, out object pParent);
+
+    /// &lt;summary&gt;
+    ///     Enumerates the adapters (video cards).
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult EnumAdapters(uint numAdapter, [MarshalAs(UnmanagedType.IUnknown)] out object adapter);
+
+    /// &lt;summary&gt;
+    ///     Allows DXGI to monitor an application's message queue for the alt-enter key sequence (which causes the application
+    ///     to switch from windowed to fullscreen or vice versa).
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult MakeWindowAssociation(IntPtr windowHandle, uint flags);
+
+    /// &lt;summary&gt;
+    ///     Get the window through which the user controls the transition to and from fullscreen.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult GetWindowAssociation(out IntPtr outHandleWindow);
+
+    /// &lt;summary&gt;
+    ///     Creates a swap chain.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult CreateSwapChain(object iUnknown, ref DxgiSwapChainDesc swapChainDesc,
+        [MarshalAs(UnmanagedType.IUnknown)] out object dxgiSwapChainObject);
+
+    /// &lt;summary&gt;
+    ///     Create an adapter interface that represents a software adapter.
+    /// &lt;/summary&gt;
+    [PreserveSig]
+    HResult CreateSoftwareAdapter(IntPtr moduleHandle, out IntPtr outPtr);
+}
+</code></pre>
+<p>Все проблемы себя исчерпали, и код стал работать так как должен.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

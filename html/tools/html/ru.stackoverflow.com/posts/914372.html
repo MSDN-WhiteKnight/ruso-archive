@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1079;&#1072;&#1087;&#1091;&#1089;&#1090;&#1080;&#1090;&#1100; &#1089;&#1083;&#1091;&#1078;&#1073;&#1091; net &#1074; windows 10 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1079;&#1072;&#1087;&#1091;&#1089;&#1090;&#1080;&#1090;&#1100; &#1089;&#1083;&#1091;&#1078;&#1073;&#1091; net &#1074; windows 10 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как запустить службу net в windows 10</h1>
+<p><a href="https://ru.stackoverflow.com/questions/914372/%d0%9a%d0%b0%d0%ba-%d0%b7%d0%b0%d0%bf%d1%83%d1%81%d1%82%d0%b8%d1%82%d1%8c-%d1%81%d0%bb%d1%83%d0%b6%d0%b1%d1%83-net-%d0%b2-windows-10">Source</a> - by <a href="https://ru.stackoverflow.com/users/318008/user318008">user318008</a></p>
+<blockquote>
+<p>При вызове утилиты net c командой view получаю ответ что служба не запущена</p>
+</blockquote>
+<h2>Answer 916164</h2>
+<p><a href="https://ru.stackoverflow.com/a/916164/">Source</a> - by <a href="https://ru.stackoverflow.com/users/265408/daemon-5">Daemon-5</a></p>
+<blockquote>
+<p>На уровне сетевого интерфейса за предоставление доступа к сети отвечает "Клиент для сетей".
+На пользовательском уровне за предоставление перечня компьютеров (серверов) в сети отвечает служба "рабочей станции" - LanmanWorkstation.
+Запуск:</p>
+<pre><code>net start lanmanworkstation
+</code></pre>
+<p>Не думаю, что это поможет.
+Поэтому диагностируйте: смотрите статус службы, читайте журнал событий "Система" и т.д.</p>
+</blockquote>
+<h2>Answer 916296</h2>
+<p><a href="https://ru.stackoverflow.com/a/916296/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Служба "Обозреватель компьютеров", которую использует net view, использует SMB 1.0, который в Windows 10 по умолчанию не установлен. Вы можете установить его, зайдя в "<em>Программы и компоненты</em>" -> "<em>Включение и отключение компонентов Windows</em>" и отметив галку "<em>SMB 1.0/CIFS File sharing support</em>". Однако, делать это не рекомендуется, ведь SMB 1.0 исключили из-за его небезопасности.</p>
+<p>Наверное, для получения списка компьютеров следует использовать что-нибудь более современное, скажем, PowerShell ADSI: </p>
+<pre><code>powershell "([adsi]'WinNT://WORKGROUP').Children"
+</code></pre>
+<p><strong>Источники:</strong></p>
+<p><a href="https://support.microsoft.com/en-nz/help/4034314/smbv1-is-not-installed-by-default-in-windows" rel="nofollow noreferrer">SMBv1 is not installed by default in Windows 10 Fall Creators Update and Windows Server, version 1709 and later versions</a></p>
+<p><a href="https://support.microsoft.com/en-us/help/2696547/how-to-detect-enable-and-disable-smbv1-smbv2-and-smbv3-in-windows-and" rel="nofollow noreferrer">How to detect, enable and disable SMBv1, SMBv2, and SMBv3 in Windows and Windows Server</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 948852 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 948852 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 948852</h1>
+<h2>Answer 948852</h2>
+<p><a href="https://ru.stackoverflow.com/a/948852/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Windows с максимальным уровнем защиты UAC переключает систему на защищенный рабочий стол Winlogon перед тем, как вывести окно UAC. Можно отключить защищенный рабочий стол:</p>
+<ul>
+<li><p>С помощью редактора групповых политик: <strong>secpol.msc</strong> -> <strong>Локальные политики</strong> -> <strong>Параметры безопасности</strong> -> отключить <strong>Контроль учетных записей: Переключаться на безопасный рабочий стол при запросе повышения</strong> (<strong>User Account Control: Switch to the secure desktop when prompting for elevation</strong>)</p></li>
+<li><p>Через реестр: Установить в ключе  <strong>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System</strong> значение <strong>PromptOnSecureDesktop</strong> равным 0.</p></li>
+</ul>
+<p>Тогда окно UAC будет запускаться как обычно, и его скриншот можно сделать обычным Print Screen.</p>
+<hr>
+<p>Однако, остается вопрос: а что, если хочется сделать скриншот именно защищенного рабочего стола? Как оказалось, это можно сделать. Для этого понадобится:</p>
+<ol>
+<li><p>Программа, умеющая сохранять скриншоты в файл по нажатию горячей клавиши (например <a href="https://getgreenshot.org" rel="nofollow noreferrer">Greenshot</a>).</p></li>
+<li><p>Утилита <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/psexec" rel="nofollow noreferrer">PsExec</a> из пакета PsTools.</p></li>
+</ol>
+<p>Для создания скриншотов защищенного рабочего стола необходимо запустить нашу скриншотную программу от имени локальной системы на рабочем столе <code>WinSta0\Winlogon</code>. Командная строка для запуска выглядит так:</p>
+<pre><code>PsExec /h /x /d /s "C:\Program Files\Greenshot\Greenshot.exe"
+</code></pre>
+<p>(запускать, само собой, из командной строки, запущенной с правами администратора)</p>
+<p>После этого, когда появилось окно UAC, нажимаем горячую клавишу (Ctrl+PrintScreen в случае GreenShot), и готово: на защищенном рабочем столе появляется диалоговое окно, позволяющее сохранить изображение в файл! </p>
+<p><a href="https://i.stack.imgur.com/j1nfI.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/j1nfI.png" alt="dialog"></a></p>
+<p>Результат:</p>
+<p><a href="https://i.stack.imgur.com/jGD0C.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/jGD0C.png" alt="screen"></a></p>
+<p>На самом деле, все проходит не совсем гладко: GreenShot сыплет кучей сообщений об ошибках, будучи запущенным в защищенном рабочем столе, но главное, что это работает, скриншоты сохраняются.</p>
+<p>Источники:</p>
+<p><a href="https://support.microsoft.com/ru-ru/help/975788/guided-help-turn-off-the-secure-desktop-in-windows-7" rel="nofollow noreferrer">Guided Help: Turn off the secure desktop in Windows 7</a></p>
+<p><a href="https://superuser.com/a/758754/1001787">How to take a screenshot of Window's secure desktop?</a> - ответ участника <a href="https://superuser.com/users/283926/antonio-dias">Antonio Dias</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

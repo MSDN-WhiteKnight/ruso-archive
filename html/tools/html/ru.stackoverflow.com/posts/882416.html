@@ -1,0 +1,452 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1057;&#1082;&#1086;&#1083;&#1100;&#1082;&#1086; &#1074;&#1089;&#1077;&#1075;&#1086; &#1089;&#1077;&#1081;&#1095;&#1072;&#1089; &#1089;&#1090;&#1072;&#1085;&#1076;&#1072;&#1088;&#1090;&#1085;&#1099;&#1093; &#1082;&#1083;&#1072;&#1089;&#1089;&#1086;&#1074; &#1074; C# .net? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1057;&#1082;&#1086;&#1083;&#1100;&#1082;&#1086; &#1074;&#1089;&#1077;&#1075;&#1086; &#1089;&#1077;&#1081;&#1095;&#1072;&#1089; &#1089;&#1090;&#1072;&#1085;&#1076;&#1072;&#1088;&#1090;&#1085;&#1099;&#1093; &#1082;&#1083;&#1072;&#1089;&#1089;&#1086;&#1074; &#1074; C# .net? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Сколько всего сейчас стандартных классов в C# .net?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/882416/%d0%a1%d0%ba%d0%be%d0%bb%d1%8c%d0%ba%d0%be-%d0%b2%d1%81%d0%b5%d0%b3%d0%be-%d1%81%d0%b5%d0%b9%d1%87%d0%b0%d1%81-%d1%81%d1%82%d0%b0%d0%bd%d0%b4%d0%b0%d1%80%d1%82%d0%bd%d1%8b%d1%85-%d0%ba%d0%bb%d0%b0%d1%81%d1%81%d0%be%d0%b2-%d0%b2-c-net">Source</a> - by <a href="https://ru.stackoverflow.com/users/11849/%d0%92%d0%bb%d0%b0%d0%b4%d0%b8%d0%bc%d0%b8%d1%80-%d0%a1%d0%bc%d0%b8%d1%80%d0%bd%d0%be%d0%b2">Владимир Смирнов</a></p>
+<blockquote>
+<p>Несколько версий назад было 40000, а сейчас как сосчитать?</p>
+</blockquote>
+<h2>Answer 882513</h2>
+<p><a href="https://ru.stackoverflow.com/a/882513/">Source</a> - by <a href="https://ru.stackoverflow.com/users/220553/evgeniyz">EvgeniyZ</a></p>
+<blockquote>
+<p>Уважаемый, ну мы же с вами программисты, что мешает нам написать простейшую программу по подсчету этих классов? Благо Microsoft <a href="https://referencesource.microsoft.com" rel="noreferrer">выкладывает</a> исходный код в удобном формате!</p>
+<p>Попробуем это сделать?</p>
+<ol>
+<li>Добавляем в проект что нибудь для работы с HTML кодом, я буду использовать <code>HtmlAgilityPack</code>.</li>
+<li>Заходим на нужный нам <a href="https://referencesource.microsoft.com" rel="noreferrer">сайт</a> и анализируем его:
+<ul>
+<li>Сбоку видим группы всяких namespace, просмотрев процесс загрузки сайта, мы увидим, что все это грузится со страницы <code>/results.html</code>.</li>
+<li>Каждый namespace ведет по адресу <code>/#mscorlib,namespaces</code>. Опять смотрим как и от куда грузиться и получаем следующий адрес: <code>/mscorlib/namespaces.html</code>.</li>
+<li>Теперь нужные нам классы. К сожалению Microsoft не делает пометок, что за тип такой в коде, но зато он отображает картинку типа, поигравшись с адресом изображений мы узнаем, что за классы отвечают изображения от <code>../content/icons/0.png</code> до <code>../content/icons/5.png</code></li>
+</ul></li>
+<li><p>Имея все эти данные - начинаем набрасывать код. Первым делом подготовим все необходимое, а точнее: вынесем адреса изображений в массив, а также сделаем базовый <code>Uri</code>:</p>
+<pre><code>public static Uri BaseUri = new Uri("https://referencesource.microsoft.com/");
+public static List&lt;string&gt; ClassImages = new List&lt;string&gt;
+{
+    "../content/icons/0.png",
+    "../content/icons/1.png",
+    "../content/icons/2.png",
+    "../content/icons/3.png",
+    "../content/icons/4.png",
+    "../content/icons/5.png"
+};
+</code></pre></li>
+<li><p>Создадим простой класс, который будет отправлять запрос и отдавать нам HTML:</p>
+<pre><code>public static async Task&lt;string&gt; Get(Uri uri)
+{
+    string data;
+    var cookieContainer = new CookieContainer();
+    using (var httpClientHandler = new HttpClientHandler { CookieContainer = cookieContainer })
+    {
+        using (var httpClient = new HttpClient(httpClientHandler))
+        {
+            data = await httpClient.GetStringAsync(uri);
+        }
+    }
+
+    return HttpUtility.HtmlDecode(data);
+}
+</code></pre></li>
+<li><p>Создадим класс для одного Namespace. Так, как в коде Microsoft зовут это как Group - я решил не отставать от них:</p>
+<pre><code>class Group
+{
+    public string Namespace { get; set; }
+    public string Type { get; set; }
+    public Uri Uri { get; set; }
+    public int Classes { get; set; }
+}
+</code></pre></li>
+<li><p>Теперь сделаем метод, который будет отдавать нам список всех Namespace на странице:</p>
+<pre><code>public static async Task&lt;IEnumerable&lt;Group&gt;&gt; GetGroups()
+{
+    List&lt;Group&gt; groups = new List&lt;Group&gt;();
+    var result = await Get(new Uri(BaseUri, "results.html"));
+    var html = new HtmlDocument();
+    html.LoadHtml(result);
+
+    var groupsNodes = html.DocumentNode.SelectNodes("//div[@class='resultGroup']/a");
+    if (groupsNodes != null)
+    {
+        foreach (var group in groupsNodes)
+        {
+            var link = group.GetAttributeValue("href", null);
+            if (link != null)
+            {
+                var arr = link.Split(',');
+                var nspace = arr[0].TrimStart('/', '#');
+                var type = arr[1];
+
+                groups.Add(new Group
+                {
+                    Namespace = nspace,
+                    Type = type,
+                    Uri = new Uri(BaseUri, $"{nspace}/{type}.html")
+                });
+
+            }
+        }
+    }
+
+    return groups;
+}
+</code></pre></li>
+<li><p>Теперь сделаем метод для подсчета изображений на странице конкретного Namespace (так, как Microsoft не очень любят частых подключений, делаем 3 попытки и увеличиваем интервал между подключениями):</p>
+<pre><code>public static async Task&lt;bool&gt; CountClasses(Group group)
+{
+    if (group == null) return false;
+
+    try
+    {
+        var result = await Get(group.Uri);
+        var html = new HtmlDocument();
+        html.LoadHtml(result);
+
+        var classesIcons = html.DocumentNode.SelectNodes("//img[@class='tDNI']")
+            .Select(x =&gt; x.GetAttributeValue("src", null))
+            .Where(x =&gt; ClassImages.Contains(x));
+
+        group.Classes = classesIcons.Count();
+        return true;
+    }
+    catch (Exception )
+    {
+        return false;
+    }
+}
+</code></pre></li>
+<li><p>Теперь объединим все это:</p>
+<pre><code>public static async Task Main(string[] args)
+{
+    var groups = await GetGroups();
+    var list = groups.ToList();
+
+    int count = 1;
+    foreach (var group in list)
+    {
+        Console.Write($"[{count}/{list.Count}] {group.Namespace}. ");
+
+        var status = false;
+        var attempt = 0;
+
+        while (!status)
+        {
+            status = await CountClasses(group);
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            if (attempt &gt;= 3) break;
+            if (!status) attempt++;
+        }
+
+        Console.WriteLine($"Результат: {group.Classes}");
+        count++;
+    }
+
+    Console.WriteLine($"Всего: {list.Sum(x=&gt;x.Classes)}");
+    Console.ReadKey();
+}
+</code></pre></li>
+<li><p>Запускаем и любуемся результатом:</p>
+<pre><code>[1/113] mscorlib. Результат: 1901
+[2/113] PresentationFramework. Результат: 1793
+[3/113] System.Web. Результат: 1854
+[4/113] System. Результат: 1431
+[5/113] System.Windows.Forms. Результат: 1381
+[6/113] PresentationCore. Результат: 1203
+[7/113] System.ServiceModel. Результат: 3216
+[8/113] System.Data. Результат: 675
+[9/113] System.Data.Entity. Результат: 1280
+[10/113] System.Core. Результат: 668
+[11/113] System.Xml. Результат: 702
+[12/113] System.Activities. Результат: 705
+[13/113] WindowsBase. Результат: 416
+[14/113] System.Activities.Presentation. Результат: 705
+[15/113] System.Drawing. Результат: 175
+[16/113] Microsoft.VisualBasic. Результат: 86
+[17/113] System.IdentityModel. Результат: 612
+[18/113] System.Web.Extensions. Результат: 310
+[19/113] System.Runtime.Serialization. Результат: 326
+[20/113] System.Workflow.ComponentModel. Результат: 517
+[21/113] System.Data.SqlXml. Результат: 313
+[22/113] System.Data.Linq. Результат: 377
+[23/113] UIAutomationClientsideProviders. Результат: 107
+[24/113] PresentationBuildTasks. Результат: 211
+[25/113] System.Configuration. Результат: 155
+[26/113] System.Management. Результат: 109
+[27/113] System.Data.Services. Результат: 184
+[28/113] System.IO.Compression.FileSystem. Результат: 2
+[29/113] System.IO.Log. Результат: 49
+[30/113] System.Workflow.Activities. Результат: 411
+[31/113] System.Management.Automation. Результат: 1638
+[32/113] Microsoft.CSharp. Результат: 7
+[33/113] System.Runtime.Serialization.Formatters.Soap. Результат: 0
+[34/113] System.Web.Mobile. Результат: 348
+[35/113] System.Web.Services. Результат: 304
+[36/113] System.Security. Результат: 117
+[37/113] System.Data.Services.Client. Результат: 137
+[38/113] System.ServiceModel.Web. Результат: 131
+[39/113] System.ServiceModel.Activities. Результат: 274
+[40/113] System.Workflow.Runtime. Результат: 196
+[41/113] System.ComponentModel.DataAnnotations. Результат: 58
+[42/113] System.Activities.Core.Presentation. Результат: 171
+[43/113] System.Design. Результат: 825
+[44/113] Microsoft.Build.Tasks.v4.0. Результат: 283
+[45/113] UIAutomationClient. Результат: 81
+[46/113] System.Runtime.Remoting. Результат: 155
+[47/113] Microsoft.JScript. Результат: 156
+[48/113] System.Xml.Linq. Результат: 46
+[49/113] System.Net. Результат: 70
+[50/113] Microsoft.Build.Engine. Результат: 210
+[51/113] System.Transactions. Результат: 170
+[52/113] System.Messaging. Результат: 63
+[53/113] System.Data.Entity.Design. Результат: 71
+[54/113] Microsoft.Transactions.Bridge. Результат: 439
+[55/113] Accessibility. Результат: 1
+[56/113] System.ServiceModel.Internals. Результат: 129
+[57/113] System.Web.DynamicData. Результат: 82
+[58/113] System.WorkflowServices. Результат: 170
+[59/113] System.ServiceModel.Discovery. Результат: 206
+[60/113] ReachFramework. Результат: 327
+[61/113] ComSvcConfig. Результат: 31
+[62/113] System.AddIn. Результат: 61
+[63/113] System.Runtime.Caching. Результат: 39
+[64/113] System.ServiceModel.Activation. Результат: 83
+[65/113] System.Xaml. Результат: 83
+[66/113] SMSvcHost. Результат: 45
+[67/113] System.ComponentModel.Composition. Результат: 108
+[68/113] System.Deployment. Результат: 214
+[69/113] System.Printing. Результат: 124
+[70/113] System.Activities.DurableInstancing. Результат: 47
+[71/113] Microsoft.Build.Framework. Результат: 48
+[72/113] Microsoft.Build.Utilities.v4.0. Результат: 43
+[73/113] Microsoft.Web.Administration. Результат: 73
+[74/113] System.DirectoryServices. Результат: 104
+[75/113] System.Numerics. Результат: 5
+[76/113] System.ServiceModel.Channels. Результат: 72
+[77/113] PresentationFramework.Aero. Результат: 14
+[78/113] System.Runtime.DurableInstancing. Результат: 47
+[79/113] WsatConfig. Результат: 56
+[80/113] WsatUI. Результат: 45
+[81/113] PresentationUI. Результат: 73
+[82/113] System.Web.ApplicationServices. Результат: 14
+[83/113] System.Data.Services.Design. Результат: 48
+[84/113] PresentationFramework.Luna. Результат: 9
+[85/113] System.Web.Entity. Результат: 33
+[86/113] System.EnterpriseServices. Результат: 80
+[87/113] XamlBuildTask. Результат: 32
+[88/113] System.Data.DataSetExtensions. Результат: 14
+[89/113] PresentationFramework.Royale. Результат: 9
+[90/113] SMDiagnostics. Результат: 22
+[91/113] System.Web.Extensions.Design. Результат: 89
+[92/113] System.ServiceModel.Routing. Результат: 60
+[93/113] System.IdentityModel.Selectors. Результат: 50
+[94/113] UIAutomationTypes. Результат: 37
+[95/113] System.ServiceProcess. Результат: 15
+[96/113] Microsoft.Build.Utilities.v3.5. Результат: 27
+[97/113] System.DirectoryServices.Protocols. Результат: 76
+[98/113] PresentationFramework.Classic. Результат: 10
+[99/113] System.Web.Entity.Design. Результат: 28
+[100/113] Microsoft.VisualBasic.Activities.Compiler. Результат: 15
+[101/113] UIAutomationProvider. Результат: 1
+[102/113] System.ServiceModel.WasHosting. Результат: 16
+[103/113] svcutil. Результат: 4
+[104/113] System.Web.RegularExpressions. Результат: 76
+[105/113] System.AddIn.Contract. Результат: 2
+[106/113] System.Configuration.Install. Результат: 16
+[107/113] System.Web.DataVisualization. Результат: 304
+[108/113] System.Windows.Forms.DataVisualization. Результат: 264
+[109/113] WindowsFormsIntegration. Результат: 8
+[110/113] System.Xaml.Hosting. Результат: 13
+[111/113] System.Drawing.Design. Результат: 15
+[112/113] System.Windows.Presentation. Результат: 2
+[113/113] System.Windows.Input.Manipulations. Результат: 13
+Всего: 31556
+</code></pre></li>
+</ol>
+<p>Получаем ответ: <strong>~31556 класса в C#</strong>.
+P.S. Не стал расписывать как и что тут работает, а также не стал делать многопоточность и прочее (ибо программа на один запуск).</p>
+<p>Также можно заметить, что <code>System.Runtime.Serialization.Formatters.Soap</code> выдал <code>0</code>, это потому что сервер меня походу заблокировал и выдает вечно <code>Server encountered an internal error.</code>. Так что в общий подсчет этот Namestace не вошел.</p>
+<p>И также, хочу заметить, что я не уверен, что все классы здесь находятся или все грамотно отображаются в боковом меню на сайте. По этому результат приблизительный...</p>
+</blockquote>
+<h2>Answer 882523</h2>
+<p><a href="https://ru.stackoverflow.com/a/882523/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Если считать стандартными классами .NET все типы (в том числе непубличные), расположенные в управляемых сборках в подкаталоге <code>%WINDIR%\Microsoft.NET\Framework\</code> соответствующей версии, для которых Type.IsClass возвращает true, можно посчитать их так:</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using System.Reflection;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        static uint CountClasses(string asspath)
+        {
+            uint res = 0;
+            Assembly ass = Assembly.LoadFile(asspath);
+
+            foreach (var type in ass.GetTypes())
+            {
+                if ( type.IsClass)
+                {                    
+                    res++;
+                }
+
+            }
+
+            return res;
+        }
+
+        static uint ProcessDirectory(string path)
+        {
+            uint res = 0;
+
+            var files = Directory.GetFiles(path);
+
+            foreach (var file in files)
+            {
+                if (Path.GetExtension(file).ToUpper() == ".DLL")
+                {
+
+                    Console.WriteLine("{0}", file);
+                    try
+                    {
+                        res += CountClasses(file);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);                            
+                    }
+                }                
+            }
+
+            var dirs = Directory.GetDirectories(path);
+            foreach (var dir in dirs)
+            {
+                Console.WriteLine("{0}", dir);
+                res += ProcessDirectory(dir);
+            }
+            return res;
+        }
+
+
+        static void Main(string[] args)
+        {
+            var count = ProcessDirectory(@"C:\Windows\Microsoft.NET\Framework\v4.0.30319\");
+            Console.WriteLine("Classes: {0}", count);
+            Console.ReadKey();            
+        }
+    }
+}
+</code></pre>
+<p>Результаты:</p>
+<p>.NET 4.7.2 - 43310</p>
+<p>.NET 3.5 - 19785 (сумма результатов по каталогам 2.0, 3.0 и 3.5, так как это одна версия)</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

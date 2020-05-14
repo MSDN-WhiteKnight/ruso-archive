@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>QT C++ &#1057;&#1086;&#1079;&#1076;&#1072;&#1085;&#1080;&#1077; ISO-&#1086;&#1073;&#1088;&#1072;&#1079;&#1072; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="QT C++ &#1057;&#1086;&#1079;&#1076;&#1072;&#1085;&#1080;&#1077; ISO-&#1086;&#1073;&#1088;&#1072;&#1079;&#1072; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>QT C++ Создание ISO-образа</h1>
+<p><a href="https://ru.stackoverflow.com/questions/1054552/qt-c-%d0%a1%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5-iso-%d0%be%d0%b1%d1%80%d0%b0%d0%b7%d0%b0">Source</a> - by <a href="https://ru.stackoverflow.com/users/331178/larboss">Larboss</a></p>
+<blockquote>
+<p>Появилась задача создать простую программу для создания ISO-образов с компакт-диска на C++. Однако, в дебрях интернета несколько запутался и не смог найти какой-то вменяемый пример или библиотеку. </p>
+<p>Находил информацию, что использовать надо:</p>
+<ul>
+<li>IMAPI2 Windows API для работы с дисками</li>
+<li>libcdio</li>
+</ul>
+<p>Но примеров создания образов или вменяемого описания так и не нашел.</p>
+<p>Подскажите в какую сторону копать?</p>
+</blockquote>
+<h2>Answer 1054632</h2>
+<p><a href="https://ru.stackoverflow.com/a/1054632/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Я думаю, примеров нету, потому что задача создания образа ISO фактически сводится к задаче побайтового копирования данных с устройства в файл. Подробнее это обсуждалось здесь: <a href="https://ru.stackoverflow.com/questions/877005/">Склонировать диск (в т.ч системный) в ISO</a> </p>
+<p>IMAPI тут не нужен, достаточно обычных файловых API. Основная сложность состоит в том, чтобы реализовать чтение с устройства в конкретной ОС.</p>
+<p>Реализация под Windows:</p>
+<pre class="lang-cpp prettyprint-override"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+
+const unsigned int SECTOR_SIZE = 2048; //размер сектора для CD
+
+#ifdef _WIN32
+#include &lt;Windows.h&gt;
+
+void GetDiskMetrics(const char* disk, unsigned int* pBlockSize, uint64_t* pTotalSize){
+
+    char path[MAX_PATH]="";
+    strcpy(path,disk);
+    strcat(path,":\\"); 
+
+    unsigned long  dwSectorsPerCluster, dwBytesPerSector, dwNumberOfFreeClusters, dwTotalNumberOfClusters;
+    unsigned int  blocksize;
+    uint64_t totalsize;
+
+    //найдем размер сектора и объем данных на диске
+    int res = GetDiskFreeSpaceA(path, &amp;dwSectorsPerCluster, &amp;dwBytesPerSector,
+                &amp;dwNumberOfFreeClusters, &amp;dwTotalNumberOfClusters);
+
+    //вычислим размер блока, кратный размеру сектора, и общий объем данных в байтах
+    if (res){
+        blocksize = dwBytesPerSector * 20;
+        totalsize = dwSectorsPerCluster * dwBytesPerSector * (uint64_t)dwTotalNumberOfClusters;
+    }
+    else{
+        printf("GetDiskFreeSpace error %d", GetLastError());
+        blocksize = SECTOR_SIZE * 20;
+        totalsize = 4700307456; //DVD
+    }
+
+    *pBlockSize = blocksize;
+    *pTotalSize = totalsize;
+}
+
+bool OpenDevice(const char* disk, void** phFile){
+    char path[MAX_PATH]=""; 
+    sprintf(path,"\\\\.\\%s:",disk); //формат имени файла для открытия тома
+
+    //открываем том для прямого доступа на чтение
+    HANDLE handle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
+            NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    if (handle == INVALID_HANDLE_VALUE) {
+        fprintf(stderr,"CreateFileA error %d", GetLastError());  
+        return false;
+    }
+    else {
+        *phFile = handle;
+        return true;
+    }
+}
+
+bool ReadDevice(void* hFile, void* lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead){
+
+    BOOL res = ReadFile(hFile, lpBuffer, nNumberOfBytesToRead, lpNumberOfBytesRead, NULL);
+
+    if (res == FALSE){
+        fprintf(stderr,"ReadFile error %d", GetLastError());
+        return false;
+    }
+    else return true;
+}
+
+void CloseDevice(void* hFile){
+    CloseHandle(hFile);
+}
+#endif
+
+void CreateISO(const char* disk, const char* outfile){      
+
+    char* buf;
+    unsigned long dwRead = 0;
+    uint64_t count = 0;     
+    unsigned int  blocksize;
+    uint64_t totalsize; 
+
+    GetDiskMetrics(disk,&amp;blocksize,&amp;totalsize);
+    buf = (char*)malloc(blocksize);     
+
+    //открываем том для прямого доступа на чтение    
+    void* handle=NULL;
+    bool res = OpenDevice(disk,&amp;handle);
+    if (res == false)  goto End;    
+
+    //открываем файл для записи
+    FILE* target = fopen(outfile,"wb");
+
+    while (true){
+        dwRead = 0;
+        memset(buf,0,blocksize);
+
+        //считаем блок данных
+        res = ReadDevice(handle,buf, blocksize, &amp;dwRead);
+        if (res == false) goto End;
+
+        if (dwRead == 0) break; //конец считывания
+
+        count += dwRead;
+
+        printf(" Creating image: %5.1f%% [%10.2f KB / %10.2f KB]\r",
+               (count * 100.0f / totalsize),
+               (count / 1024.0f),
+               (totalsize / 1024.0f));
+
+        //запишем блок в файл
+        fwrite(buf,dwRead,1,target);                    
+     }
+
+     End: CloseDevice(handle);
+          fclose(target);
+          free(buf);
+          printf("\n");
+}
+
+int main(int argc, char **argv)
+{
+
+    CreateISO("K", "c:\\distr\\image.iso");
+
+    getchar();
+    return 0;
+}
+</code></pre>
+<p>Чтобы заставить это работать под другими ОС, вам нужно будет реализовать функции, расположенные в блоке <code>#ifdef _WIN32</code>.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

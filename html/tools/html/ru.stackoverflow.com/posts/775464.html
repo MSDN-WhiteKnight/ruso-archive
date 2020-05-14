@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1086;&#1076;&#1076;&#1077;&#1088;&#1078;&#1080;&#1074;&#1072;&#1077;&#1090;&#1089;&#1103; &#1083;&#1080; &#1092;&#1091;&#1085;&#1082;&#1094;&#1080;&#1103; localtime_s &#1074; &#1090;&#1088;&#1072;&#1085;&#1089;&#1083;&#1103;&#1090;&#1086;&#1088;&#1077; GCC? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1086;&#1076;&#1076;&#1077;&#1088;&#1078;&#1080;&#1074;&#1072;&#1077;&#1090;&#1089;&#1103; &#1083;&#1080; &#1092;&#1091;&#1085;&#1082;&#1094;&#1080;&#1103; localtime_s &#1074; &#1090;&#1088;&#1072;&#1085;&#1089;&#1083;&#1103;&#1090;&#1086;&#1088;&#1077; GCC? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Поддерживается ли функция localtime_s в трансляторе GCC?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/775464/%d0%9f%d0%be%d0%b4%d0%b4%d0%b5%d1%80%d0%b6%d0%b8%d0%b2%d0%b0%d0%b5%d1%82%d1%81%d1%8f-%d0%bb%d0%b8-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8f-localtime-s-%d0%b2-%d1%82%d1%80%d0%b0%d0%bd%d1%81%d0%bb%d1%8f%d1%82%d0%be%d1%80%d0%b5-gcc">Source</a> - by <a href="https://ru.stackoverflow.com/users/192421/pepsicoca1">pepsicoca1</a></p>
+<blockquote>
+<p>Добрый день.</p>
+<p>Пользуюсь в основном Visual Studio, и с некоторых пор Visual Studio с маниакальным упорством настаивает, чтобы вместо localtime все применяли localtime_s из-за незащищенности localtime от использования в многопоточных приложениях. В версии Visual Studio 2017 это предупреждение переведено в ранг ошибки компилятора. </p>
+<p>Все бы ничего, но иногда нужно чтобы код транслировался и под GCC. Поэтому я решил проверить, поддерживается ли localtime_s в GCC. Я взял онлайн транслятор GCC <a href="http://cpp.sh/" rel="nofollow noreferrer">http://cpp.sh/</a> и написал программу:</p>
+<pre><code>// Example program
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;time.h&gt;
+
+int main()
+{
+
+struct tm *ptr;
+struct tm structtime;
+time_t lt;
+lt = time(NULL);
+
+ptr = localtime(&amp;lt);
+printf(asctime(ptr));
+
+ptr = localtime_s(&amp;structtime,&amp;lt);
+printf(asctime(&amp;structtime));
+
+  std::string name;
+  std::cout &lt;&lt; "What is your name? ";
+  getline (std::cin, name);
+  std::cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "!\n";
+}
+</code></pre>
+<p>При попытки трансляции в строке </p>
+<pre><code>ptr = localtime_s(&amp;structtime,&amp;lt);
+</code></pre>
+<p>транслятор сообщил мне, что:</p>
+<blockquote>
+  <p>17:34: error: 'localtime_s' was not declared in this scope</p>
+</blockquote>
+<p>Соответственно вопросы:</p>
+<ol>
+<li>Поддерживается ли localtime_s в GCC?</li>
+<li>Может быть нужен другой хедер, не time.h?</li>
+</ol>
+<p>Спасибо.</p>
+<p>UPD1:</p>
+<p>На других онлайн GCC трансляторах таких как:</p>
+<p><a href="https://www.onlinegdb.com/online_c++_compiler" rel="nofollow noreferrer">https://www.onlinegdb.com/online_c++_compiler</a></p>
+<p><a href="https://ideone.com/" rel="nofollow noreferrer">https://ideone.com/</a></p>
+<p>тоже не работает localtime_s. Даже если определить все указанные макросы.</p>
+</blockquote>
+<h2>Answer 775470</h2>
+<p><a href="https://ru.stackoverflow.com/a/775470/">Source</a> - by <a href="https://ru.stackoverflow.com/users/176217/%ce%b1%ce%bb%ce%b5%cf%87%ce%bf%ce%bb%cf%85%cf%84">αλεχολυτ</a></p>
+<blockquote>
+<p>Как сказано на <a href="http://en.cppreference.com/w/c/chrono/localtime" rel="nofollow noreferrer">cppreference</a>:</p>
+<blockquote>
+  <p>As with all bounds-checked functions, <code>localtime_s</code> is only guaranteed to be available if <code>__STDC_LIB_EXT1__</code> is defined by the implementation and if the user defines <code>__STDC_WANT_LIB_EXT1__</code> to the integer constant 1 before including <code>time.h</code>.</p>
+</blockquote>
+<p>требуется проверка наличия дефайна <code>__STDC_LIB_EXT1__</code> и задания после этого пользовательского дефайна <code>__STDC_WANT_LIB_EXT1__</code> в единицу. Всё это нужно выполнить до подключения заголовочного файла <code>time.h</code>.</p>
+<p>Иначе, функция может отсутствовать в реализации конкретного компилятора.</p>
+</blockquote>
+<h2>Answer 775831</h2>
+<p><a href="https://ru.stackoverflow.com/a/775831/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>В современных версиях Visual C++ CRT функция <code>localtime</code> (как большинство других подобных функций) не имеет проблем с доступом из разных потоков: используемый буфер не является настоящей статической переменной, а размещен на самом деле в локальном хранилище потока. Это не значит, что хорошо ее использовать - это просто очень неудачно спроектированный API, с которым легко допустить ошибки. Но таких в С/С++ много, это ни о чем не говорит.</p>
+<p>Насколько я знаю, студия на такие функции дает предупреждение, а не ошибку. Вероятно, у вас включена опция компилятора "обрабатывать предупреждения как ошибки". Вы можете отключить предупреждение директивой <code>#pragma warning(disable : 4996)</code>, если у вас хватит дисциплины при этом не использовать <strong>действительно</strong> небезопасные функции из CRT, вроде <code>strcpy</code>. Либо переписывать код с использованием безопасных функций, доступных в конкретных компиляторах.</p>
+<p>Что касается <code>localtime_s</code>, она введена в стандарте С11, который считается "экзотикой", и не все реализации в полной мере его поддерживают. В С++11 ее нету. GLIBC (аналог CRT в GCC) содержит вместо нее <code>localtime_r</code> из POSIX. Чтобы писать код, который будет обрабатываться разными компиляторами, придется воспользоваться условными директивами препроцессора и написать разные ветки кода для разных компиляторов. Иначе никак.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

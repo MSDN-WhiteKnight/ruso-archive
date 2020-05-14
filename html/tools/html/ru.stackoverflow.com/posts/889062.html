@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1042;&#1080;&#1076;&#1099; &#1086;&#1090;&#1083;&#1072;&#1076;&#1086;&#1095;&#1085;&#1086;&#1081; &#1080;&#1085;&#1092;&#1086;&#1088;&#1084;&#1072;&#1094;&#1080;&#1080; &#1074; PE &#1092;&#1072;&#1081;&#1083;&#1072;&#1093; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1042;&#1080;&#1076;&#1099; &#1086;&#1090;&#1083;&#1072;&#1076;&#1086;&#1095;&#1085;&#1086;&#1081; &#1080;&#1085;&#1092;&#1086;&#1088;&#1084;&#1072;&#1094;&#1080;&#1080; &#1074; PE &#1092;&#1072;&#1081;&#1083;&#1072;&#1093; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Виды отладочной информации в PE файлах</h1>
+<p><a href="https://ru.stackoverflow.com/questions/889062/%d0%92%d0%b8%d0%b4%d1%8b-%d0%be%d1%82%d0%bb%d0%b0%d0%b4%d0%be%d1%87%d0%bd%d0%be%d0%b9-%d0%b8%d0%bd%d1%84%d0%be%d1%80%d0%bc%d0%b0%d1%86%d0%b8%d0%b8-%d0%b2-pe-%d1%84%d0%b0%d0%b9%d0%bb%d0%b0%d1%85">Source</a> - by <a href="https://ru.stackoverflow.com/users/238013/d-stark">D .Stark</a></p>
+<blockquote>
+<p>Существует несколько форматов отладочной информации. Меня интересует 4 наиболее известных: CodeView, PDB, FPO, MISC. В сети ответов не нашёл и решил задать вопрос тут.</p>
+<p>Верно ли, что PDB - это тот же CodeView только вынесенный в отдельный файл?
+Что кроме отладочных символов может содержать файл PDB?</p>
+<p>Что такое Frame Pointer Omission?</p>
+<p>Поскольку любая отладочная информация в PE описывается структурой IMAGE_DEBUG_DIRECTORY, что должно находиться в соответствующей директории отладки, если вся информация вынесена в отдельный файл (в случае использования MISC это вроде DBG, PDB - файл PDB)? Наверное есть какая то ссылка на этот файл?..</p>
+<p>MISC - это какой то конкретный формат отладочных данных или просто обозначает то, что отладочная информация вынесена в отдельный файл DBG?</p>
+</blockquote>
+<h2>Answer 891288</h2>
+<p><a href="https://ru.stackoverflow.com/a/891288/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Типы отладочной информации перечислены <a href="https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-debug-section" rel="nofollow noreferrer">документации формата PE</a>, а также в заголовочном файле winnt.h:</p>
+<pre><code>#define IMAGE_DEBUG_TYPE_UNKNOWN          0
+#define IMAGE_DEBUG_TYPE_COFF             1
+#define IMAGE_DEBUG_TYPE_CODEVIEW         2
+#define IMAGE_DEBUG_TYPE_FPO              3
+#define IMAGE_DEBUG_TYPE_MISC             4
+#define IMAGE_DEBUG_TYPE_EXCEPTION        5
+#define IMAGE_DEBUG_TYPE_FIXUP            6
+#define IMAGE_DEBUG_TYPE_OMAP_TO_SRC      7
+#define IMAGE_DEBUG_TYPE_OMAP_FROM_SRC    8
+#define IMAGE_DEBUG_TYPE_BORLAND          9
+#define IMAGE_DEBUG_TYPE_RESERVED10       10
+#define IMAGE_DEBUG_TYPE_CLSID            11
+#define IMAGE_DEBUG_TYPE_VC_FEATURE       12
+#define IMAGE_DEBUG_TYPE_POGO             13
+#define IMAGE_DEBUG_TYPE_ILTCG            14
+#define IMAGE_DEBUG_TYPE_MPX              15
+#define IMAGE_DEBUG_TYPE_REPRO            16
+</code></pre>
+<p>Из всего этого зоопарка наибольшее значение имеют следующие:</p>
+<p><strong>IMAGE_DEBUG_TYPE_COFF</strong></p>
+<p>Наиболее старый формат, предполагает встраивание отладочной информации в исполняемый файл. Поддерживает только ограниченный набор отладочной информации (соответствие строк исходников адресам в бинарнике и FPO, если оно применяется для файла). Такой тип информации использовали версии Visual C++ примерно до 2005, современные версии его не используют.</p>
+<p><strong>IMAGE_DEBUG_TYPE_CODEVIEW</strong></p>
+<p>Более новый формат, он допускает как встраивание информации в EXE-файл, так и вынесение в отдельный файл (.PDB). Однако в современных версиях Visual C++ отладочная информация всегда вынесена в .PDB, и Debug Directory данного формата содержит только ссылку на внешний PDB-файл. (Отдельного типа записи "PDB" в Debug Directory не существует.)</p>
+<p><strong>IMAGE_DEBUG_TYPE_FPO</strong></p>
+<p>Если программа компилируется без оптимизации FPO, ее стек представляет из себя связный список, в котором каждый элемент содержит указатель на следующий,  так что отладчик может легко его обходить без дополнительной информации. Если же включена оптимизация FPO, указателя на следующий элемент не будет, поэтому для успешного анализа стека нужен размер данных на стеке у конкретной функции. Эта информация и включается в Debug Directory типа FPO.  </p>
+<p><strong>IMAGE_DEBUG_TYPE_MISC</strong></p>
+<p>Ссылка на внешний файл .DBG, содержащий отладочную информацию формата COFF и/или CodeView. Файл .DBG аналогичен по структуре PE файлам, его обычно получали с помощью утилиты rebase, входящей в состав старых версий Visual Studio. Сейчас редко используется.</p>
+<p><strong>IMAGE_DEBUG_TYPE_VC_FEATURE</strong></p>
+<p>Некоторая служебная информация компилятора (для Visual C++ начиная с версии 2010 при сборке с параметром /GL).</p>
+<hr>
+<p>Для иллюстрации возьмем программу, собранную Visual C++ 2012 в отладочной конфигурации, и изучим ее Debug Directory с помощью команды <code>dumpbin /headers</code>:</p>
+<pre><code>Debug Directories
+
+        Time Type        Size      RVA  Pointer
+    -------- ------- -------- -------- --------
+    5BAC500B cv            3E 000167B0     5BB0    Format: RSDS, {A11BDEB7-1F5D-4BFC-8E80-CE407A215DE8}, 39, C:\PROJECTS\CppTest\Debug\CppTest.pdb
+    5BAC500B feat          10 000167F0     5BF0    Counts: Pre-VC++ 11.00=7, C/C++=27, /GS=27, /sdl=0, guardN=unreported
+</code></pre>
+<p>Первая строка - запись формата IMAGE_DEBUG_TYPE_CODEVIEW. RSDS - это сигнатура формата, дальше идет GUID, номер версии файла (для отслеживания изменений) и путь к файлу.</p>
+<p>Вторая строка - запись формата IMAGE_DEBUG_TYPE_VC_FEATURE. Из надписи sdl=0, например, можно сделать вывод, что параметр /sdl (дополнительные проверки безопасности) был выключен.</p>
+<p><strong>Источники</strong></p>
+<p><a href="https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-debug-section" rel="nofollow noreferrer">PE Format</a></p>
+<p><a href="http://beefchunk.com/documentation/sys-programming/os-win32/debug/www.debuginfo.com/articles/gendebuginfo.html" rel="nofollow noreferrer">Generating debug information with Visual C++</a></p>
+<p><a href="https://docs.microsoft.com/en-us/cpp/build/reference/debug-generate-debug-info?view=vs-2017" rel="nofollow noreferrer">Параметр компоновки /DEBUG</a></p>
+<p><a href="https://docs.microsoft.com/en-us/cpp/build/reference/z7-zi-zi-debug-information-format?view=vs-2017" rel="nofollow noreferrer">Параметры компиляции /Z7, /Zi, /ZI</a></p>
+<p><a href="http://blogs.microsoft.co.il/sasha/2011/08/22/walking-the-stack-without-symbols-and-with-fpo-frame-pointer-omission/" rel="nofollow noreferrer">Walking the Stack Without Symbols and With FPO (Frame Pointer Omission)</a></p>
+<p><a href="https://technet.microsoft.com/zh-tw/aa297109%28v=vs.71%29?f=255&amp;MSPPError=-2147217396" rel="nofollow noreferrer">The .dbg Files</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

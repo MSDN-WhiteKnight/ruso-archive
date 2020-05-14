@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1048;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1077; &#1075;&#1088;&#1086;&#1084;&#1082;&#1086;&#1089;&#1090;&#1080; &#1076;&#1088;&#1091;&#1075;&#1086;&#1075;&#1086; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1048;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1077; &#1075;&#1088;&#1086;&#1084;&#1082;&#1086;&#1089;&#1090;&#1080; &#1076;&#1088;&#1091;&#1075;&#1086;&#1075;&#1086; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Изменение громкости другого приложения</h1>
+<p><a href="https://ru.stackoverflow.com/questions/862954/%d0%98%d0%b7%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b3%d1%80%d0%be%d0%bc%d0%ba%d0%be%d1%81%d1%82%d0%b8-%d0%b4%d1%80%d1%83%d0%b3%d0%be%d0%b3%d0%be-%d0%bf%d1%80%d0%b8%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%b8%d1%8f">Source</a> - by <a href="https://ru.stackoverflow.com/users/219714/%d0%92%d0%b8%d1%82%d0%b0%d0%bb%d0%b8%d0%b9">Виталий</a></p>
+<blockquote>
+<p>Нашел такой код:</p>
+<pre><code>using System;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+
+namespace SetAppVolumne
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            const string app = "Mozilla Firefox";
+
+            foreach (string name in EnumerateApplications())
+            {
+                Console.WriteLine("name:" + name);
+                if (name == app)
+                {
+                    // display mute state &amp; volume level (% of master)
+                    Console.WriteLine("Mute:" + GetApplicationMute(app));
+                    Console.WriteLine("Volume:" + GetApplicationVolume(app));
+
+                    // mute the application
+                    SetApplicationMute(app, true);
+
+                    // set the volume to half of master volume (50%)
+                    SetApplicationVolume(app, 50);
+                }
+            }
+        }
+
+        public static float? GetApplicationVolume(string name)
+        {
+            ISimpleAudioVolume volume = GetVolumeObject(name);
+            if (volume == null)
+                return null;
+
+            float level;
+            volume.GetMasterVolume(out level);
+            return level * 100;
+        }
+
+        public static bool? GetApplicationMute(string name)
+        {
+            ISimpleAudioVolume volume = GetVolumeObject(name);
+            if (volume == null)
+                return null;
+
+            bool mute;
+            volume.GetMute(out mute);
+            return mute;
+        }
+
+        public static void SetApplicationVolume(string name, float level)
+        {
+            ISimpleAudioVolume volume = GetVolumeObject(name);
+            if (volume == null)
+                return;
+
+            Guid guid = Guid.Empty;
+            volume.SetMasterVolume(level / 100, ref guid);
+        }
+
+        public static void SetApplicationMute(string name, bool mute)
+        {
+            ISimpleAudioVolume volume = GetVolumeObject(name);
+            if (volume == null)
+                return;
+
+            Guid guid = Guid.Empty;
+            volume.SetMute(mute, ref guid);
+        }
+
+        public static IEnumerable&lt;string&gt; EnumerateApplications()
+        {
+            // get the speakers (1st render + multimedia) device
+            IMMDeviceEnumerator deviceEnumerator = (IMMDeviceEnumerator)(new MMDeviceEnumerator());
+            IMMDevice speakers;
+            deviceEnumerator.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia, out speakers);
+
+            // activate the session manager. we need the enumerator
+            Guid IID_IAudioSessionManager2 = typeof(IAudioSessionManager2).GUID;
+            object o;
+            speakers.Activate(ref IID_IAudioSessionManager2, 0, IntPtr.Zero, out o);
+            IAudioSessionManager2 mgr = (IAudioSessionManager2)o;
+
+            // enumerate sessions for on this device
+            IAudioSessionEnumerator sessionEnumerator;
+            mgr.GetSessionEnumerator(out sessionEnumerator);
+            int count;
+            sessionEnumerator.GetCount(out count);
+
+            for (int i = 0; i &lt; count; i++)
+            {
+                IAudioSessionControl ctl;
+                sessionEnumerator.GetSession(i, out ctl);
+                string dn;
+                ctl.GetDisplayName(out dn);
+                yield return dn;
+                Marshal.ReleaseComObject(ctl);
+            }
+            Marshal.ReleaseComObject(sessionEnumerator);
+            Marshal.ReleaseComObject(mgr);
+            Marshal.ReleaseComObject(speakers);
+            Marshal.ReleaseComObject(deviceEnumerator);
+        }
+
+        private static ISimpleAudioVolume GetVolumeObject(string name)
+        {
+            // get the speakers (1st render + multimedia) device
+            IMMDeviceEnumerator deviceEnumerator = (IMMDeviceEnumerator)(new MMDeviceEnumerator());
+            IMMDevice speakers;
+            deviceEnumerator.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia, out speakers);
+
+            // activate the session manager. we need the enumerator
+            Guid IID_IAudioSessionManager2 = typeof(IAudioSessionManager2).GUID;
+            object o;
+            speakers.Activate(ref IID_IAudioSessionManager2, 0, IntPtr.Zero, out o);
+            IAudioSessionManager2 mgr = (IAudioSessionManager2)o;
+
+            // enumerate sessions for on this device
+            IAudioSessionEnumerator sessionEnumerator;
+            mgr.GetSessionEnumerator(out sessionEnumerator);
+            int count;
+            sessionEnumerator.GetCount(out count);
+
+            // search for an audio session with the required name
+            // NOTE: we could also use the process id instead of the app name (with IAudioSessionControl2)
+            ISimpleAudioVolume volumeControl = null;
+            for (int i = 0; i &lt; count; i++)
+            {
+                IAudioSessionControl ctl;
+                sessionEnumerator.GetSession(i, out ctl);
+                string dn;
+                ctl.GetDisplayName(out dn);
+                if (string.Compare(name, dn, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    volumeControl = ctl as ISimpleAudioVolume;
+                    break;
+                }
+                Marshal.ReleaseComObject(ctl);
+            }
+            Marshal.ReleaseComObject(sessionEnumerator);
+            Marshal.ReleaseComObject(mgr);
+            Marshal.ReleaseComObject(speakers);
+            Marshal.ReleaseComObject(deviceEnumerator);
+            return volumeControl;
+        }
+    }
+
+    [ComImport]
+    [Guid("BCDE0395-E52F-467C-8E3D-C4579291692E")]
+    internal class MMDeviceEnumerator
+    {
+    }
+
+    internal enum EDataFlow
+    {
+        eRender,
+        eCapture,
+        eAll,
+        EDataFlow_enum_count
+    }
+
+    internal enum ERole
+    {
+        eConsole,
+        eMultimedia,
+        eCommunications,
+        ERole_enum_count
+    }
+
+    [Guid("A95664D2-9614-4F35-A746-DE8DB63617E6"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IMMDeviceEnumerator
+    {
+        int NotImpl1();
+
+        [PreserveSig]
+        int GetDefaultAudioEndpoint(EDataFlow dataFlow, ERole role, out IMMDevice ppDevice);
+
+        // the rest is not implemented
+    }
+
+    [Guid("D666063F-1587-4E43-81F1-B948E807363F"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IMMDevice
+    {
+        [PreserveSig]
+        int Activate(ref Guid iid, int dwClsCtx, IntPtr pActivationParams, [MarshalAs(UnmanagedType.IUnknown)] out object ppInterface);
+
+        // the rest is not implemented
+    }
+
+    [Guid("77AA99A0-1BD6-484F-8BC7-2C654C9A9B6F"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IAudioSessionManager2
+    {
+        int NotImpl1();
+        int NotImpl2();
+
+        [PreserveSig]
+        int GetSessionEnumerator(out IAudioSessionEnumerator SessionEnum);
+
+        // the rest is not implemented
+    }
+
+    [Guid("E2F5BB11-0570-40CA-ACDD-3AA01277DEE8"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IAudioSessionEnumerator
+    {
+        [PreserveSig]
+        int GetCount(out int SessionCount);
+
+        [PreserveSig]
+        int GetSession(int SessionCount, out IAudioSessionControl Session);
+    }
+
+    [Guid("F4B1A599-7266-4319-A8CA-E70ACB11E8CD"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IAudioSessionControl
+    {
+        int NotImpl1();
+
+        [PreserveSig]
+        int GetDisplayName([MarshalAs(UnmanagedType.LPWStr)] out string pRetVal);
+
+        // the rest is not implemented
+    }
+
+    [Guid("87CE5498-68D6-44E5-9215-6DA47EF883D8"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface ISimpleAudioVolume
+    {
+        [PreserveSig]
+        int SetMasterVolume(float fLevel, ref Guid EventContext);
+
+        [PreserveSig]
+        int GetMasterVolume(out float pfLevel);
+
+        [PreserveSig]
+        int SetMute(bool bMute, ref Guid EventContext);
+
+        [PreserveSig]
+        int GetMute(out bool pbMute);
+    }
+}
+</code></pre>
+<p>Но его выполнение мне выдаёт следующее: 
+<a href="https://i.stack.imgur.com/3SIS1.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/3SIS1.png" alt="введите сюда описание изображения"></a></p>
+<p>Что нужно исправить?</p>
+<p>P.S. использую Windows 10.</p>
+</blockquote>
+<h2>Answer 903387</h2>
+<p><a href="https://ru.stackoverflow.com/a/903387/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>У WASAPI-сессий имя часто пустое или бессмысленное. Для идентификации сессий конкретного приложения лучше использовать ID процесса:</p>
+<pre><code>private static ISimpleAudioVolume GetVolumeObject(int pid)
+{
+    // get the speakers (1st render + multimedia) device
+    IMMDeviceEnumerator deviceEnumerator = (IMMDeviceEnumerator)(new MMDeviceEnumerator());
+    IMMDevice speakers;
+    deviceEnumerator.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia, out speakers);
+
+    // activate the session manager. we need the enumerator
+    Guid IID_IAudioSessionManager2 = typeof(IAudioSessionManager2).GUID;
+    object o;
+    speakers.Activate(ref IID_IAudioSessionManager2, 0, IntPtr.Zero, out o);
+    IAudioSessionManager2 mgr = (IAudioSessionManager2)o;
+
+    // enumerate sessions for on this device
+    IAudioSessionEnumerator sessionEnumerator;
+    mgr.GetSessionEnumerator(out sessionEnumerator);
+    int count;
+    sessionEnumerator.GetCount(out count);
+
+    uint val;
+
+    ISimpleAudioVolume volumeControl = null;
+    for (int i = 0; i &lt; count; i++)
+    {
+        IAudioSessionControl ctl;
+        sessionEnumerator.GetSession(i, out ctl);
+
+        IAudioSessionControl2 ctl2 = (IAudioSessionControl2)ctl;
+        ctl2.GetProcessId(out val);
+
+        if (val == pid)
+        {
+            volumeControl = ctl as ISimpleAudioVolume;
+            break;
+        }
+        Marshal.ReleaseComObject(ctl);
+        Marshal.ReleaseComObject(ctl2);
+    }
+    Marshal.ReleaseComObject(sessionEnumerator);
+    Marshal.ReleaseComObject(mgr);
+    Marshal.ReleaseComObject(speakers);
+    Marshal.ReleaseComObject(deviceEnumerator);
+    return volumeControl;
+}
+</code></pre>
+<p>Интерфейс IAudioSessionControl2:</p>
+<pre><code>[Guid("bfb7ff88-7239-4fc9-8fa2-07c950be9c6d"),
+InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+interface IAudioSessionControl2
+{
+    [PreserveSig]
+    int GetState(out object state);
+    [PreserveSig]
+    int GetDisplayName(out IntPtr name);
+    [PreserveSig]
+    int SetDisplayName(string value, Guid EventContext);
+    [PreserveSig]
+    int GetIconPath(out IntPtr Path);
+    [PreserveSig]
+    int SetIconPath(string Value, Guid EventContext);
+    [PreserveSig]
+    int GetGroupingParam(out Guid GroupingParam);
+    [PreserveSig]
+    int SetGroupingParam(Guid Override, Guid Eventcontext);
+    [PreserveSig]
+    int RegisterAudioSessionNotification(object NewNotifications);
+    [PreserveSig]
+    int UnregisterAudioSessionNotification(object NewNotifications);
+
+    [PreserveSig]
+    int GetSessionIdentifier(out IntPtr retVal);
+    [PreserveSig]
+    int GetSessionInstanceIdentifier(out IntPtr retVal);
+    [PreserveSig]
+    int GetProcessId(out UInt32 retvVal);
+    [PreserveSig]
+    int IsSystemSoundsSession();
+    [PreserveSig]
+    int SetDuckingPreference(bool optOut);
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

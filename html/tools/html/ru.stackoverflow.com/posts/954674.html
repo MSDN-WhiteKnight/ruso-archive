@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1074; C &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100;, &#1088;&#1072;&#1073;&#1086;&#1090;&#1072;&#1090;&#1100; &#1089; &#1088;&#1091;&#1089;&#1089;&#1082;&#1080;&#1084;&#1080; &#1089;&#1080;&#1084;&#1074;&#1086;&#1083;&#1072;&#1084;&#1080; &#1074; &#1082;&#1086;&#1085;&#1089;&#1086;&#1083;&#1080;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1074; C &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100;, &#1088;&#1072;&#1073;&#1086;&#1090;&#1072;&#1090;&#1100; &#1089; &#1088;&#1091;&#1089;&#1089;&#1082;&#1080;&#1084;&#1080; &#1089;&#1080;&#1084;&#1074;&#1086;&#1083;&#1072;&#1084;&#1080; &#1074; &#1082;&#1086;&#1085;&#1089;&#1086;&#1083;&#1080;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как в C использовать, работать с русскими символами в консоли?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/954674/%d0%9a%d0%b0%d0%ba-%d0%b2-c-%d0%b8%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c-%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%b0%d1%82%d1%8c-%d1%81-%d1%80%d1%83%d1%81%d1%81%d0%ba%d0%b8%d0%bc%d0%b8-%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%b0%d0%bc%d0%b8-%d0%b2-%d0%ba%d0%be%d0%bd%d1%81%d0%be%d0%bb%d0%b8">Source</a> - by <a href="https://ru.stackoverflow.com/users/329756/%d0%95%d0%b2%d0%b3%d0%b5%d0%bd%d0%b8%d0%b9-%d0%9b%d0%be%d0%b3%d0%b8%d0%bd%d0%be%d0%b2">Евгений Логинов</a></p>
+<blockquote>
+<p>Помогите разобраться как заставить консоль или компилятор работать с русскими символами. 
+Есть строка на русском str[] = "Привет Мир!"
+она печатается как строка все хорошо.</p>
+<p>но если например сделать сравнение что str[0] == 'П' сделай что-то, это не срабатывает...
+при просто печати printf("%c\n", str[0]); выводятся вопросики....</p>
+<p>Система Kali Linux</p>
+</blockquote>
+<h2>Answer 954677</h2>
+<p><a href="https://ru.stackoverflow.com/a/954677/">Source</a> - by <a href="https://ru.stackoverflow.com/users/268949/ljil">Ljil</a></p>
+<blockquote>
+<pre><code>#include &lt;locale.h&gt;
+</code></pre>
+<p>В начале main</p>
+<pre><code>setlocale(LC_ALL, "Rus");
+</code></pre>
+</blockquote>
+<h2>Answer 954876</h2>
+<p><a href="https://ru.stackoverflow.com/a/954876/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Со строками национальных алфавитов можно работать как с многобайтовыми (UTF8) или как со строками широких символов.</p>
+<p>При использовании UTF8 каждый символ строки занимает переменное число байтов, поэтому работать со строкой как с массивом символов нельзя! Для доступа к отдельным символам надо проходить по всей строке, получая длину каждого символа функцией mbrlen:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;wchar.h&gt;
+#include &lt;locale.h&gt;
+
+int mbcompare(const char* pStr, int index, const char* pMatch)
+{   
+    mbstate_t mbs = { 0 };  
+    int len = 0;
+    int i = 0;
+
+    const char* pEnd = pStr + strlen(pStr);
+    mbrlen(NULL, 0, &amp;mbs);
+
+    while ((len = mbrlen(pStr, pEnd - pStr, &amp;mbs)) &gt; 0)
+    {
+        if (i == index) {
+            return strncmp(pStr, pMatch, len) == 0;
+        }
+        pStr += len;
+        i++;
+    }
+    return 0;
+}
+
+void mbprint(const char* pStr)
+{
+    mbstate_t mbs = { 0 };
+    int len = 0;
+    int i = 0;
+    char buf[6];
+
+    const char* pEnd = pStr + strlen(pStr);
+    mbrlen(NULL, 0, &amp;mbs);
+
+    while ((len = mbrlen(pStr, pEnd - pStr, &amp;mbs)) &gt; 0)
+    {
+
+        strncpy_s(buf,sizeof(buf), pStr, len);
+        printf(u8"%2d: %s (%d байт)\n", i,buf,len);
+
+        pStr += len;
+        i++;
+    }   
+}
+
+int main()
+{
+    setlocale(LC_ALL, "ru_RU.utf8");    
+
+    char str[] = u8"Привет Мир!";   
+    mbprint(str);
+
+    if (mbcompare(str, 1, u8"р")) printf(u8"Символ 1 == [р]\n");
+    else printf(u8"Символ 1 != [р]\n");
+
+    getchar();
+}
+
+/* Вывод:
+
+ 0: П (2 байт)
+ 1: р (2 байт)
+ 2: и (2 байт)
+ 3: в (2 байт)
+ 4: е (2 байт)
+ 5: т (2 байт)
+ 6:   (1 байт)
+ 7: М (2 байт)
+ 8: и (2 байт)
+ 9: р (2 байт)
+10: ! (1 байт)
+Символ 1 == [р]
+*/
+</code></pre>
+<p>Выглядит не очень удобно? Возможно, проще будет использовать широкие символы:</p>
+<pre><code>setlocale(LC_ALL, "ru_RU");
+wchar_t str[] = L"Привет Мир!";
+
+int c = wcslen(str);
+for (int i = 0; i &lt; c; i++) {
+    wprintf(L"%2d: %lc\n", i, str[i]);
+}
+
+if (str[1]==L'р') wprintf(L"Символ 1 == [р]\n");
+else wprintf(L"Символ 1 != [р]\n\n"); 
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

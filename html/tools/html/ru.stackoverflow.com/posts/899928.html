@@ -1,0 +1,683 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1085;&#1072;&#1087;&#1080;&#1089;&#1072;&#1090;&#1100; &#1084;&#1077;&#1090;&#1086;&#1076;/&#1082;&#1083;&#1072;&#1089;&#1089;, &#1082;&#1086;&#1090;&#1086;&#1088;&#1099;&#1081; &#1073;&#1099; &#1086;&#1076;&#1080;&#1085;&#1072;&#1082;&#1086;&#1074;&#1086; &#1088;&#1072;&#1073;&#1086;&#1090;&#1072;&#1083; &#1089;&#1086; &#1074;&#1089;&#1077;&#1084;&#1080; &#1095;&#1080;&#1089;&#1083;&#1086;&#1074;&#1099;&#1084;&#1080; &#1090;&#1080;&#1087;&#1072;&#1084;&#1080;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1085;&#1072;&#1087;&#1080;&#1089;&#1072;&#1090;&#1100; &#1084;&#1077;&#1090;&#1086;&#1076;/&#1082;&#1083;&#1072;&#1089;&#1089;, &#1082;&#1086;&#1090;&#1086;&#1088;&#1099;&#1081; &#1073;&#1099; &#1086;&#1076;&#1080;&#1085;&#1072;&#1082;&#1086;&#1074;&#1086; &#1088;&#1072;&#1073;&#1086;&#1090;&#1072;&#1083; &#1089;&#1086; &#1074;&#1089;&#1077;&#1084;&#1080; &#1095;&#1080;&#1089;&#1083;&#1086;&#1074;&#1099;&#1084;&#1080; &#1090;&#1080;&#1087;&#1072;&#1084;&#1080;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как написать метод/класс, который бы одинаково работал со всеми числовыми типами?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/899928/%d0%9a%d0%b0%d0%ba-%d0%bd%d0%b0%d0%bf%d0%b8%d1%81%d0%b0%d1%82%d1%8c-%d0%bc%d0%b5%d1%82%d0%be%d0%b4-%d0%ba%d0%bb%d0%b0%d1%81%d1%81-%d0%ba%d0%be%d1%82%d0%be%d1%80%d1%8b%d0%b9-%d0%b1%d1%8b-%d0%be%d0%b4%d0%b8%d0%bd%d0%b0%d0%ba%d0%be%d0%b2%d0%be-%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%b0%d0%bb-%d1%81%d0%be-%d0%b2%d1%81%d0%b5%d0%bc%d0%b8-%d1%87%d0%b8%d1%81%d0%bb%d0%be%d0%b2%d1%8b%d0%bc%d0%b8-%d1%82%d0%b8%d0%bf%d0%b0%d0%bc%d0%b8">Source</a> - by <a href="https://ru.stackoverflow.com/users/248572/kir-antipov">Kir_Antipov</a></p>
+<blockquote>
+<p>Предположим, я хочу описать <code>generic</code>-класс, выполняющий роль калькулятора, таким образом, чтобы он одинаково работал для всех числовых типов. Т.е.:</p>
+<ul>
+<li>sbyte </li>
+<li>byte </li>
+<li>short </li>
+<li>ushort </li>
+<li>int </li>
+<li>uint</li>
+<li>long </li>
+<li>ulong </li>
+<li>float </li>
+<li>double </li>
+</ul>
+<p>Сложность задачи заключается в том, что пусть все эти типы и объединяет наличие определения для их экземпляров арифметических операций, однако они не наследуют какого-либо общего интерфейса типа <code>IArithmetical</code>, <code>INumber</code>. А также <a href="https://docs.microsoft.com/ru-ru/dotnet/csharp/language-reference/keywords/where-generic-type-constraint" rel="noreferrer">ограничение where</a> в <code>C#</code> не позволяет нам описать нечто вроде:</p>
+<pre><code>public static void Add&lt;T&gt;(T A, T B) where T : +, -, *, /, % ...
+</code></pre>
+<p>Так что компилятор не может быть уверен в том, что для всех возможных типов, эксплуатирующих метод, определены нужные операции</p>
+<p>Это приводит к тому, что подобный код:</p>
+<pre><code>public class Calculator&lt;T&gt;
+{
+    public T Add(T A, T B) =&gt; A + B;
+    public T Sub(T A, T B) =&gt; A - B;
+    public T Mul(T A, T B) =&gt; A * B;
+    public T Div(T A, T B) =&gt; A / B;
+    public T Mod(T A, T B) =&gt; A % B;
+}
+</code></pre>
+<p>Увы, но просто невозможно скомпилировать: по описанным выше причинам будет выкинута <a href="https://docs.microsoft.com/ru-ru/dotnet/csharp/language-reference/compiler-messages/cs0019" rel="noreferrer">ошибка CS0019</a></p>
+<hr>
+<p>Так что же делать в данной ситуации? Возможно-ли вообще средствами <code>C#</code> описать <code>generic</code>-класс/метод, который бы мог работать с числами и только с ними?</p>
+</blockquote>
+<h2>Answer 899929</h2>
+<p><a href="https://ru.stackoverflow.com/a/899929/">Source</a> - by <a href="https://ru.stackoverflow.com/users/248572/kir-antipov">Kir_Antipov</a></p>
+<blockquote>
+<p>Я начал этот топик, дабы рассмотреть все известные (мне) способы решения поставленной проблемы и дать максимально развернутый ответ на сей довольно таки частый вопрос</p>
+<p>Если вдруг Вам известен метод, который я по каким-то причинам не описал в данном посте - напишите, пожалуйста, об этом в комментариях!</p>
+<p>Итак, поехали!</p>
+<hr>
+<h1>#0.0: Дублирование кода и никаких generic'ов</h1>
+<p>Бесспорно, самым банальным решением, к которому и прибегают все отчаявшиеся, является простое дублирование кода для каждого из типов:</p>
+<pre><code>public sbyte Add(sbyte A, sbyte B) =&gt; (sbyte)(A + B);
+public byte Add(byte A, byte B) =&gt; (byte)(A + B);
+public short Add(short A, short B) =&gt; (short)(A + B);
+public ushort Add(ushort A, ushort B) =&gt; (ushort)(A + B);
+public int Add(int A, int B) =&gt; A + B;
+public uint Add(uint A, uint B) =&gt; A + B;
+public long Add(long A, long B) =&gt; A + B;
+public ulong Add(ulong A, ulong B) =&gt; A + B;
+public float Add(float A, float B) =&gt; A + B;
+public double Add(double A, double B) =&gt; A + B;
+</code></pre>
+<h3>Плюсы:</h3>
+<ul>
+<li>По крайней мере это работает)</li>
+<li>Доступны операции только для заданных типов</li>
+<li>Операции для типов определены во время компиляции (не придется жертвовать временем и прочими ресурсами во время исполнения для создания данных методов)</li>
+</ul>
+<h3>Минусы:</h3>
+<ul>
+<li>Очевидно, что это куча <s>хлама</s> дублирующего кода, которая ломает всякое изящество проекта</li>
+<li>Если вдруг метод <code>Add</code> немного поменяет свою логику (как бы странно это ни звучало), то переписывать придется каждый из <em>N</em> методов! </li>
+</ul>
+<hr>
+<h1>#0.1: Кодогенерация</h1>
+<p>Чтобы хоть как-то упростить себе жизнь и не писать множество однотипных методов, можно прибегнуть к кодогенерации с помощью встроенного в <code>Visual Studio</code> <a href="https://msdn.microsoft.com/ru-ru/library/bb126445.aspx" rel="nofollow noreferrer">T4-генератора</a>:</p>
+<p>Добавим в проект файл <code>Calc.tt</code> по шаблону <code>Text Template</code> (<code>Текстовый шаблон</code>). Запишем в него следующий код:</p>
+<pre><code>&lt;#@ output extension=".cs" #&gt;
+&lt;#@ assembly name="System.Core" #&gt;
+&lt;#@ import namespace="System.Linq" #&gt;
+&lt;#@ import namespace="System.Text" #&gt;
+&lt;#@ import namespace="System.Collections.Generic" #&gt;
+&lt;#@ template debug="false" hostspecific="false" language="C#" #&gt;
+
+namespace Calc
+{
+    public class Calculator
+    {
+    &lt;# 
+        // Типы, используемые в методах
+        string[] usingTypes = new[] { "sbyte", "byte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double" };
+
+        // Экземпляры некоторых типов перед операцией кастятся к int, так что результат нужно привести обратно
+        HashSet&lt;string&gt; needCast= new HashSet&lt;string&gt; { "sbyte", "byte", "short", "ushort" };
+
+        foreach(string T in usingTypes)
+        {
+    #&gt;
+        public &lt;#=T#&gt; Add(&lt;#=T#&gt; A, &lt;#=T#&gt; B) =&gt; &lt;#=(needCast.Contains(T) ? $"({T})(A + B)" : "A + B")#&gt;;
+    &lt;#
+        }
+    #&gt;
+    }
+}
+</code></pre>
+<p>Выхлоп (<code>Calc.cs</code>) будет выглядеть так:</p>
+<pre><code>namespace Calc
+{
+    public class Calculator
+    {
+        public sbyte Add(sbyte A, sbyte B) =&gt; (sbyte)(A + B);
+        public byte Add(byte A, byte B) =&gt; (byte)(A + B);
+        public short Add(short A, short B) =&gt; (short)(A + B);
+        public ushort Add(ushort A, ushort B) =&gt; (ushort)(A + B);
+        public int Add(int A, int B) =&gt; A + B;
+        public uint Add(uint A, uint B) =&gt; A + B;
+        public long Add(long A, long B) =&gt; A + B;
+        public ulong Add(ulong A, ulong B) =&gt; A + B;
+        public float Add(float A, float B) =&gt; A + B;
+        public double Add(double A, double B) =&gt; A + B;
+    }
+}
+</code></pre>
+<h3>Плюсы:</h3>
+<ul>
+<li>См. пункт <strong>0.0</strong>)</li>
+<li>Мы избавились от проблемной модификации логики метода: теперь вся логика сосредоточена в одном месте, так что достаточно отредактировать алгоритм всего один раз, а кодогенератор проделает всю грязную работу за Вас)</li>
+</ul>
+<h3>Минусы:</h3>
+<ul>
+<li>Поддержка подсветки синтаксиса текстовых шаблонов в <code>Visual Studio</code> хромает, мягко говоря. Так что о комфортном коддинге можно забыть)
+<ul>
+<li>Это до сих пор нежелательное и лишь слегка прикрытое дублирование кода</li>
+</ul></li>
+</ul>
+<p><sub>Данный подход был первоначально описан в <a href="https://ru.stackoverflow.com/a/662346/248572">ответе от Alexander Petrov</a></sub></p>
+<hr>
+<h1>#1.0: dynamic</h1>
+<p>Так как мы решаем проблему, которая неведома языкам с динамической типизацией, то следующим очевидным решением будет использование <a href="https://docs.microsoft.com/ru-ru/dotnet/csharp/language-reference/keywords/dynamic" rel="nofollow noreferrer">dynamic</a>:</p>
+<blockquote>
+  <p>Тип <code>dynamic</code> включает операции, в которых он применяется для обхода проверки типов во время компиляции. Такие операции разрешаются во время выполнения.</p>
+</blockquote>
+<p>Собственно, нам это подходит!</p>
+<p>Перепишем метод <code>Add</code> таким образом: </p>
+<pre><code>// Достаточно привести лишь один аргумент к dynamic,
+// дабы обозначить динамический контекст
+public T Add(T A, T B) =&gt; (T)((dynamic)A + B);
+</code></pre>
+<p>И посмотрим, что получилось:</p>
+<pre><code>Calculator&lt;int&gt; calcInt = new Calculator&lt;int&gt;();
+int resultInt = calcInt.Add(19, 23); // 42
+
+Calculator&lt;sbyte&gt; calcSbyte = new Calculator&lt;sbyte&gt;();
+sbyte resultSbyte = calcSbyte.Add(19, 23); // 42
+</code></pre>
+<p>Кажется, все чудесно работает!<br>
+Право, все же вынужден добавить бочку дегтя в эту ложку меда:</p>
+<p>Помимо того, что разрешение динамического контекста съедает куда больше времени, нежели разрешение статического, так мы ведь не предусмотрели следующей вещи: </p>
+<p>Кто нам мешает написать так?</p>
+<pre><code>Calculator&lt;DateTime&gt; calcDate = new Calculator&lt;DateTime&gt;();
+DateTime resultDate = calcDate.Add(DateTime.Now, DateTime.Now);
+</code></pre>
+<p>Как раз таки никто, так что код спокойно скомпилируется, экземпляр класса будет успешно создан, однако метод <code>Add</code> упадет со следующей ошибкой:</p>
+<blockquote>
+  <p><strong>Microsoft.CSharp.RuntimeBinder.RuntimeBinderException</strong>: Не удается применить оператор <code>+</code> к операндам типа <code>System.DateTime</code> и <code>System.DateTime</code></p>
+</blockquote>
+<p>Как уже упоминалось в самом вопросе, мы <strong>не можем</strong> ограничить <code>generic</code>-параметры определенным набором типов. Так что придется делать это вручную и в <code>runtime</code>:</p>
+<pre><code>public class Calculator&lt;T&gt;
+{
+    // Добавим классу статический инициализатор, который будет отвечать 
+    // за проверку валидности типа
+
+    // (Статический - дабы не проводить проверку несколько раз для одинаковых типов)
+    static Calculator()
+    {
+        // Если тип не является одним из доступных, то сразу же выкинем ошибку,
+        // дав тем самым конечному пользователю понять, что его 
+        // действия неправомерны
+        if (!new[] { typeof(sbyte), typeof(byte),
+                    typeof(short), typeof(ushort),
+                    typeof(int), typeof(uint),
+                    typeof(long), typeof(ulong),
+                    typeof(float), typeof(double)}.Contains(typeof(T)))
+            throw new NotSupportedException($"Type `{typeof(T).FullName}` isn't supported!");
+    }
+
+    // Достаточно привести лишь один аргумент к dynamic,
+    // дабы обозначить динамический контекст
+    public T Add(T A, T B) =&gt; (T)((dynamic)A + B);           
+}
+</code></pre>
+<h3>Плюсы:</h3>
+<ul>
+<li>Мы избавились от дублирования кода</li>
+<li>Мы наконец добавили в код <code>generic</code>, чтобы для разных типов работали разные предопределенные методы</li>
+</ul>
+<h3>Минусы:</h3>
+<ul>
+<li><em>"Чудесная"</em> скорость отработки динамического контекста</li>
+<li>Необходимость проверять допустимость используемого типа уже во время исполнения</li>
+</ul>
+<hr>
+<h1>#2.0: Изменение контекста функции в зависимости от типа</h1>
+<p>Идея данного метода заключается в следующем:</p>
+<p>Мы не можем просто так переназначить функции во время исполнения в духе:</p>
+<pre><code>public void A() =&gt; ...;
+...
+A = () =&gt; Console.WriteLine("Hello, world!");
+</code></pre>
+<p>Однако мы можем переназначать переменные (в том числе и типов <a href="https://docs.microsoft.com/ru-ru/dotnet/csharp/programming-guide/delegates/" rel="nofollow noreferrer">делегатов</a>)!</p>
+<p>Мы можем создать внутреннее поле типа делегата, переназначать его в зависимости от ситуации, а уже публичный метод, будучи неизменным, как раз и будет его эксплуатировать:</p>
+<pre><code>public class Calculator&lt;T&gt;
+{
+    static Calculator()
+    {
+        // Инициализируем _add, исходя из типа generic-параметра
+        if (typeof(T) == typeof(sbyte))
+            _add = castFrom&lt;sbyte&gt;((x, y) =&gt; (sbyte)(x + y));
+        else if (typeof(T) == typeof(byte))
+            _add = castFrom&lt;byte&gt;((x, y) =&gt; (byte)(x + y));
+        else if (typeof(T) == typeof(short))
+            _add = castFrom&lt;short&gt;((x, y) =&gt; (short)(x + y));
+        else if (typeof(T) == typeof(ushort))
+            _add = castFrom&lt;ushort&gt;((x, y) =&gt; (ushort)(x + y));
+        else if (typeof(T) == typeof(int))
+            _add = castFrom&lt;int&gt;((x, y) =&gt; x + y);
+        else if (typeof(T) == typeof(uint))
+            _add = castFrom&lt;uint&gt;((x, y) =&gt; x + y);
+        else if (typeof(T) == typeof(long))
+            _add = castFrom&lt;long&gt;((x, y) =&gt; x + y);
+        else if (typeof(T) == typeof(ulong))
+            _add = castFrom&lt;ulong&gt;((x, y) =&gt; x + y);
+        else if (typeof(T) == typeof(int))
+            _add = castFrom&lt;float&gt;((x, y) =&gt; x + y);
+        else if (typeof(T) == typeof(double))
+            _add = castFrom&lt;double&gt;((x, y) =&gt; x + y);
+        else
+            // Если тип не является ни одним из доступных, то выкинем ошибку 
+            throw new NotSupportedException($"Type `{typeof(T).FullName}` isn't supported!");
+
+        Func&lt;T, T, T&gt; castFrom&lt;U&gt;(Func&lt;U, U, U&gt; f) =&gt; (Func&lt;T, T, T&gt;)(object)f;
+    }
+
+    // Инструкция внутри _add будет проинициализированна
+    // в зависимости от типа generic-параметра
+    private static readonly Func&lt;T, T, T&gt; _add;
+
+    // А вот инструкция в самой функции Add всегда одна - вызвать _add)
+    public T Add(T A, T B) =&gt; _add(A, B);           
+}
+</code></pre>
+<p>Этот метод стоило бы расположить в блоке про <strong>"Дублирование кода"</strong>, однако для многих он все же является менее очевидным, чем <code>dynamic</code>, да и тему можно развить, что показано в следующем блоке)</p>
+<h3>Плюсы:</h3>
+<ul>
+<li>Работать это будет куда быстрее, чем предыдущий метод с использованием динамического контекста</li>
+</ul>
+<h3>Минусы:</h3>
+<ul>
+<li>Мы опять злоупотребляем дублированием кода (опять же, можно совместить сей метод с кодогенерацией)</li>
+<li>Необходимость проверять допустимость используемого типа уже во время исполнения</li>
+</ul>
+<p><sub>Данный подход был первоначально описан в <a href="https://ru.stackoverflow.com/a/662289/248572">ответе от VladD</a></sub></p>
+<hr>
+<h1>#2.1: Expression:</h1>
+<p>С помощью класса <a href="https://docs.microsoft.com/ru-ru/dotnet/api/system.linq.expressions.expression?redirectedfrom=MSDN&amp;view=netframework-4.7.2" rel="nofollow noreferrer">Expression</a> мы можем по узлам собрать нужное нам дерево выражений и скомпилировать его в делегат необходимой сигнатуры, используя при этом базовую идею предыдущего подхода:</p>
+<pre><code>public class Calculator&lt;T&gt;
+{
+    static Calculator()
+    {
+        // Эту проверку Вы уже наблюдали)
+        if (!new[] { typeof(sbyte), typeof(byte),
+            typeof(short), typeof(ushort),
+            typeof(int), typeof(uint),
+            typeof(long), typeof(ulong),
+            typeof(float), typeof(double)}.Contains(typeof(T)))
+            throw new NotSupportedException($"Type `{typeof(T).FullName}` isn't supported!");
+
+        // Укажем параметры, испоьзуемые в функции
+        ParameterExpression a = Expression.Parameter(typeof(T));
+        ParameterExpression b = Expression.Parameter(typeof(T));
+
+        // Создадим узел сложения заданных параметров
+        BinaryExpression addition = Expression.Add(a, b);
+
+        // Скомпилируем полученное дерево
+        _add = Expression.Lambda&lt;Func&lt;T, T, T&gt;&gt;(addition, a, b).Compile();
+    }
+
+    // Инструкция внутри _add будет проинициализированна
+    // в зависимости от типа generic-параметра
+    private static readonly Func&lt;T, T, T&gt; _add;
+
+    // А вот инструкция в самой функции Add всегда одна - вызвать _add)
+    public T Add(T A, T B) =&gt; _add(A, B);
+}
+</code></pre>
+<h3>Плюсы:</h3>
+<ul>
+<li>Мы снова избавились от дублирования кода</li>
+<li>По скорости работы это приближено к не-<code>generic</code> реализациям)</li>
+</ul>
+<h3>Минусы:</h3>
+<ul>
+<li>Придется потратить немного ресурсов в <code>runtime</code> на создание метода</li>
+<li>Необходимость проверять допустимость используемого типа уже во время исполнения</li>
+</ul>
+<p><sub>Данный подход был первоначально описан в <a href="https://ru.stackoverflow.com/a/562688/248572">ответе от Pavel Mayorov</a></sub></p>
+<hr>
+<h1>#3.0: Векторизация</h1>
+<p>У <code>Microsoft</code> есть следующий прекрасный пакет - <a href="https://www.nuget.org/packages/System.Numerics.Vectors" rel="nofollow noreferrer">System.Numerics.Vectors</a>, описание коиего гласит:</p>
+<blockquote>
+  <p>Обеспечивает аппаратно-ускоренные числовые типы, подходящие для высокопроизводительной обработки и графических приложений.</p>
+</blockquote>
+<p>В данном пакете нас интересует тип <a href="https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1?redirectedfrom=MSDN&amp;view=netcore-2.1" rel="nofollow noreferrer">Vector&lt;T></a>, которой способен векторизовать входные данные, после чего мы можем применять к полученным векторам нужные нам арифметические операции!</p>
+<p>Посмотрим на примере:</p>
+<pre><code>public class Calculator&lt;T&gt; where T : struct
+{
+    static Calculator()
+    {
+        // Эту проверку Вы уже наблюдали)
+        if (!new[] { typeof(sbyte), typeof(byte),
+                typeof(short), typeof(ushort),
+                typeof(int), typeof(uint),
+                typeof(long), typeof(ulong),
+                typeof(float), typeof(double)}.Contains(typeof(T)))
+            throw new NotSupportedException($"Type `{typeof(T).FullName}` isn't supported!");
+    }
+
+    // Создадим векторы на основе заданных значений,
+    // после чего сложим их и вернем 0-вое измерение
+    // результирующего вектора
+    public T Add(T A, T B) =&gt; (new Vector&lt;T&gt;(A) + new Vector&lt;T&gt;(B))[0];
+}
+</code></pre>
+<h3>Плюсы:</h3>
+<ul>
+<li>Никакого дублирования кода</li>
+<li>Высокая производительность (в некоторых тестах векторизация показывает себя даже лучше нативного кода! Какие операции пройдут быстрее - смотрите в <a href="https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1?redirectedfrom=MSDN&amp;view=netcore-2.1#remarks" rel="nofollow noreferrer">данной табличке</a>)</li>
+</ul>
+<h3>Минусы:</h3>
+<ul>
+<li>Необходимость установки дополнительного <code>nuget</code>-пакета</li>
+<li>Необходимость проверять допустимость используемого типа уже во время исполнения</li>
+</ul>
+<p><sub>Данный подход был первоначально описан в <a href="https://ru.stackoverflow.com/a/562580/248572">ответе от VladD</a></sub></p>
+<hr>
+<h1>#4.0: IL позволит Вам то, чего не позволит C#!</h1>
+<p>Как известно, код любого <code>.NET</code>-языка транслируется в <a href="https://ru.wikipedia.org/wiki/Common_Intermediate_Language" rel="nofollow noreferrer">IL</a>-код. Этот факт мы и будем использовать)</p>
+<p>Напишем такой вот код:</p>
+<pre><code>int a = 2;
+int b = 3;
+int c = a + b;
+</code></pre>
+<p>Просмотрев <code>IL</code>-код, созданный для данной цепочки выражений, мы увидим нечто такое:</p>
+<pre><code>ldc.i4.2    
+stloc a
+ldc.i4.3    
+stloc b
+ldloc a
+ldloc b
+add         
+stloc c
+</code></pre>
+<p><em>(Код примерный, таким он, конечно, не будет. Приведен он в таком виде для ясности происходящего)</em></p>
+<p>Что же отвечает за сложение двух чисел типа <code>int</code>? <br>
+Стандартная инструкция <code>add</code>)</p>
+<p>Перепишем код:</p>
+<pre><code>double a = 2;
+double b = 3;
+double c = a + b;
+</code></pre>
+<p>Теперь <code>IL</code> будет таковым:</p>
+<pre><code>ldc.r8 2
+stloc a
+ldc.r8 3
+stloc b
+ldloc a
+ldloc b
+add         
+stloc c
+</code></pre>
+<p>Что изменилось? Только инструкция <strong><em>l</em></strong>oa<strong>dc</strong>onstant, инструкция же сложения так и осталось на своем законном месте)</p>
+<p>Я веду к тому, что на уровне <code>IL</code> <strong>одна и та же</strong> инструкция <code>add</code> спокойненько обрабатывает сложение экземпляров типов <code>sbyte</code>, <code>byte</code>, <code>short</code>, <code>ushort</code>, <code>int</code>, <code>uint</code>, <code>long</code>, <code>ulong</code>, <code>float</code>, <code>double</code>)<br>
+А ведь это именно то, что нам нужно!</p>
+<p>(К слову, это верно и для инструкций <code>sub</code>, <code>mul</code>, <code>div</code>, <code>rem</code>. Подробный лист инструкций <code>IL</code> с описанием <a href="https://en.wikipedia.org/wiki/List_of_CIL_instructions" rel="nofollow noreferrer">найдете здесь</a>)</p>
+<p>Добавим к проекту файл <code>Calc.il</code>, используя расширение <a href="https://marketplace.visualstudio.com/items?itemName=ins0mniaque.ILSupport" rel="nofollow noreferrer">ILSupport</a>, после чего запишем туда следующий код:</p>
+<pre><code>.class Calc.Calculator`1&lt;T&gt;
+{
+    .method public !T Add(!T, !T) cil managed
+    {
+        .maxstack 2
+        ldarg.0     // Кладем на стек нулевой аргумент
+        ldarg.1     // Кладем на стек первый аргумент
+        add         // Складываем их
+        ret         // Возвращаем результат
+    }
+}
+</code></pre>
+<p>На <code>C#</code> же проделаем следующие манипуляции с классом:</p>
+<pre><code>public class Calculator&lt;T&gt;
+{
+    static Calculator()
+    {
+        // Эту проверку Вы уже наблюдали)
+        if (!new[] { typeof(sbyte), typeof(byte),
+                typeof(short), typeof(ushort),
+                typeof(int), typeof(uint),
+                typeof(long), typeof(ulong),
+                typeof(float), typeof(double)}.Contains(typeof(T)))
+            throw new NotSupportedException($"Type `{typeof(T).FullName}` isn't supported!");
+    }
+
+    // Сообщаем, что метод реализован где-то в другом месте
+    [MethodImpl(MethodImplOptions.ForwardRef)]
+    public extern T Add(T A, T B);
+}
+</code></pre>
+<p>Вот и готово! Скомпилировав проект, мы получим класс, который способен работать с любым стандартным числовым типом)</p>
+<h3>Плюсы:</h3>
+<ul>
+<li>Никакого дублирования кода</li>
+<li>Не нужно тратить времени и прочих ресурсов на создание метода в <code>runtime</code></li>
+<li>Высокая производительность, совпадающая с таковой нативного кода (ибо это он по сути и есть))</li>
+</ul>
+<h3>Минусы:</h3>
+<ul>
+<li>Для человека, который не знаком с <code>IL</code>, решение может показаться сложным</li>
+<li>Необходимо настроить проект на <em>"сожительство"</em> <code>C#</code> и <code>IL</code></li>
+<li>Необходимость проверять допустимость используемого типа уже во время исполнения</li>
+</ul>
+<p><sub>Данный подход был первоначально описан в <a href="https://ru.stackoverflow.com/a/894125/248572">ответе от Kir_Antipov</a></sub></p>
+<hr>
+<p>Надеюсь, один из предложенных в данном ответе методов помог решить Вам указанную задачу)</p>
+<p>А пока у меня есть 2 большие просьбы:</p>
+<ol>
+<li><p>Не забывайте благодарить авторов оригинальных ответов (помимо своего решения я собрал в данном ответе и идеи других участников сообщества, приведя на них ссылки)</p></li>
+<li><p>Если у Вас есть еще идеи по решению данной задачи/по исправлению данного ответа - пишите комментарии! Буду безумно рад выслушать Ваше мнение)</p></li>
+</ol>
+</blockquote>
+<h2>Answer 900136</h2>
+<p><a href="https://ru.stackoverflow.com/a/900136/">Source</a> - by <a href="https://ru.stackoverflow.com/users/214955/b-vandyshev">B. Vandyshev</a></p>
+<blockquote>
+<p>Мне нравятся подходы 0.0 и 0.1 из предыдущего ответа, но дублирование кода я бы сделал по-другому принципу, я бы вынес интерфейс <code>ICalculator&lt;T&gt;</code>:</p>
+<pre><code>public interface ICalculator&lt;T&gt;
+{
+    T Add(T a, T b);
+    T Sub(T a, T b);
+    T Mul(T a, T b);
+    T Div(T a, T b);
+    T Mod(T a, T b);
+}
+
+public class IntCalculator : ICalculator&lt;int&gt;
+{        
+    public int Add(int a, int b) =&gt; a + b;
+    public int Sub(int a, int b) =&gt; a - b;
+    public int Mul(int a, int b) =&gt; a * b;
+    public int Div(int a, int b) =&gt; a / b;
+    public int Mod(int a, int b) =&gt; a % b;
+}
+</code></pre>
+<p>Потребуется реализовать <code>ICalculator&lt;T&gt;</code> для каждого типа с которым вы хотите работать, они не обязательно должны быть числами. Такой подход будет гораздо лучше если вы используете Dependency Injection, вы сможете передавать <code>ICalculator&lt;T&gt;</code> в класс где он требуется. Ну и напоследок - реализация может быть либо такой, либо можно создать универсальную с dynamic или IL.</p>
+</blockquote>
+<h2>Answer 901079</h2>
+<p><a href="https://ru.stackoverflow.com/a/901079/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Все числовые типы объединяет то, что они являются структурами и реализуют интерфейс IComparable. С этим ограничением уже можно отсечь много неподходящих типов на этапе компиляции. Не нужно использовать статические конструкторы для "валидации", они предназначены для инициализации глобального состояния, и класс, единственная задача которого - арифметические операции, вообще не должен их иметь. Проверяйте перед вычислением (или компиляцией выражения), это намного более логично.</p>
+<p>Что касается алгоритма, есть еще один способ, который лежит на поверхности: это простой обобщенный метод с несколькими ветками в условном операторе. Может показаться, что веток будет слишком много, но на самом деле, операции сложения для многих типов по сути одинаковы и отличаются только типом, к которому приводится конечный результат. Например, операцию сложения на целом типе можно представить как операцию сложения на Decimal с последующим "сужающим" приведением к целому типу (Decimal позволяет представить все значения любых целых типов и еще оставляет некоторый запас для обработки переполнений). Аналогично, сложение на типе float можно представить как сложение на типе double с последующим преобразованием результата. </p>
+<p>Весь набор числовых типов можно разделить на три группы:</p>
+<ol>
+<li><strong>Беззнаковые целые.</strong> Для них формула преобразования из Decimal в конкретный тип будет выглядеть так:</li>
+</ol>
+<blockquote>
+  <p>y = x % 2 <sup> n</sup> </p>
+</blockquote>
+<p>где n - размер типа в битах.</p>
+<p>(Остаток от деления тут появляется, так как по умолчанию у нас unchecked-контекст, и переполнения не генерируют ошибку, а просто обрезаются по границе типа.)</p>
+<ol start="2">
+<li><strong>Знаковые целые.</strong> Для них минимальное значение равно <strong>- 0.5 * 2 <sup> n</sup></strong>, а максимальное <strong>0.5 * 2 <sup> n</sup> - 1</strong>. Пользуясь этим, можно вывести формулу перевода:</li>
+</ol>
+<blockquote>
+  <p>y = (x + 2 <sup> n</sup> * 1.5) % 2 <sup> n</sup> - 0.5 * 2 <sup> n</sup></p>
+</blockquote>
+<p>На самом деле, формула может выглядеть по разному, но для отлова переполнений подходит именно такой вид.</p>
+<ol start="3">
+<li><strong>С плавающей точкой.</strong> Ну, тут все просто, формула не нужна, так как преобразование из double в float это просто обрезка "знаков после запятой".</li>
+</ol>
+<p>Реализовать это можно так:</p>
+<pre><code>using System;
+using System.Text;
+
+namespace ConsoleApp1
+{
+    public class Calculator&lt;T&gt; where T : struct,IComparable
+    {
+        static bool IsSignedInteger(Type t)
+        {
+            return (t == typeof(sbyte) || t == typeof(short) || t == typeof(int) || t == typeof(long));
+        }
+
+        static bool IsUnsignedInteger(Type t)
+        {
+            return (t == typeof(byte) || t == typeof(ushort) || t == typeof(uint) || t == typeof(ulong));
+        }
+
+        static bool IsReal(Type t)
+        {
+            return (t == typeof(float) || t == typeof(double));
+        }
+
+        //преобразует значение из Decimal в целевой целочисленный тип
+        public static T FromDecimal(decimal val)
+        {
+            //вычисляем размер типа
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+
+            //вычисляем количество элементов в целевом множестве
+            decimal capacity = (size &lt; 8) ? (1L &lt;&lt; (size * 8)) : ((decimal)UInt64.MaxValue + 1);
+
+            //отображаем элемент на целевое множество
+            decimal res;
+
+            if (IsUnsignedInteger(typeof(T)))
+            {
+                res = (val) % (capacity);
+                return (T)Convert.ChangeType(res, typeof(T));
+            }
+            else if (IsSignedInteger(typeof(T)))
+            {    
+                res = (val + capacity * 1.5M) % (capacity) - capacity * 0.5M;    
+                return (T)Convert.ChangeType(res, typeof(T));
+            }
+            else throw new NotSupportedException(typeof(T).ToString() + " is not integer type");
+        }
+
+        //непосредственно сложение
+        public static T Add(T A, T B)
+        {
+            if (IsSignedInteger(typeof(T)) || IsUnsignedInteger(typeof(T)))
+            {
+                return FromDecimal(Convert.ToDecimal(A) + Convert.ToDecimal(B));
+            }
+            else if (IsReal(typeof(T)))
+            {
+                return (T)Convert.ChangeType(Convert.ToDouble(A) + Convert.ToDouble(B), typeof(T));
+            }
+            else throw new NotSupportedException(typeof(T).ToString() + " is not supported, because it is not numeric type");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {    
+            unchecked
+            {
+                //тест сложения целых чисел
+                Console.WriteLine("{0} {1}", Calculator&lt;int&gt;.Add(1000, 222), (1000 + 222));
+                Console.WriteLine("{0} {1}", Calculator&lt;byte&gt;.Add(200, 200), (byte)(200 + 200));
+                Console.WriteLine("{0} {1}", Calculator&lt;sbyte&gt;.Add(100, 100), (sbyte)(100 + 100));                        
+                Console.WriteLine("{0} {1}", Calculator&lt;long&gt;.Add(long.MinValue, -1), (long)(long.MinValue - 1));
+
+                //тест сложения с плавающей точкой    
+                Console.WriteLine("{0} {1}", Calculator&lt;float&gt;.Add((float)Math.PI, 2.2f), (float)Math.PI + 2.2f);
+                Console.WriteLine("{0} {1}", Calculator&lt;double&gt;.Add(Math.PI, 2.2), Math.PI + 2.2);
+
+                //этот код выдаст исключение...                
+                //Console.WriteLine("{0}", Calculator&lt;DateTime&gt;.Add(DateTime.Now, new DateTime(2000, 1, 1)));
+                //Console.WriteLine("{0}", Calculator&lt;bool&gt;.Add(true, true));
+
+                //а этот - не скомпилируется
+                //Console.WriteLine("{0}", Calculator&lt;string&gt;.Add("Саша", "Маша"));
+
+            } 
+            Console.ReadKey();
+        }              
+    }
+}
+</code></pre>
+<p>Если наплевать на переполнения, то код можно значительно упростить.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

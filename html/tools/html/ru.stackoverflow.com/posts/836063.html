@@ -1,0 +1,421 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1056;&#1072;&#1073;&#1086;&#1090;&#1072; &#1089; &#1092;&#1072;&#1081;&#1083;&#1072;&#1084;&#1080; &#1057;++ (WinAPI) | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1056;&#1072;&#1073;&#1086;&#1090;&#1072; &#1089; &#1092;&#1072;&#1081;&#1083;&#1072;&#1084;&#1080; &#1057;++ (WinAPI) | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Работа с файлами С++ (WinAPI)</h1>
+<p><a href="https://ru.stackoverflow.com/questions/836063/%d0%a0%d0%b0%d0%b1%d0%be%d1%82%d0%b0-%d1%81-%d1%84%d0%b0%d0%b9%d0%bb%d0%b0%d0%bc%d0%b8-%d0%a1-winapi">Source</a> - by <a href="https://ru.stackoverflow.com/users/299140/%d0%9d%d0%b8%d0%ba%d0%b8%d1%82%d0%b0-%d0%9a%d0%be%d0%bb%d0%b5%d1%81%d0%bd%d0%b8%d0%ba%d0%be%d0%b2">Никита Колесников</a></p>
+<blockquote>
+<p>Программа должна открывать для чтения и записи ".txt" файл, в котором хранятся модели и цены ноутбуков, и при необходимости вызывать окно добавления данных в файл и сохранять этот файл.</p>
+<p>Проблемы с которыми столкнулся:  </p>
+<ol>
+<li><p>При открытии ".txt" файла в кодировке ANSII в окно выводится куча непонятных символов, однако, если сохранить файл как UNICODE, открывает без проблем. Необходимо поправить код, чтобы программа без проблем открывала кодировку ANSII  </p></li>
+<li><p>Возможно из-за конфликта кодировок при добавлении данных в поле EDIT_2 и последующем их сохранении вместе цены ноутбука, сохраняется рандомный символ.</p></li>
+</ol>
+<p>
+<pre><code> using namespace std;
+
+// Глобальные переменные:  
+HINSTANCE hInst;                                // текущий экземпляр  
+WCHAR szTitle[MAX_LOADSTRING];                  // Текст строки заголовка  
+WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса главного окна  
+
+ATOM                MyRegisterClass(HINSTANCE hInstance);  
+BOOL                InitInstance(HINSTANCE, int);  
+LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);  
+INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);  
+BOOL CALLBACK DlgProcAdd(HWND, UINT, WPARAM, LPARAM);  
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,  
+                     _In_opt_ HINSTANCE hPrevInstance,  
+                     _In_ LPWSTR    lpCmdLine,  
+                     _In_ int       nCmdShow)    
+{  
+    UNREFERENCED_PARAMETER(hPrevInstance);  
+    UNREFERENCED_PARAMETER(lpCmdLine);  
+
+    // Инициализация глобальных строк  
+    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);  
+    LoadStringW(hInstance, IDC_TEST, szWindowClass, MAX_LOADSTRING);  
+    MyRegisterClass(hInstance);  
+
+    // Выполнить инициализацию приложения:  
+    if (!InitInstance (hInstance, nCmdShow))  
+    {  
+        return FALSE;  
+    }  
+    MSG msg;  
+
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_TEST));  
+
+    // Цикл основного сообщения:  
+    while (GetMessage(&amp;msg, nullptr, 0, 0))  
+    {  
+        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &amp;msg))  
+        {  
+            TranslateMessage(&amp;msg);  
+            DispatchMessage(&amp;msg);  
+        }  
+    }  
+
+    return (int) msg.wParam;  
+}  
+
+//  
+//  ФУНКЦИЯ: MyRegisterClass()  
+//  
+//  НАЗНАЧЕНИЕ: регистрирует класс окна.  
+//  
+ATOM MyRegisterClass(HINSTANCE hInstance)  
+{
+    WNDCLASSEXW wcex;
+
+    wcex.cbSize = sizeof(WNDCLASSEX);
+
+    wcex.style          = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc    = WndProc;
+    wcex.cbClsExtra     = 0;
+    wcex.cbWndExtra     = 0;
+    wcex.hInstance      = hInstance;
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+    wcex.hCursor        = LoadCursor(hInstance,MAKEINTRESOURCE (IDC_POINTER));
+    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_TEST);
+    wcex.lpszClassName  = szWindowClass;
+    wcex.hIconSm        = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+
+    return RegisterClassExW(&amp;wcex);
+}
+
+//
+//   ФУНКЦИЯ: InitInstance(HINSTANCE, int)
+//
+//   НАЗНАЧЕНИЕ: сохраняет обработку экземпляра и создает главное окно.
+//
+//   КОММЕНТАРИИ:
+//
+//        В данной функции дескриптор экземпляра сохраняется в глобальной переменной, а также
+//        создается и выводится на экран главное окно программы.
+//
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+   hInst = hInstance; // Сохранить дескриптор экземпляра в глобальной переменной
+
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   if (!hWnd)
+   {
+      return FALSE;
+   }
+
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
+
+   return TRUE;
+}
+//
+//  ФУНКЦИЯ: WndProc(HWND, UINT, WPARAM, LPARAM)
+//
+//  НАЗНАЧЕНИЕ:  обрабатывает сообщения в главном окне.
+//
+//  WM_COMMAND — обработать меню приложения
+//  WM_PAINT — отрисовать главное окно
+//  WM_DESTROY — отправить сообщение о выходе и вернуться
+//
+//
+    //Создаем пользовательскую структуру
+
+    struct laptop {
+        TCHAR model[20];
+        int price;
+    }ms,laptops[25];
+    const int N = 10; //количество ноутбуков на складе
+    laptop Stock[N];//Массив для всех ноутбуков
+    laptop Unit; //Структурные переменные
+    DWORD dwCount;
+
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    int wmId, wmEvent;
+    PAINTSTRUCT ps;
+    HDC hdc;
+    HMENU hSubMenu, hMenu;
+    int xpos, ypos;
+    //Переменные для стандартных диалогов "Open", "Save As"
+    static OPENFILENAME file;
+    static TCHAR name[MAX_PATH];
+    static HANDLE hFile;
+    BOOL succes;
+    TCHAR szT[200];
+    int i = 0;
+    int y = 0;
+    DWORD dw = 0;
+    const DWORD MaxLength = 250;
+    static wchar_t text[MaxLength] ;    
+    switch (message)
+    {
+        case WM_RBUTTONDOWN:
+        xpos = LOWORD(lParam);
+        ypos = HIWORD(lParam);
+        //Загрузим меню из ресурсов приложения
+        hMenu = LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(Context_Menu));
+        //Получим дескриптор подменю
+        hSubMenu = GetSubMenu(hMenu, 0);
+        //Отобразим контекстное меню
+        TrackPopupMenu(hSubMenu, TPM_LEFTALIGN, xpos, ypos, 0, hWnd, NULL);
+        break;
+    case WM_CREATE:
+
+    {
+        file.lStructSize = sizeof(OPENFILENAME);
+        file.hInstance = hInst;
+        file.lpstrFilter = _T("Text\0*.txt");
+        file.lpstrFile = name;
+        file.nMaxFile = 256;
+        file.lpstrInitialDir = _T(".\\");
+        file.lpstrDefExt = _T("txt");
+    }
+
+    case WM_COMMAND:
+        wmId = LOWORD(wParam);
+        wmEvent = HIWORD(wParam);
+        // Разобрать выбор в меню:
+        switch (wmId)
+        {
+        case ID_32779:
+            file.lpstrTitle = _T("Открыть файл для чтения");
+            file.Flags = OFN_HIDEREADONLY;
+            if (!GetOpenFileName(&amp;file)) return 1;
+            hFile = CreateFile(name, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+            hdc = GetDC(hWnd);
+            SetFilePointer(hFile, 0, 0, FILE_BEGIN);
+            //ReadFile(hFile, &amp;laptops, sizeof(laptops), &amp;dwCount, NULL);
+            while (ReadFile(hFile, &amp;laptops, sizeof(laptops), &amp;dwCount, NULL) &amp;&amp; dwCount != 0)
+            {
+
+            TextOut(hdc, 0, y, (LPWSTR)laptops, dwCount);
+                y += 16;
+
+            }
+            ReleaseDC(hWnd, hdc);
+            break;
+        case ID_32792:
+            file.lpstrTitle = _T("Сохранить файл");
+            file.Flags = OFN_HIDEREADONLY;
+            succes = GetSaveFileName(&amp;file);
+            if (succes)
+            {
+                MessageBox(hWnd, file.lpstrFile, TEXT("Файл сохраняется с именем:"), MB_OK);
+                hFile = CreateFile(file.lpstrFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL);
+                SetFilePointer(hFile, 0, 0, FILE_END);
+                WriteFile(hFile, &amp;laptops, sizeof(laptops), &amp;dwCount, NULL);
+                CloseHandle(hFile);
+            }
+            else
+                MessageBox(hWnd, ESC_OF, TEXT("Отказ от выбора или ошибка"), MB_ICONWARNING);
+            break;
+            // Разобрать выбор в меню:
+        case ID_32807:
+        {
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, DlgProcAdd);
+            break;
+
+        }
+        case IDM_ABOUT:
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+            break;
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+        }
+
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &amp;ps);
+        // TODO: Добавьте сюда любой код прорисовки, использующий HDC...
+        EndPaint(hWnd, &amp;ps);
+    }
+    break;
+    case WM_DESTROY:
+    {   PostQuitMessage(0);
+    break;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+    }
+}
+
+BOOL CALLBACK DlgProcAdd(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    HWND hModel, hPrice;
+    TCHAR str[20];
+    DWORD dw = 0;
+    static HANDLE hFile;
+    static int j = 0;
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        hModel = GetDlgItem(hWnd, IDC_VVOD1);
+        hPrice = GetDlgItem(hWnd, IDC_VVOD2);
+        SetFocus(hModel);
+        return TRUE;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK)
+        {
+            GetDlgItemText(hWnd, IDC_VVOD1, (LPWSTR)ms.model, sizeof(ms.model));
+            ms.price = GetDlgItemInt(hWnd, IDC_VVOD2, 0, 0);
+            FlushFileBuffers(hFile);
+            WriteFile(hFile, &amp;ms, sizeof(ms), &amp;dw, NULL);
+            SetFilePointer(hFile, 0, 0, FILE_END);
+            laptops[j++] = ms;
+            EndDialog(hWnd, 0);
+        }
+        else if (LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hWnd, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        return TRUE;
+        break;
+    case WM_CLOSE:
+        EndDialog(hWnd, 0);
+        return TRUE;
+    }
+    return FALSE;
+}
+// Обработчик сообщений для окна "О программе".
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+        break;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
+}
+</code></pre>
+</blockquote>
+<h2>Answer 836189</h2>
+<p><a href="https://ru.stackoverflow.com/a/836189/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Проблема на самом деле не связана с кодировками. Вы пишете, что файл "txt", но при этом работаете с ним как с бинарным. Также вы пытаетесь интерпретировать бинарные данные структуры как текст (<em>LPWSTR</em>), что не может быть хорошей идеей. Поля, содержащие юникод-строки, корректно выводятся по случайности, так как для них бинарное и текстовое представление в данном случае совпадают.</p>
+<p>Чтобы сделать все правильно, нужно сначала определиться, бинарный файл вам нужен или текстовый. Если на самом деле текстовый, то вместо скармливания <code>WriteFile</code> структуры <em>laptop</em> нужно преобразовать все ее члены в строку и записывать в файл уже строки, следуя определенному формату. При считывании наоборот, делить текст на отдельные элементы на основе этого формата и преобразовывать их в соответствующий тип. Проще всего это будет реализовать с использованием функций <a href="http://en.cppreference.com/w/c/io/fprintf" rel="nofollow noreferrer">fprintf_s</a> и <a href="http://en.cppreference.com/w/c/io/fscanf" rel="nofollow noreferrer">fscanf_s</a> (ANSI), либо <code>fwprintf_s</code> и <code>fwscanf_s</code> (Unicode). </p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

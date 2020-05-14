@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 753705 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 753705 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 753705</h1>
+<h2>Answer 753705</h2>
+<p><a href="https://ru.stackoverflow.com/a/753705/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<blockquote>
+  <p>При подключении нового USB устройства появляются два девайса - USB
+  Mass Storage Device и Disk Drive. Какое из включать/выключать, чтобы
+  USB устройство правильно отключилось?</p>
+</blockquote>
+<p>Я полагаю, USB Mass Storage Device, т.к. Disk Drive является для него дочерним устройством, и отключается автоматически</p>
+<blockquote>
+  <p>Как отобразить ВСЕ свойства, которые есть в Device Manager'e?</p>
+</blockquote>
+<p>Не знаю насчет "все", но довольно много свойств можно получить с помощью Setup API. Функция на C++ для вывода всех свойств по заданному ID устройства:
+</p>
+<pre><code>#pragma comment(lib,"Setupapi.lib")
+
+#include &lt;Windows.h&gt;
+#include &lt;Setupapi.h&gt;
+#include &lt;winusb.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;Devpkey.h&gt;
+#include &lt;iostream&gt;
+
+void ErrorMes(LPTSTR lpszFunction) 
+{ 
+    // Retrieve the system error message for the last-error code
+
+    LPVOID lpMsgBuf;
+    LPVOID lpDisplayBuf;
+    DWORD dw = GetLastError(); 
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR) &amp;lpMsgBuf,
+        0, NULL );
+
+    // Display the error message and exit the process
+
+    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT, 
+        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR)); 
+    wprintf(L"%s failed with error %d: %s", 
+        lpszFunction, dw, lpMsgBuf);     
+
+    LocalFree(lpMsgBuf);
+    LocalFree(lpDisplayBuf);
+
+}
+
+
+/*Вывод информации об устройстве с указанным InstanceID*/
+BOOL PrintDevice(wchar_t* id)
+{
+    unsigned index;
+    HDEVINFO hDevInfo;
+    SP_DEVINFO_DATA DeviceInfoData;
+    TCHAR id_upper[1024]=L"";
+    TCHAR buf[1024]=L"";    
+    DEVPROPTYPE dpt=0;  
+    DEVPROPKEY arr[100];
+    DWORD count=0;
+
+    for(int i=0;i&lt;wcslen(id);i++){
+        id_upper[i]=toupper(id[i]);//преобразование в заглавные буквы
+    }       
+
+    // List all connected devices
+    hDevInfo = SetupDiGetClassDevs(NULL, NULL, NULL, DIGCF_PRESENT | DIGCF_ALLCLASSES);
+    for (index = 0; ; index++) {
+        DeviceInfoData.cbSize = sizeof(DeviceInfoData);
+        if (!SetupDiEnumDeviceInfo(hDevInfo, index, &amp;DeviceInfoData)) {
+            return FALSE;     // no match
+        }
+
+        BOOL res=SetupDiGetDeviceProperty(hDevInfo,&amp;DeviceInfoData,
+                        &amp;DEVPKEY_Device_InstanceId,&amp;dpt,(PBYTE)buf,1000,NULL,0);
+            if(res==FALSE)continue; 
+
+
+        if(wcscmp(buf,id_upper)==0){
+            //устройство найдено
+            res=SetupDiGetDeviceProperty(hDevInfo,&amp;DeviceInfoData,
+                        &amp;DEVPKEY_Device_DeviceDesc,&amp;dpt,(PBYTE)buf,1000,NULL,0);
+
+            //вывод названия устройства
+            if(res==FALSE)ErrorMes(L"SetupDiGetDeviceProperty");
+            else wprintf(L"* %s's properties: *\n\n ",buf); 
+
+            //получение свойств
+            res=SetupDiGetDevicePropertyKeys(hDevInfo,&amp;DeviceInfoData,arr,100,&amp;count,0);
+            if(res==FALSE)ErrorMes(L"SetupDiGetDevicePropertyKeys");
+
+            for(int i=0;i&lt;count;i++)//вывод всех свойств
+            {
+                res=SetupDiGetDeviceProperty(hDevInfo,&amp;DeviceInfoData,
+                    &amp;arr[i],&amp;dpt,(PBYTE)buf,1000,NULL,0);//запрос свойства
+
+                if(res==FALSE){ErrorMes(L"SetupDiGetDeviceProperty");continue;} 
+
+                //вывод DEVPROPKEY
+                wprintf(L"{%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX; %3d}: ",
+                arr[i].fmtid.Data1, arr[i].fmtid.Data2, arr[i].fmtid.Data3, 
+                arr[i].fmtid.Data4[0], arr[i].fmtid.Data4[1], arr[i].fmtid.Data4[2], arr[i].fmtid.Data4[3],
+                arr[i].fmtid.Data4[4], arr[i].fmtid.Data4[5], arr[i].fmtid.Data4[6], arr[i].fmtid.Data4[7],
+                arr[i].pid);
+
+                //вывод типа и значения свойства
+                switch (dpt)
+                {
+                    case DEVPROP_TYPE_STRING:wprintf(L"String   \t%s\n ",buf);  break;      
+                    case DEVPROP_TYPE_STRING_LIST:wprintf(L"Strings \tFirst line: %s\n ",buf);break;    
+                    case DEVPROP_TYPE_BOOLEAN:wprintf(L"Bool     \t%d\n ",(bool)*((LPBYTE)(&amp;buf)));break;
+                    case DEVPROP_TYPE_UINT16:wprintf(L"%Uint16    \t%d\n ",*((LPWORD)(&amp;buf)));break;
+                    case DEVPROP_TYPE_UINT32:wprintf(L"Uint     \t%d\n ",*((LPUINT)(&amp;buf)));break;
+                    case DEVPROP_TYPE_GUID:
+                        wprintf(L"GUID   \t{%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX}\n ",
+                            (*((GUID*)(&amp;buf))).Data1, (*((GUID*)(&amp;buf))).Data2, (*((GUID*)(&amp;buf))).Data3, 
+                            (*((GUID*)(&amp;buf))).Data4[0], (*((GUID*)(&amp;buf))).Data4[1], (*((GUID*)(&amp;buf))).Data4[2], 
+                            (*((GUID*)(&amp;buf))).Data4[3], (*((GUID*)(&amp;buf))).Data4[4], (*((GUID*)(&amp;buf))).Data4[5], 
+                            (*((GUID*)(&amp;buf))).Data4[6], (*((GUID*)(&amp;buf))).Data4[7]);
+
+                        break;
+                    case DEVPROP_TYPE_BINARY:wprintf(L"(Binary data)\n ");break;
+
+                    default:wprintf(L"Other    \tType: 0x%x\n ",(int)dpt);
+                    break;
+                }                           
+
+            }           
+
+            SetupDiDestroyDeviceInfoList(hDevInfo);
+            return TRUE;
+        }//end if
+
+
+    }//end for
+
+    SetupDiDestroyDeviceInfoList(hDevInfo);
+    return FALSE;//устройство не найдено
+}
+
+
+int main()
+{
+    setlocale(LC_ALL,"Russian");
+
+    PrintDevice(L"USB\\VID_046E&amp;PID_5505\\5&amp;15C311E1&amp;0&amp;6");        
+
+    system("PAUSE");
+    return 0;
+}
+</code></pre>
+<p>Пример вывода:</p>
+<pre class="lang-none prettyprint-override"><code>* Составное USB устройство's properties: *
+
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;   2}: String    Составное USB устройство
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;   3}: Strings   First line: USB\VID_046E&amp;PID_5505&amp;REV_0100
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;   4}: Strings   First line: USB\DevClass_00&amp;SubClass_00&amp;Prot_00
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;   6}: String    usbccgp
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;   9}: String    USB
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  10}: GUID      {36FC9E60-C465-11CF-8056-444553540000}
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  11}: String    {36fc9e60-c465-11cf-8056-444553540000}\0009
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  12}: Uint      0
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  13}: String    (Стандартный USB хост-контроллер)
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  15}: String    Port_#0006.Hub_#0003
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  16}: String    \Device\USBPDO-6
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  17}: Uint      132
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  21}: GUID      {9D7DEBBC-C85D-11D1-9EB4-006008C3A19A}
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  22}: Uint      15
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  23}: Uint      0
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  24}: String    USB
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  30}: Uint      6
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  32}: (Binary data)
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  33}: Uint      3
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  34}: Uint      3
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  36}: Uint      0
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  38}: GUID      {23447943-B752-11E7-B8FD-806E6F6E6963}
+ {B725F130-47EF-101A-A5F1-02608C9EEBAC;  10}: String    Составное USB устройство
+ {78C34FC8-104A-4ACA-9EA4-524D52996E57; 256}: String    USB\VID_046E&amp;PID_5505\5&amp;15C311E1&amp;0&amp;6
+ {4340A6C5-93FA-4706-972C-7B648008A5A7;   2}: Uint      25182218
+ {4340A6C5-93FA-4706-972C-7B648008A5A7;   3}: Uint      0
+ {4340A6C5-93FA-4706-972C-7B648008A5A7;   7}: Strings   First line: USB\VID_046E&amp;PID_5505&amp;MI_00\6&amp;157c6e38&amp;0&amp;0000
+ {4340A6C5-93FA-4706-972C-7B648008A5A7;   8}: String    USB\ROOT_HUB30\4&amp;1ed8c4ae&amp;0&amp;0
+ {4340A6C5-93FA-4706-972C-7B648008A5A7;   9}: Strings   First line: USB\VID_046E&amp;PID_5505&amp;MI_00\6&amp;157c6e38&amp;0&amp;0000
+ {4340A6C5-93FA-4706-972C-7B648008A5A7;  10}: Strings   First line: USB\VID_09DA&amp;PID_000A\5&amp;15c311e1&amp;0&amp;3
+ {AFD97640-86A3-4210-B67C-289C41AABE55;   2}: Bool      0
+ {8C7ED206-3F8A-4827-B3AB-AE9E1FAEFC6C;   2}: GUID      {23447943-B752-11E7-B8FD-806E6F6E6963}
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;   5}: Bool      1
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;   6}: Bool      0
+ {83DA6326-97A6-4088-9453-A1923F573B29;  15}: Bool      1
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;  16}: Bool      0
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;   8}: Uint      2026182162
+ {8C7ED206-3F8A-4827-B3AB-AE9E1FAEFC6C;   4}: Bool      0
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;  14}: Strings   First line: \Driver\usbccgp
+ {3464F7A4-2444-40B1-980A-E0903CB6D912;  10}: Uint      3
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;   4}: String    USB Multimedia Keyboard
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;   7}: String    usb.inf:USB\COMPOSITE,Composite.Dev.NT
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;   9}: (Binary data)
+ {540B947E-8B40-45BC-A8A2-6A0B894CBDA2;  10}: String    \_SB.PCI0.XHC.RHUB.HS06
+ {80497100-8C73-48B9-AAD9-CE387E19C56E;   6}: Uint      0
+ {80497100-8C73-48B9-AAD9-CE387E19C56E;   7}: Other     Type: 0x9
+ {83DA6326-97A6-4088-9453-A1923F573B29;   3}: String    usb.inf:392c3d53461eda3a:Composite.Dev.NT:10.0.15063.674:USB\COMPOSITE
+ {83DA6326-97A6-4088-9453-A1923F573B29;  10}: String    USB\ROOT_HUB30\4&amp;1ed8c4ae&amp;0&amp;0
+ {83DA6326-97A6-4088-9453-A1923F573B29; 100}: Other     Type: 0x10
+ {83DA6326-97A6-4088-9453-A1923F573B29; 101}: Other     Type: 0x10
+ {83DA6326-97A6-4088-9453-A1923F573B29; 102}: Other     Type: 0x10
+ {A45C254E-DF1C-4EFD-8020-67D146A850E0;  37}: Strings   First line: PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(6)
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;   2}: Other     Type: 0x10
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;   3}: String    10.0.15063.674
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;   4}: String    USB Composite Device
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;   5}: String    usb.inf
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;   6}: String    Composite.Dev.NT
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;   8}: String    USB\COMPOSITE
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;   9}: String    Microsoft
+ {A8B865DD-2E3D-4094-AD97-E593A70C75D6;  14}: Uint      16719875
+ Для продолжения нажмите любую клавишу . . .
+</code></pre>
+<p>Свойства определяются по значениям <code>DEVPROPKEY</code>. Чтобы понять, что это за свойство, нужно сравнить его с константами из Devpkey.h (например, Matching Device ID - это <code>DEVPKEY_Device_MatchingDeviceId</code>).</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1080;&#1079;&#1084;&#1077;&#1085;&#1080;&#1090;&#1100; &#1087;&#1086;&#1083;&#1077; /Producer &#1074; pdf &#1076;&#1086;&#1082;&#1091;&#1084;&#1077;&#1085;&#1090;&#1077; &#1073;&#1077;&#1079; &#1089;&#1090;&#1086;&#1088;&#1086;&#1085;&#1085;&#1080;&#1093; &#1073;&#1080;&#1073;&#1083;&#1080;&#1086;&#1090;&#1077;&#1082; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1080;&#1079;&#1084;&#1077;&#1085;&#1080;&#1090;&#1100; &#1087;&#1086;&#1083;&#1077; /Producer &#1074; pdf &#1076;&#1086;&#1082;&#1091;&#1084;&#1077;&#1085;&#1090;&#1077; &#1073;&#1077;&#1079; &#1089;&#1090;&#1086;&#1088;&#1086;&#1085;&#1085;&#1080;&#1093; &#1073;&#1080;&#1073;&#1083;&#1080;&#1086;&#1090;&#1077;&#1082; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как изменить поле /Producer в pdf документе без сторонних библиотек</h1>
+<p><a href="https://ru.stackoverflow.com/questions/1037304/%d0%9a%d0%b0%d0%ba-%d0%b8%d0%b7%d0%bc%d0%b5%d0%bd%d0%b8%d1%82%d1%8c-%d0%bf%d0%be%d0%bb%d0%b5-producer-%d0%b2-pdf-%d0%b4%d0%be%d0%ba%d1%83%d0%bc%d0%b5%d0%bd%d1%82%d0%b5-%d0%b1%d0%b5%d0%b7-%d1%81%d1%82%d0%be%d1%80%d0%be%d0%bd%d0%bd%d0%b8%d1%85-%d0%b1%d0%b8%d0%b1%d0%bb%d0%b8%d0%be%d1%82%d0%b5%d0%ba">Source</a> - by <a href="https://ru.stackoverflow.com/users/189850/%d0%90%d0%bb%d0%b5%d0%ba%d1%81%d0%b0%d0%bd%d0%b4%d1%80-%d0%9f%d1%83%d0%b7%d0%b0%d0%bd%d0%be%d0%b2">Александр Пузанов</a></p>
+<blockquote>
+<p>Есть pdf документ. Я использую следующий код, для того, чтобы его открыть и изменить значение /Producer</p>
+<pre><code>public void CorrectPdf()
+{
+    string path = "c:\temp\My.pdf");
+    byte[] bf = File.ReadAllBytes(path);
+    string s = Convert.ToBase64String(bf);
+
+    var decodeStr = Base64Decode(s);
+    //Здесь будет корректировка строки
+    //decodeStr.Replace(@"/Producer (HiQPdf 11.1)", "/Producer (MyMy)");
+    var encodeStr= Base64Encode(decodeStr);
+    var bf = Convert.FromBase64String(encodeStr);
+    System.IO.File.WriteAllBytes(path, bf);
+}
+
+    public static string Base64Encode(string plainText)
+    {
+        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+        return System.Convert.ToBase64String(plainTextBytes);
+    }
+
+    public static string Base64Decode(string base64EncodedData)
+    {
+        var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+        return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+    }
+</code></pre>
+<p>Не понимаю почему на выходе pdf документ с пустыми листами.</p>
+</blockquote>
+<h2>Answer 1038514</h2>
+<p><a href="https://ru.stackoverflow.com/a/1038514/">Source</a> - by <a href="https://ru.stackoverflow.com/users/184217/alexander-petrov">Alexander Petrov</a></p>
+<blockquote>
+<p><sub>Пожалуйста, не плюсуйте это сообщение, т. к. оно не является точным ответом на вопрос. Минусовать можно.</sub></p>
+<p>Рассмотрим ваш код по шагам.<br>
+Считали файл как массив байтов:</p>
+<pre><code>byte[] bf = File.ReadAllBytes(path);
+</code></pre>
+<p>Конвертировали массив байтов в base64:</p>
+<pre><code>string s = Convert.ToBase64String(bf);
+</code></pre>
+<p>Внутри метода <code>Base64Decode</code> тут же конвертировали эту base64-строку обратно в байты:</p>
+<pre><code>var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+</code></pre>
+<p>То есть содержимое массивов <code>base64EncodedBytes</code> и <code>bf</code> одинаково. Можно смело выкидывать эти действия.</p>
+<p>Далее массив байтов преобразуется в строку:</p>
+<pre><code>return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+</code></pre>
+<p>Я не спец в PDF, однако быстрый поиск <a href="https://stackoverflow.com/a/10656899/5045688">показывает</a>, что внутри PDF могут быть разные кодировки. И не факт, что у вашего файла UTF-8. Поэтому вы могли получить кракозябры вместо текста.</p>
+<p>После замены вы перегоняете строку в байты кодировки UTF-8.<br>
+Далее вы опять совершаете ненужные действия: массив байтов конвертируется в base64 и тут же обратно из base64 в массив байтов.</p>
+<p>Как я понимаю, эти ненужные конвертации ничего не должны портить. Но они просто лишние и создают нагрузку на процессор и память.</p>
+<hr>
+<p>Вообще, незачем читать сперва байты, а потом перекодировать их в текст в нужной кодировке. Можно это сделать сразу, вызовом одного метода:</p>
+<pre><code>var text = File.ReadAllText(path, Encoding.UTF8);
+</code></pre>
+<p>Тут делаем замену: <code>text = text.Replace</code>.<br>
+Записываем аналогично:</p>
+<pre><code>File.WriteAllText(path, text, Encoding.UTF8);
+</code></pre>
+<p>Естественно, кодировки должны совпадать при чтении и записи.</p>
+<p>Можно попробовать брутфорс: перебрать все кодировки.</p>
+<pre><code>foreach (var encoding in Encoding.GetEncodings())
+</code></pre>
+<p>Их довольно много. У меня показывает 140 штук.</p>
+<hr>
+<p>Никто больше не отвечает, так что буду отдуваться.</p>
+<p>Почему простая строковая замена не работает? Повторю, что я не спец в PDF. Но там вполне может быть структура данных с полями определённых размеров. И когда вы делаете замену:</p>
+<pre><code>decodeStr.Replace(@"/Producer (HiQPdf 11.1)", "/Producer (MyMy)");
+</code></pre>
+<p>то очевидно, что длины строк не совпадают. Из-за этого весь текст сдвигается. Но это же не просто текст - это структура данных со множеством полей, где хранится разметка страниц, шрифты, изображения и многое другое. В результате сдвига эти данные сломались. В итоге вы получаете пустые листы.</p>
+<p>Самый лучший способ решения проблемы - взять библиотеку для работы с PDF, о чём уже писали в комментариях.</p>
+</blockquote>
+<h2>Answer 1039794</h2>
+<p><a href="https://ru.stackoverflow.com/a/1039794/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<blockquote>
+  <p>И хотелось бы получить полный ответ почему я немгу pdf считать в байты, затем перевести в строку </p>
+</blockquote>
+<p>На это ответ очень прост: PDF - бинарный формат, а не текстовый. Любой код, который вызывает <code>Encoding.GetString</code> на содержимом PDF-файла (в целом) можно смело выбрасывать. Конечно, преобразовывать в строку отдельные его поля, которые гарантированно являются текстом, можно.</p>
+<p>Если вам нужно просто грубо заменить вхождение <code>/Producer (Foo)</code> на <code>/Producer (Bar)</code>, не учитывая структуру файла (т.е., если такая последовательность случайно встретится в содержимом файла, он будет поврежден), то можно сделать так:</p>
+<pre><code>using System;
+using System.IO;
+using System.Text;
+
+class Program
+{
+    public static bool SequenceEquals(byte[] array, int position, byte[] match)
+    {
+        if (match.Length &gt; (array.Length - position)) return false;
+
+        for (int i = 0; i &lt; match.Length; i++)
+        {
+            if (array[position + i] != match[i])  return false;
+        }
+
+        return true;
+    }
+
+    public static int FindSequence(byte[] arr, byte[] match, int startindex=0)
+    {
+        for (int i = startindex; i &lt; arr.Length; i++)
+        {
+            if (SequenceEquals(arr, i, match)) return i;
+        }
+        return -1;
+    }
+
+    public static void Main()
+    {        
+        string path1 = @"C:\Test\file1.pdf";
+        string path2 = @"C:\Test\file2.pdf";
+
+        //считаем данные
+        byte[] data = File.ReadAllBytes(path1);
+
+        //подготовим последовательности для поиска
+        byte[] match_start = Encoding.ASCII.GetBytes("/Producer");
+        byte[] match_end = Encoding.ASCII.GetBytes(")");
+
+        //найдем последовательность в массиве
+        int index_start = FindSequence(data, match_start);           
+        int index_end = FindSequence(data, match_end, index_start + 1) + 1;
+        byte[] bytes_old = new byte[index_end - index_start];
+        Array.Copy(data, index_start, bytes_old, 0, bytes_old.Length);
+        string s_old = Encoding.ASCII.GetString(bytes_old);
+
+        //подготовим новые данные
+        string s_new = "/Producer (MyMy)";
+        byte[] bytes_new = Encoding.ASCII.GetBytes(s_new);
+        byte[] newdata = new byte[data.Length - bytes_old.Length + bytes_new.Length];
+
+        //запишем результат
+        Array.Copy(data, newdata, index_start);
+        Array.Copy(bytes_new, 0, newdata, index_start, bytes_new.Length);
+        Array.Copy(data, index_end, newdata, index_start+ bytes_new.Length, data.Length - index_end);
+        File.WriteAllBytes(path2, newdata);
+
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>Корректная замена должна учитывать структуру файла в соответствии с <a href="https://www.adobe.com/content/dam/acom/en/devnet/pdf/pdf_reference_archive/PDFReference.pdf" rel="nofollow noreferrer">документацией Adobe</a>. </p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

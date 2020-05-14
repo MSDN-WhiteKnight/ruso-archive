@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1077; &#1082; &#1073;&#1072;&#1079;&#1077; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093; &#1085;&#1072; C++ | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1077; &#1082; &#1073;&#1072;&#1079;&#1077; &#1076;&#1072;&#1085;&#1085;&#1099;&#1093; &#1085;&#1072; C++ | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Подключение к базе данных на C++</h1>
+<p><a href="https://ru.stackoverflow.com/questions/998161/%d0%9f%d0%be%d0%b4%d0%ba%d0%bb%d1%8e%d1%87%d0%b5%d0%bd%d0%b8%d0%b5-%d0%ba-%d0%b1%d0%b0%d0%b7%d0%b5-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85-%d0%bd%d0%b0-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/342634/%d0%90%d0%bb%d0%b5%d0%b2%d1%82%d0%b8%d0%bd%d0%b0">Алевтина</a></p>
+<blockquote>
+<p>Пытаюсь подключиться к базе данных SQL через плюсы. </p>
+<p>База в файле, сервер - локальный.</p>
+<p>Если отправить запрос на считывание из базы: <code>SELECT * FROM Vertex</code>, то выскакивает ошибка, что недопустимое имя "Vertex".</p>
+<p>Может быть кто-то знает, что не так происходит?</p>
+<p><a href="https://i.stack.imgur.com/KPC0A.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/KPC0A.png" alt="База данных"></a>
+<a href="https://i.stack.imgur.com/dJhMD.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/dJhMD.png" alt="Код"></a>
+<a href="https://i.stack.imgur.com/aJA5N.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/aJA5N.png" alt="Файл с базой"></a>
+<a href="https://i.stack.imgur.com/dYtWE.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/dYtWE.png" alt="Ошибка"></a></p>
+</blockquote>
+<h2>Answer 998817</h2>
+<p><a href="https://ru.stackoverflow.com/a/998817/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>По приведенным данным трудно понять, в чем ошибка. Я рекомендую вместо MFC использовать классический C API ODBC, который дает чуть больше контроля над происходящим.</p>
+<p>Вот рабочий пример подключения к SQL Server с помощью ODBC:</p>
+<pre class="lang-cpp prettyprint-override"><code>#include &lt;stdio.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;Windows.h&gt;
+#include &lt;sqlext.h&gt;
+#include &lt;locale.h&gt;
+
+WCHAR szDSN[] = L"Driver={SQL Server};DSN='';SERVER=.\\sqlexpress;DATABASE=mydatabase;";
+WCHAR query[] = L"SELECT * FROM Table";
+
+void DisplayError(SQLSMALLINT t,SQLHSTMT h) {
+    SQLWCHAR       SqlState[6], Msg[SQL_MAX_MESSAGE_LENGTH];
+    SQLINTEGER    NativeError;
+    SQLSMALLINT   i, MsgLen;
+    SQLRETURN     rc;
+
+    SQLLEN numRecs = 0;
+    SQLGetDiagField(t, h, 0, SQL_DIAG_NUMBER, &amp;numRecs, 0, 0);  
+
+    // Get the status records.
+    i = 1;
+    while (i &lt;= numRecs &amp;&amp; (rc = SQLGetDiagRec(t, h, i, SqlState, &amp;NativeError,
+            Msg, sizeof(Msg), &amp;MsgLen)) != SQL_NO_DATA) {
+        wprintf(L"Error %d: %s\n", NativeError, Msg);
+        i++;
+    }
+
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{   
+    HENV    hEnv = NULL;
+    HDBC    hDbc = NULL;
+    HSTMT hStmt = NULL;
+    int iConnStrLength2Ptr;
+    WCHAR szConnStrOut[256];
+    SQLINTEGER rowCount = 0;
+    SQLSMALLINT fieldCount = 0, currentField = 0;
+    SQLWCHAR buf[128],colName[128]; 
+    SQLINTEGER ret;
+
+    /* ODBC API return status */
+    RETCODE rc;
+
+    setlocale(LC_ALL, "Russian");
+
+    /* Allocate an environment handle */
+    rc = SQLAllocEnv(&amp;hEnv);
+    /* Allocate a connection handle */
+    rc = SQLAllocConnect(hEnv, &amp;hDbc);
+
+    /* Connect to the database */
+    rc = SQLDriverConnect(hDbc, NULL, (WCHAR*)szDSN,
+        SQL_NTS, (WCHAR*)szConnStrOut,
+        255, (SQLSMALLINT*)&amp;iConnStrLength2Ptr, SQL_DRIVER_NOPROMPT);
+
+    if (SQL_SUCCEEDED(rc))
+    {
+        wprintf(L"Successfully connected to database. Data source name: \n  %s\n",
+            szConnStrOut);
+
+        /* Prepare SQL query */
+        wprintf(L"SQL query:\n  %s\n", query);
+
+        rc = SQLAllocStmt(hDbc, &amp;hStmt);
+        rc = SQLPrepare(hStmt, (SQLWCHAR*)query, SQL_NTS);      
+
+        /* Excecute the query */
+        rc = SQLExecute(hStmt);
+        if (SQL_SUCCEEDED(rc))
+        {
+            wprintf(L"\n- Columns -\n");
+
+            SQLNumResultCols(hStmt, &amp;fieldCount);
+            if (fieldCount &gt; 0)
+            {   
+                for (currentField = 1; currentField &lt;= fieldCount; currentField++)
+                {
+                    SQLDescribeCol(hStmt, currentField,
+                        colName, sizeof(colName), 0, 0, 0, 0, 0);
+                    wprintf(L"%d: %s\n", (int)currentField, colName);
+                }
+                wprintf(L"\n");
+
+                /* Loop through the rows in the result set */                               
+
+                rc = SQLFetch(hStmt);
+                while (SQL_SUCCEEDED(rc))
+                {
+                    wprintf(L"- Record #%d -\n", (int)rowCount);
+
+                    for (currentField = 1; currentField &lt;= fieldCount; currentField++)
+                    {
+                        rc = SQLGetData(hStmt, currentField, SQL_C_WCHAR, buf, sizeof(buf), &amp;ret);
+
+                        if (SQL_SUCCEEDED(rc) == FALSE) {
+                            wprintf(L"%d: SQLGetData failed\n", (int)currentField);
+                            continue;
+                        }
+
+                        if (ret &lt;= 0) {
+                            wprintf(L"%d: (no data)\n", (int)currentField);
+                            continue;
+                        }
+
+                        wprintf(L"%d: %s\n", (int)currentField, buf);
+                    }                   
+
+                    wprintf(L"\n");
+                    rc = SQLFetch(hStmt);
+                    rowCount++;
+                };                  
+
+                rc = SQLFreeStmt(hStmt, SQL_DROP);
+
+            }
+            else
+            {
+                wprintf(L"Error: Number of fields in the result set is 0.\n");
+            }                   
+
+        }
+        else {
+            wprintf(L"SQL Failed\n");
+            DisplayError(SQL_HANDLE_STMT, hStmt);
+        }
+    }
+    else
+    {
+        wprintf(L"Couldn't connect to %s\n", szDSN);    
+        DisplayError(SQL_HANDLE_DBC, hDbc);
+    }
+
+    /* Disconnect and free up allocated handles */
+    SQLDisconnect(hDbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+
+    getchar();
+    return 0;
+}
+</code></pre>
+<p>Если нужно подключиться к mdf-файлу, строка подключения szDSN будет иметь вид:</p>
+<pre class="lang-none prettyprint-override"><code>Driver={SQL Server};DSN='';SERVER=.\\SQLEXPRESS;AttachDBFileName=C:\\base\\db.mdf;
+</code></pre>
+<p>Параметры строки подключения:</p>
+<ul>
+<li><p><strong>Driver</strong>: по ситуации (в зависимости от того, к какой версии SQL Server на какой ОС и как именно подключаетесь и что пытаетесь делать) возможно понадобится поменять на <code>SQL Server Native Client XX.0</code>, где ХХ - используемая версия. Например <code>SQL Server Native Client 11.0</code> для SQL 2012.</p></li>
+<li><p><strong>Server</strong>: путь к экземпляру вида <code>(IP или имя сервера)\(имя экземпляра)</code>. Точка означает localhost. Если используется экземпляр по умолчанию, имя экземпляра и косую черту нужно опустить</p></li>
+<li><p><strong>DataBase</strong>: имя БД, уже присоединенной к серверу.</p></li>
+<li><p><strong>AttachDBFileName</strong>: путь к файлу БД для подключения (Внимание - при таком сценарии он будет открыт монопольно, пока вы работаете с соединением!).</p></li>
+</ul>
+<p>Для аутентификации по логину и паролю необходимо добавить <code>UID=login;PWD=password</code> (по умолчанию используется Windows-аутентификация от имени текущего пользователя).</p>
+<p>Если не уверены в параметрах соединения, можно поэкспериментировать через <em>Панель управления - Администрирование - Источники данных ODBC</em>. Создаете файловый DSN с нужными параметрами, тестируете его, а затем открываете в блокноте и копируете параметры.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

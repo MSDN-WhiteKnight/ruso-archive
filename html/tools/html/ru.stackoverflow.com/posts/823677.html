@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>App.config &#1080; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1077; &#1085;&#1072; C# | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="App.config &#1080; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1077; &#1085;&#1072; C# | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>App.config и приложение на C#</h1>
+<p><a href="https://ru.stackoverflow.com/questions/823677/app-config-%d0%b8-%d0%bf%d1%80%d0%b8%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%b8%d0%b5-%d0%bd%d0%b0-c">Source</a> - by <a href="https://ru.stackoverflow.com/users/294648/men">Men</a></p>
+<blockquote>
+<p>У меня есть небольшая программа на 2 версии .NET, но новых версиях Windows  она не запускается, но если создать файл настроек, то она запустится.</p>
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;configuration&gt;
+&lt;startup&gt;
+  &lt;supportedRuntime version="v2.0"/&gt;
+  &lt;supportedRuntime version="v3.5"/&gt;
+  &lt;supportedRuntime version="v4.0"/&gt;
+&lt;/startup&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>Есть какие-нибудь варианты, что можно сделать, чтоб было не 2 файла, а 1? Т.е внедрить этот файл настроек в exe или ещё как-нибудь.</p>
+</blockquote>
+<h2>Answer 847798</h2>
+<p><a href="https://ru.stackoverflow.com/a/847798/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Встроить файл конфигурации в EXE-файл нельзя (так как весь смысл конфигурации - это возможность редактирования параметров без перекомпиляции программы, такой возможности не предусмотрели). Влиять на параметр <code>supportedRuntime</code> из кода на C# также нельзя, так этот параметр используется неуправляемым кодом загрузчика до того, как в процесс загружена CLR, и в этот момент управляемый код еще не может выполняться.</p>
+<p>Если нужно управлять выбором версии CLR без файла конфигурации, единственный способ - написать свой собственный загрузчик на С++, пользуясь <a href="https://docs.microsoft.com/en-us/dotnet/framework/unmanaged-api/index" rel="nofollow noreferrer">Unmanaged .NET API</a>.</p>
+<p>Например, создадим такую программу на C#:</p>
+<pre><code>using System;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        static int Run(string arg)
+        {
+            Console.WriteLine("Hello from .NET " + Environment.Version.ToString());
+            Console.ReadKey();
+            return 0;
+        }
+
+        static void Main(string[] args)
+        {
+            Run("");
+        }        
+    }    
+}
+</code></pre>
+<p>Скомпилируем ее, получаем файл <em>Program.exe</em>. Создадим проект С++, добавим в него файл <em>Program.exe</em> и создадим файл ресурсов <em>resource.rc</em> следующего содержания:</p>
+<pre><code>#define IDR_RCDATA1 101
+
+IDR_RCDATA1 RCDATA "Program.exe"
+</code></pre>
+<p>Напишем на С++ код загрузчика, который находит первую установленную версию CLR, загружает ее, извлекает из ресурсов программу на C# во временную папку и запускает ее:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;Windows.h&gt;
+#include &lt;metahost.h&gt;
+
+#pragma comment(lib, "mscoree.lib")
+
+#define IDR_RCDATA1 101
+
+int wmain(int argc, wchar_t* argv[])
+{
+    LPCWSTR prog_name = L"Program.exe"; //имя программы на C#
+
+    //построим путь к временному файлу  
+    WCHAR temppath[300] = L"c:\\temp\\";
+    GetTempPath(300,temppath);
+    wcscat(temppath,prog_name); 
+
+    //извлечем программу из ресурсов
+    HRSRC myResource = ::FindResource(NULL, MAKEINTRESOURCE(IDR_RCDATA1), RT_RCDATA);
+    UINT Size = ::SizeofResource(NULL, myResource);
+    HGLOBAL myResourceData = ::LoadResource(NULL, myResource);
+    void* pMyBinaryData = ::LockResource(myResourceData);
+    FILE* f = _wfopen(temppath,L"wb");
+    fwrite(pMyBinaryData,Size,1,f);
+    fclose(f);
+
+    //инициализация CLR...
+    HRESULT hr;
+    ICLRMetaHost *pMetaHost = NULL;
+    ICLRRuntimeInfo *pRuntimeInfo = NULL;
+    ICLRRuntimeHost *pClrRuntimeHost = NULL; 
+    IEnumUnknown* pEnum= NULL;
+    ICLRRuntimeInfo* pInfo= NULL;
+    IUnknown* pUnk = NULL;
+
+    hr = CLRCreateInstance(CLSID_CLRMetaHost, IID_PPV_ARGS(&amp;pMetaHost));
+    if(FAILED(hr)){printf("CLRCreateInstance failed\n");goto End;}
+
+    //поиск установленных версий CLR...
+    pMetaHost-&gt;EnumerateInstalledRuntimes(&amp;pEnum);
+    if(FAILED(hr)){printf("EnumerateInstalledRuntimes failed\n");goto End;}
+
+    ULONG c= 0;
+    WCHAR buffer[250];
+    DWORD cch = 250;
+
+    while(1){
+        if(pInfo!=NULL){pInfo-&gt;Release();pInfo = NULL;}
+        if(pUnk!=NULL){pUnk-&gt;Release();pUnk = NULL;}
+        if(pRuntimeInfo!=NULL){pRuntimeInfo-&gt;Release();pRuntimeInfo = NULL;}        
+
+        hr = pEnum-&gt;Next(1,&amp;pUnk,&amp;c);
+        if(hr != S_OK)break;
+
+        pUnk-&gt;QueryInterface(IID_ICLRRuntimeInfo, (void**)&amp;pInfo);
+        if(FAILED(hr)){printf("QueryInterface failed\n");continue;}
+
+        pInfo-&gt;GetVersionString(buffer,&amp;cch);
+        if(FAILED(hr)){printf("GetVersionString failed\n");continue;}
+
+        hr = pMetaHost-&gt;GetRuntime(buffer, IID_PPV_ARGS(&amp;pRuntimeInfo));
+        if(hr == S_OK){break;}      
+        else {wprintf(L".NET %s: GetRuntime HRESULT 0x%x\n",buffer,(UINT)hr);}
+    }
+
+    if(pRuntimeInfo == NULL){printf("Failed to initialize CLR\n");goto End;}
+
+    /* Можно также указать версию явно, например:
+          pMetaHost-&gt;GetRuntime(L"v2.0.50727", IID_PPV_ARGS(&amp;pRuntimeInfo));
+          pMetaHost-&gt;GetRuntime(L"v4.0.30319", IID_PPV_ARGS(&amp;pRuntimeInfo));
+       и т.п.
+    */
+
+    hr = pRuntimeInfo-&gt;GetInterface(CLSID_CLRRuntimeHost,
+        IID_PPV_ARGS(&amp;pClrRuntimeHost));
+    if(FAILED(hr)){printf("GetInterface failed\n");goto End;}
+
+    //запуск CLR
+    hr = pClrRuntimeHost-&gt;Start();
+    if(FAILED(hr)){printf("Start failed\n");goto End;}
+
+    //Запуск программы на C#
+    DWORD pReturnValue;
+    hr = pClrRuntimeHost-&gt;ExecuteInDefaultAppDomain(
+        temppath,
+        L"ConsoleApplication1.Program", //класс
+        L"Run", //метод
+        L"", //параметр
+        &amp;pReturnValue);
+    if(FAILED(hr)){printf("ExecuteInDefaultAppDomain failed 0x%x\n",(UINT)hr);goto End;}
+
+End:
+
+    //Освобождение ресурсов
+    if(pMetaHost != NULL) pMetaHost-&gt;Release();
+    if(pRuntimeInfo != NULL) pRuntimeInfo-&gt;Release();
+    if(pClrRuntimeHost != NULL) pClrRuntimeHost-&gt;Release();
+    if(pEnum != NULL) pEnum-&gt;Release();
+    if(pInfo != NULL) pInfo-&gt;Release();
+    if(pUnk != NULL) pUnk-&gt;Release();       
+    return 0;
+}
+</code></pre>
+<p>В результате программа, собранная под .NET 2.0, при его отсутствии будет запускаться на имеющейся версии .NET, как и при использовании параметра <code>supportedRuntime</code>.</p>
+<p><strong>Источники:</strong></p>
+<p><a href="https://stackoverflow.com/a/45056961/8674428">Embedding supportedRuntime into exe file - ответ Ondrej Svejdar</a></p>
+<p><a href="https://stackoverflow.com/a/9240388/8674428">How to load a custom binary resource in a VC++ static library as part of a dll?
+ - ответ LihO</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1086;&#1095;&#1077;&#1084;&#1091; &#1092;&#1091;&#1085;&#1082;&#1094;&#1080;&#1103; CreateThread &#1079;&#1072;&#1087;&#1091;&#1089;&#1082;&#1072;&#1077;&#1090; &#1092;&#1091;&#1085;&#1082;&#1094;&#1080;&#1102; &#1089;&#1088;&#1072;&#1079;&#1091; &#1087;&#1086;&#1089;&#1083;&#1077; &#1089;&#1086;&#1079;&#1076;&#1072;&#1085;&#1080;&#1103;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1086;&#1095;&#1077;&#1084;&#1091; &#1092;&#1091;&#1085;&#1082;&#1094;&#1080;&#1103; CreateThread &#1079;&#1072;&#1087;&#1091;&#1089;&#1082;&#1072;&#1077;&#1090; &#1092;&#1091;&#1085;&#1082;&#1094;&#1080;&#1102; &#1089;&#1088;&#1072;&#1079;&#1091; &#1087;&#1086;&#1089;&#1083;&#1077; &#1089;&#1086;&#1079;&#1076;&#1072;&#1085;&#1080;&#1103;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Почему функция CreateThread запускает функцию сразу после создания?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/1036663/%d0%9f%d0%be%d1%87%d0%b5%d0%bc%d1%83-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8f-createthread-%d0%b7%d0%b0%d0%bf%d1%83%d1%81%d0%ba%d0%b0%d0%b5%d1%82-%d1%84%d1%83%d0%bd%d0%ba%d1%86%d0%b8%d1%8e-%d1%81%d1%80%d0%b0%d0%b7%d1%83-%d0%bf%d0%be%d1%81%d0%bb%d0%b5-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d1%8f">Source</a> - by <a href="https://ru.stackoverflow.com/users/330678/ilya-pakhmutov">Ilya  Pakhmutov</a></p>
+<blockquote>
+<p>возникла проблема с распараллеливанием вывода на экран консоли:</p>
+<p>История: исполнение <code>WriteConsoleOutputW</code> занимает с каждым последующим обновлением занимает все больше времени, при чем размер буфера не меняется. Изначально была идея вынести вывод в отдельный поток, но оно все еще занимает 74-76 мс, что невероятно долго. Последнее что пришло в голову - разделить буфер на несколько частей и выводить их в нескольких потоках.</p>
+<pre><code>self-&gt;ThreadPool[0] = CreateThread(
+        NULL,
+        0,
+        &amp;PassToRender1,
+        self,
+        0,
+        &amp;self-&gt;ThreadPoolID[0]);
+
+    self-&gt;ThreadPool[1] = CreateThread(
+        NULL,
+        0,
+        &amp;PassToRender2,
+        self,
+        0,
+        &amp;self-&gt;ThreadPoolID[1]);
+</code></pre>
+<pre><code>void _OutputToScreen(struct Window *self)
+{
+    WaitForMultipleObjects(2, self-&gt;ThreadPool, true, INFINITE);
+}
+
+DWORD VTHREAD PassToRender1(struct Window *self)
+{
+    WriteConsoleOutputW(
+        self-&gt;hOut, 
+        *self-&gt;ppBuffer, 
+        (COORD) { (short)self-&gt;Width, (short)self-&gt;Height/2 }, 
+        (COORD) { 0, 0 }, 
+        &amp;self-&gt;rWindowRect
+    );
+}
+DWORD VTHREAD PassToRender2(struct Window *self)
+{
+    SMALL_RECT rect = self-&gt;rWindowRect;
+    rect.Top = rect.Bottom / 2;
+
+    WriteConsoleOutputW(
+        self-&gt;hOut,
+        *self-&gt;ppBuffer,
+        (COORD) { (short)self-&gt;Width, (short)self-&gt;Height/2 }, 
+        (COORD) { 0, (short)self-&gt;Height / 2 }, 
+        &amp;rect
+    );
+}
+</code></pre>
+<p>Однако как я выяснил <code>CreateThread</code> запускает функции сразу после создания, а я бы хотел, чтобы я мог обращаться к потокам по вызову функций, при том не пересоздавая потоки, что дорого по времени. </p>
+<p>Есть ли какие-нибудь варианты как сделать запуск по вызову?</p>
+<p>Дополнение: Вот что я рендерю
+<a href="https://i.stack.imgur.com/z4ni7.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/z4ni7.png" alt="введите сюда описание изображения"></a></p>
+</blockquote>
+<h2>Answer 1036837</h2>
+<p><a href="https://ru.stackoverflow.com/a/1036837/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<blockquote>
+  <p>История: исполнение WriteConsoleOutputW занимает с каждым последующим обновлением занимает все больше времени, при чем размер буфера не меняется. Изначально была идея вынести вывод в отдельный поток, но оно все еще занимает 74-76 мс, что невероятно долго. </p>
+</blockquote>
+<p>Хотелось бы увидеть, на каком размере буфера и в какой ОС вывод занимает так долго. У меня на Windows 10 при буфере 100х50 среднее время 0.1 - 0.2 мс, вот код для тестирования:</p>
+<pre><code>#include &lt;windows.h&gt; 
+#include &lt;stdio.h&gt;
+
+const int W = 100; //ширина области рисования
+const int H = 50; //высота области рисования
+CHAR_INFO chiBuffer[W*H] = { 0 };
+COORD coordBufSize;
+COORD coordBufCoord;
+HANDLE hStdout;
+SMALL_RECT srctWriteRect;
+
+void Render(int pos) {
+
+    //рисуем звездочку в заданной позиции
+    for (int i = 0; i &lt; sizeof(chiBuffer) / sizeof(CHAR_INFO); i++) {
+        chiBuffer[i].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | BACKGROUND_BLUE;
+
+        if (i == pos) chiBuffer[i].Char.UnicodeChar = L'*';
+        else chiBuffer[i].Char.UnicodeChar = L' ';
+    }
+
+    srctWriteRect.Top = 0;
+    srctWriteRect.Left = 0;
+    srctWriteRect.Bottom = H;
+    srctWriteRect.Right = W;
+
+    BOOL fSuccess = WriteConsoleOutputW(
+        hStdout, // screen buffer to write to 
+        chiBuffer,        // buffer to copy from 
+        coordBufSize,     // col-row size of chiBuffer 
+        coordBufCoord,    // top left src cell in chiBuffer 
+        &amp;srctWriteRect);  // dest. screen buffer rectangle  
+
+    if (!fSuccess)
+    {
+        printf("WriteConsoleOutput failed - (%d)\n", GetLastError());       
+    }   
+}
+
+int main(void)
+{   
+    BOOL fSuccess;  
+
+    hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    coordBufSize.Y = H;
+    coordBufSize.X = W;
+    coordBufCoord.X = 0;
+    coordBufCoord.Y = 0;
+
+    // Set the destination rectangle. 
+
+    srctWriteRect.Top = 0;
+    srctWriteRect.Left = 0;
+    srctWriteRect.Bottom = H;
+    srctWriteRect.Right = W;        
+
+    const int N_RUNS = 50; //число запусков в пределах одного теста
+    const int N_TESTS = 50; //число тестов
+    float tsum = 0;
+    DWORD t1;
+    DWORD t2;
+
+    Render(0);
+    int pos = 1;
+
+    for (int i = 0; i &lt; N_TESTS; i++) {
+
+        t1 = GetTickCount();
+        for (int j = 0; j &lt; N_RUNS; j++) {
+
+            Render(pos);
+            pos++;
+            if (pos &gt;= W * H)pos = 0;
+        }
+        t2 = GetTickCount();
+        tsum += (t2 - t1)/(float)N_RUNS; //определим длительность отрисовки в пределах одного теста     
+    }
+
+    //выведем среднее время отрисовки   
+    wchar_t s[100] = L"";       
+    swprintf(s,100,L"Render time = %.3f ms\n", tsum / (float)N_TESTS);
+    MessageBoxW(GetConsoleWindow(), s, L"Results", MB_OK);
+    getchar();
+
+    return 0;
+}
+</code></pre>
+<p>Но я слышал, что на Windows 7 и ранее консоль рисует медленнее.</p>
+<blockquote>
+  <p>Последнее что пришло в голову - разделить буфер на несколько частей и выводить их в нескольких потоках.</p>
+</blockquote>
+<p>Идея распараллелить что-то с целью его ускорения редко является хорошей. Начать с того, что код может выполняться на компьютере с одним процессорным ядром, тогда "ускорение" в реальности обернется замедлением. Но даже если ядер несколько, реальный эффект от параллельности проявится только когда потоки не конкурируют за общие ресурсы. В случае консоли, я подозреваю, что там внутренне работает свой механизм синхронизации, и эффекта не будет.</p>
+<blockquote>
+  <p>Однако как я выяснил CreateThread запускает функции сразу после создания</p>
+</blockquote>
+<p>Это не совсем так. Есть флаг <a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createthread" rel="nofollow noreferrer">CREATE_SUSPENDED</a>:</p>
+<blockquote>
+  <p>The thread is created in a suspended state, and does not run until the ResumeThread function is called.</p>
+</blockquote>
+<p>Но для вашей задачи это никак не поможет.</p>
+<hr>
+<p>Реальная оптимизация, которая здесь могла бы помочь - это вместо вывода всего буфера проверять, какие области изменились, и выводить только их. Если на каждом шаге не весь экран изменяется, это может дать серьезное ускорение.</p>
+<hr>
+<h2>Дополнение</h2>
+<p>Если попробовать на большом буфере и распараллелить вот так с синхронизацией через события:</p>
+<pre><code>#include &lt;windows.h&gt; 
+#include &lt;stdio.h&gt;
+
+void Render1();
+void Render2();
+
+const int W = 640; //ширина области рисования
+const int H = 320; //высота области рисования
+CHAR_INFO chiBuffer[W*H] = { 0 };
+HANDLE hStdout;
+
+//первая часть
+COORD coordBufSize1;
+COORD coordBufCoord1;
+SMALL_RECT srctWriteRect1;
+
+//вторая часть
+COORD coordBufSize2;
+COORD coordBufCoord2;
+SMALL_RECT srctWriteRect2;
+
+//события для синхронизации
+HANDLE evtRendering1;
+HANDLE evtRendering2;
+HANDLE evtRendered1;
+HANDLE evtRendered2;
+
+DWORD WINAPI ThreadProc1(LPVOID lpThreadParameter) {
+    while (1) {
+        WaitForSingleObject(evtRendering1, INFINITE); //ждем сигнала
+        ResetEvent(evtRendering1);
+
+        //выводим первую половину
+        Render1();
+
+        //сообщаем о завершении
+        SetEvent(evtRendered1);
+    }
+}
+
+DWORD WINAPI ThreadProc2(LPVOID lpThreadParameter) {
+    while (1) {
+        WaitForSingleObject(evtRendering2, INFINITE); //ждем сигнала
+        ResetEvent(evtRendering2);
+
+        //выводим первую половину
+        Render2();
+
+        //сообщаем о завершении
+        SetEvent(evtRendered2);
+    }
+}
+
+void FillBuffer(int pos) {
+    //рисуем звездочку в заданной позиции
+    for (int i = 0; i &lt; sizeof(chiBuffer) / sizeof(CHAR_INFO); i++) {
+        chiBuffer[i].Attributes = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | BACKGROUND_BLUE;
+
+        if (i == pos) chiBuffer[i].Char.UnicodeChar = L'*';
+        else chiBuffer[i].Char.UnicodeChar = L' ';
+    }
+}
+
+void Render1() {            
+
+    srctWriteRect1.Top = 0;
+    srctWriteRect1.Left = 0;
+    srctWriteRect1.Bottom = H/2;
+    srctWriteRect1.Right = W;
+
+    BOOL fSuccess = WriteConsoleOutputW(
+        hStdout, // screen buffer to write to 
+        chiBuffer,        // buffer to copy from 
+        coordBufSize1,     // col-row size of chiBuffer 
+        coordBufCoord1,    // top left src cell in chiBuffer 
+        &amp;srctWriteRect1);  // dest. screen buffer rectangle     
+
+    if (!fSuccess)
+    {
+        printf("Render1: WriteConsoleOutput failed - (%d)\n", GetLastError());      
+    }   
+}
+
+void Render2() {
+
+    srctWriteRect2.Top = H / 2;
+    srctWriteRect2.Left = 0;
+    srctWriteRect2.Bottom = H;
+    srctWriteRect2.Right = W;
+
+    BOOL fSuccess = WriteConsoleOutputW(
+        hStdout, // screen buffer to write to 
+        &amp;(chiBuffer[W*H/2]),        // buffer to copy from 
+        coordBufSize2,     // col-row size of chiBuffer 
+        coordBufCoord2,    // top left src cell in chiBuffer 
+        &amp;srctWriteRect2);  // dest. screen buffer rectangle     
+
+    if (!fSuccess)
+    {
+        printf("Render2: WriteConsoleOutput failed - (%d)\n", GetLastError());
+    }
+}
+
+void Render(BOOL parallel) {
+
+    if (parallel != FALSE) {
+        //запускаем оба потока
+        SetEvent(evtRendering1);
+        SetEvent(evtRendering2);
+
+        HANDLE ha[2] = { evtRendered1,evtRendered2 };
+
+        //ждем завершения вывода
+
+        DWORD dwWaitResult = WaitForMultipleObjects(
+            2,   // number of handles in array
+            ha,     // array of handles
+            TRUE,          // wait until all are signaled
+            INFINITE);
+
+        switch (dwWaitResult)
+        {
+            // All objects were signaled
+            case WAIT_OBJECT_0: break;
+
+            // An error occurred
+            default:
+            printf("WaitForMultipleObjects failed (%d)\n", GetLastError());
+            break;
+        }
+
+        ResetEvent(evtRendered1);
+        ResetEvent(evtRendered2);
+    }
+    else {
+        Render1();
+        Render2();
+    }
+}
+
+int main(void)
+{   
+    BOOL fSuccess;  
+
+    hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    coordBufSize1.Y = H/2;
+    coordBufSize1.X = W;
+    coordBufCoord1.X = 0;
+    coordBufCoord1.Y = 0;
+
+    coordBufSize2.Y = H / 2;
+    coordBufSize2.X = W;
+    coordBufCoord2.X = 0;
+    coordBufCoord2.Y = 0/*H / 2*/;
+
+    // Set the destination rectangle. 
+
+    srctWriteRect1.Top = 0;
+    srctWriteRect1.Left = 0;
+    srctWriteRect1.Bottom = H/2;
+    srctWriteRect1.Right = W;   
+
+    srctWriteRect2.Top = H / 2;
+    srctWriteRect2.Left = 0;
+    srctWriteRect2.Bottom = H;
+    srctWriteRect2.Right = W;
+
+    const int N_TESTS = 500; //число тестов
+    DWORD tsum = 0;
+    DWORD t1;
+    DWORD t2;
+
+    evtRendering1 = CreateEvent(
+        NULL,               // default security attributes
+        TRUE,               // manual-reset event
+        FALSE,              // initial state is nonsignaled
+        TEXT("evtRendering1")  // object name
+    );
+
+    evtRendering2 = CreateEvent(
+        NULL,               // default security attributes
+        TRUE,               // manual-reset event
+        FALSE,              // initial state is nonsignaled
+        TEXT("evtRendering2")  // object name
+    );
+
+    evtRendered1 = CreateEvent(
+        NULL,               // default security attributes
+        TRUE,               // manual-reset event
+        FALSE,              // initial state is nonsignaled
+        TEXT("evtRendered1")  // object name
+    );
+
+    evtRendered2 = CreateEvent(
+        NULL,               // default security attributes
+        TRUE,               // manual-reset event
+        FALSE,              // initial state is nonsignaled
+        TEXT("evtRendered2")  // object name
+    );
+
+    HANDLE hThread = CreateThread(
+        NULL,              // default security
+        0,                 // default stack size
+        ThreadProc1,        // name of the thread function
+        NULL,              // no thread parameters
+        0,                 // default startup flags
+        NULL);
+
+    if (hThread == NULL)
+    {
+        printf("CreateThread failed (%d)\n", GetLastError());
+        return 1;
+    }
+
+    hThread = CreateThread(
+        NULL,              // default security
+        0,                 // default stack size
+        ThreadProc2,        // name of the thread function
+        NULL,              // no thread parameters
+        0,                 // default startup flags
+        NULL);
+
+    if (hThread == NULL)
+    {
+        printf("CreateThread failed (%d)\n", GetLastError());
+        return 1;
+    }
+
+    /* *** Начало теста *** */
+    BOOL parallel = TRUE;
+    FillBuffer(0);
+    Render(parallel);
+    int pos = 1;
+
+    for (int i = 0; i &lt; N_TESTS; i++) {
+
+        FillBuffer(pos);
+        t1 = GetTickCount();                                
+        Render(parallel);
+        t2 = GetTickCount();
+        pos++;
+        if (pos &gt;= W * H)pos = 0;
+
+        tsum += (t2 - t1); //определим длительность отрисовки в пределах одного теста       
+    }
+
+    //выведем среднее время отрисовки   
+    wchar_t s[100] = L"";       
+    swprintf(s,100,L"Render time = %.3f ms\n", tsum / (float)N_TESTS);
+    MessageBoxW(GetConsoleWindow(), s, L"Results", MB_OK);
+    getchar();
+
+    return 0;
+}
+</code></pre>
+<p>То получается</p>
+<ul>
+<li>без параллельности: 1.2 мс</li>
+<li>с параллельностью: 1.6 мс</li>
+</ul>
+<p>То есть вроде как пользы от распараллеливания нет, даже наоборот, получается медленнее за счет накладных расходов на ожидание.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

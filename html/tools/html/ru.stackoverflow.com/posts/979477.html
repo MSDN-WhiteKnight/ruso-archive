@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1053;&#1077; &#1091;&#1076;&#1072;&#1077;&#1090;&#1089;&#1103; &#1089;&#1095;&#1080;&#1090;&#1072;&#1090;&#1100; &#1080;&#1084;&#1103; &#1083;&#1086;&#1082;&#1072;&#1083;&#1080;, &#1082;&#1091;&#1095;&#1072; &#1087;&#1086;&#1074;&#1088;&#1077;&#1078;&#1076;&#1072;&#1077;&#1090;&#1089;&#1103;, &#1082;&#1072;&#1082; &#1080;&#1089;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; 2 &#1084;&#1077;&#1090;&#1086;&#1076;&#1072;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1053;&#1077; &#1091;&#1076;&#1072;&#1077;&#1090;&#1089;&#1103; &#1089;&#1095;&#1080;&#1090;&#1072;&#1090;&#1100; &#1080;&#1084;&#1103; &#1083;&#1086;&#1082;&#1072;&#1083;&#1080;, &#1082;&#1091;&#1095;&#1072; &#1087;&#1086;&#1074;&#1088;&#1077;&#1078;&#1076;&#1072;&#1077;&#1090;&#1089;&#1103;, &#1082;&#1072;&#1082; &#1080;&#1089;&#1087;&#1088;&#1072;&#1074;&#1080;&#1090;&#1100; 2 &#1084;&#1077;&#1090;&#1086;&#1076;&#1072;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Не удается считать имя локали, куча повреждается, как исправить 2 метода?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/979477/%d0%9d%d0%b5-%d1%83%d0%b4%d0%b0%d0%b5%d1%82%d1%81%d1%8f-%d1%81%d1%87%d0%b8%d1%82%d0%b0%d1%82%d1%8c-%d0%b8%d0%bc%d1%8f-%d0%bb%d0%be%d0%ba%d0%b0%d0%bb%d0%b8-%d0%ba%d1%83%d1%87%d0%b0-%d0%bf%d0%be%d0%b2%d1%80%d0%b5%d0%b6%d0%b4%d0%b0%d0%b5%d1%82%d1%81%d1%8f-%d0%ba%d0%b0%d0%ba-%d0%b8%d1%81%d0%bf%d1%80%d0%b0%d0%b2%d0%b8%d1%82%d1%8c-2-%d0%bc%d0%b5%d1%82%d0%be%d0%b4%d0%b0">Source</a> - by <a href="https://ru.stackoverflow.com/users/206435/%e3%83%92%e3%83%9f%e3%82%b3">ヒミコ</a></p>
+<blockquote>
+<p>Имеется следующий интерфейс:</p>
+<pre><code>/// &lt;summary&gt;
+///     Represents a collection of strings indexed by locale name.
+/// &lt;/summary&gt;
+[ComImport]
+[Guid("08256209-099a-4b34-b86d-c22b110e7771")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+public interface IDWriteLocalizedStrings
+{
+    /// &lt;summary&gt;
+    ///     Gets the number of language/string pairs.
+    /// &lt;/summary&gt;
+    uint GetCount();
+
+    /// &lt;summary&gt;
+    ///     Gets the index of the item with the specified locale name.
+    /// &lt;/summary&gt;
+    /// &lt;param name="localeName"&gt;Locale name to look for.&lt;/param&gt;
+    /// &lt;param name="index"&gt;Receives the zero-based index of the locale name/string pair.&lt;/param&gt;
+    /// &lt;param name="exists"&gt;Receives TRUE if the locale name exists or FALSE if not.&lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     Standard HRESULT error code. If the specified locale name does not exist, the return value is S_OK,
+    ///     but *index is UINT_MAX and *exists is FALSE.
+    /// &lt;/returns&gt;
+    [PreserveSig]
+    int FindLocaleName([MarshalAs(UnmanagedType.LPWStr)] string localeName, out uint index,
+        [MarshalAs(UnmanagedType.Bool)] out bool exists);
+
+    /// &lt;summary&gt;
+    ///     Gets the length in characters (not including the null terminator) of the locale name with the specified index.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the locale name.&lt;/param&gt;
+    /// &lt;param name="length"&gt;Receives the length in characters, not including the null terminator.&lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    [PreserveSig]
+    int GetLocaleNameLength(uint index, out uint length);
+
+    /// &lt;summary&gt;
+    ///     Copies the locale name with the specified index to the specified array.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the locale name.&lt;/param&gt;
+    /// &lt;param name="localeName"&gt;Character array that receives the locale name.&lt;/param&gt;
+    /// &lt;param name="size"&gt;
+    ///     Size of the array in characters. The size must include space for the terminating
+    ///     null character.
+    /// &lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    [PreserveSig]
+    int GetLocaleName(uint index, [MarshalAs(UnmanagedType.LPArray)] [In] ref byte[] localeName, uint size);
+
+    /// &lt;summary&gt;
+    ///     Gets the length in characters (not including the null terminator) of the string with the specified index.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the string.&lt;/param&gt;
+    /// &lt;param name="length"&gt;Receives the length in characters, not including the null terminator.&lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    [PreserveSig]
+    int GetStringLength(uint index, out uint length);
+
+    /// &lt;summary&gt;
+    ///     Copies the string with the specified index to the specified array.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the string.&lt;/param&gt;
+    /// &lt;param name="stringBuffer"&gt;Character array that receives the string.&lt;/param&gt;
+    /// &lt;param name="size"&gt;
+    ///     Size of the array in characters. The size must include space for the terminating
+    ///     null character.
+    /// &lt;/param&gt;
+    /// &lt;returns&gt;
+    ///     Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    [PreserveSig]
+    int GetString(uint index, [MarshalAs(UnmanagedType.LPWStr)] out string stringBuffer, uint size);
+}
+</code></pre>
+<p>Но оригинальный интерфейс определен вот так:</p>
+<pre><code>/// &lt;summary&gt;
+/// Represents a collection of strings indexed by locale name.
+/// &lt;/summary&gt;
+interface DWRITE_DECLARE_INTERFACE("08256209-099a-4b34-b86d-c22b110e7771") IDWriteLocalizedStrings : public IUnknown
+{
+    /// &lt;summary&gt;
+    /// Gets the number of language/string pairs.
+    /// &lt;/summary&gt;
+    STDMETHOD_(UINT32, GetCount)() PURE;
+
+    /// &lt;summary&gt;
+    /// Gets the index of the item with the specified locale name.
+    /// &lt;/summary&gt;
+    /// &lt;param name="localeName"&gt;Locale name to look for.&lt;/param&gt;
+    /// &lt;param name="index"&gt;Receives the zero-based index of the locale name/string pair.&lt;/param&gt;
+    /// &lt;param name="exists"&gt;Receives TRUE if the locale name exists or FALSE if not.&lt;/param&gt;
+    /// &lt;returns&gt;
+    /// Standard HRESULT error code. If the specified locale name does not exist, the return value is S_OK, 
+    /// but *index is UINT_MAX and *exists is FALSE.
+    /// &lt;/returns&gt;
+    STDMETHOD(FindLocaleName)(
+        _In_z_ WCHAR const* localeName,
+        _Out_ UINT32* index,
+        _Out_ BOOL* exists
+        ) PURE;
+
+    /// &lt;summary&gt;
+    /// Gets the length in characters (not including the null terminator) of the locale name with the specified index.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the locale name.&lt;/param&gt;
+    /// &lt;param name="length"&gt;Receives the length in characters, not including the null terminator.&lt;/param&gt;
+    /// &lt;returns&gt;
+    /// Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    STDMETHOD(GetLocaleNameLength)(
+        UINT32 index,
+        _Out_ UINT32* length
+        ) PURE;
+
+    /// &lt;summary&gt;
+    /// Copies the locale name with the specified index to the specified array.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the locale name.&lt;/param&gt;
+    /// &lt;param name="localeName"&gt;Character array that receives the locale name.&lt;/param&gt;
+    /// &lt;param name="size"&gt;Size of the array in characters. The size must include space for the terminating
+    /// null character.&lt;/param&gt;
+    /// &lt;returns&gt;
+    /// Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    STDMETHOD(GetLocaleName)(
+        UINT32 index,
+        _Out_writes_z_(size) WCHAR* localeName,
+        UINT32 size
+        ) PURE;
+
+    /// &lt;summary&gt;
+    /// Gets the length in characters (not including the null terminator) of the string with the specified index.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the string.&lt;/param&gt;
+    /// &lt;param name="length"&gt;Receives the length in characters, not including the null terminator.&lt;/param&gt;
+    /// &lt;returns&gt;
+    /// Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    STDMETHOD(GetStringLength)(
+        UINT32 index,
+        _Out_ UINT32* length
+        ) PURE;
+
+    /// &lt;summary&gt;
+    /// Copies the string with the specified index to the specified array.
+    /// &lt;/summary&gt;
+    /// &lt;param name="index"&gt;Zero-based index of the string.&lt;/param&gt;
+    /// &lt;param name="stringBuffer"&gt;Character array that receives the string.&lt;/param&gt;
+    /// &lt;param name="size"&gt;Size of the array in characters. The size must include space for the terminating
+    /// null character.&lt;/param&gt;
+    /// &lt;returns&gt;
+    /// Standard HRESULT error code.
+    /// &lt;/returns&gt;
+    STDMETHOD(GetString)(
+        UINT32 index,
+        _Out_writes_z_(size) WCHAR* stringBuffer,
+        UINT32 size
+        ) PURE;
+};
+</code></pre>
+<p>Я понимаю что у меня не правильно определены 2 метода: <code>GetLocaleName</code> и <code>GetString</code>.</p>
+<p>Но у меня нет представления что мне передать туда, т.к. как выходная строка, не подходит, а при передачи как указатель на массив, происходит повреждение кучи. Как правильно эти 2 метода перенести в <code>c#</code>?</p>
+</blockquote>
+<h2>Answer 979564</h2>
+<p><a href="https://ru.stackoverflow.com/a/979564/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Массивы тут не нужны. COM Interop умеет <a href="https://docs.microsoft.com/ru-ru/dotnet/framework/interop/default-marshaling-for-strings#fixed-length-string-buffers" rel="nofollow noreferrer">работать со строками как с выходными параметрами</a>:</p>
+<pre><code>[PreserveSig]
+int GetLocaleName(uint index, [MarshalAs(UnmanagedType.LPWStr)] [In, Out] StringBuilder localeName, uint size);
+</code></pre>
+<p>При вызове передать StringBuilder достаточного размера: <code>new StringBuilder(size)</code>.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

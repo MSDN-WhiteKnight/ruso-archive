@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1088;&#1080; &#1091;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1082;&#1077; &#1089;&#1074;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; TopMost &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1077; &#1074;&#1086;&#1089;&#1087;&#1088;&#1080;&#1085;&#1080;&#1084;&#1072;&#1077;&#1090;&#1089;&#1103; &#1082;&#1072;&#1082; &#1090;&#1088;&#1086;&#1103;&#1085; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1088;&#1080; &#1091;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1082;&#1077; &#1089;&#1074;&#1086;&#1081;&#1089;&#1090;&#1074;&#1072; TopMost &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1077; &#1074;&#1086;&#1089;&#1087;&#1088;&#1080;&#1085;&#1080;&#1084;&#1072;&#1077;&#1090;&#1089;&#1103; &#1082;&#1072;&#1082; &#1090;&#1088;&#1086;&#1103;&#1085; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>При установке свойства TopMost приложение воспринимается как троян</h1>
+<p><a href="https://ru.stackoverflow.com/questions/769043/%d0%9f%d1%80%d0%b8-%d1%83%d1%81%d1%82%d0%b0%d0%bd%d0%be%d0%b2%d0%ba%d0%b5-%d1%81%d0%b2%d0%be%d0%b9%d1%81%d1%82%d0%b2%d0%b0-topmost-%d0%bf%d1%80%d0%b8%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%b8%d0%b5-%d0%b2%d0%be%d1%81%d0%bf%d1%80%d0%b8%d0%bd%d0%b8%d0%bc%d0%b0%d0%b5%d1%82%d1%81%d1%8f-%d0%ba%d0%b0%d0%ba-%d1%82%d1%80%d0%be%d1%8f%d0%bd">Source</a> - by <a href="https://ru.stackoverflow.com/users/213331/tarasovych">Tarasovych</a></p>
+<blockquote>
+<p>Писал Winform-приложение, чтобы делать скриншоты выбранной области экрана (аналог "Ножниц" от Windows).</p>
+<p>Для свойства <code>TopMost</code> одной из форм приложения присвоил <code>true</code>, чтобы окно с захваченным экраном было поверх остальных. В итоге после проверки антивирусом (Windows Defender) получил Trojan:Win32/Fuerboos.A!cl. Устанавливал <code>false</code>, тестировал - антивирус ничего не находил. Приложение никак не взаимодействует с какими-либо сетевыми портами. Цифровая подпись присутствует.</p>
+<p>Вот часть кода этой формы (<a href="https://pastebin.com/U0qD9FtA" rel="nofollow noreferrer">здесь класс полностью</a>):</p>
+<pre><code>public Image Image { get; set; }
+
+public Rectangle RectangleSelect
+{
+    set
+    {
+        rectangleSelect = new Rectangle();
+    }
+}
+
+public static Image Snip()
+{
+    var rectangle = Screen.PrimaryScreen.Bounds;
+    using (Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb))
+    {
+        using (Graphics graphics = Graphics.FromImage(bitmap))
+            graphics.CopyFromScreen(0, 0, 0, 0, bitmap.Size);
+
+        using (var snipper = new SnippingTool(bitmap))
+        {
+            if (snipper.ShowDialog() == DialogResult.OK)
+            {
+                return snipper.Image;
+            }
+        }
+        return null;
+    }
+}
+
+public SnippingTool(Bitmap screenShot)
+{
+    InitializeComponent();
+    this.BackgroundImage = screenShot;
+    this.ShowInTaskbar = false;
+    this.FormBorderStyle = FormBorderStyle.None;
+    this.WindowState = FormWindowState.Maximized;
+    this.DoubleBuffered = true;
+}
+</code></pre>
+<p>Как можно исправить проблему?<br>
+P.S. Virustotal вообще не находит ничего.<br>
+P.P.S Написал в twitter MS Defender, жду ответа.</p>
+<hr>
+<p><strong>EDIT #0</strong>: Создал пустой проект с пустой формой, присвоил ей <code>TopMost</code> <code>true</code> - в результате тот же вирус.<br>
+<strong>EDIT #1</strong>: по совету <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a> создал checkbox, установил ему <code>Ckecked=true, Visible=false</code>, на этом основании устанавливал <code>TopMost=true</code>, это не помогло. Перенес checkbox в другую форму, тоже не помогло.</p>
+</blockquote>
+<h2>Answer 770402</h2>
+<p><a href="https://ru.stackoverflow.com/a/770402/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Хоть проблема была решена <a href="https://chat.stackexchange.com/transcript/message/42225209#42225209">обновлением определений вирусов до последней версии</a> наверное, имеет смысл что-то написать для истории. </p>
+<p><a href="https://www.microsoft.com/en-us/wdsi/threats/malware-encyclopedia-description?Name=Trojan:Win32/Fuerboos.A!cl" rel="nofollow noreferrer">Win32/Fuerboos</a> - это эвристическое правило в Windows Defender, которое может определять различные типы вредоносных программ. <strong>Эвристическое правило</strong> - это правило, которое использует некий набор характерных признаков для выявления в том числе неизвестных вирусов, в противоположность <strong>сигнатурному</strong> анализу, выполняющему сравнение последовательности байтов с уже известными сигнатурами вирусов. Таким признаком может быть, например, скачивание файла по заранее прошитому в коде URL - признак трояна / клиента ботнета, скачивающего свой конфиг.</p>
+<p>На приложения без цифровой подписи, или с бессмысленным именем издателя типа "Неизвестный издатель" в свойствах сборки, эвристические правила срабатывают чаще. Поэтому, при распространении программ желательно позаботиться об этих аспектах.</p>
+<p>Установка свойства <code>TopMost</code> тоже может таким признаком, особенно для окна большого размера: это может быть расценено как попытка скрыть часть экрана от пользователя и помешать его работе. Хорошо, что MS в обновлении уменьшили роль этого фактора, но все же рекомендуется не злоупотреблять размещением своего окна поверх всех окон (обязательно сделать возможность это отключить).</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

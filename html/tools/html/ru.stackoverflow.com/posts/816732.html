@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 816732 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 816732 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 816732</h1>
+<h2>Answer 816732</h2>
+<p><a href="https://ru.stackoverflow.com/a/816732/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Для отключения сетевого адаптера можно использовать Setup API (требует привилегий администратора, не работает из-под WOW64):</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;locale.h&gt;
+#include &lt;stdio.h&gt;
+
+#include &lt;Windows.h&gt;
+#include &lt;SetupAPI.h&gt;
+#define INITGUID
+#include &lt;Devpkey.h&gt;
+#include &lt;devguid.h&gt;
+
+#pragma comment(lib,"Setupapi.lib")
+
+void ErrorMes(LPTSTR lpszFunction) 
+{ 
+    // Retrieve the system error message for the last-error code
+
+    LPVOID lpMsgBuf;
+    LPVOID lpDisplayBuf;
+    DWORD dw = GetLastError(); 
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR) &amp;lpMsgBuf,
+        0, NULL );
+
+    // Display the error message
+
+    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT, 
+        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR)); 
+    wprintf(L"%s failed with error %d: %s\n", 
+        lpszFunction, dw, lpMsgBuf);     
+
+    LocalFree(lpMsgBuf);
+    LocalFree(lpDisplayBuf);
+}
+
+//* Включает или отключает сетевое соединение *
+//aState: true - включить, false - отключить
+//adapter: имя сетевого адаптера (как в диспетчере устройств)
+void EnableConnection(bool aState, wchar_t* adapter)
+{
+    unsigned index;
+    HDEVINFO hDevInfo;
+    SP_DEVINFO_DATA DeviceInfoData;  
+    SP_PROPCHANGE_PARAMS PCHP;
+    TCHAR buf[1024]=L"";
+
+    DEVPROPTYPE dpt=0;      
+    BOOL res;
+
+    // Enum all network devices
+    hDevInfo = SetupDiGetClassDevs(&amp;GUID_DEVCLASS_NET, 0, 0, DIGCF_PRESENT);
+    for (index = 0; ; index++) {
+        DeviceInfoData.cbSize = sizeof(DeviceInfoData);
+        if (!SetupDiEnumDeviceInfo(hDevInfo, index, &amp;DeviceInfoData)) {         
+           break;     
+        }
+
+        res=SetupDiGetDeviceProperty(hDevInfo,&amp;DeviceInfoData,
+                        &amp;DEVPKEY_Device_DeviceDesc,&amp;dpt,(PBYTE)buf,1000,NULL,0);//name              
+        if(res==FALSE){ErrorMes(L"SetupDiGetDeviceProperty");continue;}
+
+        if(wcscmp(buf,adapter)==0){//device found
+
+            PCHP.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
+
+            if (SetupDiSetClassInstallParams(hDevInfo,&amp;DeviceInfoData,&amp;PCHP.ClassInstallHeader,sizeof(SP_PROPCHANGE_PARAMS)))
+            {
+                PCHP.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
+                PCHP.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
+                PCHP.HwProfile = 0;
+                PCHP.Scope = DICS_FLAG_CONFIGSPECIFIC;
+                if (aState) PCHP.StateChange = DICS_ENABLE;
+                else  PCHP.StateChange = DICS_DISABLE;
+                SetupDiSetClassInstallParams(hDevInfo,&amp;DeviceInfoData,&amp;PCHP.ClassInstallHeader,sizeof(SP_PROPCHANGE_PARAMS));
+
+                if(SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,hDevInfo,&amp;DeviceInfoData)==0)
+                {
+                    ErrorMes(L"SetupDiCallClassInstaller");
+                    if(GetLastError()==ERROR_DI_POSTPROCESSING_REQUIRED)wprintf(L"ERROR_DI_POSTPROCESSING_REQUIRED\n");
+                    if(GetLastError()==ERROR_IN_WOW64)wprintf(L"SetupDiCallClassInstaller не работает из WOW64\n");
+                }
+                else
+                    wprintf(L"Состояние адаптера успешно изменено.\n");
+            }
+            else ErrorMes(L"SetupDiSetClassInstallParams");
+            break;
+        }
+    }
+
+    SetupDiDestroyDeviceInfoList(hDevInfo);    
+}
+
+
+int main(void)
+{       
+    setlocale(LC_ALL,"Russian");    
+
+    EnableConnection(false,L"Realtek PCIe GBE Family Controller");      
+
+    system("PAUSE");    
+    return 0;
+}
+</code></pre>
+<p>Для отключения dial-up соединения - функцию <a href="https://msdn.microsoft.com/ru-ru/library/windows/desktop/aa377567(v=vs.85).aspx" rel="nofollow noreferrer">RasHangUp</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

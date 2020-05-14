@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>WPF &#1085;&#1077;&#1074;&#1086;&#1079;&#1084;&#1086;&#1078;&#1085;&#1086; &#1086;&#1073;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1101;&#1083;&#1077;&#1084;&#1077;&#1085;&#1090; &#1086;&#1082;&#1085;&#1072; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="WPF &#1085;&#1077;&#1074;&#1086;&#1079;&#1084;&#1086;&#1078;&#1085;&#1086; &#1086;&#1073;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100; &#1101;&#1083;&#1077;&#1084;&#1077;&#1085;&#1090; &#1086;&#1082;&#1085;&#1072; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>WPF невозможно обновить элемент окна</h1>
+<p><a href="https://ru.stackoverflow.com/questions/866956/wpf-%d0%bd%d0%b5%d0%b2%d0%be%d0%b7%d0%bc%d0%be%d0%b6%d0%bd%d0%be-%d0%be%d0%b1%d0%bd%d0%be%d0%b2%d0%b8%d1%82%d1%8c-%d1%8d%d0%bb%d0%b5%d0%bc%d0%b5%d0%bd%d1%82-%d0%be%d0%ba%d0%bd%d0%b0">Source</a> - by <a href="https://ru.stackoverflow.com/users/277742/rootware">Rootware</a></p>
+<blockquote>
+<p>Использовал слайдер на <code>DispatcherTimer</code> внутри кода окна. Но после переноса в отдельный Singleton класс потоков управляющих кэшированием картинок и смены слайда выскакивает ошибка.</p>
+<p>Помогите побороть эту ошибку возникающую при передачи изображения в форму. Не понимаю, что делаю не так. Вроде оформил доступ к окну через делегат. И вроде подобные структуры работают нормально с текстовыми полями формы, но с изображением нет.</p>
+<p>Код MainWindow.xaml.cs:</p>
+<pre><code>public partial class MainWindow : Window
+{
+    private delegate void slideCacheUpdateDelegate(int slide, BitmapImage image);
+
+    public MainWindow()
+    {
+        SlideCache.getInstance.init();
+
+        InitializeComponent();
+
+        // Initial slide cache updater delegate.
+        SlideCache.OnRefresh += (s, i) =&gt;
+        {
+            if (Dispatcher.CheckAccess())
+                changeToNextSlide(s, i);
+            else
+                Dispatcher.BeginInvoke(new slideCacheUpdateDelegate(changeToNextSlide), new object[] { s, i });
+        };
+
+        SlideCache.getInstance.startSlideShow();
+    }
+
+    private void changeToNextSlide(int slide, BitmapImage image)
+    {
+        switch (slide)
+        {
+            case 1:
+                this.imageSlide2.Source = image;
+                DoubleAnimation animationSlide1 = new DoubleAnimation();
+                animationSlide1.From = 0;
+                animationSlide1.To = 1;
+                animationSlide1.Duration = TimeSpan.FromMilliseconds(500);
+                this.imageSlide2.BeginAnimation(Canvas.OpacityProperty, animationSlide1);
+                break;
+
+            case 2:
+                this.imageSlide1.Source = image;
+                DoubleAnimation animationSlide2 = new DoubleAnimation();
+                animationSlide2.From = 1;
+                animationSlide2.To = 0;
+                animationSlide2.Duration = TimeSpan.FromMilliseconds(500);
+                this.imageSlide2.BeginAnimation(Canvas.OpacityProperty, animationSlide2);
+                break;
+        }
+    }
+}
+</code></pre>
+<p>Код MainWindow.xaml:</p>
+<pre><code>&lt;Window x:Class="SlideShow.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525"&gt;
+    &lt;Grid&gt;
+        &lt;StackPanel Width="200" Height="100" Background="Black"&gt;
+            &lt;Image Name="imageSlide1" Stretch="Fill"/&gt;
+            &lt;Image Name="imageSlide2" Stretch="Fill"/&gt;
+        &lt;/StackPanel&gt;
+    &lt;/Grid&gt;
+&lt;/Window&gt;
+</code></pre>
+<p>Код SlideCache.cs:</p>
+<pre><code>public class SlideCache
+{
+    public delegate void Slider(int slide, BitmapImage holder);
+    public static event Slider OnRefresh;
+
+    private static volatile SlideCache INSTANCE;
+    private static object syncRoot = new Object();
+
+    private Thread _threadCache;
+    private Thread _threadSlide;
+
+    private Dictionary&lt;int, BitmapHolder&gt; _images;
+
+    private int _currentSlide;
+
+    private Boolean _isFirstImage;
+
+    private SlideCache()
+    {
+        // Do nothing.
+    }
+
+    public void init()
+    {
+        initDictionary();
+
+        _currentSlide = 0;
+        _isFirstImage = true;
+
+        _threadCache = new Thread(slideCache);
+        _threadCache.IsBackground = true;
+        _threadCache.SetApartmentState(ApartmentState.MTA);
+        _threadCache.Start();
+    }
+
+    private void slideShow()
+    {
+        while (true)
+        {
+            ++_currentSlide;
+            if (_images[_currentSlide] != null)
+            {
+                slideUpdate(_isFirstImage ? 1 : 2, _images[_currentSlide].getImage());
+                _isFirstImage = !_isFirstImage;
+            }
+
+            Thread.Sleep(3000);
+        }
+    }
+
+    private void slideCache()
+    {
+        while (true)
+        {
+            DateTime timestamp = DateTime.Now;
+            for (int i = 0; i &lt; 10; i++ )
+            {
+                int slideId = i + 1;
+                BitmapHolder holder = _images[slideId];
+                if (holder == null || holder.getTimestamp() &lt; timestamp)
+                {
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri("http://example.com/slide_" + slideId);
+                    image.EndInit();
+
+                    if (holder != null &amp;&amp; holder.getImage() != null &amp;&amp; image.PixelWidth == 1)
+                        continue;
+
+                    _images[slideId] = new BitmapHolder(timestamp.AddSeconds(new Random().Next(180, 600)), image);
+                }
+            }
+
+            Thread.Sleep(1000);
+        }
+    }
+
+    private void initDictionary()
+    {
+        _images = new Dictionary&lt;int, BitmapHolder&gt;(10);
+
+        for (int i = 0; i &lt; 10; i++)
+            _images.Add((i + 1), null);
+    }
+
+    private void slideUpdate(int slide, BitmapImage image)
+    {
+        OnRefresh.Invoke(slide, image);
+    }
+
+    public void startSlideShow()
+    {
+        _threadSlide = new Thread(slideShow);
+        _threadSlide.IsBackground = true;
+        _threadSlide.SetApartmentState(ApartmentState.MTA);
+        _threadSlide.Start();
+    }
+
+    public void stopSlideShow()
+    {
+        _threadSlide.Abort();
+    }
+
+    public void changeToNextSlide(int slide)
+    {
+        _currentSlide = slide;
+        slideUpdate(_isFirstImage ? 1 : 2, _images[_currentSlide].getImage());
+        _isFirstImage = !_isFirstImage;
+    }
+
+    public Boolean slideShowEnabled()
+    {
+        return _threadSlide.ThreadState == ThreadState.Running;
+    }
+
+    public static SlideCache getInstance
+    {
+        get
+        {
+            if (INSTANCE == null)
+            {
+                lock (syncRoot)
+                {
+                    if (INSTANCE == null)
+                        INSTANCE = new SlideCache();
+                }
+            }
+
+            return INSTANCE;
+        }
+    }
+}
+</code></pre>
+<p>Код BitmapHolder.cs:</p>
+<pre><code>public class BitmapHolder
+{
+    private DateTime _timestamp;
+    private BitmapImage _image;
+
+    public BitmapHolder(DateTime timestamp, BitmapImage image)
+    {
+        _timestamp = timestamp;
+        _image = image;
+    }
+
+    public DateTime getTimestamp()
+    {
+        return _timestamp;
+    }
+
+    public BitmapImage getImage()
+    {
+        return _image;
+    }
+}
+</code></pre>
+<p>При запуске приложение зависает и выскакивает следущая ошибка в VS:</p>
+<blockquote>
+  <p><strong>System.InvalidOperationException не обработано пользовательским кодом</strong> Вызывающий поток не может получить доступ к данному объекту,
+  так как владельцем этого объекта является другой поток.</p>
+</blockquote>
+<p><strong>Решение проблемы:</strong></p>
+<pre><code>BitmapImage image = new BitmapImage();
+image.BeginInit();
+image.CacheOption = BitmapCacheOption.OnLoad;
+image.StreamSource = new MemoryStream(new WebClient().DownloadData("http://example.com/Slide_" + slideId + ".png"));
+image.EndInit();
+image.Freeze();
+</code></pre>
+<p>Спасибо <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a> за помощь с проверкой локальных ресурсов. Ваш ответ был ближе всего к решению проблемы.</p>
+<p>P.S. Сама проблема была не с доступом к элементу UI из другого потока, а с блокированным ресурсом который поток из <code>Singleton</code> класса пытался передать в UI. Т.е. нужно было взять картинку как стрим поток и на основании его создать ресурс. А далее как в MSDN описании <code>Freeze()</code> для совместного использования. Надеюсь кому-то пригодится, т.к. проблема не единичная, по крайней мере, на EN SO.</p>
+</blockquote>
+<h2>Answer 867086</h2>
+<p><a href="https://ru.stackoverflow.com/a/867086/">Source</a> - by <a href="https://ru.stackoverflow.com/users/219799/liptondev">LiptonDev</a></p>
+<blockquote>
+<p>Любое взаимодействие с UI из потока, отличного от потока UI, должно вызываться в UI потоке. Проверяйте весь код, где есть какое-либо взаимодействие с UI контролами, например, присвоение картинки и используйте Dispatcher.</p>
+<pre><code>App.Current.Dispatcher.Invoke(() =&gt; imageSlide1.Source = CreateImage());
+</code></pre>
+</blockquote>
+<h2>Answer 868062</h2>
+<p><a href="https://ru.stackoverflow.com/a/868062/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Объект ImageSource обычно может использоваться только из потока, в котором он был создан. Необходимо вызвать <code>image.Freeze()</code> после завершения загрузки изображения (т.е., вызова <code>image.EndInit()</code>), если вы хотите использовать его в других потоках (после этого он станет неизменяемым). См. <a href="https://docs.microsoft.com/ru-ru/dotnet/framework/wpf/advanced/freezable-objects-overview" rel="nofollow noreferrer">Freezable Objects Overview</a></p>
+<hr>
+<p>Также, если ImageSource указывает на HTTP URL, его загрузка осуществляется асинхронно. Поэтому перед вызовом Freeze нужно дождаться его загрузки, при этом выполняя обработку событий WPF в потоке. Для этого понадобится вспомогательный метод:</p>
+<pre><code>using System.Windows.Threading;
+
+public static void DoWpfEvents()
+{
+      DispatcherFrame frame = new DispatcherFrame();
+      Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background,
+           new DispatcherOperationCallback((f) =&gt;
+           {
+               ((DispatcherFrame)f).Continue = false; return null;
+           }), frame);
+      Dispatcher.PushFrame(frame);
+ } 
+</code></pre>
+<p>Ожидание можно выполнить так:</p>
+<pre><code>BitmapImage image = new BitmapImage();
+image.BeginInit();
+image.UriSource = new Uri("http://example.com/image_" + slideId.ToString() + ".png");
+image.CacheOption = BitmapCacheOption.OnLoad;
+image.EndInit();
+
+while (image.IsDownloading) { DoWpfEvents(); Thread.Sleep(100); }                     
+
+image.Freeze();
+</code></pre>
+<p>Но лучше воспользоваться советом из <a href="https://ru.stackoverflow.com/a/867086/240512">соседнего ответа</a> и создать изображение в основном потоке (он на самом деле работает, если все сделать правильно):</p>
+<pre><code>BitmapImage image=null;
+
+Application.Current.Dispatcher.Invoke(() =&gt; {
+    image = new BitmapImage();
+    image.BeginInit();
+    image.UriSource = new Uri("http://example.com/image_" + slideId.ToString() + ".png");        
+    image.EndInit();
+
+});
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 928654 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 928654 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 928654</h1>
+<h2>Answer 928654</h2>
+<p><a href="https://ru.stackoverflow.com/a/928654/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>В ходе подробных тестов выяснилось, что используемая схема привязки неудачна во всех отношениях. Помимо того, что нет легкого способа определить момент завершения загрузки изображения, в случае указания в качестве пути к изображению HTTP URI возникают существенные зависания GUI. Это вызвано тем, что хотя и загрузка BitmapImage по HTTP осуществляется асинхронно, разрешение имени узла все равно осуществляется синхронно. На компьютере, где отключен NetBIOS, скорее всего, это не будет иметь заметного эффекта, однако при включенном NetBIOS любое имя, которое не удалось разрешить в DNS, система будет пытаться разрешить широковещательно и это приведет к заметным зависаниям GUI в ходе ввода пути в TextBox (обновление в данной схеме привязки осуществляется при вводе каждого нового символа).</p>
+<p>Вместо этого, я предлагаю создать вспомогательный класс для загрузки изображения в фоновом Task с событием окончания загрузки:</p>
+<pre><code>public class ImageLoader
+{
+    Uri _ImageUri;
+    BitmapImage _bi;                    
+
+    public BitmapImage Image
+    {
+        get { return _bi; }
+    }
+
+    public event EventHandler LoadCompleted;
+
+    void OnLoadCompleted()
+    {
+        if (LoadCompleted != null) LoadCompleted(this, new EventArgs());
+    }        
+
+    public ImageLoader(Uri uri)
+    {
+        this._ImageUri = uri;           
+    }
+
+    void LoadImage()
+    {
+        BitmapImage bi;
+        try
+        {
+            byte[] data;
+
+            if (_ImageUri.IsFile)
+            {
+                data = System.IO.File.ReadAllBytes(_ImageUri.LocalPath);
+            }
+            else
+            {
+                var client = new System.Net.WebClient();
+                using (client)
+                {
+                    data = client.DownloadData(_ImageUri);
+                }
+            }
+
+            var ms = new System.IO.MemoryStream(data);
+
+            bi = new BitmapImage();
+            bi.BeginInit();
+            bi.CacheOption = BitmapCacheOption.OnLoad;
+            bi.StreamSource = ms;
+            bi.EndInit();
+            bi.Freeze();                
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            bi = null;                
+        }
+        this._bi = bi;            
+        OnLoadCompleted();
+    }
+
+    public void Run()
+    {            
+        Task t = new Task(() =&gt; LoadImage());
+        t.Start();            
+    }        
+}
+</code></pre>
+<p>Привязку TextBox и Image лучше сделать не напрямую, а через вспомогательные свойства:</p>
+<pre><code>&lt;Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WpfApplication1" Height="350" Width="620.522" &gt;
+    &lt;Grid  &gt;
+        &lt;Image Width="50" Height="50" Source="{Binding Path=IconImageSource}" 
+               Margin="40,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"&gt;
+        &lt;/Image&gt;
+        &lt;TextBox x:Name="IconPath" Height="35"
+                 Text="{Binding Path=IconPathString, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"  
+                 Margin="139,40,40,0" VerticalAlignment="Top"/&gt;
+        &lt;StatusBar HorizontalAlignment="Stretch" Height="40" VerticalAlignment="Bottom" &gt;
+            &lt;Label Content="{Binding Path=ImageStatusText}"/&gt;
+        &lt;/StatusBar&gt;
+    &lt;/Grid&gt;
+&lt;/Window&gt;
+</code></pre>
+<p>В код окна добавить логику загрузки изображения и обновления GUI:</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows;
+using System.Threading;
+using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+namespace WpfApplication1
+{
+    public partial class MainWindow : Window, INotifyPropertyChanged
+    {       
+        public MainWindow()
+        {
+            InitializeComponent();
+            this.DataContext = this;
+        }        
+
+        string _IconPathString = "";
+        ImageLoader Loader = null;
+
+        public BitmapImage IconImageSource
+        {
+            get
+            {
+                if (Loader != null) return Loader.Image;
+                else return null;
+            }
+        }
+
+        string _ImageStatusText="";
+        public string ImageStatusText
+        {
+            get { return _ImageStatusText; }
+            set {
+                _ImageStatusText = value;
+                OnPropertyChanged("ImageStatusText");
+            }
+        }
+
+        public string IconPathString
+        {
+            get { return _IconPathString; }
+
+            set
+            {   
+                try
+                {
+                    if (Loader != null)
+                    {
+                        Loader.LoadCompleted -= ImageLoadCompleted;
+                        Loader = null;
+                    }
+
+                    if (String.IsNullOrEmpty(value))
+                    {
+                        _IconPathString = "";                        
+                        OnPropertyChanged("IconImageSource");
+                        ImageStatusText = "Введите путь к изображению";                        
+                        return;
+                    }
+
+                    Uri uri = new Uri(value);
+                    Loader = new ImageLoader(uri);
+                    Loader.LoadCompleted += ImageLoadCompleted;
+                    Loader.Run();
+                    _IconPathString = value;
+                    ImageStatusText = "Подождите...";   
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.ToString());
+                    _IconPathString = "";
+                    OnPropertyChanged("IconImageSource");
+                    ImageStatusText = "Введен неверный путь к изображению";                    
+                }
+            }
+        }
+
+        void ImageLoadCompleted(object sender, EventArgs e)
+        {
+            this.Dispatcher.Invoke(new Action(() =&gt;
+            {
+                if ((sender as ImageLoader).Image != null)
+                {                    
+                    ImageStatusText = "Изображение загружено успешно";   
+                }
+                else
+                {                    
+                    _IconPathString = "";
+                    ImageStatusText = "Введен неверный путь к изображению";   
+                }
+
+                OnPropertyChanged("IconImageSource");
+                (sender as ImageLoader).LoadCompleted -= ImageLoadCompleted;
+            }));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(name));
+        }
+    }
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

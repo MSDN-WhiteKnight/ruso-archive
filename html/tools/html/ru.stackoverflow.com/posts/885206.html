@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Post 885206 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Post 885206 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Post 885206</h1>
+<h2>Answer 885206</h2>
+<p><a href="https://ru.stackoverflow.com/a/885206/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>На самом деле можно, это называется <a href="https://docs.microsoft.com/en-us/windows/desktop/menurc/dialog-resource" rel="nofollow noreferrer">Ресурсы диалоговых окон</a>. Несмотря на название, их область использования куда шире, чем диалоговые окна в традиционном смысле. Например, ничто не мешает:</p>
+<ul>
+<li><p>Сделать главное окно приложение диалоговым, если оно состоит исключительно из элементов управления и не содержит сложной логики отрисовки.</p></li>
+<li><p>Создать диалоговое окно со стилем WS_CHILD и вкладывать его в другие окна (аналог User Control).</p></li>
+</ul>
+<p>Пример. Нарисуем с помощью редактора ресурсов Visual Studio такое диалоговое окно:</p>
+<p><a href="https://i.stack.imgur.com/X97IH.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/X97IH.png" alt="resource"></a></p>
+<p>Редактор ресурсов не содержится в студии Express-версий, поэтому при их использовании нужно будет найти сторонний редактор или редактировать определения ресурсов вручную (см. ниже).</p>
+<p>В результате получим файл ресурсов и заголовочный файл. Откроем их в текстовом редакторе и удалим лишний текст, сгенерированный IDE, получим в результате:</p>
+<p><strong>Resource.h</strong> (идентификаторы элементов управления, используются для связи кода с UI)</p>
+<pre><code>#define IDD_CALC                        103
+
+#define IDC_INPUT1                      1000 
+#define IDC_INPUT2                      1001
+#define IDC_PLUS                        1002
+#define IDC_MINUS                       1003
+#define IDC_MULTI                       1004
+#define IDC_DIV                         1005
+</code></pre>
+<p><strong>Resource.rc</strong> (определение UI, аналог XAML)</p>
+<pre><code>#include "resource.h"
+#include "windows.h"
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CALC DIALOGEX 0, 0, 217, 89
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Супер калькулятор"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Выход",IDOK,160,68,50,14,WS_GROUP
+    EDITTEXT        IDC_INPUT1,15,14,47,15,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_INPUT2,15,36,47,15,ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "+",IDC_PLUS,77,15,18,12
+    PUSHBUTTON      "-",IDC_MINUS,105,15,18,12
+    PUSHBUTTON      "*",IDC_MULTI,77,36,18,12
+    PUSHBUTTON      "/",IDC_DIV,105,36,18,12
+END
+</code></pre>
+<p>Далее добавим код:</p>
+<p><strong>Model.cpp</strong></p>
+<pre><code>#include &lt;windows.h&gt;
+#include "resource.h"
+
+//Логика вычислений
+BOOL Calculate(UINT idAction, int arg1, int arg2, int* pOutput) {
+
+    if (pOutput == NULL) return FALSE;
+
+    if (idAction == IDC_DIV &amp;&amp; arg2 == 0) return FALSE;
+
+    switch (idAction) {
+
+    case IDC_PLUS:  *pOutput = arg1 + arg2; return TRUE;
+    case IDC_MINUS: *pOutput = arg1 - arg2; return TRUE;
+    case IDC_MULTI: *pOutput = arg1 * arg2; return TRUE;
+    case IDC_DIV:   *pOutput = arg1 / arg2; return TRUE;
+
+    }
+    return FALSE;
+}
+</code></pre>
+<p><strong>ViewModel.cpp</strong></p>
+<pre><code>#include &lt;windows.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;tchar.h&gt;
+#include "resource.h"
+
+//объявления функций
+BOOL                InitInstance(HINSTANCE, int);
+INT_PTR CALLBACK    DlgCalc_Callback(HWND, UINT, WPARAM, LPARAM);
+BOOL Calculate(UINT idAction, int arg1, int arg2, int* pOutput);
+
+// Глобальные переменные
+HINSTANCE hInst;                                
+HWND hWnd = NULL;
+
+// Точка входа
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
+{
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);        
+
+    // Выполнить инициализацию приложения
+    if (!InitInstance (hInstance, nCmdShow))
+    {
+        return FALSE;
+    }
+
+    MSG msg;
+
+    // Цикл основного сообщения
+    while (GetMessage(&amp;msg, nullptr, 0, 0))
+    {        
+          TranslateMessage(&amp;msg);
+          DispatchMessage(&amp;msg);        
+    }
+
+    return (int) msg.wParam;
+}
+
+//Инициализация приложения
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+   hInst = hInstance; 
+
+   //создать окно
+   CreateDialog(hInstance, MAKEINTRESOURCE(IDD_CALC), NULL, DlgCalc_Callback);
+
+   if (!hWnd)
+   {
+      return FALSE;
+   }
+
+   //отобразить окно
+   ShowWindow(hWnd, nCmdShow);   
+
+   return TRUE;
+}
+
+
+//Логика обработки команд в окне
+INT_PTR ProcessCommand(HWND hDlg, UINT idAction) {
+
+    BOOL success = FALSE;
+    int x, y, res;
+
+    if (idAction == IDOK || idAction == IDCANCEL)
+    {
+        //закрыть окно
+        DestroyWindow(hDlg);        
+        return (INT_PTR)TRUE;
+    }
+
+    if (idAction &gt;= IDC_PLUS &amp;&amp; idAction &lt;= IDC_DIV) {
+
+        //получение входных данных
+        x = GetDlgItemInt(hDlg, IDC_INPUT1, &amp;success, TRUE);
+        if (success == FALSE) {
+            MessageBox(hDlg, L"Введенное число некорректно", NULL, MB_OK | MB_ICONERROR);
+            return (INT_PTR)TRUE;
+        }
+
+        y = GetDlgItemInt(hDlg, IDC_INPUT2, &amp;success, TRUE);
+        if (success == FALSE) {
+            MessageBox(hDlg, L"Введенное число некорректно", NULL, MB_OK | MB_ICONERROR);
+            return (INT_PTR)TRUE;
+        }
+
+        //выполнение команды
+        success = Calculate(idAction, x, y, &amp;res);
+        if (success == FALSE) {
+            MessageBox(hDlg, L"При вычислении произошла ошибка", NULL, MB_OK | MB_ICONERROR);
+            return (INT_PTR)TRUE;
+        }
+
+        //вывод результата
+        SetDlgItemText(hDlg, IDC_INPUT2, L"");
+        SetDlgItemInt(hDlg, IDC_INPUT1, res, TRUE);
+        return (INT_PTR)TRUE;
+    }
+
+    return (INT_PTR)FALSE;
+}
+
+
+INT_PTR CALLBACK DlgCalc_Callback(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    UINT idAction;
+
+    switch (message)
+    {
+    case WM_INITDIALOG:     
+        hWnd = hDlg;
+        return (INT_PTR)TRUE;
+
+    case WM_COMMAND:    
+        idAction = LOWORD(wParam);        
+        return ProcessCommand(hDlg, idAction);
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    }
+    return (INT_PTR)FALSE;
+}
+</code></pre>
+<p>В итоге получаем приложение с разделением на декларативное определение UI, логику UI и логику вычислений, хотя по возможностям это и далеко от WPF/XAML. </p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

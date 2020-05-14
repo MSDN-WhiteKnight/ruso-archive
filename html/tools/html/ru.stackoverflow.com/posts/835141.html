@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1053;&#1077; &#1087;&#1086;&#1083;&#1091;&#1095;&#1072;&#1077;&#1090;&#1089;&#1103; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1076;&#1072;&#1085;&#1085;&#1099;&#1077; &#1086; UDP &#1089;&#1086;&#1077;&#1076;&#1080;&#1085;&#1077;&#1085;&#1080;&#1103;&#1093; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; GetExtendedUdpTable | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1053;&#1077; &#1087;&#1086;&#1083;&#1091;&#1095;&#1072;&#1077;&#1090;&#1089;&#1103; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1076;&#1072;&#1085;&#1085;&#1099;&#1077; &#1086; UDP &#1089;&#1086;&#1077;&#1076;&#1080;&#1085;&#1077;&#1085;&#1080;&#1103;&#1093; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; GetExtendedUdpTable | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Не получается получить данные о UDP соединениях с помощью GetExtendedUdpTable</h1>
+<p><a href="https://ru.stackoverflow.com/questions/835141/%d0%9d%d0%b5-%d0%bf%d0%be%d0%bb%d1%83%d1%87%d0%b0%d0%b5%d1%82%d1%81%d1%8f-%d0%bf%d0%be%d0%bb%d1%83%d1%87%d0%b8%d1%82%d1%8c-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d0%b5-%d0%be-udp-%d1%81%d0%be%d0%b5%d0%b4%d0%b8%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f%d1%85-%d1%81-%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e-getextendedudptable">Source</a> - by <a href="https://ru.stackoverflow.com/users/289076/oleg-lylok">Oleg Lylok</a></p>
+<blockquote>
+<p>Есть следующий код:</p>
+<pre><code>    private struct MIB_UDPROW_OWNER_PID
+    {
+        public uint dwLocalAddr;
+        public uint dwLocalPort;
+        public uint dwOwningPid;
+    }
+   enum UDP_TABLE_CLASS
+    {
+        UDP_TABLE_BASIC,
+        UDP_TABLE_OWNER_MODULE,
+        UDP_TABLE_OWNER_PID
+    }
+
+    const uint ERROR_INSUFFICIENT_BUFFER = 122;
+    const uint NO_ERROR = 0;
+    private const uint AF_INET = 2;
+    private const uint AF_INET6 = 23;
+
+    [DllImport("Iphlpapi.dll", SetLastError = true, ExactSpelling = true)]
+    static extern uint GetExtendedUdpTable(IntPtr pTcpTable,
+       ref int pdwSize,
+       bool bOrder,
+       uint ulAf,
+       UDP_TABLE_CLASS TableClass,
+       uint Reserved
+       )
+       ;
+    static void Main(string[] args)
+    {
+        while (true)
+        {
+            Thread.Sleep(100);
+            MIB_UDPROW_OWNER_PID[] ms = GetUdpTableForEachProcess();
+            foreach (MIB_UDPROW_OWNER_PID m in ms )
+            {
+                Console.WriteLine(m.dwLocalPort);
+            }
+        }
+    }
+    static MIB_UDPROW_OWNER_PID[] GetUdpTableForEachProcess()
+    {
+        IntPtr ptr = IntPtr.Zero;
+        int buffSize = 0;
+        uint dwError;
+
+        dwError = GetExtendedUdpTable(ptr, ref buffSize, false, AF_INET, UDP_TABLE_CLASS.UDP_TABLE_OWNER_PID, 0);
+
+        if (dwError != ERROR_INSUFFICIENT_BUFFER)
+        {
+            return null;
+        }
+
+        ptr = Marshal.AllocHGlobal(buffSize);
+
+        dwError = GetExtendedUdpTable(ptr, ref buffSize, false, AF_INET, UDP_TABLE_CLASS.UDP_TABLE_OWNER_PID, 0);
+
+        if (dwError != NO_ERROR)
+        {
+            Marshal.FreeHGlobal(ptr);
+            return null;
+        }
+
+        int count = Marshal.ReadInt32(ptr);
+        IntPtr ptrRead = ptr + sizeof(int);
+        int sz = Marshal.SizeOf(typeof(MIB_UDPROW_OWNER_PID));
+        MIB_UDPROW_OWNER_PID[] mtop = new MIB_UDPROW_OWNER_PID[count];
+
+        for (int i = 0; i &lt;= count - 1; i++)
+        {
+            mtop[i] = (MIB_UDPROW_OWNER_PID)Marshal.PtrToStructure(ptrRead, typeof(MIB_UDPROW_OWNER_PID));
+            ptrRead += sz;
+        }
+        Marshal.FreeHGlobal(ptr);
+
+        return mtop;
+
+
+    }
+</code></pre>
+<p>И вместо того, чтобы вернуть мне порт, оно возвращает значения вида 0 0 0 <em>куча цифр</em> 0 0 0. Тоже самое и с PID. Причем с GetExtendedTcpTable все работает отлично. Все структуры и перечисления точно правильные, так как взяты с MSDN. Null нигде и никто не возвращает. Есть идеи, товарищи?</p>
+</blockquote>
+<h2>Answer 835285</h2>
+<p><a href="https://ru.stackoverflow.com/a/835285/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<blockquote>
+  <p>Все структуры и перечисления точно правильные</p>
+</blockquote>
+<p>Так то нет. В <em>UDP_TABLE_CLASS</em> порядок неверный, должно быть:</p>
+<pre><code>enum UDP_TABLE_CLASS
+{
+    UDP_TABLE_BASIC,            
+    UDP_TABLE_OWNER_PID,
+    UDP_TABLE_OWNER_MODULE,
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

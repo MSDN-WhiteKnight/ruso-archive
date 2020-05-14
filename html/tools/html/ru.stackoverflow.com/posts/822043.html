@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>C# - &#1054;&#1090;&#1084;&#1077;&#1085;&#1080;&#1090;&#1100; &#1079;&#1072;&#1082;&#1088;&#1099;&#1090;&#1080;&#1077; WebBrowser &#1087;&#1077;&#1088;&#1077;&#1093;&#1074;&#1072;&#1090;&#1086;&#1084; WM_DESTROY &#1080;&#1083;&#1080; WM_CLOSE | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="C# - &#1054;&#1090;&#1084;&#1077;&#1085;&#1080;&#1090;&#1100; &#1079;&#1072;&#1082;&#1088;&#1099;&#1090;&#1080;&#1077; WebBrowser &#1087;&#1077;&#1088;&#1077;&#1093;&#1074;&#1072;&#1090;&#1086;&#1084; WM_DESTROY &#1080;&#1083;&#1080; WM_CLOSE | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>C# - Отменить закрытие WebBrowser перехватом WM_DESTROY или WM_CLOSE</h1>
+<p><a href="https://ru.stackoverflow.com/questions/822043/c-%d0%9e%d1%82%d0%bc%d0%b5%d0%bd%d0%b8%d1%82%d1%8c-%d0%b7%d0%b0%d0%ba%d1%80%d1%8b%d1%82%d0%b8%d0%b5-webbrowser-%d0%bf%d0%b5%d1%80%d0%b5%d1%85%d0%b2%d0%b0%d1%82%d0%be%d0%bc-wm-destroy-%d0%b8%d0%bb%d0%b8-wm-close">Source</a> - by <a href="https://ru.stackoverflow.com/users/295746/%d0%95%d0%b2%d0%b3%d0%b5%d0%bd%d0%b8%d0%b9-%d0%9a%d0%b0%d0%bf%d0%b5%d1%88%d0%ba%d0%be">Евгений Капешко</a></p>
+<blockquote>
+<p>У меня есть форма с экземпляром WebBrowser на ней. В него загружается страница сайта, на которой есть ссылка вида '&lt;a onClick="self.close();"&gt;Закрыть окно&lt;/a&gt;'.
+При нажатии ее выдает сообщение, что скрипты пытается закрыть WebBrowser. Если согласиться, то WebBrowser просто зависает.
+Поэтому стоит задача перехватить и отменить это закрытие.</p>
+<p>После гугления нашел следующее решение. Расширить класс WebBrowser, чтобы перегрузить метод 'WndProc()', чтобы он ловил событие WM_PARENTNOTIFY, в котором передается WM_DESTROY. Однако, решение было предназначено для организации корректного закрытия формы браузера. В моем же случае мне нужно отменить закрытие и перейти по конкретному URL. Мне удается перехватить WM_DESTROY, но WebBrowser все равно убивается и зависает. Код использованного решения ниже:</p>
+<pre><code>public class ExtendedWebBrowser : WebBrowser
+  {
+    // Define constants from winuser.h
+    private const int WM_PARENTNOTIFY = 0x210;
+    private const int WM_DESTROY = 2;
+
+    public string BackUrl { get; set; };
+
+    protected override void WndProc(ref Message m)
+    {
+      switch (m.Msg)
+      {
+        case WM_PARENTNOTIFY:
+          if (!DesignMode)
+          {
+            if (m.WParam.ToInt32() == WM_DESTROY)
+            {
+              Navigate(BackUrl);
+            }
+          }
+          DefWndProc(ref m);
+          break;
+        default:
+          base.WndProc(ref m);
+          break;
+      }
+    }
+  }
+</code></pre>
+<p>Вопрос: Как предотвратить дальнейшую обработку WM_DESTROY или WM_CLOSE?</p>
+</blockquote>
+<h2>Answer 825717</h2>
+<p><a href="https://ru.stackoverflow.com/a/825717/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Вместо того, чтобы переопределять <em>WM_DESTROY</em> (которое вызывается когда уже слишком поздно), нужно переопределить функцию close на уровне JavaScript. Для этого нужно будет добавить ссылку на COM объект Microsoft HTML Object Library и воспользоваться интерфейсом <em>IHTMLScriptElement</em> для добавления в каждую загружаемую страницу сценария со своей функцией close. В старых версиях IE это можно сделать присваиванием <code>window.close = function ()...</code>, но в IE11 это почему-то не работает, хотя то же самое достигается просто определением своей функции close.</p>
+<p>Чтобы форма могла получать уведомления от JavaScript через вызовы <em>window.external</em>, нужно будет добавить к ней атрибут <em>ComVisible</em> и присвоить ее свойству веб браузера <em>ObjectForScripting</em>. Пример:</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
+using System.Windows.Forms;
+using System.Security.Permissions;
+using System.Runtime.InteropServices;
+
+namespace WindowsFormsTest1
+{
+    [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+    [System.Runtime.InteropServices.ComVisibleAttribute(true)]
+    public partial class Form1 : Form
+    {
+        public void NotifyClose()
+        {
+            //попытка закрытия WebBrowser...
+        } 
+
+        public Form1()
+        {
+            InitializeComponent();
+            webBrowser1.ObjectForScripting = this;
+        }        
+
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            // here we override the functionality of window.close
+            HtmlElement head = webBrowser1.Document.GetElementsByTagName("head")[0];
+            HtmlElement scriptEl = webBrowser1.Document.CreateElement("script");
+            mshtml.IHTMLScriptElement element = (mshtml.IHTMLScriptElement)scriptEl.DomElement;
+            try
+            {
+                element.text = "function close() { window.external.NotifyClose();  } ";
+                head.AppendChild(scriptEl);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(element);
+            }
+        }  
+    }     
+
+}
+</code></pre>
+<p><a href="https://social.microsoft.com/Forums/en-US/c9384257-f83c-4186-a59d-cb991273211d/webbrowser-control-and-windowclosing-event?forum=Offtopic" rel="nofollow noreferrer">Источник</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

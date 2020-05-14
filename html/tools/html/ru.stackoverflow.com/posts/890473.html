@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1042;&#1099;&#1074;&#1086;&#1076; &#1074; &#1082;&#1086;&#1085;&#1089;&#1086;&#1083;&#1100; &#1074; Visual Studio 2017 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1042;&#1099;&#1074;&#1086;&#1076; &#1074; &#1082;&#1086;&#1085;&#1089;&#1086;&#1083;&#1100; &#1074; Visual Studio 2017 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Вывод в консоль в Visual Studio 2017</h1>
+<p><a href="https://ru.stackoverflow.com/questions/890473/%d0%92%d1%8b%d0%b2%d0%be%d0%b4-%d0%b2-%d0%ba%d0%be%d0%bd%d1%81%d0%be%d0%bb%d1%8c-%d0%b2-visual-studio-2017">Source</a> - by <a href="https://ru.stackoverflow.com/users/203811/%d0%92%d0%b8%d1%82%d0%b0%d0%bb%d0%b8%d0%b9-%d0%95%d1%84%d0%b8%d0%bc%d0%be%d0%b2">Виталий Ефимов</a></p>
+<blockquote>
+<p>Работаю над WPF-приложением. Использую консоль для вывода отладочной информации при работе приложения. Консоль подключаю через соответствующие методы из kernel.dll.
+В Visual Studio 2012 все работало правильно. Недавно перешел на 17 версию студии и в ней данный вывод отсутствует. 
+Как можно настроить вывод в консоль в Visual Studio 2017?</p>
+</blockquote>
+<h2>Answer 890779</h2>
+<p><a href="https://ru.stackoverflow.com/a/890779/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>На самом деле консольный вывод, разумеется, никак не привязан к версии студии. Но многие методы класса Console, несмотря на название, выводят не в консоль, а в стандартный поток вывода, и никто не обещал, что он не будет перенаправлен. Так вот, в Visual Studio 2017 причина как будто именно в этом - при запуске под отладчиком стандартный вывод студия перенаправляет для каких-то своих целей. </p>
+<p>Можно пересоздать stdout, так чтобы он выводил напрямую в консоль:</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Controls;
+
+#pragma warning disable CS0618
+
+namespace WpfApp1
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        internal static extern uint GetConsoleCP();
+
+        const uint GENERIC_READ = 0x80000000;
+        const uint GENERIC_WRITE = 0x40000000;
+        const uint FILE_SHARE_READ = 0x00000001;
+        const uint FILE_SHARE_WRITE = 0x00000002;
+        const uint OPEN_EXISTING = 3;
+        const uint FILE_ATTRIBUTE_NORMAL = 0x00000080;
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr CreateFile(
+             [MarshalAs(UnmanagedType.LPTStr)] string filename,
+             [MarshalAs(UnmanagedType.U4)] uint access,
+             [MarshalAs(UnmanagedType.U4)] uint share,
+             IntPtr securityAttributes,
+             [MarshalAs(UnmanagedType.U4)] uint creationDisposition,
+             [MarshalAs(UnmanagedType.U4)] uint flagsAndAttributes,
+             IntPtr templateFile);
+
+        public static bool CreateConsole()
+        {
+            bool res = AllocConsole(); //создаем консоль
+            if (res == false) return false;
+
+            uint cp = GetConsoleCP(); //получаем кодировку консоли
+
+            //получаем дескриптор консоли
+            var handle = CreateFile("CONOUT$", GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
+            IntPtr.Zero, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, IntPtr.Zero);
+            if (handle.ToInt64() == -1)
+            {
+                throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            //Пересоздаем stdout
+            Stream s = new FileStream(handle, FileAccess.Write);
+            StreamWriter wr = new StreamWriter( s, Encoding.GetEncoding((int)cp));
+            wr.AutoFlush = true;
+            System.Console.SetOut(wr);                        
+
+            return true;
+        }        
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            bool res = CreateConsole();
+            if (res == false) MessageBox.Show("Failed to create console");
+
+            Console.WriteLine("Hello from WPF!");
+        }
+    }    
+}
+</code></pre>
+<p>Используйте на свой страх и риск, я понятия не имею, что может сломаться от подобных извращений. Вообще, непонятно зачем тут вообще нужна именно консоль: в ней нет ничего особенно удобного для целей отладки. Вы могли бы вместо этого использовать вывод в System.Diagnostics.Debug в отладочной конфигурации (<code>#if DEBUG</code>) и обычное окно с TextBox в релизной.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

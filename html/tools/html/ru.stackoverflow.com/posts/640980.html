@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>WPF ListView &#1050;&#1072;&#1082; &#1079;&#1072;&#1089;&#1090;&#1072;&#1074;&#1080;&#1090;&#1100; &#1087;&#1086;&#1083;&#1077; &#1079;&#1072;&#1085;&#1103;&#1090;&#1100; &#1086;&#1089;&#1090;&#1072;&#1074;&#1096;&#1077;&#1077;&#1089;&#1103; &#1087;&#1088;&#1086;&#1089;&#1090;&#1088;&#1072;&#1085;&#1089;&#1090;&#1074;&#1086;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="WPF ListView &#1050;&#1072;&#1082; &#1079;&#1072;&#1089;&#1090;&#1072;&#1074;&#1080;&#1090;&#1100; &#1087;&#1086;&#1083;&#1077; &#1079;&#1072;&#1085;&#1103;&#1090;&#1100; &#1086;&#1089;&#1090;&#1072;&#1074;&#1096;&#1077;&#1077;&#1089;&#1103; &#1087;&#1088;&#1086;&#1089;&#1090;&#1088;&#1072;&#1085;&#1089;&#1090;&#1074;&#1086;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>WPF ListView Как заставить поле занять оставшееся пространство?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/640980/wpf-listview-%d0%9a%d0%b0%d0%ba-%d0%b7%d0%b0%d1%81%d1%82%d0%b0%d0%b2%d0%b8%d1%82%d1%8c-%d0%bf%d0%be%d0%bb%d0%b5-%d0%b7%d0%b0%d0%bd%d1%8f%d1%82%d1%8c-%d0%be%d1%81%d1%82%d0%b0%d0%b2%d1%88%d0%b5%d0%b5%d1%81%d1%8f-%d0%bf%d1%80%d0%be%d1%81%d1%82%d1%80%d0%b0%d0%bd%d1%81%d1%82%d0%b2%d0%be">Source</a> - by <a href="https://ru.stackoverflow.com/users/233980/mrmodest">MrModest</a></p>
+<blockquote>
+<p>Имеется следующий ListView</p>
+<pre><code>&lt;ListView ItemsSource="{Binding List}" 
+          MaxHeight="250" 
+          util:GridViewSort.AutoSort="True" 
+          AlternationCount="2"
+          SizeChanged="ListView_SizeChanged"&gt;
+    &lt;ListView.ItemContainerStyle&gt;
+        &lt;Style TargetType="ListViewItem"&gt;
+            &lt;Setter Property="HorizontalContentAlignment" Value="Stretch"/&gt;
+            &lt;Setter Property="Height" Value="30" /&gt;
+            &lt;Style.Triggers&gt;
+                &lt;Trigger Property="ItemsControl.AlternationIndex" Value="0"&gt;
+                    &lt;Setter Property="Background" Value="White" /&gt;
+                &lt;/Trigger&gt;
+                &lt;Trigger Property="ItemsControl.AlternationIndex" Value="1"&gt;
+                    &lt;Setter Property="Background" Value="#FFF8F8F8" /&gt;
+                &lt;/Trigger&gt;
+            &lt;/Style.Triggers&gt;
+        &lt;/Style&gt;
+    &lt;/ListView.ItemContainerStyle&gt;
+    &lt;ListView.View&gt;
+        &lt;GridView&gt;
+            &lt;GridView.Columns&gt;
+                &lt;GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}" util:GridViewSort.PropertyName="Name"/&gt;
+                &lt;GridViewColumn Header="Главы" Width="Auto"&gt;
+                    &lt;GridViewColumn.CellTemplate &gt;
+                        &lt;DataTemplate&gt;
+                            &lt;TextBlock Text="{Binding ProgressCh}" TextAlignment="Center" Padding="5,0"/&gt;
+                        &lt;/DataTemplate&gt;
+                    &lt;/GridViewColumn.CellTemplate&gt;
+                &lt;/GridViewColumn&gt;
+                &lt;GridViewColumn Header="Тома" Width="Auto"&gt;
+                    &lt;GridViewColumn.CellTemplate&gt;
+                        &lt;DataTemplate&gt;
+                            &lt;TextBlock Text="{Binding ProgressVol}" TextAlignment="Center" Padding="5,0"/&gt;
+                        &lt;/DataTemplate&gt;
+                    &lt;/GridViewColumn.CellTemplate&gt;
+                &lt;/GridViewColumn&gt;
+                &lt;GridViewColumn Header="Оценка" util:GridViewSort.PropertyName="Score" Width="70"&gt;
+                    &lt;GridViewColumn.CellTemplate&gt;
+                        &lt;DataTemplate&gt;
+                            &lt;TextBlock Text="{Binding Score}" TextAlignment="Center" Padding="5,0"/&gt;
+                        &lt;/DataTemplate&gt;
+                    &lt;/GridViewColumn.CellTemplate&gt;
+                &lt;/GridViewColumn&gt;
+                &lt;GridViewColumn Header="Тип" util:GridViewSort.PropertyName="Kind" Width="70"&gt;
+                    &lt;GridViewColumn.CellTemplate&gt;
+                        &lt;DataTemplate&gt;
+                            &lt;TextBlock Text="{Binding Kind}" TextAlignment="Center" Padding="5,0"/&gt;
+                        &lt;/DataTemplate&gt;
+                    &lt;/GridViewColumn.CellTemplate&gt;
+                &lt;/GridViewColumn&gt;
+            &lt;/GridView.Columns&gt;
+        &lt;/GridView&gt;
+    &lt;/ListView.View&gt;
+&lt;/ListView&gt;
+</code></pre>
+<p>Отображается он вот так:</p>
+<p><a href="https://i.stack.imgur.com/MrM1U.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/MrM1U.png" alt="введите сюда описание изображения"></a></p>
+<p>Хотелось бы узнать, как настроить столбцы так, чтобы все кроме первого столбца занимали ширину по содержимому самого широкого элемента, а первый столбец занимал всё оставшееся пространство. </p>
+<p>Установка Width="Auto" как -то не помогла. Второй и Третий столбцы всё равно урезаются. Плюс появляется горизонтальный Scroll, за которым скрыт последний столбец =(</p>
+<p>Подскажите как подобное можно реализовать?</p>
+</blockquote>
+<h2>Answer 641052</h2>
+<p><a href="https://ru.stackoverflow.com/a/641052/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Естественно, Auto не работает, потому что оно делает ширину равной максимальной ширине элемента; а других спецзначений у ширины нет. Вы, тем не менее, можете попробовать сделать следующее:</p>
+<ul>
+<li>Установить у всех колонок, кроме первой, Width=Auto</li>
+<li>Добавить обработчик события SizeChanged:</li>
+</ul>
+<p>_</p>
+<pre><code>private void ListView_SizeChanged(object sender, SizeChangedEventArgs e)
+{
+    ListView listView = sender as ListView;
+    GridView gView = listView.View as GridView;
+
+    var totalWidth = listView.ActualWidth - (SystemParameters.VerticalScrollBarWidth+10); 
+
+    var usedWidth = 0.0;    
+    for(int i=1;i&lt;gView.Columns.Count;i++){
+        usedWidth+=gView.Columns[i].ActualWidth;
+    }
+
+    gView.Columns[0].Width = totalWidth-usedWidth;
+
+}
+</code></pre>
+<p>(Также этот код надо вызвать при изменении содержимого списка).</p>
+</blockquote>
+<h2>Answer 654897</h2>
+<p><a href="https://ru.stackoverflow.com/a/654897/">Source</a> - by <a href="https://ru.stackoverflow.com/users/228936/dm-dymov">dm.dymov</a></p>
+<blockquote>
+<p>Для этого случая на <a href="https://stackoverflow.com/questions/10309249/listview-gridviewcolumn-width">enSO</a> предлагают немного магии: добавить <code>Grid</code> с соответствующим количеством колонок, который и будет осуществлять ресайз, перекрёстно связать ширины через биндинги и радоваться. Для фиксации ширин колонок от редактирования добавлю от себя стиль для <code>GridViewColumnHeader</code>, в котором стоит <code>IsEnabled = "False"</code>.</p>
+<p>Ваша разметка без привязки к данным и других лишних вещей:</p>
+<pre><code>&lt;Grid&gt;
+    &lt;ListView&gt;
+        &lt;ListView.Resources&gt;
+            &lt;Style x:Key="HeaderStyle"
+                   TargetType="{x:Type GridViewColumnHeader}"&gt;
+                &lt;Setter Property="IsEnabled"
+                        Value="False" /&gt;
+            &lt;/Style&gt;
+        &lt;/ListView.Resources&gt;
+        &lt;ListView.View&gt;
+            &lt;GridView&gt;
+                &lt;GridView.Columns&gt;
+                    &lt;GridViewColumn x:Name="col1"
+                                    Header="Название"
+                                    Width="{Binding ElementName=helperField, Path=ActualWidth}" /&gt;
+                    &lt;GridViewColumn x:Name="col2"
+                                    Header="Главы"
+                                    Width="Auto"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" /&gt;
+                    &lt;GridViewColumn x:Name="col3"
+                                    Header="Тома"
+                                    Width="Auto"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" /&gt;
+                    &lt;GridViewColumn x:Name="col4"
+                                    Header="Оценка"
+                                    Width="Auto"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" /&gt;
+                    &lt;GridViewColumn x:Name="col5"
+                                    Header="Тип"
+                                    Width="Auto"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" /&gt;
+                &lt;/GridView.Columns&gt;
+            &lt;/GridView&gt;
+        &lt;/ListView.View&gt;
+        Test Text
+    &lt;/ListView&gt;
+    &lt;Grid Visibility="Hidden"&gt;
+        &lt;Grid.ColumnDefinitions&gt;
+            &lt;ColumnDefinition Width="*" /&gt;
+            &lt;ColumnDefinition Width="{Binding ElementName=col2, Path=ActualWidth}" /&gt;
+            &lt;ColumnDefinition Width="{Binding ElementName=col3, Path=ActualWidth}" /&gt;
+            &lt;ColumnDefinition Width="{Binding ElementName=col4, Path=ActualWidth}" /&gt;
+            &lt;ColumnDefinition Width="{Binding ElementName=col5, Path=ActualWidth}" /&gt;
+            &lt;ColumnDefinition Width="10" /&gt;
+        &lt;/Grid.ColumnDefinitions&gt;
+        &lt;Grid Grid.Column="0"
+              x:Name="helperField" /&gt;
+    &lt;/Grid&gt;
+&lt;/Grid&gt;
+</code></pre>
+<p>У всех колонок в <code>ListView</code> кроме первой стоит <code>Width=Auto</code>, в управляющем невидимом <code>Grid</code> соответствующие колонки привязаны к <code>ActualWidth</code> колонок <code>ListView</code>. Первая колонка в <code>Grid</code> имеет ширину "*", значит занимает оставшееся пространство. В <code>Grid</code> лежит в первой колонке элемент, <code>ActualWidth</code> которого привязана к первой колонке <code>ListView</code>. Также в <code>Grid</code> есть 10-пиксельная колонка для того, чтобы не отображался горизонтальный скрол по умолчанию.</p>
+<p>Решение, конечно, попахивает, но тем не менее работает, и работает только из разметки.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

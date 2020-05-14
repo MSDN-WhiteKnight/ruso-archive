@@ -1,0 +1,439 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1085;&#1072;&#1088;&#1080;&#1089;&#1086;&#1074;&#1072;&#1090;&#1100; &#1075;&#1088;&#1072;&#1092;&#1080;&#1095;&#1077;&#1089;&#1082;&#1086;&#1077; &#1087;&#1088;&#1077;&#1076;&#1089;&#1090;&#1072;&#1074;&#1083;&#1077;&#1085;&#1080;&#1077; wav-&#1092;&#1072;&#1081;&#1083;&#1072;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1085;&#1072;&#1088;&#1080;&#1089;&#1086;&#1074;&#1072;&#1090;&#1100; &#1075;&#1088;&#1072;&#1092;&#1080;&#1095;&#1077;&#1089;&#1082;&#1086;&#1077; &#1087;&#1088;&#1077;&#1076;&#1089;&#1090;&#1072;&#1074;&#1083;&#1077;&#1085;&#1080;&#1077; wav-&#1092;&#1072;&#1081;&#1083;&#1072;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как нарисовать графическое представление wav-файла?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/878097/%d0%9a%d0%b0%d0%ba-%d0%bd%d0%b0%d1%80%d0%b8%d1%81%d0%be%d0%b2%d0%b0%d1%82%d1%8c-%d0%b3%d1%80%d0%b0%d1%84%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%be%d0%b5-%d0%bf%d1%80%d0%b5%d0%b4%d1%81%d1%82%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5-wav-%d1%84%d0%b0%d0%b9%d0%bb%d0%b0">Source</a> - by <a href="https://ru.stackoverflow.com/users/251015/bob-torus">bob torus</a></p>
+<blockquote>
+<p>Есть считанный с файла WAV_HEADER и data segment. Как построить waveform, т.е график такого вида:</p>
+<p><a href="https://i.stack.imgur.com/3h6LJ.gif" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/3h6LJ.gif" alt="waveform"></a></p>
+<pre><code> struct  WAV_HEADER
+{
+    /* RIFF Chunk Descriptor */
+    uint8_t         RIFF[4];        // RIFF Header Magic header
+    uint32_t        ChunkSize;      // RIFF Chunk Size
+    uint8_t         WAVE[4];        // WAVE Header
+                                    /* "fmt" sub-chunk */
+    uint8_t         fmt[4];         // FMT header
+    uint32_t        Subchunk1Size;  // Size of the fmt chunk
+    uint16_t        AudioFormat;    // Audio format 1=PCM,6=mulaw,7=alaw,     257=IBM Mu-Law, 258=IBM A-Law, 259=ADPCM
+    uint16_t        NumOfChan;      // Number of channels 1=Mono 2=Sterio
+    uint32_t        SamplesPerSec;  // Sampling Frequency in Hz
+    uint32_t        bytesPerSec;    // bytes per second
+    uint16_t        blockAlign;     // 2=16-bit mono, 4=16-bit stereo
+    uint16_t        bitsPerSample;  // Number of bits per sample
+                                    /* "data" sub-chunk */
+    uint8_t         Subchunk2ID[4]; // "data"  string
+    uint32_t        Subchunk2Size;  // Sampled data length
+};
+</code></pre>
+</blockquote>
+<h2>Answer 879984</h2>
+<p><a href="https://ru.stackoverflow.com/a/879984/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>График аудиофайла типично строится как график зависимости средних или пиковых абсолютных  амплитуд от времени (для стерео-записи, верхняя половина графика представляет один канал, а вторая, направленная вниз - второй). </p>
+<p>Алгоритм выглядит так:</p>
+<ol>
+<li><p>Выделить из WAV-данных массив мгновенных значений звука (семплов) в формате, с которым удобно работать (например, значения float в диапазоне от -1.0 до 1.0). Информацию о том, как это делается, можно найти например <a href="https://ru.stackoverflow.com/questions/760083/wav-data-%D0%BA%D0%B0%D0%BA-%D1%81%D0%B8%D0%B4%D1%8F%D1%82-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5?rq=1">здесь</a>.</p></li>
+<li><p>Разбить массив на интервалы,  примерно соответствующие пикселю на изображении графика. Формула для вычисления длины интервала:</p></li>
+</ol>
+<blockquote>
+  <p>interval = (N_SAMPLES) / (K * W_WINDOW);</p>
+</blockquote>
+<p>где </p>
+<p><strong>N_SAMPLES</strong> - число семплов (одного канала);<br>
+<strong>W_WINDOW</strong> - ширина окна для отображения графика, в пикселах;<br>
+<strong>K</strong> - коэффициент, задающий "детализированность" графика, обычно в диапазоне (1.0; 2.0).    </p>
+<ol start="3">
+<li><p>Определить значение модуля амплитуды (среднее, пиковое) на каждом интервале</p></li>
+<li><p>Нарисовать график с помощью любой графической библиотеки</p></li>
+</ol>
+<p>Пример кода для построения графика средних амплитуд одного канала (т.е., верхней половины приведенного рисунка):</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;memory.h&gt;
+#include &lt;math.h&gt;
+#include &lt;glut.h&gt;   //Для рисования
+
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "glu32.lib")
+#pragma comment(lib, "glut32.lib")
+
+struct  WAV_HEADER
+{
+    /* RIFF Chunk Descriptor */
+    uint8_t         RIFF[4];        // RIFF Header Magic header
+    uint32_t        ChunkSize;      // RIFF Chunk Size
+    uint8_t         WAVE[4];        // WAVE Header
+                                    /* "fmt" sub-chunk */
+    uint8_t         fmt[4];         // FMT header
+    uint32_t        Subchunk1Size;  // Size of the fmt chunk
+    uint16_t        AudioFormat;    // Audio format 1=PCM,6=mulaw,7=alaw,     257=IBM Mu-Law, 258=IBM A-Law, 259=ADPCM
+    uint16_t        NumOfChan;      // Number of channels 1=Mono 2=Sterio
+    uint32_t        SamplesPerSec;  // Sampling Frequency in Hz
+    uint32_t        bytesPerSec;    // bytes per second
+    uint16_t        blockAlign;     // 2=16-bit mono, 4=16-bit stereo
+    uint16_t        bitsPerSample;  // Number of bits per sample
+                                    /* "data" sub-chunk */
+    uint32_t         Subchunk2ID; // "data"  string
+    uint32_t        Subchunk2Size;  // Sampled data length
+};
+
+
+//Возвращает следующий семпл начиная с указанной позиции в массиве байт
+float ReadNextSample (        
+    /*IN*/ WAV_HEADER* hdr, //заголовок WAV
+    /*IN*/ unsigned char* rawdata, //данные WAV
+    /*IN,OUT*/ uint64_t * startindex //начальный индекс (после вызова функции устанавливается в индекс следующего семпла)
+){
+      float res = 0.0f;
+      unsigned char byte = 0;
+      int16_t val16 = 0;
+
+      switch (hdr-&gt;AudioFormat)
+      {
+        case 1://PCM
+        if (hdr-&gt;bitsPerSample == 8)
+        {      
+            byte = rawdata[*startindex];
+            *startindex += 1;
+            res = (byte - 128.0f) / 255.0f;
+
+         }
+         else if (hdr-&gt;bitsPerSample == 16)
+         {
+            memcpy(&amp;val16,rawdata+(*startindex),2);
+            *startindex += 2;
+            res = (val16) / 32767.0f;
+
+         }         
+
+         if (res &gt; 1.0f) res = 1.0f;
+         if (res &lt; -1.0f) res = -1.0f;
+         break;
+
+         case 3: //IEEE Float
+         if (hdr-&gt;bitsPerSample == 32) {
+                memcpy(&amp;res,rawdata+(*startindex),sizeof(float));
+                        *startindex += sizeof(float);
+         }
+         break;
+
+      }
+
+      return res;
+}
+
+//Преобразует данные WAV в массив нормализованных Float-значений в интервале (-1.0;1.0). Возвращает размер массива.
+uint64_t GetSamples(
+    /* IN */ WAV_HEADER* hdr, //заголовок WAV
+    /* IN */ unsigned char* data, //данные WAV
+    /* OUT */ float** psamples //выходной массив
+){
+
+    float* samples = NULL;
+    uint64_t samples_count = hdr-&gt;Subchunk2Size / ((int)hdr-&gt;bitsPerSample / 8);
+    samples = (float*)malloc(samples_count * sizeof(float));
+    uint64_t i_data; 
+    uint64_t i_sample=0;    
+
+    for(i_data=0; i_data&lt;hdr-&gt;Subchunk2Size; ){     
+        if(i_sample&gt;=samples_count)break;
+        samples[i_sample] = ReadNextSample(hdr,data,&amp;i_data);       
+        i_sample++;
+    }
+
+    *psamples = samples;
+    return i_sample;
+}
+
+
+//Считывает заголовок и данные WAV из файла
+uint64_t ReadWav(
+    /* IN */ wchar_t* file, //путь к файлу
+    /* OUT */ WAV_HEADER* hdr, //указатель на переменную для записи заголовка
+    /* OUT */ unsigned char** pdata //указатель на переменную для записи данных
+){
+    memset(hdr,0,sizeof(WAV_HEADER));
+    FILE* f = _wfopen(file,L"rb");
+    if(f == NULL){
+        printf("Cannot open file!\n");
+        return 0;
+    }
+
+    //считываем заголовок
+    fread(&amp;(hdr-&gt;RIFF),4,1,f);
+    fread(&amp;(hdr-&gt;ChunkSize),4,1,f);
+    fread(&amp;(hdr-&gt;WAVE),4,1,f);
+    fread(&amp;(hdr-&gt;fmt),4,1,f);
+    fread(&amp;(hdr-&gt;Subchunk1Size),4,1,f);
+
+    if(!(hdr-&gt;RIFF[0] == 'R' &amp;&amp; hdr-&gt;RIFF[1] == 'I' &amp;&amp; hdr-&gt;RIFF[2] == 'F' &amp;&amp; hdr-&gt;RIFF[3] == 'F') ||
+       !(hdr-&gt;WAVE[0] == 'W' &amp;&amp; hdr-&gt;WAVE[1] == 'A' &amp;&amp;  hdr-&gt;WAVE[2] == 'V' &amp;&amp;  hdr-&gt;WAVE[3] == 'E')){
+           printf("File is not RIFF/WAV!\n");
+           fclose(f);
+           return 0;
+    }
+
+    fread(&amp;(hdr-&gt;AudioFormat),2,1,f);
+    fread(&amp;(hdr-&gt;NumOfChan),2,1,f);
+    fread(&amp;(hdr-&gt;SamplesPerSec),4,1,f);
+    fread(&amp;(hdr-&gt;bytesPerSec),4,1,f);
+    fread(&amp;(hdr-&gt;blockAlign),2,1,f);
+    fread(&amp;(hdr-&gt;bitsPerSample),2,1,f);
+
+    uint16_t fmtExtraSize = 0;  
+    if (hdr-&gt;Subchunk1Size == 18) {  
+        fread(&amp;(fmtExtraSize),2,1,f);                        
+        fseek(f,fmtExtraSize,SEEK_CUR);
+    }         
+
+    unsigned char* data=NULL;
+    size_t data_size;
+    size_t res; 
+
+    //пытаемся считать данные
+    fread(&amp;(hdr-&gt;Subchunk2ID),4,1,f);
+    fread(&amp;(hdr-&gt;Subchunk2Size),4,1,f);
+
+    while(1){
+      data = (unsigned char*)malloc(hdr-&gt;Subchunk2Size);
+      data_size = fread(data,1,hdr-&gt;Subchunk2Size,f);     
+
+      if(hdr-&gt;Subchunk2ID == 0x61746164) break;//данные найдены
+
+      //если Subchunk2Id нет тот, что ожидался, пропускаем и пробуем снова
+      free(data);
+      data = NULL;
+      hdr-&gt;Subchunk2ID = 0;
+      hdr-&gt;Subchunk2Size = 0;
+
+      res=fread(&amp;(hdr-&gt;Subchunk2ID),4,1,f);
+      if(res &lt; 4)break;
+      res=fread(&amp;(hdr-&gt;Subchunk2Size),4,1,f);
+      if(res &lt; 4)break;
+    }
+
+    fclose(f);
+    *pdata = data;
+    if(data == NULL || hdr-&gt;Subchunk2Size == 0) return 0;
+
+    if(data_size &lt; hdr-&gt;Subchunk2Size) {
+        printf("Warning: data size is lower then expected!\n");
+        hdr-&gt;Subchunk2Size = res;
+    }
+
+    return hdr-&gt;Subchunk2Size;
+}
+
+float* values = NULL; //массив значений Y для графика
+uint64_t interval=0; //размер интервала усреднения
+uint64_t intervals = 0; //количество интервалов
+int width = 500; //ширина окна
+
+void Initialize()
+{
+ //Выбрать фоновый цвет
+ glClearColor(1.0,1.0,1.0,1.0);
+
+ //Установить проекцию
+ glMatrixMode(GL_PROJECTION);
+ glLoadIdentity();
+ glOrtho(0.0,1.0,0.0,1.0,-1.0,1.0);
+}
+
+void DrawGraph(float* values,uint64_t count) //отрисовка графика по массиву значений
+{ 
+
+ glColor3f(0.0,1.0,0.0); //Выбираем цвет
+ glBegin(GL_LINES);
+
+ float x0,y0;
+ float x,y;
+
+ //Задаем точки  
+ for(int i=0;i&lt;intervals;i++){
+
+    x0=i * 1.0f/(intervals);
+    y0=values[i];
+    glVertex3f(x0,y0,0.0); 
+
+    x=(i+1) * 1.0f/(intervals);
+    y=values[i+1];
+    glVertex3f(x,y,0.0);    
+ }
+
+ glEnd();
+ glFlush();
+}
+
+void Draw(){
+    DrawGraph(values,intervals);
+}
+
+int main(int argc, char **argv)
+{
+
+    WAV_HEADER hdr={0}; //заголовок WAV 
+    unsigned char* bytes = NULL; //данные WAV   
+
+    float* data = NULL; //массив семплов
+    uint64_t count = 0; //число семплов
+
+    //считываем файл
+    if(ReadWav(L"c:\\Media\\File1.wav",&amp;hdr,&amp;bytes)==0){
+        getchar();
+        return 0;
+    }   
+
+    //получаем массив семплов
+    count = GetSamples(&amp;hdr,bytes,&amp;data);
+    free(bytes);    
+
+    //определяем интервал для усреднения
+    int chans = hdr.NumOfChan;
+    interval = (count/ chans) / (1.5f* width);
+
+    if(interval==0) interval=1;
+    intervals = (count/ chans) / interval;
+
+    //формируем массив значений для графика
+    values = (float*)malloc(intervals*sizeof(float));   
+    float y;
+
+    for(int i=0;i&lt;intervals;i++){
+        y=0.0f;
+        for(int j=i*interval;j&lt;(i+1)*interval;j++){
+            if(j*chans&gt;=count)break;            
+            y += abs(data[j * chans]);
+        }
+        y =   y/(float)interval; //находим среднее значение для каждого интервала
+        values[i]=y;        
+    }
+
+    free(data); 
+
+    glutInit(&amp;argc,argv);
+    glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+    glutInitWindowSize(width,400);      //Размер окна
+    glutInitWindowPosition(100,100);    //Позиция окна
+    glutCreateWindow("Graph");      
+    Initialize();                       
+    glutDisplayFunc(Draw);              //Задаем функцию отрисовки
+    glutMainLoop(); 
+    return 0;
+}
+</code></pre>
+<p>Поддерживает форматы кодирования PCM (8 или 16 бит) и IEEE Float (32 бит). Требует Visual C++ 2010+ и библиотеку <a href="https://www.opengl.org/resources/libraries/glut/" rel="nofollow noreferrer">Glut</a>.</p>
+<p><strong>Источники:</strong></p>
+<p><a href="https://manual.audacityteam.org/man/audacity_waveform.html" rel="nofollow noreferrer">Audacity Waveform</a></p>
+<p><a href="https://stackoverflow.com/questions/26663494/algorithm-to-draw-waveform-from-audio">Algorithm to draw waveform from audio</a></p>
+<p><a href="http://www.supermegaultragroovy.com/2009/10/06/drawing-waveforms/" rel="nofollow noreferrer">Drawing Waveforms</a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

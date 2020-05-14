@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Answer 1074848 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Answer 1074848 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Answer 1074848</h1>
+<h2>Answer 1074848</h2>
+<p><a href="https://ru.stackoverflow.com/a/1074848/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Вот .nuspec пакета:</p>
+<pre class="lang-xml prettyprint-override"><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd"&gt;
+  &lt;metadata&gt;
+    &lt;id&gt;NETMouseProjects.ABCNET&lt;/id&gt;
+    &lt;version&gt;0.0.10-stable&lt;/version&gt;
+    &lt;authors&gt;NETMouse projects&lt;/authors&gt;
+    &lt;owners&gt;NETMouse projects&lt;/owners&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;license type="expression"&gt;LGPL-3.0-only&lt;/license&gt;
+    &lt;licenseUrl&gt;https://licenses.nuget.org/LGPL-3.0-only&lt;/licenseUrl&gt;
+    &lt;icon&gt;Logo.png&lt;/icon&gt;
+    &lt;projectUrl&gt;https://github.com/NETMouse-projects/ABCNET&lt;/projectUrl&gt;
+    &lt;description&gt;ABCNET - альтернатива модулю PABCSystem для всего NET.&lt;/description&gt;
+    &lt;releaseNotes&gt;- Batch
+      - Pairwise
+      - Associate
+      - ZupTuple/UnzipTuple
+      - SwapCols/SwapRows&lt;/releaseNotes&gt;
+    &lt;copyright&gt;Copyright 2020&lt;/copyright&gt;
+    &lt;tags&gt;NETMouseProjects, ABCNET&lt;/tags&gt;
+  &lt;/metadata&gt;
+&lt;/package&gt;
+</code></pre>
+<p>В нем нет ни одной библиотеки, не то что под .NET 4.0. Добавьте элемент <a href="https://docs.microsoft.com/en-us/nuget/reference/nuspec#including-assembly-files" rel="nofollow noreferrer">files</a>:</p>
+<pre class="lang-xml prettyprint-override"><code>&lt;?xml version="1.0"?&gt;
+&lt;package &gt;
+  &lt;metadata&gt;
+    ...
+  &lt;/metadata&gt;
+  &lt;files&gt;
+        &lt;file src="lib\net40\*" target="lib/net40/" /&gt;        
+  &lt;/files&gt;
+&lt;/package&gt;
+</code></pre>
+<p>Тогда заработает. При этом библиотека должна лежать в подкаталоге <code>lib\net40\</code>. Вообще, обычно nuget pack должен сам файлы библиотек находить и генерировать files, возможно, нужно просто положить их по правильному пути.   </p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

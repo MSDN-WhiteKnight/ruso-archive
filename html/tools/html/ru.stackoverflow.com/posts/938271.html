@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1057;&#1090;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077; &#1080;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1077; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088;&#1086;&#1074; &#1086;&#1082;&#1085;&#1072; Windows 10, large DPI | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1057;&#1090;&#1088;&#1072;&#1085;&#1085;&#1086;&#1077; &#1080;&#1079;&#1084;&#1077;&#1085;&#1077;&#1085;&#1080;&#1077; &#1088;&#1072;&#1079;&#1084;&#1077;&#1088;&#1086;&#1074; &#1086;&#1082;&#1085;&#1072; Windows 10, large DPI | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Странное изменение размеров окна Windows 10, large DPI</h1>
+<p><a href="https://ru.stackoverflow.com/questions/938271/%d0%a1%d1%82%d1%80%d0%b0%d0%bd%d0%bd%d0%be%d0%b5-%d0%b8%d0%b7%d0%bc%d0%b5%d0%bd%d0%b5%d0%bd%d0%b8%d0%b5-%d1%80%d0%b0%d0%b7%d0%bc%d0%b5%d1%80%d0%be%d0%b2-%d0%be%d0%ba%d0%bd%d0%b0-windows-10-large-dpi">Source</a> - by <a href="https://ru.stackoverflow.com/users/248572/kir-antipov">Kir_Antipov</a></p>
+<blockquote>
+<p>В общем, проблема такова:</p>
+<p>Имеется следующее окно:</p>
+<p><a href="https://i.stack.imgur.com/U1OH3.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/U1OH3.png" alt="window"></a></p>
+<p>По свойствам картина следующая:</p>
+<ul>
+<li>FormBorderStyle = <strong>FixedSingle</strong> </li>
+<li>StartPosition = <strong>CenterScreen</strong></li>
+<li>ControlBox = <strong>false</strong></li>
+<li>HelpButton = <strong>false</strong></li>
+<li>MaximizeBox = <strong>false</strong></li>
+<li>MinimizeBox = <strong>false</strong></li>
+<li>TopMost = <strong>true</strong></li>
+<li>Какие-нибудь действия, привязанные к отрисовке/изменению размеров формы - <strong>отсутствуют</strong> </li>
+</ul>
+<p>У всех оно отображается корректно (так, как на скриншоте)<br>
+Однако один человек написал мне следующее:</p>
+<blockquote>
+  <p>PLEASE make Custom Sorting windows sizable and/or properly assign dialog exit codes to windows buttons - they aren't visible with large DPIs and there is almost no way to show them or "press" using accelerator keys</p>
+</blockquote>
+<p>Я попросил его прислать скриншот проблемы и увидел следующее:</p>
+<p><a href="https://i.stack.imgur.com/pRXK5.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/pRXK5.png" alt="problem"></a></p>
+<p>На нем четко видно, что размеры клиентской области почему-то порядочно ужались, так что кнопка и правая часть формы уехали в неизвестном для меня направлении</p>
+<p>Что случилось, почему так... Не имею ни малейшего представления ¯\_(ツ)_/¯ </p>
+<hr>
+<p>Так что вопрос таков:</p>
+<ol>
+<li>Почему это произошло (виноват ли Windows 10, большой DPI или что-то
+другое и почему)?</li>
+<li>Как это исправить?</li>
+</ol>
+</blockquote>
+<h2>Answer 938301</h2>
+<p><a href="https://ru.stackoverflow.com/a/938301/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Виновата комбинация свойств FormBorderStyle = FixedSingle и ControlBox = false с увеличенным DPI. По всей видимости, это баг. </p>
+<p>Решение предложено <a href="https://social.msdn.microsoft.com/Forums/windows/en-US/1840ca5f-d4f0-4efa-9ad0-40e45734d831/autoscalemodefont-and-formborderstylefixedsingle-incompatible?forum=winforms" rel="nofollow noreferrer">здесь</a>: оставить ControlBox равным true в свойствах формы в дизайнере, а затем установить его в false уже в методе OnLoad.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

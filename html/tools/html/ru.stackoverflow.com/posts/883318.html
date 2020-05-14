@@ -1,0 +1,410 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1088;&#1080;&#1089;&#1086;&#1074;&#1072;&#1090;&#1100; &#1074;&#1077;&#1082;&#1090;&#1086;&#1088;&#1085;&#1091;&#1102; &#1075;&#1088;&#1072;&#1092;&#1080;&#1082;&#1091; &#1074; Windows API? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1088;&#1080;&#1089;&#1086;&#1074;&#1072;&#1090;&#1100; &#1074;&#1077;&#1082;&#1090;&#1086;&#1088;&#1085;&#1091;&#1102; &#1075;&#1088;&#1072;&#1092;&#1080;&#1082;&#1091; &#1074; Windows API? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как рисовать векторную графику в Windows API?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/883318/%d0%9a%d0%b0%d0%ba-%d1%80%d0%b8%d1%81%d0%be%d0%b2%d0%b0%d1%82%d1%8c-%d0%b2%d0%b5%d0%ba%d1%82%d0%be%d1%80%d0%bd%d1%83%d1%8e-%d0%b3%d1%80%d0%b0%d1%84%d0%b8%d0%ba%d1%83-%d0%b2-windows-api">Source</a> - by <a href="https://ru.stackoverflow.com/users/276534/mike-waters">Mike Waters</a></p>
+<blockquote>
+<p>Чем можно рисовать векторное изображение в Windows API?
+Особенно интересует SVG в GDI+.
+Есть ли смысл разбирать формат? Хотелось бы получить что-то похожее на то что сделано в C# XAML (не используя сторонние программы)</p>
+<pre><code>&lt;Path Stroke="Black" Fill="Gray"
+  Data="M 10,100 C 10,300 300,-200 300,100"/&gt;
+</code></pre>
+</blockquote>
+<h2>Answer 886630</h2>
+<p><a href="https://ru.stackoverflow.com/a/886630/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>GDI+ не поддерживает работу с SVG. Также в Windows нет другого стандартного средства для работы с SVG, доступного во всех поддерживаемых версиях ОС. Можно предложить несколько обходных путей.</p>
+<h1>Вариант 1 - Парсинг XML</h1>
+<p>Если вам нужен только небольшой набор элементов из SVG, можно написать свой парсер, вытянуть из SVG данные и отрисовать объекты вручную. Поскольку SVG основан на XML, можно использовать любую библиотеку для работы с XML, например <a href="https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms763742(v%3dvs.85)" rel="nofollow noreferrer">MSXML</a>. Пример чтения данных есть <a href="https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms767594%28v%3dvs.85%29" rel="nofollow noreferrer">здесь</a>.</p>
+<h1>Вариант 2 - Использование метафайлов</h1>
+<p>GDI+ поддерживает <a href="https://docs.microsoft.com/ru-ru/dotnet/framework/winforms/advanced/metafiles-in-gdi" rel="nofollow noreferrer">метафайлы</a> (EMF/WMF), стандартный для Windows формат векторной графики. Он поддерживает далеко не все, что есть в SVG, но с базовыми фигурами справляется. Можно преобразовать SVG в метафайл с помощью сторонней программы или онлайн-сервиса, и использовать в программе уже его.</p>
+<p>Например, создадим такой простейший SVG:</p>
+<pre><code>&lt;svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0"&gt;
+&lt;circle cx="200" cy="200" r="150" stroke="red" fill="green" stroke-width="10"/&gt;
+&lt;/svg&gt;
+</code></pre>
+<p>Перегоним его в WMF с помощью <a href="https://cloudconvert.com/svg-to-emf" rel="nofollow noreferrer">онлайн-сервиса</a>, получим такой <a href="https://yadi.sk/d/-p1JyS-5kzYhvw" rel="nofollow noreferrer">файл</a> (он по какой-то причине некорректно отображается в Paint, но он не поврежден; при отрисовке с помощью кода ниже он нормально отображается).</p>
+<p>Напишем код для отрисовки метафайла:</p>
+<pre><code>#include &lt;Windows.h&gt;
+#include &lt;gdiplus.h&gt;
+#pragma comment(lib, "gdiplus.lib")
+
+const int W_IMAGE = 6000; //для метафайлов почему-то приходится задавать очень большую ширину и высоту, иначе они не попадают в область отображения.
+const int H_IMAGE = 6000;
+
+Gdiplus::Metafile * wmf = NULL;
+
+//...
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+    case WM_CREATE:
+        {
+        //загрузка изображения
+        wmf = new Gdiplus::Metafile(L"D:\\images\\circle.wmf");
+        }
+        break;
+    case WM_PAINT:
+        {
+            //отрисовка изображения
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hWnd, &amp;ps);
+
+            Gdiplus::Graphics g(hdc);            
+
+            if(wmf != NULL){
+                g.DrawImage(wmf,0, 0, 0, 0, W_IMAGE, H_IMAGE, Gdiplus::Unit::UnitPixel);
+            }
+
+            EndPaint(hWnd, &amp;ps);
+        }
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+}
+</code></pre>
+<p>Результат:</p>
+<p><img src="https://i.stack.imgur.com/a6fnR.png" alt="screenshot"></p>
+<h1>Вариант 3 - Преобразование в растровое изображение</h1>
+<p>Можно преобразовать SVG в Bitmap (в отличие от предыдущего способа, это легко сделать на лету, программно) и нарисовать его. Например так, с помощью MSHTML и OLE (требует наличия IE 11):</p>
+<pre><code>#include &lt;string&gt;
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+#include &lt;Windows.h&gt;
+#include &lt;oleidl.h&gt;
+#include &lt;Mshtml.h&gt;
+#include &lt;gdiplus.h&gt;
+#pragma comment(lib, "gdiplus.lib")
+
+const int W_IMAGE = 600;
+const int H_IMAGE = 600;
+
+//Глобальные переменные
+HINSTANCE hInst;                               // текущий экземпляр
+WCHAR szTitle[100] = L"Window";                  // текст строки заголовка
+WCHAR szWindowClass[100] = L"MyClass";           // имя класса главного окна
+Gdiplus::Bitmap* svgbitmap = NULL;             // объект изображения
+
+//объявления функций, включенных в этот модуль кода:
+ATOM                MyRegisterClass(HINSTANCE hInstance);
+BOOL                InitInstance(HINSTANCE, int);
+LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+
+void DocumentWrite(IHTMLDocument2* pdoc, const WCHAR* content) {
+
+    HRESULT hr = 0;
+    VARIANT *param;
+    BSTR bstr = SysAllocString(content);
+
+    // Creates a new one-dimensional array
+    SAFEARRAY *psaStrings = SafeArrayCreateVector(VT_VARIANT, 0, 1);
+    if (psaStrings == NULL) {
+        goto cleanup;
+    }
+
+    hr = SafeArrayAccessData(psaStrings, (LPVOID*)&amp;param);
+    param-&gt;vt = VT_BSTR;
+    param-&gt;bstrVal = bstr;
+    hr = SafeArrayUnaccessData(psaStrings);
+    hr = pdoc-&gt;write(psaStrings);
+cleanup:
+    // SafeArrayDestroy calls SysFreeString for each BSTR
+    if (psaStrings != NULL) {
+        SafeArrayDestroy(psaStrings);
+    }
+}
+
+// *** Преобразование SVG в Bitmap ***
+Gdiplus::Bitmap* SvgToBitmap(const WCHAR* svgcontent, int w_image, int h_image) {
+
+    const int HIMETRIC_INCH = 2540; 
+    SIZEL sz = { 0 };
+    RECTL rcClient = { 0 };
+    HDC screendc;
+    HDC hdc;
+
+    WCHAR svghtml1[] = L"&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=\"X-UA-Compatible\" content=\"IE=11\" /&gt;&lt;/head&gt;&lt;body&gt;";
+    WCHAR svghtml2[] = L"&lt;/body&gt;&lt;/html&gt;";
+
+    Gdiplus::Bitmap* bmp = NULL;
+    Gdiplus::Graphics* g = NULL;
+    IHTMLDocument2* d2 = NULL;
+    IOleObject* pObj = NULL;
+    IViewObject* pView = NULL;
+
+    BOOL b = SystemParametersInfo(SPI_GETWORKAREA, 0, &amp;rcClient, 0);
+    if (b == FALSE) { rcClient.bottom = 480; rcClient.right = 640; }
+
+    int width = (int)(rcClient.right - rcClient.left);
+    int height = (int)(rcClient.bottom - rcClient.top);
+
+
+    //создание документа
+    HRESULT hr = CoCreateInstance(CLSID_HTMLDocument, NULL, CLSCTX_INPROC_SERVER, IID_IHTMLDocument2, (LPVOID*)&amp;d2);
+    if (FAILED(hr)) {
+        MessageBox(NULL, L"CoCreateInstance failed", NULL, MB_OK|MB_ICONERROR); goto End;
+    }
+
+    hr = d2-&gt;QueryInterface(IID_IOleObject, (LPVOID*)&amp;pObj);
+    if (FAILED(hr)) { MessageBox(NULL, L"QueryInterface failed", 0, 0); goto End; }
+
+    //установка размера документа
+    screendc = GetDC(NULL);
+    sz.cx = (UINT)MulDiv(width, HIMETRIC_INCH, GetDeviceCaps(screendc, LOGPIXELSX));
+    sz.cy = (UINT)MulDiv(height, HIMETRIC_INCH, GetDeviceCaps(screendc, LOGPIXELSY));
+    ReleaseDC(NULL,screendc);
+
+    hr = pObj-&gt;SetExtent(DVASPECT_CONTENT,&amp;sz);
+    if (FAILED(hr)) { MessageBox(NULL, L"SetExtent failed", NULL, MB_OK | MB_ICONERROR); goto End; }
+
+    //запись SVG в документ
+    DocumentWrite(d2, svghtml1);
+    DocumentWrite(d2, svgcontent);
+    DocumentWrite(d2, svghtml2);
+    d2-&gt;close();    
+
+    //преобразование в Bitmap
+    hr = d2-&gt;QueryInterface(IID_IViewObject, (LPVOID*)&amp;pView);
+    if (FAILED(hr)) { MessageBox(NULL, L"Cannot get IViewObject!", NULL, MB_OK | MB_ICONERROR); goto End; }
+
+    bmp = new Gdiplus::Bitmap(w_image, h_image);
+    g = Gdiplus::Graphics::FromImage(bmp);
+
+    hdc = g-&gt;GetHDC();
+    hr = pView-&gt;Draw(DVASPECT_CONTENT,-1, NULL, NULL, NULL, hdc, &amp; rcClient, NULL,NULL, 0); 
+    g-&gt;ReleaseHDC(hdc); 
+
+    if (FAILED(hr)) MessageBox(NULL, L"Draw failed", NULL, MB_OK | MB_ICONERROR);
+
+End:
+
+    if( g != NULL) delete g;
+    if (d2 != NULL)d2-&gt;Release();
+    if (pObj != NULL)pObj-&gt;Release();
+    if (pView != NULL)pView-&gt;Release(); 
+
+    return bmp;
+}
+
+// *** GUI ***
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
+{
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+
+    CoInitialize(NULL);    
+    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    ULONG_PTR gdiplusToken;
+    Gdiplus::GdiplusStartup(&amp;gdiplusToken, &amp;gdiplusStartupInput, NULL);
+    MyRegisterClass(hInstance);
+
+    // Выполнить инициализацию приложения
+    if (!InitInstance (hInstance, nCmdShow))
+    {
+        return FALSE;
+    }    
+
+    MSG msg;
+
+    while (GetMessage(&amp;msg, nullptr, 0, 0))
+    {       
+            TranslateMessage(&amp;msg);
+            DispatchMessage(&amp;msg);        
+    }
+
+    return (int) msg.wParam;
+}
+
+
+ATOM MyRegisterClass(HINSTANCE hInstance)
+{
+    WNDCLASSEXW wcex = { 0 };
+    wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.style          = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc    = WndProc;
+    wcex.cbClsExtra     = 0;
+    wcex.cbWndExtra     = 0;
+    wcex.hInstance      = hInstance;   
+    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);    
+    wcex.lpszClassName  = szWindowClass;    
+    return RegisterClassExW(&amp;wcex);
+}
+
+
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+   hInst = hInstance; // Сохранить маркер экземпляра в глобальной переменной
+
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   if (!hWnd)
+   {
+      return FALSE;
+   }
+
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
+
+   return TRUE;
+}
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+    case WM_CREATE:
+        {
+
+        //загрузка изображения
+        std::wifstream fStream(L"c:\\web\\image.svg");      
+        std::wstringstream wstrStream;
+        wstrStream &lt;&lt; fStream.rdbuf();
+        std::wstring s = wstrStream.str();      
+
+        svgbitmap = SvgToBitmap(s.c_str(), W_IMAGE, H_IMAGE);
+
+        }
+        break;
+    case WM_PAINT:
+        {
+            //отрисовка изображения
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hWnd, &amp;ps);
+            Gdiplus::Graphics g(hdc);
+
+            Gdiplus::Status res = g.DrawImage(svgbitmap, 0, 0, 0, 0, W_IMAGE, H_IMAGE, Gdiplus::Unit::UnitPixel);
+
+            EndPaint(hWnd, &amp;ps);
+        }
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

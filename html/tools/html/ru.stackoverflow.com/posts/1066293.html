@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1052;&#1099;&#1096;&#1100; &#1086;&#1090;&#1087;&#1088;&#1072;&#1074;&#1083;&#1103;&#1077;&#1090; &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103;, &#1085;&#1086; &#1082;&#1091;&#1076;&#1072;? &#1054;&#1090;&#1082;&#1091;&#1076;&#1072; &#1080;&#1093; &#1076;&#1086;&#1089;&#1090;&#1072;&#1074;&#1072;&#1090;&#1100; &#1076;&#1083;&#1103; &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1085;&#1080;&#1103;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1052;&#1099;&#1096;&#1100; &#1086;&#1090;&#1087;&#1088;&#1072;&#1074;&#1083;&#1103;&#1077;&#1090; &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103;, &#1085;&#1086; &#1082;&#1091;&#1076;&#1072;? &#1054;&#1090;&#1082;&#1091;&#1076;&#1072; &#1080;&#1093; &#1076;&#1086;&#1089;&#1090;&#1072;&#1074;&#1072;&#1090;&#1100; &#1076;&#1083;&#1103; &#1080;&#1089;&#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1085;&#1080;&#1103;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Мышь отправляет сообщения, но куда? Откуда их доставать для использования?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/1066293/%d0%9c%d1%8b%d1%88%d1%8c-%d0%be%d1%82%d0%bf%d1%80%d0%b0%d0%b2%d0%bb%d1%8f%d0%b5%d1%82-%d1%81%d0%be%d0%be%d0%b1%d1%89%d0%b5%d0%bd%d0%b8%d1%8f-%d0%bd%d0%be-%d0%ba%d1%83%d0%b4%d0%b0-%d0%9e%d1%82%d0%ba%d1%83%d0%b4%d0%b0-%d0%b8%d1%85-%d0%b4%d0%be%d1%81%d1%82%d0%b0%d0%b2%d0%b0%d1%82%d1%8c-%d0%b4%d0%bb%d1%8f-%d0%b8%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d1%8f">Source</a> - by <a href="https://ru.stackoverflow.com/users/366214/kelbon">Kelbon</a></p>
+<blockquote>
+<p>У меня обычный "пустой проект" в VS2019(С++), я нашёл как найти координаты окна и курсора,</p>
+<pre><code>POINT mouse;//точка с координатами мыши
+while (1)
+{//тут я просто определяю координаты куда нажал мышкой относительно окна и пишу это
+    GetWindowRect(hwndConsole, &amp;rc);
+    GetCursorPos(&amp;mouse);//записываем в точку координаты курсора
+    std::cout &lt;&lt;"Position WINDOW   "&lt;&lt; rc.left &lt;&lt; "\t" &lt;&lt; rc.top &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Position MOUSE   " &lt;&lt; mouse.x &lt;&lt; "\t" &lt;&lt; mouse.y &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Position MOUSE by WINDOW   " &lt;&lt; mouse.x - rc.left &lt;&lt; "\t" &lt;&lt; mouse.y - rc.top &lt;&lt; std::endl;
+    _getch();
+}
+</code></pre>
+<p>но совершенно не понимаю как начать принимать MESSAGE от мыши о её нажатиях и движении. И если я таки начну получать сообщения от неё, то как их лучше обрабатывать, в бесконечном цикле или есть какая-то специальная функция "ждать сообщение от мышки" ? И как я понимаю в отдельном процессе это делать, чтобы в основном делать то, что нужно при нажатиях на кнопки или это происходит как-то автоматически? 
+И ещё, есть ли какие нибудь особенности при работе с консолью?</p>
+</blockquote>
+<h2>Answer 1066327</h2>
+<p><a href="https://ru.stackoverflow.com/a/1066327/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Работать из консоли с мышью - необычно. Внезапно консоль - это элемент <strong>текстового</strong> интерфейса, который заточен на работу с символьными данными... Консольные приложения обычно не получают как таковых "MESSAGE", но они могут использовать функцию <a href="https://docs.microsoft.com/en-us/windows/console/readconsoleinput" rel="nofollow noreferrer">ReadConsoleInput</a> для получения событий мыши, если включить режим <code>SetConsoleMode(hStdin,ENABLE_MOUSE_INPUT)</code>. Фактически да, по принципу "ждать сообщение от мышки". <a href="https://docs.microsoft.com/en-us/windows/console/reading-input-buffer-events" rel="nofollow noreferrer">Пример</a>.</p>
+<p>Также консольные приложения могут установить глобальный хук на мышь, и тогда они будут получать сообщения о событиях мыши во всех приложениях. Их в этом случае можно обработать с помощью обычного цикла GetMessage/DispatchMessage. <a href="https://ru.stackoverflow.com/a/927170/240512">Пример работы с хуками</a></p>
+<p>GUI-приложения обычно могут проще взаимодействовать с мышью, обрабатывая <a href="https://docs.microsoft.com/ru-ru/windows/win32/inputdev/mouse-input-notifications" rel="nofollow noreferrer">сообщения мыши</a> типа <code>WM_MOUSEMOVE</code> в своих окнах.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

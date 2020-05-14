@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1050;&#1072;&#1082; &#1085;&#1072;&#1088;&#1080;&#1089;&#1086;&#1074;&#1072;&#1090;&#1100; &#1088;&#1072;&#1084;&#1082;&#1091; &#1087;&#1086;&#1074;&#1077;&#1088;&#1093; &#1086;&#1082;&#1085;&#1072; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103;? | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1085;&#1072;&#1088;&#1080;&#1089;&#1086;&#1074;&#1072;&#1090;&#1100; &#1088;&#1072;&#1084;&#1082;&#1091; &#1087;&#1086;&#1074;&#1077;&#1088;&#1093; &#1086;&#1082;&#1085;&#1072; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103;? | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Как нарисовать рамку поверх окна приложения?</h1>
+<p><a href="https://ru.stackoverflow.com/questions/894736/%d0%9a%d0%b0%d0%ba-%d0%bd%d0%b0%d1%80%d0%b8%d1%81%d0%be%d0%b2%d0%b0%d1%82%d1%8c-%d1%80%d0%b0%d0%bc%d0%ba%d1%83-%d0%bf%d0%be%d0%b2%d0%b5%d1%80%d1%85-%d0%be%d0%ba%d0%bd%d0%b0-%d0%bf%d1%80%d0%b8%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%b8%d1%8f">Source</a> - by <a href="https://ru.stackoverflow.com/users/219041/rudolfninja">rudolfninja</a></p>
+<blockquote>
+<p>Нужно нарисовать рамку, поверх окна приложения из списка запущенных приложений. То есть, пользователь выбирает приложение из списка запущенных, его окно становится активным и поверх его рисуется рамка. Я пробовал поулчить <code>hdc</code> этого приложения и нарисовать рамку на этом <code>hdc</code>, но выяснилось, что такой способ работать не будет. </p>
+<p>В <a href="https://stackoverflow.com/questions/52858141/c-winapi-draw-border-on-top-of-application-window">аналогичной теме на английской версии сайта</a> мне предложили использовать Layered Windows, но, прочитав про технологию я не понял, как это можно использовать в моём случае. Хотелось бы пример.</p>
+<p>Может кто сталкивался с подобным и может подсказать как можно решить мою проблему с использованием Layered Windows или без них? </p>
+<p>Попробовал создать Layered окно, поместить его поверх нужного окна и нарисовать на layered окне рамку, но не вышло:</p>
+<pre><code>const COLORREF MY_COLOR_KEY = RGB(255, 128, 0);
+HWND cmdHanlde = NULL;
+constexpr unsigned int timerIdWindowUpdate = 1;
+constexpr unsigned int timerIdFrameColor = 2;
+bool tick = false;
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+             _In_opt_ HINSTANCE hPrevInstance,
+             _In_ LPWSTR    lpCmdLine,
+             _In_ int       nCmdShow)
+{
+WNDCLASSEX wc = {};
+wc.cbSize = sizeof(WNDCLASSEX);
+wc.style = CS_HREDRAW | CS_VREDRAW;
+wc.lpszClassName = L"MyTransparentFrame";
+wc.hCursor = ::LoadCursor(NULL, IDC_ARROW);
+wc.hbrBackground = NULL;
+
+wc.lpfnWndProc = [](HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) -&gt; LRESULT
+{
+switch (msg)
+{
+case WM_PAINT:
+{
+    PAINTSTRUCT ps{};
+    HDC hdc = BeginPaint(hwnd, &amp;ps);
+
+    RECT rc{}; GetClientRect(hwnd, &amp;rc);
+    HPEN hPen = CreatePen(PS_SOLID, 5, tick ? RGB(255, 128, 1) : RGB(255, 201, 14));
+    HBRUSH hBrush = CreateSolidBrush(MY_COLOR_KEY);
+    HGDIOBJ hOldPen = SelectObject(hdc, hPen);
+    HGDIOBJ hOldBrush = SelectObject(hdc, hBrush);
+
+    Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
+
+    if (hOldPen)
+        SelectObject(hdc, hOldPen);
+    if (hOldBrush)
+    SelectObject(hdc, hOldBrush);
+    if (hPen)
+        DeleteObject(hPen);
+    if (hBrush)
+        DeleteObject(hBrush);
+
+    EndPaint(hwnd, &amp;ps);
+}
+break;
+case WM_TIMER:
+{
+    if (wp == timerIdWindowUpdate)
+    {
+        WINDOWPLACEMENT windowPlacement = { sizeof(WINDOWPLACEMENT), };
+        if (::GetWindowPlacement(cmdHanlde, &amp;windowPlacement))
+        {
+            if (windowPlacement.showCmd == SW_SHOWMINIMIZED
+                || !IsWindowVisible(cmdHanlde))
+            {
+                ::SetWindowPos(hwnd, cmdHanlde, 0, 0, 0, 0, SWP_HIDEWINDOW);
+
+            }
+            else
+            {
+                RECT rect = {};
+                ::GetWindowRect(cmdHanlde, &amp;rect);
+                MONITORINFO monInfo;
+                monInfo.cbSize = sizeof(MONITORINFO);
+                GetMonitorInfoW(MonitorFromWindow(cmdHanlde, MONITOR_DEFAULTTONEAREST), &amp;monInfo);
+                if (cmdHanlde != NULL &amp;&amp; ::IsZoomed(cmdHanlde))
+                {
+                    rect.left = monInfo.rcWork.left;
+                    rect.top = monInfo.rcWork.top;
+                    rect.bottom = monInfo.rcWork.bottom &gt; rect.bottom ? rect.bottom : monInfo.rcWork.bottom;
+                    rect.right = monInfo.rcWork.right &gt; rect.right ? rect.right : monInfo.rcWork.right;
+                }
+                ::SetWindowPos(hwnd, 0, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
+                    SWP_SHOWWINDOW);
+            }
+        }
+    }
+    else if (wp == timerIdFrameColor)
+    {
+        tick = !tick;
+        ::RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
+    }
+    break;
+}
+case WM_DESTROY:
+    PostQuitMessage(0);
+    break;
+
+default:
+    return DefWindowProcW(hwnd, msg, wp, lp);
+}
+
+return 0;
+};
+
+RegisterClassEx(&amp;wc);
+
+HWND hwnd = CreateWindowExW(WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_LAYERED | WS_EX_TRANSPARENT, wc.lpszClassName, L"", WS_POPUP | WS_VISIBLE | WS_DISABLED,
+0, 0, 0, 0, nullptr, nullptr, nullptr, nullptr);
+::SetTimer(hwnd, timerIdWindowUpdate, 50, NULL);
+::SetTimer(hwnd, timerIdFrameColor, 500, NULL);
+SetLayeredWindowAttributes(hwnd, MY_COLOR_KEY, 255, LWA_COLORKEY);
+ShowWindow(hwnd, SW_SHOW);
+cmdHanlde = FindWindow(L"ConsoleWindowClass", L"C:\\WINDOWS\\system32\\cmd.exe");
+
+MSG msg;
+while (GetMessage(&amp;msg, nullptr, 0, 0))
+{
+TranslateMessage(&amp;msg);
+DispatchMessage(&amp;msg);
+}
+
+return (int)msg.wParam;
+}
+</code></pre>
+</blockquote>
+<h2>Answer 894802</h2>
+<p><a href="https://ru.stackoverflow.com/a/894802/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>Рисование в DC чужого окна определенно "работает". Другое дело, что:</p>
+<ul>
+<li><p>Нарисованное таким образом изображение затрется при первой обработке WM_PAINT в целевом окне (его понадобится постоянно перерисовывать).</p></li>
+<li><p>Если вам нужно рисовать рамку вокруг какого-то окна, вам нужен DC не этого окна, а его родительского окна (или рабочего стола, если это окно верхнего уровня). Ведь на DC окна можно рисовать только внутри этого окна, а рамка нужна снаружи.</p></li>
+</ul>
+<p>Подробнее см. в похожем вопросе: <a href="https://ru.stackoverflow.com/questions/661585/%D0%A0%D0%B8%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B0-%D0%BE%D0%BA%D0%BD%D0%B5-%D0%B4%D1%80%D1%83%D0%B3%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-winapi/661636#661636">Рисование на окне другого приложения с помощью WinAPI</a></p>
+<hr>
+<p>Что касается layered window, вот так у меня работает:</p>
+<pre><code>LRESULT CALLBACK LayerWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    switch (msg)
+    {
+        case WM_PAINT:
+        {
+            HPEN framePen = ::CreatePen(PS_SOLID, 5, RGB(255, 0, 0));
+            RECT rect = {};
+            PAINTSTRUCT ps;
+            ::GetClientRect(hwnd, &amp;rect);
+            HDC hdc = ::BeginPaint(hwnd, &amp;ps);
+            ::SelectObject(hdc, framePen);
+            ::Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+            ::EndPaint(hwnd, &amp;ps);
+        }
+        break;
+        case WM_CLOSE:
+            DestroyWindow(hwnd);
+            break;
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+        default:
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+void CreateLayer(){
+    HWND handle = FindWindow(L"ConsoleWindowClass", L"C:\\WINDOWS\\system32\\cmd.exe");
+
+    SetForegroundWindow(handle);
+
+    RECT rect = {};
+    ::GetWindowRect(handle, &amp;rect);
+
+    WNDCLASSEX wx = {};
+    wx.cbSize = sizeof(WNDCLASSEX);
+    wx.lpfnWndProc = LayerWndProc;
+    wx.lpszClassName = L"TestBorderWindow";
+    wx.hCursor = ::LoadCursor(NULL, IDC_ARROW);
+    wx.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
+
+    ::RegisterClassEx(&amp;wx);
+
+    HWND hWnd = CreateWindowEx(WS_EX_LAYERED,
+    L"TestBorderWindow",
+    L"Demo",
+    WS_POPUP,
+    rect.left, rect.top,
+    rect.right - rect.left, rect.bottom - rect.top,
+    NULL,
+    NULL,
+    (HINSTANCE)GetModuleHandle(NULL),
+    NULL);
+
+    ::GetWindowRect(handle, &amp;rect);
+    SetLayeredWindowAttributes(hWnd, RGB(255,255,255), 0, LWA_COLORKEY);
+    ::SetWindowPos(handle, hWnd, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
+    SWP_SHOWWINDOW);
+    ShowWindow(hWnd,SW_SHOW);
+}
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPWSTR    lpCmdLine,
+                     _In_ int       nCmdShow)
+{
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+
+    MSG msg;    
+
+    CreateLayer();
+
+    // Main message loop:
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+    {       
+            TranslateMessage(&amp;msg);
+            DispatchMessage(&amp;msg);      
+    }
+
+    return (int) msg.wParam;
+}
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

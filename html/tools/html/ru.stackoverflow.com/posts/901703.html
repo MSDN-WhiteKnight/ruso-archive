@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>OpenALL &#1057;++ &#1047;&#1072;&#1087;&#1080;&#1089;&#1100; &#1080; &#1086;&#1090;&#1076;&#1077;&#1083;&#1100;&#1085;&#1086; &#1055;&#1088;&#1086;&#1080;&#1075;&#1088;&#1099;&#1074;&#1072;&#1085;&#1080;&#1077; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="OpenALL &#1057;++ &#1047;&#1072;&#1087;&#1080;&#1089;&#1100; &#1080; &#1086;&#1090;&#1076;&#1077;&#1083;&#1100;&#1085;&#1086; &#1055;&#1088;&#1086;&#1080;&#1075;&#1088;&#1099;&#1074;&#1072;&#1085;&#1080;&#1077; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.40.12.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>OpenALL С++ Запись и отдельно Проигрывание</h1>
+<p><a href="https://ru.stackoverflow.com/questions/901703/openall-%d0%a1-%d0%97%d0%b0%d0%bf%d0%b8%d1%81%d1%8c-%d0%b8-%d0%be%d1%82%d0%b4%d0%b5%d0%bb%d1%8c%d0%bd%d0%be-%d0%9f%d1%80%d0%be%d0%b8%d0%b3%d1%80%d1%8b%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5">Source</a> - by <a href="https://ru.stackoverflow.com/users/270698/%d0%ae%d1%80%d1%96%d0%b9-%d0%9f%d0%b8%d1%81%d0%b0%d0%bd%d0%ba%d0%b0">Юрій Писанка</a></p>
+<blockquote>
+<p>Пытаюсь научиться обрабатывать записанный с микрофона звук, нашёл пример, но там всё склеено, и непонятно что за что отвечает.</p>
+<p>Мне нужно </p>
+<ol>
+<li><p>Записать допустим 3 секунды</p></li>
+<li><p>Получить доступ к массиву с записанными данными, проанализировать или даже изменить</p></li>
+<li><p>Проиграть запись, сохранённую в  массиве</p></li>
+</ol>
+<p>Вот пример, о котором писал.</p>
+<pre><code>    //#include &lt;unistd.h&gt;
+#include &lt;AL/al.h&gt; 
+#include &lt;AL/alc.h&gt; 
+#include &lt;time.h&gt;
+#include &lt;ctime&gt; 
+#pragma comment (lib,"OpenAL32.lib")
+#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+//#include &lt;windows.h&gt;
+//#include &lt;al.h&gt;
+//#include &lt;alc.h&gt;
+
+
+using namespace std;
+int main()
+{
+
+
+
+
+ALCdevice *dev[2];
+ALCcontext *ctx;
+ALuint source, buffers[3];
+char data[5000];
+ALuint buf;
+ALint val;
+
+    float ttotal;
+    unsigned int ccount;
+    long int c1ount;
+    c1ount =0;
+
+dev[0] = alcOpenDevice(NULL);
+ctx = alcCreateContext(dev[0], NULL);
+alcMakeContextCurrent(ctx);
+
+alGenSources(1, &amp;source);
+alGenBuffers(3, buffers);
+
+/* Setup some initial silent data to play out of the source */
+alBufferData(buffers[0], AL_FORMAT_MONO16, data, sizeof(data), 22050);
+alBufferData(buffers[1], AL_FORMAT_MONO16, data, sizeof(data), 22050);
+alBufferData(buffers[2], AL_FORMAT_MONO16, data, sizeof(data), 22050);
+alSourceQueueBuffers(source, 3, buffers);
+
+/* If you don't need 3D spatialization, this should help processing time */
+alDistanceModel(AL_NONE); 
+
+dev[1] = alcCaptureOpenDevice(NULL, 22050, AL_FORMAT_MONO16, sizeof(data)/2); //22050 mean 22.050 samples per     second. or 44100 for 44.1 per second.
+
+/* Start playback and capture, and enter the audio loop */
+alSourcePlay(source);
+alcCaptureStart(dev[1]);    //starts ring buffer
+
+while(1) 
+{
+    /* Check if any queued buffers are finished */
+    alGetSourcei(source, AL_BUFFERS_PROCESSED, &amp;val);
+    if(val &lt;= 0)
+        continue;
+
+    /* Check how much audio data has been captured (note that 'val' is the
+    * number of frames, not bytes) */
+    alcGetIntegerv(dev[1], ALC_CAPTURE_SAMPLES, 1, &amp;val);
+
+    /* Read the captured audio */
+    alcCaptureSamples(dev[1], data, val);
+
+
+        //***** Process/filter captured data here *****//
+
+
+c1ount = c1ount +1;
+if(c1ount &gt;= 33){
+          break;
+         }
+
+
+        //for (int ii=0;ii&lt;val;++ii) {
+        //  data[ii]*=0.1; // Make it quieter
+        //}
+    //***** end Process/filter captured data here *****//
+
+    /* Pop the oldest finished buffer, fill it with the new capture data,
+    then re-queue it to play on the source */
+    alSourceUnqueueBuffers(source, 1, &amp;buf);
+    alBufferData(buf, AL_FORMAT_MONO16, data, val*2 /* bytes here, not
+    frames */, 22050);
+    alSourceQueueBuffers(source, 1, &amp;buf);
+
+    /* Make sure the source is still playing */
+    alGetSourcei(source, AL_SOURCE_STATE, &amp;val);
+
+    if(val != AL_PLAYING)
+    {
+
+        alSourcePlay(source);
+    }
+}
+
+cout&lt;&lt; "fgggggggg\n";
+
+
+/* Shutdown and cleanup */
+alcCaptureStop(dev[1]);
+alcCaptureCloseDevice(dev[1]);
+
+alSourceStop(source);
+alDeleteSources(1, &amp;source);
+alDeleteBuffers(3, buffers);
+alDeleteBuffers(1, &amp;buf);
+
+alcMakeContextCurrent(NULL);
+alcDestroyContext(ctx);
+alcCloseDevice(dev[0]); 
+
+return 0;
+}
+</code></pre>
+<p>Вот тоже пример, который должен записывать, но почему тут вечный цикл?</p>
+<pre><code>    #include &lt;AL/al.h&gt;
+#include &lt;AL/alc.h&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+#pragma comment(lib,"OpenAL32.lib")
+
+const int SRATE = 44100;
+const int SSIZE = 1024;
+
+ALbyte buffer[22050];
+ALint sample;
+
+int main(int argc, char *argv[]) {
+    alGetError();
+    ALCdevice *device = alcCaptureOpenDevice(NULL, SRATE, AL_FORMAT_STEREO16, SSIZE);
+    if (alGetError() != AL_NO_ERROR) {
+        return 0;
+    }
+    alcCaptureStart(device);
+
+    while (true) {
+        alcGetIntegerv(device, ALC_CAPTURE_SAMPLES, (ALCsizei)sizeof(ALint), &amp;sample);
+        alcCaptureSamples(device, (ALCvoid *)buffer, sample);
+
+        // ... do something with the buffer 
+
+        for(int i = 0; i&lt;80;i++)
+        {
+            cout&lt;&lt;(int)buffer[i]&lt;&lt;' ';
+        }
+        cout&lt;&lt;"loop s\n";
+    }
+
+    alcCaptureStop(device);
+    alcCaptureCloseDevice(device);
+
+    return 0;
+}
+</code></pre>
+</blockquote>
+<h2>Answer 902777</h2>
+<p><a href="https://ru.stackoverflow.com/a/902777/">Source</a> - by <a href="https://ru.stackoverflow.com/users/240512/msdn-whiteknight">MSDN.WhiteKnight</a></p>
+<blockquote>
+<p>В первом примере вот эта строка сохраняет данные аудио в массив data:</p>
+<pre><code>alcCaptureSamples(dev[1], data, val);
+</code></pre>
+<p>Длительность звука в массиве рассчитывается по формуле </p>
+<blockquote>
+  <p>t = (N <sub>Samples</sub>) / (SampleRate * N <sub>Channels</sub>)</p>
+</blockquote>
+<p>Размер данных в массиве (в байтах) рассчитывается по формуле:</p>
+<blockquote>
+  <p>N <sub>Bytes</sub> = N <sub>Samples</sub> * (BitsPerSample / 8)</p>
+</blockquote>
+<p>У вас N <sub>Channels</sub> = 1 (моно), SampleRate = 22050, BitsPerSample = 16, получаем:</p>
+<pre><code>t = val / 22050;
+
+N_bytes = val * 2;
+</code></pre>
+<p>Вам нужно объявить массив, размером достаточный для хранения требуемой длительности аудио, допустим, saved_data. После получения каждой порции через alcCaptureSamples накапливаете данные в этом массиве (просто через memcpy копируете в конец массива и сохраняете суммарный размер). Когда длительность достигает требуемого значения, останавливаете цикл, делаете свою обработку, а потом массив с накопленными данными передаете в alBufferData и выполняете код воспроизведения:</p>
+<pre><code>alSourceUnqueueBuffers(source, 1, &amp;buf);
+alBufferData(buf, AL_FORMAT_MONO16, saved_data, N_bytes, 22050);
+alSourceQueueBuffers(source, 1, &amp;buf);
+</code></pre>
+<p>Есть вот такой <a href="https://ru.stackoverflow.com/a/794133/240512">пример записи звука на чистом WASAPI</a>, возможно будет полезен. Правда, там сохранение сразу в файл сделано, а не в массив.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
