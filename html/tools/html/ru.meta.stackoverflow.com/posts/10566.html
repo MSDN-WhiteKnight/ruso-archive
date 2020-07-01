@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>&#1044;&#1086;&#1074;&#1086;&#1083;&#1100;&#1085;&#1099; &#1083;&#1080; &#1074;&#1099; &#1085;&#1072;&#1096;&#1077;&#1081; &#1084;&#1086;&#1076;&#1077;&#1088;&#1072;&#1094;&#1080;&#1077;&#1081;? | RuSO Archive </title>
+    <title>&#1053;&#1077; &#1088;&#1072;&#1073;&#1086;&#1090;&#1072;&#1077;&#1090; &#1087;&#1086;&#1076;&#1089;&#1074;&#1077;&#1090;&#1082;&#1072; &#1089;&#1080;&#1085;&#1090;&#1072;&#1082;&#1089;&#1080;&#1089;&#1072;, &#1082;&#1086;&#1075;&#1076;&#1072; &#1103;&#1074;&#1085;&#1086; &#1079;&#1072;&#1076;&#1072;&#1085; &#1103;&#1079;&#1099;&#1082; &#1087;&#1086;&#1089;&#1083;&#1077; ``` | RuSO Archive </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="&#1044;&#1086;&#1074;&#1086;&#1083;&#1100;&#1085;&#1099; &#1083;&#1080; &#1074;&#1099; &#1085;&#1072;&#1096;&#1077;&#1081; &#1084;&#1086;&#1076;&#1077;&#1088;&#1072;&#1094;&#1080;&#1077;&#1081;? | RuSO Archive ">
+    <meta name="title" content="&#1053;&#1077; &#1088;&#1072;&#1073;&#1086;&#1090;&#1072;&#1077;&#1090; &#1087;&#1086;&#1076;&#1089;&#1074;&#1077;&#1090;&#1082;&#1072; &#1089;&#1080;&#1085;&#1090;&#1072;&#1082;&#1089;&#1080;&#1089;&#1072;, &#1082;&#1086;&#1075;&#1076;&#1072; &#1103;&#1074;&#1085;&#1086; &#1079;&#1072;&#1076;&#1072;&#1085; &#1103;&#1079;&#1099;&#1082; &#1087;&#1086;&#1089;&#1083;&#1077; ``` | RuSO Archive ">
     <meta name="generator" content="docfx 2.40.12.0">
     
     <link rel="shortcut icon" href="../../../../favicon.ico">
@@ -69,35 +69,34 @@
             <article class="content wrap" id="_content" data-uid="">
 
 <p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
-<h1>Довольны ли вы нашей модерацией?</h1>
-<p><a href="https://ru.meta.stackoverflow.com/questions/10333/%d0%94%d0%be%d0%b2%d0%be%d0%bb%d1%8c%d0%bd%d1%8b-%d0%bb%d0%b8-%d0%b2%d1%8b-%d0%bd%d0%b0%d1%88%d0%b5%d0%b9-%d0%bc%d0%be%d0%b4%d0%b5%d1%80%d0%b0%d1%86%d0%b8%d0%b5%d0%b9">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/337540/victor-vosmottor-thanks-monica">Victor VosMottor thanks Monica</a></p>
+<h1>Не работает подсветка синтаксиса, когда явно задан язык после ```</h1>
+<p><a href="https://ru.meta.stackoverflow.com/questions/10566/%d0%9d%d0%b5-%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%b0%d0%b5%d1%82-%d0%bf%d0%be%d0%b4%d1%81%d0%b2%d0%b5%d1%82%d0%ba%d0%b0-%d1%81%d0%b8%d0%bd%d1%82%d0%b0%d0%ba%d1%81%d0%b8%d1%81%d0%b0-%d0%ba%d0%be%d0%b3%d0%b4%d0%b0-%d1%8f%d0%b2%d0%bd%d0%be-%d0%b7%d0%b0%d0%b4%d0%b0%d0%bd-%d1%8f%d0%b7%d1%8b%d0%ba-%d0%bf%d0%be%d1%81%d0%bb%d0%b5">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/184217/alexander-petrov">Alexander Petrov</a></p>
 <blockquote>
-<p>Порой некоторые участники ругают нашу модерацию. Поэтому я решил устроить голосование:</p>
-<blockquote>
-  <p>Довольны ли вы нашей модерацией?
-  <hr>
-  Считаете ли вы, что наши модераторы объективны и справедливы, или же есть претензии?</p>
+<p>Я заметил, что на сайте на работает подсветка синтаксиса, когда явно указан язык программирования после знаков ```. Например, ```c#. При этом указана метка языка.</p>
+<p>Код для теста.</p>
+<p>С четырьмя отступами:</p>
+<pre><code>Console.WriteLine(&quot;Hello&quot;);
+</code></pre>
+<p>Заключённый в знаки ``` без указания языка:</p>
+<pre><code>Console.WriteLine(&quot;Hello&quot;);
+</code></pre>
+<p>Заключённый в знаки ```c# с указанием языка:</p>
+<pre>Console.WriteLine(&quot;Hello&quot;);
+</pre>
+<p>Причём, что любопытно, в режиме редактирования подсветка работает.</p>
 </blockquote>
-<p>Если будут ссылки, подтверждающие ту или иную позицию, добавьте их правкой в соответствующий ответ.</p>
-<p><em>P.S.</em> Не надо закрывать этот вопрос, пока идет голосование. Я попрошу модераторов его заблокировать, когда оно закончится.</p>
-</blockquote>
-<h2>Answer 10337</h2>
-<p><a href="https://ru.meta.stackoverflow.com/a/10337/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/15479/suvitruf-andrei-apanasik">Suvitruf - Andrei Apanasik</a></p>
+<h2>Answer 10568</h2>
+<p><a href="https://ru.meta.stackoverflow.com/a/10568/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/337540/victor-vosmottor-thanks-monica">Victor VosMottor thanks Monica</a></p>
 <blockquote>
-<p>В таком виде опрос бесполезен. Он только рассорит людей.</p>
-<p>Также хочу напомнить ещё раз:</p>
-<ul>
-<li><a href="https://ru.meta.stackoverflow.com/q/4790/15479">Следует ли обращаться к участникам по имени в вопросах на Мете?</a> Упоминание участника, который недоволен действиями модератора, не нужно. Важны факты. Если из вопроса убрать конкретные имена, смысл не изменится. Но зато уменьшится вероятность негатива по отношению к этим участникам.</li>
-<li>Не совсем понимаю, что будет по итогу этого вопроса. Если у участника проблемы, то ему этот опрос не поможет. У нас <a href="https://ru.meta.stackoverflow.com/q/9800/15479">есть процедуры, если участник недоволен действиями модератора</a>. Он всегда может <a href="https://ru.meta.stackoverflow.com/contact">связаться</a> с <a href="https://ru.meta.stackoverflow.com/users/6/nicolas-chabanovsky?tab=profile">управляющим</a> (у которого в профиле указаны и прямые контакты для связи, если у вас очень важный вопрос).</li>
-</ul>
+<pre><code>Console.WriteLine(&quot;Hello&quot;);
+</code></pre>
+<pre><code>```csharp
+</code></pre>
 <hr>
-<p>Небольшое уточнение по поводу обсуждений модерации на Мете. Это не запрещено, если вопрос удовлетворяет формальным требованиям:</p>
-<ul>
-<li>Никаких имён.</li>
-<li>Никаких нападок на других участников.</li>
-<li><strong>Пруфы/ссылки/факты</strong>.</li>
-</ul>
-<p><a href="https://ru.meta.stackoverflow.com/q/10327/15479">Этот вопрос</a> требованиям не удовлетворял, поэтому и был закрыт участниками. Но это не значит, что не нужно обсуждать проблемы сообщества. Нужно. Но давайте сдерживать эмоции и обсуждать всё как профессионалы.</p>
+<pre class="lang-cs prettyprint-override"><code>Console.WriteLine(&quot;Hello&quot;);
+</code></pre>
+<pre><code>```cs
+</code></pre>
 </blockquote>
 <hr>
 <p><i>Content is retrieved from StackExchange API. </i></p>
