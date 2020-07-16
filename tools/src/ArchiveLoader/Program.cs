@@ -269,10 +269,12 @@ namespace ArchiveLoader
                         wr.AutoFlush = true;
                         Console.SetOut(wr);
                         Console.SetError(wr);
+                        Console.WriteLine();
                         Console.WriteLine(" Pulling latest changes from remote repository: {0}", DateTime.Now);
                         Console.WriteLine(GitBash.ExecuteCommand("cd ../../../../../; git pull"));
                         LoadDataMarkdown();
                         Console.WriteLine("Done");
+                        Console.WriteLine();
                     }
                     catch (Exception ex)
                     {
@@ -291,17 +293,44 @@ namespace ArchiveLoader
                     }
                 }
             }
-            else if (args.Length >= 1 && args[0] == "load-auto")
+            else if (args.Length >= 1 && args[0] == "publish")
             {
-                try
+                StreamWriter wr = new StreamWriter("ArchiveLoader.log", true);
+                using (wr)
                 {
-                    LoadDataMarkdown();
-                    Console.WriteLine("Done");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    throw;
+                    try
+                    {
+                        wr.AutoFlush = true;
+                        Console.SetOut(wr);
+                        Console.SetError(wr);
+                        Console.WriteLine();
+                        Console.WriteLine(" Pushing pending changes to remote repository: {0}", DateTime.Now);
+                        
+                        string command = "cd ../../../../../; " +
+                            "git add tools/data/\\*.md &>/dev/null; " +
+                            "git add html/ &>/dev/null; " + 
+                            "git commit -m \"Update website (auto)\"; "+
+                            "git push origin master";
+
+                        Console.WriteLine(GitBash.ExecuteCommand(command));
+                        Console.WriteLine("Done");
+                        Console.WriteLine();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        throw;
+                    }
+                    finally
+                    {
+                        var standardOutput = new StreamWriter(Console.OpenStandardOutput());
+                        standardOutput.AutoFlush = true;
+                        Console.SetOut(standardOutput);
+
+                        var standardError = new StreamWriter(Console.OpenStandardError());
+                        standardError.AutoFlush = true;
+                        Console.SetError(standardError);
+                    }
                 }
             }
             else
