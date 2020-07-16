@@ -291,6 +291,19 @@ namespace ArchiveLoader
                     }
                 }
             }
+            else if (args.Length >= 1 && args[0] == "load-auto")
+            {
+                try
+                {
+                    LoadDataMarkdown();
+                    Console.WriteLine("Done");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    throw;
+                }
+            }
             else
             {
                 Console.WriteLine(" *** RuSO Archive Tool *** ");
