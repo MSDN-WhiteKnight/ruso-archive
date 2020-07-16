@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using RuSoLib;
 using Integration.Git;
+using System.Runtime.InteropServices;
 
 namespace ArchiveLoader
 {   
@@ -212,6 +213,15 @@ namespace ArchiveLoader
             }
         }
 
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -223,7 +233,6 @@ namespace ArchiveLoader
             if (args.Length == 0)
             {
                 LoadDataMarkdown();
-                //Archive.SelectUserAnswers("ru.stackoverflow.com", "posts", "myposts", 240512);
 
                 if (!Console.IsInputRedirected)
                 {
@@ -300,19 +309,34 @@ namespace ArchiveLoader
                 {
                     try
                     {
+                        IntPtr hwnd = GetConsoleWindow();
+                        if (hwnd != null) ShowWindow(hwnd, SW_HIDE);
+
                         wr.AutoFlush = true;
                         Console.SetOut(wr);
                         Console.SetError(wr);
+
+                        Archive.Generate("ru.meta.stackoverflow.com", "posts", "Posts");
+                        Archive.Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
+                        Archive.Generate("ru.stackoverflow.com", "posts", "Posts");
+                        Archive.Generate("ru.stackoverflow.com", "deleted", "Deleted posts");
+
                         Console.WriteLine();
-                        Console.WriteLine(" Pushing pending changes to remote repository: {0}", DateTime.Now);
+                        Console.WriteLine(" Publishing pending changes to remote repository: {0}", DateTime.Now);
                         
                         string command = "cd ../../../../../; " +
+                            "$DOCFX_PATH/docfx.exe docfx.json; " +
                             "git add tools/data/\\*.md &>/dev/null; " +
-                            "git add html/ &>/dev/null; " + 
-                            "git commit -m \"Update website (auto)\"; "+
+                            "git add html/ &>/dev/null; ";
+
+                        Console.WriteLine(GitBash.ExecuteCommand(command));
+
+                        command = "cd ../../../../../; " +
+                            "git commit -m 'Update website (auto)'; " +
                             "git push origin master";
 
                         Console.WriteLine(GitBash.ExecuteCommand(command));
+
                         Console.WriteLine("Done");
                         Console.WriteLine();
                     }
