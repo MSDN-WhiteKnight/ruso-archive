@@ -42,12 +42,7 @@ namespace RuSoLib
                 res.UserName = "(unknown person)";
                 res.UserLink = "";
                 res.UserId = "";
-            }
-
-            dynamic score = JSON.GetPropertyValue(data, "score");
-
-            if (score != null) res.Score = score;
-            else res.Score = 0;
+            }                        
 
             res.IsAccepted = (data as dynamic).is_accepted;
             res.PostType = "answer";
@@ -88,8 +83,6 @@ namespace RuSoLib
             target.WriteLine(this.QuestionId);
             target.Write("se.post_type: ");
             target.WriteLine(this.PostType);
-            target.Write("se.score: ");
-            target.WriteLine(this.Score);
             target.Write("se.is_accepted: ");
             target.WriteLine(this.IsAccepted);
             target.WriteLine("---");

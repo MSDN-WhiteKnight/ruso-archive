@@ -48,8 +48,7 @@ namespace RuSoLib
                 res.UserLink = "";
                 res.UserId = "";
             }
-
-            res.Score = (data as dynamic).score;
+            
             res.PostType = (data as dynamic).post_type;
             res.id = (data as dynamic).post_id;
             res.Title = "Post "+res.id.ToString();
@@ -81,8 +80,6 @@ namespace RuSoLib
             target.WriteLine(this.Id);
             target.Write("se.post_type: ");
             target.WriteLine(this.PostType);
-            target.Write("se.score: ");
-            target.WriteLine(this.Score);
             target.WriteLine("---");
             target.Write(this.Body);
         }

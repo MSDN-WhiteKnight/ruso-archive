@@ -49,11 +49,6 @@ namespace RuSoLib
                 res.UserLink = "";
                 res.UserId = "";
             }
-
-            dynamic score = JSON.GetPropertyValue(data, "score");
-
-            if (score != null) res.Score = score;
-            else res.Score = 0;
             
             res.PostType = "question";
             res.id = (data as dynamic).question_id;
@@ -86,8 +81,6 @@ namespace RuSoLib
             target.WriteLine(this.Id);            
             target.Write("se.post_type: ");
             target.WriteLine(this.PostType);
-            target.Write("se.score: ");
-            target.WriteLine(this.Score);            
             target.WriteLine("---");
             target.Write(this.Body);
         }
