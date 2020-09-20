@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Text;
 using RuSoLib;
 using Integration.Git;
-using System.Runtime.InteropServices;
 
 namespace ArchiveLoader
 {   
@@ -304,17 +305,39 @@ namespace ArchiveLoader
             }
             else if (args.Length >= 1 && args[0] == "publish")
             {
-                StreamWriter wr = new StreamWriter("ArchiveLoader.log", true);
+                IntPtr hwnd = GetConsoleWindow();
+                if (hwnd != null) ShowWindow(hwnd, SW_HIDE);
+
+                StreamWriter wr=null;
+                int c = 0;
+
+                while (true)
+                {
+                    try
+                    {
+                        wr = new StreamWriter("ArchiveLoader.log", true);
+                    }
+                    catch (IOException) 
+                    {
+                        if (c > 10) throw;
+                    }
+
+                    if (wr != null) break;
+
+                    c++;
+                    Thread.Sleep(5000);
+                }
+
                 using (wr)
                 {
                     try
                     {
-                        IntPtr hwnd = GetConsoleWindow();
-                        if (hwnd != null) ShowWindow(hwnd, SW_HIDE);
-
-                        wr.AutoFlush = true;
-                        Console.SetOut(wr);
-                        Console.SetError(wr);
+                        if (wr != null)
+                        {
+                            wr.AutoFlush = true;
+                            Console.SetOut(wr);
+                            Console.SetError(wr);
+                        }
 
                         Archive.Generate("ru.meta.stackoverflow.com", "posts", "Posts");
                         Archive.Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
