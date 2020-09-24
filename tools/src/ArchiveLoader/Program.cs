@@ -317,15 +317,19 @@ namespace ArchiveLoader
                     {
                         wr = new StreamWriter("ArchiveLoader.log", true);
                     }
-                    catch (IOException) 
+                    catch (IOException iex) 
                     {
-                        if (c > 10) throw;
+                        if (c > 15)
+                        {
+                            Exception ex = new Exception(c.ToString() + " attempts to open ArchiveLoader.log failed.", iex);
+                            throw ex;
+                        }                            
                     }
 
                     if (wr != null) break;
 
                     c++;
-                    Thread.Sleep(5000);
+                    Thread.Sleep(10000);
                 }
 
                 using (wr)
@@ -338,6 +342,11 @@ namespace ArchiveLoader
                             Console.SetOut(wr);
                             Console.SetError(wr);
                         }
+
+                        Console.WriteLine();
+                        Console.WriteLine(" Generating website: {0}", DateTime.Now);
+
+                        if (c > 0) Console.WriteLine("Warning: ArchiveLoader.log opened with " + c.ToString() + " attempts!");
 
                         Archive.Generate("ru.meta.stackoverflow.com", "posts", "Posts");
                         Archive.Generate("ru.meta.stackoverflow.com", "deleted", "Deleted posts");
