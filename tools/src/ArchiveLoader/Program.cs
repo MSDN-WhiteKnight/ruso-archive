@@ -319,7 +319,7 @@ namespace ArchiveLoader
                     }
                     catch (IOException iex) 
                     {
-                        if (c > 15)
+                        if (c > 20)
                         {
                             Exception ex = new Exception(c.ToString() + " attempts to open ArchiveLoader.log failed.", iex);
                             throw ex;
