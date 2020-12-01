@@ -9,9 +9,28 @@ using RuSoLib;
 using Integration.Git;
 
 namespace ArchiveLoader
-{   
+{
     class Program
-    {        
+    {
+        static void MoveFile(string src, string dst, bool overwrite)
+        {
+            bool copied;
+            Exception copy_error = null;
+
+            try
+            {
+                File.Copy(src, dst, overwrite);
+                copied = true;
+            }
+            catch (Exception ex)
+            {
+                copied = false;
+                copy_error = ex;
+            }
+
+            if (copied) File.Delete(src);
+            else throw new IOException("Failed to move file " + src, copy_error);
+        }
 
         static void LoadDataMarkdown()
         {
@@ -53,15 +72,19 @@ namespace ArchiveLoader
                         {
                             Console.WriteLine("Found deleted post: {0}", i);
                             string path2 = Path.Combine(postsdir2, "Q" + i.ToString() + ".md");
+                            string newpath;                            
+
                             if (File.Exists(path2))
                             {
-                                File.Move(path2, Path.Combine(deleted_dir, "Q" + i.ToString() + ".md"));
+                                newpath = Path.Combine(deleted_dir, "Q" + i.ToString() + ".md");
+                                MoveFile(path2, newpath, true);
                             }
 
                             path2 = Path.Combine(postsdir2, "A" + i.ToString() + ".md");
                             if (File.Exists(path2))
                             {
-                                File.Move(path2, Path.Combine(deleted_dir, "A" + i.ToString() + ".md"));
+                                newpath = Path.Combine(deleted_dir, "A" + i.ToString() + ".md");
+                                MoveFile(path2, newpath, true);
                             }
                             File.Delete(path);
                         }
