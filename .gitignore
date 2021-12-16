@@ -345,6 +345,7 @@ ASALocalRun/
 #############
 /html/manifest.json
 *.pdf
+/pdf_output/*.json
 
 # NuGet
 *.dll
