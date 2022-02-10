@@ -85,11 +85,25 @@
 <p>Выделение синим фоном и бордером делал давно под себя, приложил в коде, т.к. &quot;дефолтная подсветка&quot; отслеживаемых вопросов была убрана (но это не точно).</p>
 <p><div class="snippet" data-lang="js" data-hide="true" data-console="false" data-babel="false">
 <div class="snippet-code snippet-currently-hidden">
-<pre class="snippet-code-css lang-css prettyprint-override"><code>.s-post-summary__watched {
-  background-color: rgba(0, 136, 255, .015);
-  -webkit-box-shadow: 3px 0 0 0 #08f inset;
-  box-shadow: 3px 0 0 0 #08f inset;
+<pre class="snippet-code-css lang-css prettyprint-override"><code>.example {
+  display: -ms-grid;
+  display: grid;
+  -webkit-transition: all .5s;
+  -o-transition: all .5s;
+  transition: all .5s;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background: -webkit-gradient(linear, left top, left bottom, from(white), to(black));
+  background: -o-linear-gradient(top, white, black);
+  background: linear-gradient(to bottom, white, black);
 }
+<p>.s-post-summary__watched {
+background-color: rgba(0, 136, 255, .015);
+-webkit-box-shadow: 3px 0 0 0 #08f inset;
+box-shadow: 3px 0 0 0 #08f inset;
+}</p>
 <p>.s-post-summary--stats {
 -webkit-box-orient: horizontal !important;
 -webkit-box-direction: normal !important;
@@ -126,7 +140,9 @@ overflow: hidden !important;
 -o-text-overflow: ellipsis !important;
 text-overflow: ellipsis !important;
 }</p>
-<p>.s-post-summary--stats-item:not(.has-bounty)::first-line {
+<p>.s-post-summary--stats-item-number {
+display: block;
+margin-right: 0 !important;
 font-weight: 300;
 font-size: 1.425rem !important;
 }</p>
@@ -152,6 +168,7 @@ display: none !important;
 <p>Правки по коду.<br>
 <em>1.1</em> Ломается отображение &quot;голоса, ответ, показы&quot; когда появляется бонус за ответ, по этому принято решение не менять их положение, т.к. нет возможности &quot;привязаться&quot; к конкретным элементам.</p>
 <p><em>1.2</em> Вернул цифрам большой размер (спасибо <a href="https://ru.meta.stackoverflow.com/questions/11866/%D0%A7%D1%82%D0%BE-%D0%B7%D0%B0-%D1%83%D0%B6%D0%B0%D1%81-%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BB%D0%B8-%D1%81-%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B9-%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B5%D0%B9?cb=1#comment51118_11867">@Qwertiy</a> за подсказку)</p>
+<p><em>1.3</em> Ребята из SO сменили HTML счётчиков, поправил под это изменение</p>
 </blockquote>
 <h2>Answer 11868</h2>
 <p><a href="https://ru.meta.stackoverflow.com/a/11868/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/215103/holyblackcat">HolyBlackCat</a></p>
