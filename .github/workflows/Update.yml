@@ -1,14 +1,20 @@
 name: Update
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  schedule:
+    - cron:  '20 18 * * *'
 
 jobs:
-  build:
+  update:
 
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1    
+    - uses: actions/checkout@v2
+    - name: Checkout branch
+      run: |
+        git checkout ci-update
     - name: Build with MSBuild
       run: |
         & "$env:windir\Microsoft.NET\Framework\v4.0.30319\msbuild.exe" tools\src\RuSoTools.sln
@@ -17,4 +23,4 @@ jobs:
         Set-Location -Path tools\src\ArchiveLoader\bin\Debug\; .\ArchiveLoader.exe
     - name: Push changes
       run: |
-        git checkout $env:GITHUB_REF_NAME; git add tools/data/*; git commit -m "CI update"; git push
+        git config user.name "Workhorse"; git config user.email "workhorse@knight.ru"; git add tools/data/*; git commit -m "CI update"; git push
