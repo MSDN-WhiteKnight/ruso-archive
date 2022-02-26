@@ -1,0 +1,29 @@
+name: Publish
+
+on: 
+  workflow_dispatch:
+  schedule:
+    - cron:  '20 19 * * 0'
+
+jobs:
+  publish:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout branch
+      run: |
+        git fetch; git checkout ci-update
+    - name: Build with MSBuild
+      run: |
+        & "$env:windir\Microsoft.NET\Framework\v4.0.30319\msbuild.exe" tools\src\RuSoTools.sln
+    - name: Generate website
+      run: |
+        Set-Location -Path tools\src\ArchiveLoader\bin\Debug\; .\ArchiveLoader.exe generate
+    - name: Build website
+      run: |
+        choco install docfx; docfx .\docfx.json
+    - name: Push changes
+      run: |
+        git config user.name "Workhorse"; git config user.email "workhorse@knight.ru"; git add html/; git commit -m "CI publish"; git push
