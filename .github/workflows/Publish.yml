@@ -26,4 +26,4 @@ jobs:
         choco install docfx; docfx .\docfx.json
     - name: Push changes
       run: |
-        git config user.name "Workhorse"; git config user.email "workhorse@knight.ru"; git add html/; git commit -m "CI publish"; git push
+        .\tools\src\Scripts\push.ps1 -pathspec 'html/*' -message 'CI publish'
