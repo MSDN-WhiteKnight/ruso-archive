@@ -1,5 +1,4 @@
-param ($pathspec = '*')
-param ($message = 'Update data (auto)')
+param ($pathspec = '*', $message = 'Update data (auto)')
 
 git config user.name 'Workhorse'
 git config user.email 'workhorse@knight.ru'
