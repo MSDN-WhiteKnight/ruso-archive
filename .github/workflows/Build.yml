@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "**/*.cs"
+      - "**/*.csproj"
+      - "**/*.sln"
+      - ".github/workflows/Build.yml"
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Build with MSBuild
+      run: |
+        & "$env:windir\Microsoft.NET\Framework\v4.0.30319\msbuild.exe" tools\src\RuSoTools.sln
+    - name: Archive program binaries
+      uses: actions/upload-artifact@v1
+      with:
+          name: Program
+          path: tools\src\ArchiveLoader\bin\Debug\
