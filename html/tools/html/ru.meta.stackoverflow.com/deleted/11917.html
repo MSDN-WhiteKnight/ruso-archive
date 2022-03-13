@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Chat on Socket.io | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Chat on Socket.io | RuSO Archive ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Chat on Socket.io</h1>
+<p><a href="https://ru.meta.stackoverflow.com/questions/11917/chat-on-socket-io">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/467193/bot">bot</a></p>
+<blockquote>
+<p>я разрабатываю чат на сокетах, у меня всё идёт отлично, но у меня появилась проблема: когда пользователь закрепляет сообщения, то при каждом новом закреплении, количество закреплёных сообщений увеличиваются то есть, дублируются, почему так? (NODE.js) Вот код на сервере:</p>
+<pre><code>
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require(&quot;socket.io&quot;);
+const io = new Server(server);
+let numb = 1;
+app.get('/', (req, res) =&gt; {
+  res.sendFile(__dirname + '/index.html');
+});
+io.on('connection', (socket) =&gt; {
+  alert('a user connected');
+    socket.broadcast.emit('hello', &quot;BOT: у нас новый пользователь&quot;);
+  socket.on('disconnect', () =&gt; {
+        console.log('disconnected user');
+    socket.broadcast.emit('goodbye', &quot;BOT: пользователь ушел из чата&quot;);
+    });
+  socket.on('typing', us =&gt; {
+        socket.broadcast.emit('typing', `✍${us} пишет...`);
+        console.log(&quot;type&quot;);
+    });
+//Здесь событие закрепления
+  socket.on('pin', function (data) {
+        io.emit('pin', {
+            id: data.id,
+            text: data.text
+        });
+        console.log(`message ${data.id} was pinned with text: &quot;${data.text}&quot;`);
+    });
+    socket.on('chat message', function (msg) {
+    console.log(msg.name + &quot;: &quot; + msg.message);
+        io.emit('chat message', {
+            message: msg.message,
+            name: msg.name,
+            ID: msg.ID
+        });
+  });
+});
+server.listen(1000, () =&gt; {
+  console.log(' &gt;_     ·————listening on *:1000————·');
+});
+</code></pre>
+<p>Код на клиенте (javascript):
+HTML:</p>
+<pre><code>&lt;div id=&quot;msgs&quot;&gt;
+    &lt;div id=&quot;pinned_msgs&quot;&gt;&lt;!--здесь хранятся все закреплённые сообщения--&gt;&lt;/div&gt;
+      &lt;ul id=&quot;messages&quot;&gt;
+            
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;form id=&quot;form&quot; action=&quot;&quot;&gt;
+            &lt;input type=&quot;text&quot; id=&quot;user&quot; autocomplete=off placeholder=&quot;name...&quot;&gt;&lt;br&gt;
+      &lt;input id=&quot;input&quot; autocomplete=&quot;off&quot; placeholder=&quot;message...&quot;/&gt;&lt;button&gt;Send&lt;/button&gt;
+            &lt;input type=&quot;submit&quot;&gt;
+    &lt;/form&gt;
+</code></pre>
+<p>JS:</p>
+<pre><code>//Когда мы получаем сообщения
+    socket.on('chat message', function(msg) {
+        let tim = new Date();
+        let year = tim.getFullYear();
+        let day = tim.getDate();
+    let month = tim.getMonth();
+    let hour = tim.getHours();
+        let minute = tim.getMinutes();
+    let time = `${day}/${month}/${year} (${hour}:${minute})`;
+    var item = document.createElement('li');
+        item.id = msg.ID;
+        item.style.width = &quot;fit-content&quot;;
+    item.innerHTML = &quot;&lt;b&gt;&lt;i&gt;&quot; + msg.name + &quot;&lt;/i&gt;&lt;/b&gt;: &quot; + &quot;&lt;message&gt;&quot; + msg.message + &quot;&lt;/message&gt;&lt;br&gt; &lt;time id='d'&gt;&quot; + time + &quot;&lt;/time&gt;&quot;;
+    messages.appendChild(item);
+    //window.scrollTo(10, document.body.scrollHeight);
+<p>let h = $(&quot;#msgs&quot;).get(0).scrollHeight;
+$(&quot;#msgs&quot;).animate({
+scrollTop: h
+}, 500);
+//Когда мы фокусируемся на сообщение которое хотим закрепить
+document.querySelector(&quot;#messages&quot;).onclick = (f) =&gt; {
+let Id = &quot;&quot;;
+let tag = f.target;
+if (tag.tagName != &quot;LI&quot;) {
+Id = tag.parentNode.id;
+} else {
+Id = tag.id;
+}
+let parentControl = document.querySelector(<code>#${Id}</code>);
+//Создаём меню
+parentControl.addEventListener('click',function(ev){
+ev.preventDefault();
+new contextualMenu({
+docked:false,
+items:[
+{
+title:'Удалить',
+tip: '',
+icon:'https://Contextmenu-3.volodya-bot-developer.repl.co/delete.svg',
+children: [
+{
+title: 'У себя',
+tip:'',
+icon: 'https://Contextmenu-3.volodya-bot-developer.repl.co/delete.svg',
+onclick: function(){</p>
+<pre><code>                        }
+                    },
+                    {
+                        title: 'У всех',
+                        tip:'',
+                        icon: 'https://Contextmenu-3.volodya-bot-developer.repl.co/delete.svg',
+                        onclick: function(){
+                    
+                        }
+                    }
+                ]
+            },
+            /*{
+                seperator: true
+            },*/
+            {
+                title:'Прореагировать',
+                tip:'', 
+                icon:'https://Contextmenu-3.volodya-bot-developer.repl.co/add_sm.svg', 
+                children: [
+        {
+                        title:'😂',
+                        tip:'смешно',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+        {
+                        title:'🚀',
+                        tip:'круто',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+        {
+                        title:'❌',
+                        tip:'нет',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+                    {
+                        title:'👌',
+                        tip:'точно',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+                    {
+                        title: '🔥',
+                        tip:'вау',
+                        icon:'',
+                        onclick: function(){}
+                                }
+</code></pre>
+<p>,                      {
+title: '💪',
+tip:'неплохо',
+icon:'',
+onclick: function(){</p>
+<pre><code>                        }
+                    },                      {title: '😭',
+                     tip:'печалька',
+                     icon:'',
+                     onclick: function(){
+                         
+                     }
+                    },                      {
+                        title: '🥰',
+                        tip: 'люблю',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },                      {
+                        title: '🥳',
+                        tip: 'с днём рождения',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+                    {
+                        title: '🤩',
+                        tip: 'ого',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+                    {
+                        title: '😐',
+                        tip: 'уупс',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+                    {
+                        title: '🤔',
+                        tip: 'надо подумать',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+                    {
+                        title: '😱',
+                        tip: 'ужас',
+                        icon:'',
+                        onclick: function(){
+                            
+                        }
+                    },
+                     {
+                         title: '🤬',
+                         tip: 'чтоб тебя',
+                         icon:'',
+                         onclick: function(){
+                            
+                        }
+                     }
+                ]},
+      {
+                    title:'Копировать',
+                    tip:'Ctrl+C',
+                    icon:'https://Contextmenu-3.volodya-bot-developer.repl.co/copy.svg',
+                    onclick: function(){}
+                },
+      /*{
+                    seperator:true
+                },*/
+      {
+                    title:'Закрепить',
+                    tip:'',
+                    icon:'https://Contextmenu-3.volodya-bot-developer.repl.co/pin.svg',
+                    onclick: function(){
+                        let Text = prompt(&amp;quot;Введите текст-заголовок для закрепления&amp;quot;, &amp;quot;текст&amp;quot;);
+                        if (Text == null) {
+                            return;
+                        } else {
+          socket.emit('pin', {
+                            id: Id,
+                            text: Text
+                        });
+                            Id = null;
+                            Text = null;
+                        socket.on('pin', function (data) {
+              let pin_msg = document.createElement(&amp;quot;a&amp;quot;);
+                            pin_msg.href = `#${data.id}`;
+                            pin_msg.innerHTML = data.text + &amp;quot;&amp;lt;remove&amp;gt;❌&amp;lt;/remove&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;
+                            
+                            document.querySelector(&amp;quot;#pinned_msgs&amp;quot;).appendChild(pin_msg);
+                            pin_msg = null;
+                            let h = $(&amp;quot;#pinned_msgs&amp;quot;).get(0).scrollHeight;
+</code></pre>
+<p>$(&quot;#pinned_msgs&quot;).animate({
+scrollTop: h
+}, 500);
+document.querySelector(&quot;remove&quot;).onclick = (rt) =&gt; {
+let mef = rt.target;
+let pn = mef.parentNode;
+//alert(pn);
+document.querySelector(&quot;#pinned_msgs&quot;).removeChild(pn);
+}
+});
+}
+}
+},
+{
+title:'Редактировать',
+tip:'',
+icon:'https://Contextmenu-3.volodya-bot-developer.repl.co/cha.svg',
+children: [
+{
+title: 'У себя',
+tip:'',
+icon: 'https://Contextmenu-3.volodya-bot-developer.repl.co/cha.svg',
+onclick: function(){</p>
+<pre><code>            }
+                    },
+                    {
+                        title: 'У всех',
+                        tip: '',
+                        icon: 'https://Contextmenu-3.volodya-bot-developer.repl.co/cha.svg',
+                        onclick: function(){
+                        
+                    }
+                    }
+                    ]
+                },
+                {
+                    title: 'Комментировать',
+                    tip:'',
+                    icon: 'https://Contextmenu-3.volodya-bot-developer.repl.co/com.svg',
+                    onclick: function(){
+                        
+                    }
+                }
+    ]
+        });
+    });
+    }
+</code></pre>
+<p>});
+</code></pre><p>
+<p>Ссылка: <a href="https://Chat-on-socketio.volodya-bot-developer.repl.co" rel="nofollow noreferrer">chat example</a></p>
+<p>Внимание: чтобы вызвать меню, нужно сначала 1 раз нажать на сообщение а потом второй раз ещё раз на это же сообщение</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span><script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");ym(65150713, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true});</script><noscript><div><img src="https://mc.yandex.ru/watch/65150713" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
