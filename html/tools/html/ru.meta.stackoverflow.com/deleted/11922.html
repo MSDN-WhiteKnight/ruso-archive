@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>&#1057;&#1084;&#1077;&#1085;&#1072; &#1087;&#1086;&#1088;&#1086;&#1075;&#1072; &#1075;&#1086;&#1083;&#1086;&#1089;&#1086;&#1074; &#1076;&#1083;&#1103; &#1079;&#1072;&#1082;&#1088;&#1099;&#1090;&#1080;&#1103; | RuSO Archive </title>
+    <title>&#1079;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1072; &#1092;&#1072;&#1081;&#1083;&#1086;&#1074; &#1089; &#1089;&#1077;&#1088;&#1074;&#1077;&#1088;&#1072; &#1086;&#1076;&#1085;&#1086;&#1075;&#1086; &#1087;&#1088;&#1086;&#1077;&#1082;&#1090;&#1072; &#1085;&#1072; &#1089;&#1077;&#1088;&#1074;&#1077;&#1088; &#1076;&#1088;&#1091;&#1075;&#1086;&#1075;&#1086; &#1087;&#1088;&#1086;&#1077;&#1082;&#1090;&#1072; | RuSO Archive </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="&#1057;&#1084;&#1077;&#1085;&#1072; &#1087;&#1086;&#1088;&#1086;&#1075;&#1072; &#1075;&#1086;&#1083;&#1086;&#1089;&#1086;&#1074; &#1076;&#1083;&#1103; &#1079;&#1072;&#1082;&#1088;&#1099;&#1090;&#1080;&#1103; | RuSO Archive ">
+    <meta name="title" content="&#1079;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1072; &#1092;&#1072;&#1081;&#1083;&#1086;&#1074; &#1089; &#1089;&#1077;&#1088;&#1074;&#1077;&#1088;&#1072; &#1086;&#1076;&#1085;&#1086;&#1075;&#1086; &#1087;&#1088;&#1086;&#1077;&#1082;&#1090;&#1072; &#1085;&#1072; &#1089;&#1077;&#1088;&#1074;&#1077;&#1088; &#1076;&#1088;&#1091;&#1075;&#1086;&#1075;&#1086; &#1087;&#1088;&#1086;&#1077;&#1082;&#1090;&#1072; | RuSO Archive ">
     <meta name="generator" content="docfx 2.59.0.0">
     
     <link rel="shortcut icon" href="../../../../favicon.ico">
@@ -69,16 +69,37 @@
             <article class="content wrap" id="_content" data-uid="">
 
 <p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
-<h1>Смена порога голосов для закрытия</h1>
-<p><a href="https://ru.meta.stackoverflow.com/questions/11774/%d0%a1%d0%bc%d0%b5%d0%bd%d0%b0-%d0%bf%d0%be%d1%80%d0%be%d0%b3%d0%b0-%d0%b3%d0%be%d0%bb%d0%be%d1%81%d0%be%d0%b2-%d0%b4%d0%bb%d1%8f-%d0%b7%d0%b0%d0%ba%d1%80%d1%8b%d1%82%d0%b8%d1%8f">Source</a> - by user177221</p>
+<h1>загрузка файлов с сервера одного проекта на сервер другого проекта</h1>
+<p><a href="https://ru.meta.stackoverflow.com/questions/11922/%d0%b7%d0%b0%d0%b3%d1%80%d1%83%d0%b7%d0%ba%d0%b0-%d1%84%d0%b0%d0%b9%d0%bb%d0%be%d0%b2-%d1%81-%d1%81%d0%b5%d1%80%d0%b2%d0%b5%d1%80%d0%b0-%d0%be%d0%b4%d0%bd%d0%be%d0%b3%d0%be-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82%d0%b0-%d0%bd%d0%b0-%d1%81%d0%b5%d1%80%d0%b2%d0%b5%d1%80-%d0%b4%d1%80%d1%83%d0%b3%d0%be%d0%b3%d0%be-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82%d0%b0">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/467193/bot">bot</a></p>
 <blockquote>
-<p>Сейчас для закрытия вопроса нужно 5 голосов. Из-за низкой активности в очереди закрытия вопросы остаются висеть с 3-4 голосами максимум, голоса сгорают - и механизм очередей и закрытия не работает.</p>
-<p>Может быть стоит снизить порог голосов до 3-х, как это сделано на enSO?</p>
-</blockquote>
-<h2>Answer 11776</h2>
-<p><a href="https://ru.meta.stackoverflow.com/a/11776/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/178988/qwertiy">Qwertiy</a></p>
-<blockquote>
-<p>Пусть так и остаётся 5, а то некоторые любители закрывать набросятся и всё позакрывают. Не надо нам закрывать всё подряд.</p>
+<p>делаю приложуху которая должна загружать файлы на сервер другого проекта, но проблема: я хочу чтобы пользователь мог находясь на php-странице загрузить файлы на сервер моего чата который создан на node.js но он не делает этого, почему?</p>
+<h2>Вот php-код(index.php):</h2>
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;PHP Test&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+      &lt;div id=&quot;files&quot;&gt;&gt;&gt;&gt;FILES&lt;&lt;&lt;&lt;/div&gt;
+            &lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; action=&quot;server.php&quot;&gt;
+                &lt;h2&gt;Вы можете загрузить сюда файлы которые будут использоваться в чатах которые поддерживают это приложение&lt;/h2&gt;
+                &lt;input type=&quot;file&quot; name=&quot;file&quot;&gt;&lt;br&gt;
+                &lt;button&gt;загрузить&lt;/button&gt;
+            &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2>server.php</h2>
+<pre><code>&lt;?php
+  if ($_FILES &amp;&amp; $_FILES['file']['error'] == UPLOAD_ERR_OK) {
+        $name = &quot;https://Chat-on-socketio.volodya-bot-developer.repl.co/documents/&quot;.$_FILES[&quot;file&quot;][&quot;name&quot;];
+        //upload on SERVER
+    move_uploaded_file($_FILES[&quot;file&quot;][&quot;tmp_name&quot;], $name);
+        echo &quot;файл $name успешно загружен&quot;;
+    }
+?&gt;
+</code></pre>
+<p>Но в результате я получаю вот такие сообщения:
+<a href="https://i.stack.imgur.com/l5yEr.jpg" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/l5yEr.jpg" alt="ошибка"></a></p>
 </blockquote>
 <hr>
 <p><i>Content is retrieved from StackExchange API. </i></p>
