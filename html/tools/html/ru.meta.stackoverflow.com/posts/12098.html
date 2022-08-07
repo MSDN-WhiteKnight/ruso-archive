@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>&#1059;&#1073;&#1088;&#1072;&#1090;&#1100; &#1079;&#1085;&#1072;&#1082; &#1040;&#1085;&#1072;&#1083;&#1080;&#1090;&#1080;&#1082; | RuSO Archive </title>
+    <title>&#1050;&#1072;&#1082; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1074;&#1086;&#1087;&#1088;&#1086;&#1089;&#1099; &#1087;&#1086; &#1084;&#1077;&#1090;&#1082;&#1077;-&#1089;&#1080;&#1085;&#1086;&#1085;&#1080;&#1084;&#1091;? | RuSO Archive </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="&#1059;&#1073;&#1088;&#1072;&#1090;&#1100; &#1079;&#1085;&#1072;&#1082; &#1040;&#1085;&#1072;&#1083;&#1080;&#1090;&#1080;&#1082; | RuSO Archive ">
+    <meta name="title" content="&#1050;&#1072;&#1082; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1090;&#1100; &#1074;&#1086;&#1087;&#1088;&#1086;&#1089;&#1099; &#1087;&#1086; &#1084;&#1077;&#1090;&#1082;&#1077;-&#1089;&#1080;&#1085;&#1086;&#1085;&#1080;&#1084;&#1091;? | RuSO Archive ">
     <meta name="generator" content="docfx 2.59.3.0">
     
     <link rel="shortcut icon" href="../../../../favicon.ico">
@@ -69,28 +69,35 @@
             <article class="content wrap" id="_content" data-uid="">
 
 <p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
-<h1>Убрать знак Аналитик</h1>
-<p><a href="https://ru.meta.stackoverflow.com/questions/12078/%d0%a3%d0%b1%d1%80%d0%b0%d1%82%d1%8c-%d0%b7%d0%bd%d0%b0%d0%ba-%d0%90%d0%bd%d0%b0%d0%bb%d0%b8%d1%82%d0%b8%d0%ba">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/385375/eziomercer">EzioMercer</a></p>
+<h1>Как получить вопросы по метке-синониму?</h1>
+<p><a href="https://ru.meta.stackoverflow.com/questions/12098/%d0%9a%d0%b0%d0%ba-%d0%bf%d0%be%d0%bb%d1%83%d1%87%d0%b8%d1%82%d1%8c-%d0%b2%d0%be%d0%bf%d1%80%d0%be%d1%81%d1%8b-%d0%bf%d0%be-%d0%bc%d0%b5%d1%82%d0%ba%d0%b5-%d1%81%d0%b8%d0%bd%d0%be%d0%bd%d0%b8%d0%bc%d1%83">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/184217/alexander-petrov">Alexander Petrov</a></p>
 <blockquote>
-<p>В списке знаков ruSO и ruSO Мета есть знак Аналитик</p>
-<p><a href="https://ru.stackoverflow.com/help/badges/77/analytical">https://ru.stackoverflow.com/help/badges/77/analytical</a></p>
-<p><a href="https://ru.meta.stackoverflow.com/help/badges/77/analytical">https://ru.meta.stackoverflow.com/help/badges/77/analytical</a></p>
-<p>Этот знак никто никогда не получал и никогда не получит, потому не вижу нужды в нём</p>
-<p>Предлагаю только у нас убрать этот знак</p>
-<h5>UPD</h5>
-<p>Насколько я понял, <a href="https://ru.meta.stackoverflow.com/help/badges">список знаков</a> одинаковый везде и очень много вероятно, что не согласятся для нас делать исключение и убрать только у нас. Тем более что на других сайтах есть и по 2 знака, которые никто не получал и никогда не получит. Например <a href="https://aviation.stackexchange.com">тут</a>  на сайте <a href="https://aviation.stackexchange.com/help/badges/77/analytical">Аналитик</a> и <a href="https://aviation.stackexchange.com/help/badges/57/reversal">Реверс</a></p>
-<p>Потому было бы логично придумать общее правило для всех сайтов без исключения. Как вариант предлагали сделать общую проверку:</p>
-<blockquote>
-<p>Если знак устарел и никто его так и не получил за всё время, то не показывать этот знак</p>
+<p>Объявил я войну некоторым нерелевантным меткам. Пару штук удалил успешно.<br>
+Попался на глаза вопрос с меткой <a href="https://ru.stackoverflow.com/questions/tagged/tsql" class="post-tag" title="показать вопросы с меткой [tsql]" rel="tag">tsql</a>. Эта метка назначена синонимом к метке <a href="https://ru.stackoverflow.com/questions/tagged/sql-server" class="post-tag" title="показать вопросы с меткой [sql-server]" rel="tag">sql-server</a>. Поэтому на новые вопросы её поставить нельзя, но на нескольких старых вопросах она остаётся. Вот я и хочу удалить (заменить) её с этих вопросов.</p>
+<p>На вкладке <a href="https://ru.stackoverflow.com/tags">https://ru.stackoverflow.com/tags</a> если ввести название этой метки - <code>tsql</code> - выдаётся количество вопросов с ней: 16. Но при попытке вывести эти вопросы, автоматически срабатывает синоним и выводятся вопросы с меткой <code>[sql-server]</code>. А их много, и перебирать все вручную в поисках нужных будет очень долго.</p>
+<p>Как мне получить именно эти 16 вопросов? Чтобы удалить с них лишнюю метку.</p>
 </blockquote>
-<p>Как по мне это очень простое и элегантное решение, так что я за такую проверку на всех сайтах</p>
-</blockquote>
-<h2>Answer 12104</h2>
-<p><a href="https://ru.meta.stackoverflow.com/a/12104/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/492376/george">George</a></p>
+<h2>Answer 12099</h2>
+<p><a href="https://ru.meta.stackoverflow.com/a/12099/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/178988/qwertiy">Qwertiy</a></p>
 <blockquote>
-<p>Я против. Измените их смысл, например:<br>
-Аналитик: серебрянный, ознакомиться со всеми популярными метками(иметь 5 рейтинга по ним).<br>
-Реверс можно убрать, у него есть замена.</p>
+<p>Никак. Готово.</p>
+<blockquote>
+<p><a href="https://i.stack.imgur.com/o0LOE.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/o0LOE.png" alt="скриншот"></a></p>
+</blockquote>
+<pre><code>updating post history, 19 rows affected (pipe delimited)
+updating posts, 16 rows affected  (pipe delimited)
+updating PostTags associations, 5 rows affected
+updating ForYou nudges, 0 rows affected
+destroying 'tsql': [tsql] removed from (0 post, 0 history, 1 tag)
+total: 1 tags deleted, 0 posts modified, 0 post histories modified
+0 history records had empty tags; retagged to [untagged]
+0 post records had empty tags; retagged to [untagged]
+updating count for target tag, new count: 3289
+tag remapping of [sql-server] and [tsql] complete!
+remapping 0 synonyms
+6 favorite and ignored tags remapped!
+0 tracked tag badges were remapped!
+</code></pre>
 </blockquote>
 <hr>
 <p><i>Content is retrieved from StackExchange API. </i></p>
