@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Answer 12309 | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Answer 12309 | RuSO Archive ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Answer 12309</h1>
+<h2>Answer 12309</h2>
+<p><a href="https://ru.meta.stackoverflow.com/a/12309/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/474588/%ce%9dnl993">ΝNL993</a></p>
+<blockquote>
+<p>Украл идею у <a href="//ru.meta.stackoverflow.com/q/8355/#12155">@tym32167</a>, но я использовал чистый JavaScript, плюс сделал разделение под вопросы / ответы. (Подробности использования и т.п. ниже кода)</p>
+<pre class="lang-js prettyprint-override"><code>// ==UserScript==
+// @name Comments Templates (Stack Overflow)
+// @description готовые комментарии под сообщения низкого качества, потому что з*****о.
+// @version 1.0.0
+// @license GPL-3.0
+// @author NNL993
+// @namespace -
+// @match *://ru.stackoverflow.com/questions/*/*
+// @match *://ru.stackoverflow.com/review/*
+// @grant none
+// @run-at document-end
+// ==/UserScript==
+<p>(function() {
+const HOTKEY_CODE = 'Tab'
+const QUOTE = {
+LEFT: '«',
+RIGHT: '»',
+}
+const ACTIVE_COLOR = 'var(--theme-primary-color)'</p>
+<pre><code>const QUESTION_CAN_EDIT = ` Вопрос можно отредактировать кнопкой ${QUOTE.LEFT}[edit]${QUOTE.RIGHT}.`
+const ANSWER_CAN_EDIT = ` Ответ можно отредактировать кнопкой ${QUOTE.LEFT}%EDIT${QUOTE.RIGHT}.`
+const WELCOME = `Добро пожаловать на ${QUOTE.LEFT}StackOverflow на русском${QUOTE.RIGHT}! `
+
+let comments = {
+    question: [
+        'В этом сообществе все вопросы / ответы / комментарии обязаны быть **на русском** языке, исправьте своё сообщение заменив текст на русский.' + QUESTION_CAN_EDIT,
+        'Название вопрос должно исключительно включать тему проблемы или текст ошибки, а уже сами подробности должны быть **в вопросе**.' + QUESTION_CAN_EDIT,
+        'Вопрос задан не по теме сообщества StackOverflow, вы можете подробнее ознакомится с темами на которые можно задавать вопросы в [справке](https://ru.stackoverflow.com/help/on-topic).',
+        'Вопросы должны также содержать попытки автора решить задачу, без них (попыток), вопрос будет являться учебным заданием. Подробнее [в справке](//ru.stackoverflow.com/help/quality-standards-error).',
+        'Ответы на данный вопрос скорее всего будут основаны на личном *субъективном* опыте, стоит исправить вопрос так, чтобы ответы на него были исключительно *объективные*.' + QUESTION_CAN_EDIT,
+        '[Пожалуйста, не добавляйте код/данные/текст ошибок картинками](//ru.meta.stackoverflow.com/q/12119/#12120).',
+        'Задавайте те вопросы, на которые можно ответить **объективно**. Подробнее [в справке](//ru.stackoverflow.com/help/dont-ask).' + QUESTION_CAN_EDIT,
+    ],
+    answer: [
+        'Ответ также должен содержать объяснение, без него (объяснения), непонятно, каким образом ответ решает задачу. Подробнее [в справке](//ru.stackoverflow.com/help/how-to-answer).' + ANSWER_CAN_EDIT,
+        'Ссылаться на внешний материал конечно хорошо, но также нужно оставлять цитаты (и код если имеется) из ссылок, чтобы пользователи понимали что из ждёт из ссылки, а также это будет полезно если доступ к ресурсу был потерян. Подробнее [в справке](https://ru.stackoverflow.com/help/referencing).',
+        'В этом сообществе все вопросы / ответы / комментарии обязаны быть **на русском** языке, исправьте своё сообщение заменив текст на русский.' + ANSWER_CAN_EDIT,
+        'Постарайтесь делать ваши ответы более развёрнутыми и добавлять в них больше объяснения. Подробнее [в справке](//ru.stackoverflow.com/help/how-to-answer).' + ANSWER_CAN_EDIT
+    ]
+}
+
+let currentComments = 'question'
+const TEXTAREA_SELECTOR = '.comment-form textarea'
+
+window.addEventListener('keydown', e =&amp;gt; {
+    if(e.code === HOTKEY_CODE) {
+        e.preventDefault()
+
+        let textarea = e.target
+        let parent = textarea.parentNode
+
+        if(textarea.matches(TEXTAREA_SELECTOR)) {
+            let contentArea = textarea.closest('.answer, .question')
+            let isAnswer = contentArea.classList.contains('answer')
+            let isNewContributor = Boolean(contentArea.querySelector('.new-contributor-indicator'))
+            let select = document.createElement('div')
+            let id = contentArea.getAttribute('data-questionid') || contentArea.getAttribute('data-answerid')
+
+            currentComments = isAnswer ? 'answer' : 'question'
+
+            select.className = 'ils-comment-hints'
+
+            correctProps()
+
+            select.style.backgroundColor = 'rgb(255, 255, 255)'
+            select.style.color = 'rgb(0, 0 ,0)'
+            select.style.position = 'absolute'
+            select.style.pointerEvents = 'none'
+            select.style.zIndex = 10
+
+            select.innerHTML = comments[currentComments].map(el =&amp;gt; {
+                let textContent = el
+                  .replace('%EDIT', '[править](//ru.stackoverflow.com/posts/%ID/edit)')
+                  .replace('%ID', id)
+
+                return `&amp;lt;div style=&amp;quot;padding: 1em;&amp;quot; class=&amp;quot;ils-comment-hints-item&amp;quot; data-text=&amp;quot;${(isNewContributor ? WELCOME : '') + textContent}&amp;quot;&amp;gt;${textContent}&amp;lt;/div&amp;gt;`
+            }).join('')
+
+            if(parent.querySelector('.ils-comment-hints') === null) {
+                parent.appendChild(select)
+
+                window.addEventListener('resize', correctProps)
+            }
+
+            window.addEventListener('keydown', onKeyDown)
+
+            function correctProps() {
+                if(textarea) {
+                    select.style.top = textarea.offsetTop + textarea.offsetHeight + 'px'
+                    select.style.left = textarea.offsetLeft + 'px'
+                    select.style.width = textarea.offsetWidth + 'px'
+                } else {
+                    window.removeEventListener('resize', correctProps)
+                }
+            }
+        }
+    }
+})
+
+let currentIndex = 0
+
+window.addEventListener('keyup', e =&amp;gt; {
+    if(e.code === HOTKEY_CODE) {
+        document.querySelectorAll('.ils-comment-hints').forEach(e =&amp;gt; {
+            e.remove()
+        })
+
+        window.removeEventListener('keydown', onKeyDown)
+
+        currentIndex = 0
+    }
+})
+
+
+function onKeyDown(e) {
+    let commentsLength = comments[currentComments].length
+
+    switch (e.code) {
+        case 'ArrowDown':
+            currentIndex += 1
+
+            if(currentIndex === commentsLength + 1) {
+                currentIndex = 1
+            }
+            break
+        case 'ArrowUp':
+            currentIndex += -1
+
+            if(currentIndex &amp;lt; 1) {
+                currentIndex = commentsLength
+            }
+            break
+        default:
+            return
+    }
+
+    currentIndex = Math.max(1, Math.min(commentsLength, currentIndex)) // MIN - 1; MAX - commentsLength
+
+    let target = e.target
+
+    if(target.matches(TEXTAREA_SELECTOR)) {
+        chooseActive(currentIndex)
+
+        function chooseActive(index) {
+            unmakeActive(document.querySelector('.ils-comment-hints-item.active'))
+
+            makeActive(document.querySelector(`.ils-comment-hints-item:nth-of-type(${index})`))
+        }
+
+        function unmakeActive(el) {
+            if(el) {
+                el.classList.remove('active')
+                el.style.backgroundColor = ''
+            }
+        }
+
+        function makeActive(el) {
+            if(el) {
+                el.classList.add('active')
+                el.style.backgroundColor = ACTIVE_COLOR
+                target.value = el.dataset.text
+            }
+        }
+    }
+}
+</code></pre>
+<p>})()
+</code></pre><p>
+<h3>Использование</h3>
+<ul>
+<li>Переходим на страницу вопроса / какой-то очереди проверки</li>
+<li>Нажимаем &quot;Добавить комментарий&quot;</li>
+<li>Зажимаем <kbd>Tab</kbd></li>
+<li>Profit. (Стрелками <kbd>↑</kbd> / <kbd>↓</kbd> можно управлять)</li>
+</ul>
+<h3>Нюансы</h3>
+<p>Если участник новый, то тогда к надписи добавляется текст из переменной <code>WELCOME</code>.</p>
+<h3>Редактирование</h3>
+<p><code>HOTKEY_CODE</code> - это та горячая клавиша, на которую будет открываться список (по стандарту <code>Tab</code>), для того чтобы, например открывать список на <code>M</code>, нужно написать <code>KeyM</code>, если допустим <code>F1</code>, тогда и пишем <code>F1</code>.</p>
+<p><code>QUOTE</code> - это кавычки, которые будут использоваться в тексте, если хотите, можете из изменить, <code>LEFT</code> - кавычка слева, <code>RIGHT</code> - кавычка справа.</p>
+<p><code>ACTIVE_COLOR</code> - цвет, которым будут подсвечиваться текущий выбранный текст, по стандарту, этот цвет - цвет темы веб-сайта.</p>
+<h3>Комментарии</h3>
+<p>Есть два массива в переменной <code>comments</code>, первый <code>question</code>, где хранятся комментарии под вопросы и второй <code>answer</code>, где хранятся комментарии под ответы, в строках можно использовать весь Markdown который поддерживается для комментариев. Также в строках заменяются некоторые значения, вот они:</p>
+<ul>
+<li><code>%ID</code> - текущий ID поста (ответа / вопроса). Пример: <code>Это пост %ID!</code> -&gt; <code>Это пост 8355!</code>.</li>
+<li><code>%EDIT</code> - равносильно записи <code>[edit]</code>, но есть поддержка для ответов (Я не был уверен работает ли <code>[edit]</code> на ответы, так что на всякий случай сделал такой вариантик). Пример: <code>Отредактируйте своё сообщение кнопкой %EDIT, пожалуйста!</code> -&gt; <code>Отредактируйте своё сообщение кнопкой [править](//ru.stackoverflow.com/posts/%ID/edit), пожалуйста!</code>. (<code>%ID</code> позже заменяется на текущий ID поста)</li>
+</ul>
+<p>Есть также заготовленные переменные, чтобы не печатать одно и тоже много раз (предполагается что вы будете их использовать в конце сообщения):</p>
+<ul>
+<li><code>QUESTION_CAN_EDIT</code> - равен этой записи: <code> Вопрос можно отредактировать кнопкой «[edit]».</code></li>
+<li><code>ANSWER_CAN_EDIT</code> - равен этой записи: <code> Ответ можно отредактировать кнопкой «%EDIT»</code></li>
+</ul>
+<p>Пример использования:</p>
+<p><code>'Любое сообщение должно быть **на русском** языке!' + QUESTION_CAN_EDIT</code></p>
+<h3>Скриншот</h3>
+<p><a href="https://i.stack.imgur.com/42pwR.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/42pwR.png" alt="пример"></a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span><script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");ym(65150713, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true});</script><noscript><div><img src="https://mc.yandex.ru/watch/65150713" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
