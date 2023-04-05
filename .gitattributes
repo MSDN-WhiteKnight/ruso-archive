@@ -2,4 +2,4 @@
 * text=auto
 
 # Exclude generated HTML from language stats
-html/* linguist-generated
+html/** linguist-generated
