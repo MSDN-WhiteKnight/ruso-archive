@@ -34,7 +34,7 @@ namespace ArchiveLoader
 
         static void LoadDataMarkdown()
         {
-            const int StartingPoint = 12500;
+            const int StartingPoint = 13000;
             string site = "ru.meta.stackoverflow.com";
             string datadir = "..\\..\\..\\..\\data\\" + site + "\\";
             string postsdir = Path.Combine(datadir, "posts-raw\\");
