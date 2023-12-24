@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1059;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1077; &#1086;&#1082;&#1085;&#1072; &#1089;&#1086;&#1079;&#1076;&#1072;&#1085;&#1080;&#1103; &#1074;&#1086;&#1087;&#1088;&#1086;&#1089;&#1086;&#1074; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1059;&#1083;&#1091;&#1095;&#1096;&#1077;&#1085;&#1080;&#1077; &#1086;&#1082;&#1085;&#1072; &#1089;&#1086;&#1079;&#1076;&#1072;&#1085;&#1080;&#1103; &#1074;&#1086;&#1087;&#1088;&#1086;&#1089;&#1086;&#1074; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Улучшение окна создания вопросов</h1>
+<p><a href="https://ru.meta.stackoverflow.com/questions/13162/%d0%a3%d0%bb%d1%83%d1%87%d1%88%d0%b5%d0%bd%d0%b8%d0%b5-%d0%be%d0%ba%d0%bd%d0%b0-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d1%8f-%d0%b2%d0%be%d0%bf%d1%80%d0%be%d1%81%d0%be%d0%b2">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/422180/aarnihauta">Aarnihauta</a></p>
+<blockquote>
+<p>Основной тезис, который я хочу донести:</p>
+<p>При создании вопроса фокус на окошке с Markdown, поэтому мало кто отведет глаза направо чтобы почитать, потому что оно сливается с общим фоном и вообще никак не выделяется. Доказательство - постоянное всплывание вопросов с ужасным оформлением, с телом вопроса который оказался в заголовке и прочее.</p>
+<p>Что было бы неплохо изменить:</p>
+<ol>
+<li>Сделать боксы с шагами, как сделать черновик и больше полезных ссылок сделать выделяющимися.</li>
+<li>Изменить текст не &quot;черновик&quot;, а просто 3 пункта как задать вопрос <a href="https://ru.stackoverflow.com/help/how-to-ask">отсюда</a> (сделать выдержку).</li>
+<li>Полезные ссылки можно перенести вместо визуального мусора в хидере вопроса, который существует &quot;лишь бы заполнить страничку&quot;, сделать выделяющимися. Хотя на момент написания вопроса я начал сомневаться в переносе.</li>
+</ol>
+<p>МВП реализация которую я вижу:</p>
+<ol>
+<li>Сделать более выделяющимися боксы 1 и 2 (см. скриншот).</li>
+<li>Бокс &quot;полезные ссылки&quot; раскрыть за юзера.</li>
+<li>В боксе 1 убрать &quot;Сообщество здесь, чтобы помочь вам...&quot;</li>
+</ol>
+<p>Ну и да, причина почему этот вопрос возник: я за 2.5 года задавания вопросов впервые увидел эти боксы совсем недавно просто потому, что мозг фильтрует всякие тусклые невыделяющиеся баннеры. Тем более такая важная штука &quot;как задать качественный вопрос&quot; вообще оказывается <strong>СКРЫТА!</strong> И чтобы узнать как задать вопрос надо мало того что отвлечься от написания и посмотреть направо, так еще и раскрыть окошко на 2 боксе.</p>
+<p><a href="https://i.stack.imgur.com/qoRow.png" rel="nofollow noreferrer"><img src="https://i.stack.imgur.com/qoRow.png" alt="введите сюда описание изображения"></a></p>
+</blockquote>
+<h2>Answer 13163</h2>
+<p><a href="https://ru.meta.stackoverflow.com/a/13163/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/373567/aepot">aepot</a></p>
+<blockquote>
+<p>Указанные изменения не вносят однозначных улучшений, то есть вместе с улучшениями они вносят и ухудшения.</p>
+<p>Например, добавление веса сайдбару ещё больше перегрузит и без того перегруженную страницу. Я бы вообще весь сайдбар и прочее лишнее убрал и добавил бы странице больше интерактива. Чем меньше букв в общей массе, тем больший вес у оставшихся букв.</p>
+<p>Важную информацию про задавание качественных вопросов никто читать не будет вообще независимо от того, насколько ярко она будет бросаться в лицо участникам.</p>
+<p>Вставляя препятствия на стадии создания вопроса участнику, можно добиться только того, что <strong>вопрос вообще не будет задан</strong>. Как по мне, пусть лучше опытные участники с правами на редактирование помогают с оформлением вопросов, чем если этих вопросов не станет вообще.</p>
+<p>Слабо оформленные вопросы для нас не проблема, а рутина. Так устроен StackOverflow, во всяком случае пока так.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span><script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");ym(65150713, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true});</script><noscript><div><img src="https://mc.yandex.ru/watch/65150713" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
