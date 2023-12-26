@@ -19,9 +19,17 @@
 - https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/3779.html
 - https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/3782.html
 
+**Октябрь 2017 - Выдвижение Squidward на выборах модераторов**
+
+Участник Squidward (он же Discord) выдвинул свою кандидатуру на выборах модераторов 2017 года. При этом он начал активно критиковать других кандидатов в комментариях к ответам и в чате. Выяснилось, что Squidward недавно был забанен, а участникам, побывавшим в бане, запрещено выдвигаться на выборах. Модератор PashaPash стал выступать против выдвижения Squidward. В результате Squidward отозвал свою кандидатуру.
+
+- https://ru.meta.stackoverflow.com/questions/6051/
+- https://ru.meta.stackoverflow.com/questions/6084/
+- https://chat.stackexchange.com/transcript/message/40510143#40510143
+
 **Январь 2018 - Снятие владельцев чата**
 
-Владелец главного чата Stackoverflow на русском, Abyx, в ходе обсуждения с модератором португальского SO пошутил про геноцид индейцев Южной Америки испанцами. Администратор Nicolas Chabanovsky посчитал это недопустимым, и лишил Abyx и alexolut статуса владельцев чата.
+Владелец главного чата Stackoverflow на русском, Abyx, в ходе обсуждения с модератором португальского SO пошутил про индейцев и Колумба. Администратор Nicolas Chabanovsky посчитал это недопустимым, и лишил Abyx и alexolut статуса владельцев чата.
 - https://chat.stackexchange.com/transcript/message/42193151#42193151
 - https://chat.stackexchange.com/transcript/22462?m=42194750#42194750
 - https://ru.meta.stackoverflow.com/q/6713/240512
