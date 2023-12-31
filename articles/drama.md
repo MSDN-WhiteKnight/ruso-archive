@@ -12,6 +12,13 @@
 - https://chat.stackexchange.com/transcript/message/25902139#25902139
 - https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/lulz/discord-vs-barmaley.png
 
+**Май 2016 - Бан участника Саша Черных**
+
+Участник Саша Черных поставил себе в качестве аватара чужую фотографию, а также указал в профиле ссылку на чужую страницу ВКонтакте. Модератор Nick Volynkin предупредил его, что выдавать себя за постороннего человека запрещено правилами, и впоследствии забанил его. В результате участник сменил аватар и ссылку в профиле, и бан был снят.
+- https://meta.stackexchange.com/q/279079/370389
+- https://ru.meta.stackoverflow.com/q/4694/240512
+- https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/4697.html
+
 **Сентябрь 2016 - Бан StackOverFollow в чате**
 
 Участник StackOverFollow был заблокирован в чате на 416 дней (рекордный срок) за флуд и игнорирование просьб участников прекратить писать им не по делу. В ходе обсуждения на мете забаненный решил уйти с сайта и удалил учетную запись.
