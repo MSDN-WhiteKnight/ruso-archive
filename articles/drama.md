@@ -68,3 +68,9 @@ VladD, первый по репутации участник сайта, реш�
 - https://ru.meta.stackoverflow.com/q/11156/240512
 - https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/11272.html
 - https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/11277.html
+
+**Декабрь 2022 - Закрытие дубликатов модератором Grundy**
+
+Модератор Grundy закрыл некоторые вопросы дубликатами, несмотря на то, что другие участники были против. В результате на мету вынесли предложение о снятии Grundy с поста модератора.
+- https://ru.meta.stackoverflow.com/questions/12267/
+- https://ru.meta.stackoverflow.com/questions/13188/
