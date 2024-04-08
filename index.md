@@ -12,6 +12,10 @@
 - [Main](tools/html/ru.stackoverflow.com/posts/index.md)
 - [Meta](tools/html/ru.meta.stackoverflow.com/posts/index.md)
 
+## Статьи
+
+- [Список драм](articles/drama.md)
+
 Материалы предоставляются по лицензии [Creative Commons Attribution-ShareAlike 4.0 International License](https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE).
 
 ## См. также

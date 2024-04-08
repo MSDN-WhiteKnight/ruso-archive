@@ -6,7 +6,9 @@
           "deleted-messages/**.md",		  
           "deleted-messages/**/toc.yml",
           "tools/html/**/*.md",
-		      "tools/html/**/toc.yml",
+          "tools/html/**/toc.yml",
+          "articles/**.md",		  
+          "articles/**/toc.yml",
           "toc.yml",
           "index.md"
         ]
