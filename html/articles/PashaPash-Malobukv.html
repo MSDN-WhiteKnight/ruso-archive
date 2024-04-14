@@ -1,0 +1,1762 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1088;&#1086;&#1074;&#1077;&#1088;&#1100;&#1090;&#1077;, &#1087;&#1086;&#1078;&#1072;&#1083;&#1091;&#1081;&#1089;&#1090;&#1072;, &#1088;&#1072;&#1073;&#1086;&#1090;&#1091; &#1087;&#1088;&#1080;&#1084;&#1077;&#1088;&#1072;. | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1088;&#1086;&#1074;&#1077;&#1088;&#1100;&#1090;&#1077;, &#1087;&#1086;&#1078;&#1072;&#1083;&#1091;&#1081;&#1089;&#1090;&#1072;, &#1088;&#1072;&#1073;&#1086;&#1090;&#1091; &#1087;&#1088;&#1080;&#1084;&#1077;&#1088;&#1072;. | RuSO Archive ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>Спор между PashaPash и Malobukv об использовании IDisposable на форумах MSDN (закрыты в 2024 г.)</p>
+<h2 id="проверьте-пожалуйста-работу-примера">Проверьте, пожалуйста, работу примера.</h2>
+<p>Источник: <a href="https://yandexwebcache.net/yandbtm?fmode=inject&amp;tm=1712642003&amp;tld=ru&amp;lang=ru&amp;la=1685160832&amp;text=%D1%84%D0%BE%D1%80%D1%83%D0%BC%D1%8B+msdn+pashapash+malobukv+site%3Amicrosoft.com&amp;url=https%3A//social.msdn.microsoft.com/Forums/ru-RU/2001ecc6-d241-439d-8b98-111b1eb67836/-%3Fforum%3Dvsru&amp;l10n=ru&amp;mime=html&amp;sign=6f9e191b935c145ef9ed7437ccc3885a&amp;keyno=0">https://yandexwebcache.net/yandbtm?fmode=inject&amp;tm=1712642003&amp;tld=ru&amp;lang=ru&amp;la=1685160832&amp;text=форумы+msdn+pashapash+malobukv+site%3Amicrosoft.com&amp;url=https%3A//social.msdn.microsoft.com/Forums/ru-RU/2001ecc6-d241-439d-8b98-111b1eb67836/-%3Fforum%3Dvsru&amp;l10n=ru&amp;mime=html&amp;sign=6f9e191b935c145ef9ed7437ccc3885a&amp;keyno=0</a></p>
+<p>Среда Visual Studio и языки программирования &gt; Работа в среде Visual Studio</p>
+<p>Общие обсуждения</p>
+<p>пожалуйста, проверьте что он выдает. код под WinForms. надо проверить на разных системах.
+после запуска откроется окно. несколько раз нажмите кнопки: &quot;create -&gt; dispose&quot; и &quot;create -&gt; clear -&gt; dispose&quot;
+вывод направляется в &quot;Output window&quot; или &quot;Immediate Windows&quot;
+опубликуйте его в ответ на это сообщение.</p>
+<p>заранее спасибо.</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication12
+{
+    public partial class Form1 : Form
+    {
+        List&lt;int[]&gt; arrs = new List&lt;int[]&gt;();
+        void LoadArray()
+        {
+            var arr = new int[100000];
+            arrs.Add(arr);
+        }
+        public Form1()
+        {
+            var count = 500.0;
+            Button b1 = new Button() { Parent = this, Text = &quot;create -&gt; dispose&quot;, Location = new Point(10, 10), Width = 200 };
+            b1.Click += (s, e) =&gt;
+            {
+                var sw = Stopwatch.StartNew();
+                arrs.Clear();
+                for (var i = 0; i &lt; count; i++)
+                {
+                    using (var c = new Collection(0)) { }
+                    LoadArray();
+                }
+                System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b1.Text);
+            };
+            Button b2 = new Button() { Parent = this, Text = &quot;create -&gt; clear -&gt; dispose&quot;, Location = new Point(10, b1.Bottom + 5), Width = 200 };
+            b2.Click += (s, e) =&gt; // с Clear заметно быстрее
+            {
+                var sw = Stopwatch.StartNew();
+                arrs.Clear();
+                for (var i = 0; i &lt; count; i++)
+                {
+                    using (var c = new Collection(0))
+                    {
+                        c.Clear();
+                    }
+                    LoadArray();
+                }
+                System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b2.Text);
+            };
+        }
+        class Entity : IDisposable
+        {
+            public int Id { get; private set; }
+            public Entity(int id) { this.Id = id; }
+            ~Entity() { }
+            public virtual void Dispose() { GC.SuppressFinalize(this); }
+        }
+        class Collection : Entity
+        {
+            public IEnumerable&lt;Entity&gt; Items { get; private set; }
+            public Collection(int id)
+                : base(id)
+            {
+                var list = new List&lt;Entity&gt;();
+                for (int i = 0; i &lt; 10000; i++) list.Add(new Entity(i));
+                this.Items = list;
+            }
+            public void Clear()
+            {
+                foreach (var itm in this.Items) itm.Dispose();
+                ((List&lt;Entity&gt;)this.Items).Clear();
+            }
+            public override void Dispose()
+            {
+                this.Items = null;
+                base.Dispose();
+            }
+        }
+    }
+}
+</code></pre>
+<p>P.S.
+есть в коде баг или нет в коде бага обсуждаем в теме
+<a href="http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/92b54cb5-b3b4-47aa-a70d-af5ceb261f67">http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/92b54cb5-b3b4-47aa-a70d-af5ceb261f67</a></p>
+<p>Изменено Malobukv 28 августа 2011 г. 16:01 добавил P.S.<br>
+Изменен тип Abolmasov Dmitry 5 сентября 2011 г. 10:25<br>
+23 августа 2011 г. 13:24</p>
+<p>Рад переводу спора в конструктивное русло.</p>
+<pre><code>create -&gt; dispose: 21594
+create -&gt; clear -&gt; dispose: 27526
+create -&gt; dispose: 21875
+create -&gt; clear -&gt; dispose: 26848
+create -&gt; dispose: 21411
+create -&gt; clear -&gt; dispose: 26931
+</code></pre>
+<p>23 августа 2011 г. 13:34</p>
+<p>Модератор</p>
+<p>Win7 Enterprise 64 Bit</p>
+<pre><code>create -&gt; dispose: 1752
+
+create -&gt; clear -&gt; dispose: 729
+
+create -&gt; dispose: 1689
+
+create -&gt; clear -&gt; dispose: 731
+
+create -&gt; dispose: 1741
+
+create -&gt; clear -&gt; dispose: 775
+
+create -&gt; dispose: 1808
+
+create -&gt; clear -&gt; dispose: 711
+
+create -&gt; dispose: 1712
+
+create -&gt; clear -&gt; dispose: 738
+
+create -&gt; dispose: 1664
+
+The thread '&lt;No Name&gt;' (0x2f84) has exited with code 0 (0x0).
+
+create -&gt; clear -&gt; dispose: 815
+
+create -&gt; dispose: 1767
+
+create -&gt; clear -&gt; dispose: 712
+
+create -&gt; dispose: 1790
+
+create -&gt; clear -&gt; dispose: 726
+
+create -&gt; dispose: 1753
+
+create -&gt; clear -&gt; dispose: 757
+
+create -&gt; dispose: 1838
+
+create -&gt; clear -&gt; dispose: 746
+
+create -&gt; dispose: 1799
+
+create -&gt; clear -&gt; dispose: 712
+
+create -&gt; dispose: 1718
+
+create -&gt; clear -&gt; dispose: 750
+
+create -&gt; dispose: 1717
+
+create -&gt; clear -&gt; dispose: 737
+
+The thread '&lt;No Name&gt;' (0x1e34) has exited with code 0 (0x0).
+</code></pre>
+<p>23 августа 2011 г. 14:23</p>
+<p>Немного странный вопрос - а в чем идея кода? Показать что неправильная реализация Dispose/Finalize приводит к проблемам производительности?</p>
+<p>Очевидно же, что в первом куске кода все Entity остаются висеть в очереди на финализацию даже после вызова Dispose у Collection. Во втором - для них явно вызывается SuppressFinalize, потому и работает &quot;быстрее&quot;. Это обычный баг. Если сделать нормальную реализацию Dispose/Finalize, то магический эффект от Clear исчезнет.</p>
+<pre><code> class Entity : IDisposable
+ {
+ public int Id { get; private set; }
+ public Entity(int id) { this.Id = id; }
+ ~Entity()
+ {
+ this.Dispose(false);
+ }
+ private bool disposed = false;
+
+ //Implement IDisposable.
+ public void Dispose()
+ {
+ Dispose(true);
+ GC.SuppressFinalize(this);
+ }
+
+ protected virtual void Dispose(bool disposing)
+ {
+ if (!disposed)
+ {
+  if (disposing)
+  {
+  // Free other state (managed objects).
+  }
+  // Free your own state (unmanaged objects).
+  // Set large fields to null.
+  disposed = true;
+ }
+ }
+ }
+ class Collection : Entity
+ {
+ public IEnumerable&lt;Entity&gt; Items { get; private set; }
+ public Collection(int id)
+ : base(id)
+ {
+ var list = new List&lt;Entity&gt;();
+ for (int i = 0; i &lt; 10000; i++) list.Add(new Entity(i));
+ this.Items = list;
+ }
+
+ public void Clear()
+ {
+ foreach (var itm in this.Items) 
+  itm.Dispose();
+ ((List&lt;Entity&gt;)this.Items).Clear();
+ }
+
+ private bool disposed = false;
+
+ protected override void Dispose(bool disposing)
+ {
+ if (!disposed)
+ {
+  if (disposing)
+  {
+  this.Clear(); // или только foreach из Clear тут, почти не влияет на результаты.
+  }
+
+  disposed = true;
+ }
+
+ base.Dispose(disposing);
+ }
+ }
+</code></pre>
+<p>Результаты примерно 600 - 800ms на моей машине, в релизе x86 не под отладкой. И?</p>
+<p>UPD: Во избежание повторного удаления, я процитирую Илью Сазонова:</p>
+<p>to PashaPash  в любой теме вы общаетесь только с одним человеком - автором вопроса. Вы не имеете права осуществлять цензуру чужих мнений, высказываний и кода (если они не нарушают грубо правила форума и закон) - если кто-то сделал ошибку, то вы можете привести автору темы контр-пример и дать ссылки на первоисточники от Microsoft (документацию MSDN, блоги разрабочиков и т.п.) без опровержений и перехода на личности.</p>
+<p>Я указал вам на ошибку, привел контр-пример, и дал ссылку на документацию. Во избежание неверного вывода из результатов замеров - что clear, якобы, вляет на сбор мусора. Только попробуйте еще раз удалить этот пост с позорной припиской &quot;тема с просьбой проверить работу кода, а не исправлять и цитировать книги&quot;. Надеюсь, остальные посетители оценят количество постов, удаленных вами &quot;ради поддержания чистоты&quot;.</p>
+<p>Изменено PashaPash Moderator 24 августа 2011 г. 21:21 добавил явное обоснование воскрешения поста</p>
+<p>23 августа 2011 г. 14:46</p>
+<p>Модератор</p>
+<p>для чего в Collection повторять код Entity? :)
+может еще Sleep добавите, чтобы было так как вам надо? :)</p>
+<p>Изменено PashaPashModerator 23 августа 2011 г. 16:50 убрал коммент с Clear<br>
+Изменено Malobukv 23 августа 2011 г. 17:31 убрал цитирование. мешает. PashaPash не правьте мои сообщения.<br>
+23 августа 2011 г. 15:29</p>
+<p>для чего в Collection повторять код Entity? :)
+может еще Sleep добавите, чтобы было так как вам надо? :)</p>
+<p>P.S.
+сорри за длинное цитирование.</p>
+<p>Вы шутите или как? Это стандартная реализация IDisposable для базового класса и его наследника. Collection у вас IDisposable? Тогда вы должны реализовать этот интерфейс правильно:</p>
+<p>Реализация методов Finalize и Dispose для очистки неуправляемых ресурсов</p>
+<p>Откройте топик, просмотрите, сравните с моим кодом и со своим. Вы пробовали запустить мой код? Попробуйте, результат вас удивит - работает быстро вне зависимости от наличия Clear. Точнее, оба примера работают с тоже же скоростью, что пример с Clear в вашем варианте. Clear не нужен. :)</p>
+<p>Конктретное место, которое у вас тормозит:</p>
+<p><a href="http://msdn.microsoft.com/ru-ru/library/system.idisposable.dispose.aspx">http://msdn.microsoft.com/ru-ru/library/system.idisposable.dispose.aspx</a></p>
+<p>Цитата: При реализации этого метода необходимо убедиться, что все занятые ресурсы высвобождены путем передачи вызова по иерархии вложений.</p>
+<p>Вы не вызываете Dispose вниз по иерархии из Collection в Entity. Из-за этого для отдельных Entity в вашем примере не вызывается SupressFinalize. Из-за этого тысячи Entity остаются висеть в очереди финализации.</p>
+<p>А в куске с Clear вы внезапно решаете вызывать Dispose у отдельных Entity, что убирает их очереди на финализацию, и все работает быстрее.</p>
+<p>Самое забавное в этом споре что ошибка в вашей Disposе очевидна каждому, кто читал хотя бы Рихтера. Это же базовый паттерн, его спрашивают на каждом собеседовании. И вне зависимости от количества дурацких шуток про Sleep ваш вопрос &quot;для чего повторять код&quot; звучит просто глупо для разработчика с хоть каким-то опытом. Для того чтобы не тормозило, не забивалась очередь финализации, чтобы не рождались мифы про clear, и сборщик мусора. Чтобы не выглядеть незнающим азов .net-а, в конце концов.</p>
+<p>23 августа 2011 г. 15:49</p>
+<p>Модератор</p>
+<p>короче, из всего что вы написали, делаем вывод, что вы настаиваете на том, что в Collection.Dispose надо повторить код Entity.Dispose. рихтера вспомнили и что читать любите это хорошо.</p>
+<p>возьмите reflector или ilspy и смотрите:</p>
+<p>есть System.ComponentModel.Component - реализует IDisposable
+в примере - это Entity
+смотрим дальше. на System.Timers.Timer - наследует Component.
+в примере это Collection
+как видите в наследнике нет никаких проверок.</p>
+<p>так что отвлекитесь от книг и заглинете в .NET
+ниже мой пример, котовый вы подправили, и с моими комментами к правкам.</p>
+<pre><code>public partial class Form1 : Form
+{
+    List&lt;int[]&gt; arrs = new List&lt;int[]&gt;();
+    void LoadArray()
+    {
+        var arr = new int[100000];
+        arrs.Add(arr);
+    }
+    public Form1()
+    {
+        var count = 500.0;
+        Button b1 = new Button() { Parent = this, Text = &quot;create -&gt; dispose&quot;, Location = new Point(10, 10), Width = 200 };
+        b1.Click += (s, e) =&gt;
+        {
+            var sw = Stopwatch.StartNew();
+            arrs.Clear();
+            for (var i = 0; i &lt; count; i++)
+            {
+                using (var c = new Collection(0)) { }
+                LoadArray();
+            }
+            System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b1.Text);
+        };
+        Button b2 = new Button() { Parent = this, Text = &quot;create -&gt; clear -&gt; dispose&quot;, Location = new Point(10, b1.Bottom + 5), Width = 200 };
+        b2.Click += (s, e) =&gt; // с Clear заметно быстрее
+        {
+            var sw = Stopwatch.StartNew();
+            arrs.Clear();
+            for (var i = 0; i &lt; count; i++)
+            {
+                using (var c = new Collection(0))
+                {
+                    c.Clear();
+                }
+                LoadArray();
+            }
+            System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b2.Text);
+        };
+    }
+
+    // ниже мой код с исправлениями &quot;PashaPash Logic Software, Inc MCC, Partner
+    // и моими коментами
+
+    class Entity : IDisposable
+    {
+        public int Id { get; private set; }
+        public Entity(int id) { this.Id = id; }
+        ~Entity()
+        {
+            this.Dispose(false);
+        }
+        /*
+            PashaPash написал:
+            private bool disposed = false;
+       
+            COMMENT: для чего хранить состояние, если значение нигде не используется?
+            ответ знает только PashaPash :)
+        */
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            /*
+            PashaPash написал:
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    // Free other state (managed objects).
+                }
+                // Free your own state (unmanaged objects).
+                // Set large fields to null.
+                disposed = true;
+            }
+           
+            COMMENT: для чего все эти пустые проверки и сохранение disposed?
+            ответ знает только PashaPash :)
+            */
+        }
+    }
+    class Collection : Entity
+    {
+        public IEnumerable&lt;Entity&gt; Items { get; private set; }
+        public Collection(int id)
+            : base(id)
+        {
+            var list = new List&lt;Entity&gt;();
+            for (int i = 0; i &lt; 10000; i++) list.Add(new Entity(i));
+            this.Items = list;
+        }
+        public void Clear()
+        {
+            foreach (var itm in this.Items)
+                itm.Dispose();
+            /*
+                PashaPash закоментил строку
+                ((List&lt;Entity&gt;)this.Items).Clear();
+           
+                COMMENT: PashaPash думал что никто не заметит?! :)
+                возвращаем строку.
+            */
+            ((List&lt;Entity&gt;)this.Items).Clear();
+        }
+        /*
+            PashaPash написал:
+            private bool disposed = false;
+       
+            COMMENT: загляните в реализацию System.ComponentModel.Component
+            и его наследника, например, System.Timers.Timer
+            disposed есть в Component, но не в Timer. потому что оно здесь не нужно.
+        */
+        protected override void Dispose(bool disposing)
+        {
+            /*
+            PashaPash написал:
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    this.Clear(); // или только foreach из Clear тут, почти не влияет на результаты.
+                }
+                disposed = true;
+            }
+            base.Dispose(disposing);
+           
+            COMMENT: опять же заглянем в код .NET, например, в System.Data.Common.DataAdapter.Dispose
+            также как и в моем коде обнуляется ссылка на коллекцию
+            наверное PashaPash думал, что никто не заметит, что он повторно/незаметно вызывает Clear()? :)
+            поэтому возвращаем как было.
+            */
+            if(disposing)     // вообще-то проверка лишняя. но пусть остается.
+                this.Items = null;
+            base.Dispose(disposing);
+        }
+    }
+}
+</code></pre>
+<p>23 августа 2011 г. 16:44</p>
+<p>Да, Clear случайно заккоментил уже после замеров. Сейчас исправлю, на скорость это не влияет.</p>
+<p>Давайте уж начнем с вопроса: почему вы реализуете IDisposable для классов без неуправляемых ресурсов. Если вы ответите на этот вопрос - то поймете почему у меня в коде пустые проверки. А пока вы только все больше и больше показываете свое незнание основ .NET.</p>
+<p>Вы тоже рихтера почитайте, говорят, помогает в работе. А то все по старинке, с рефлектором.</p>
+<p>Хорошо то как - вы спорите, пытаетесь доказать что я что-то сделал криво. Но по факту у вас тормозит. У меня - нет. Я знаю как реализовать IDisposable/Finalize. Вы - явно нет. Я знаю зачем там пустые проверки, как и любой, работавший с неуправляемыми ресурсами. Вы - искрене им удивляетесь. Забавно, правда?</p>
+<p>23 августа 2011 г. 16:49</p>
+<p>Модератор</p>
+<blockquote>
+<p>Да, Clear случайно заккоментил уже после замеров</p>
+</blockquote>
+<p>ага. чисто случайно из dispose вызвали Clear и т.д. :)</p>
+<blockquote>
+<p>почему вы реализуете IDisposable для классов без неуправляемых ресурсов</p>
+</blockquote>
+<p>вы вообще в код .NET заглядывали? или по книжкам понахватались?
+у вас есть Reflector или ILSpy? нет. так посмотрите</p>
+<p>23 августа 2011 г. 16:59</p>
+<p>Нет, я закомментил Clear в Clear потому что это было проще, чем копипастить foreach в диспоуз, для проверки утверждения &quot;или только foreach из Clear тут, почти не влияет на результаты.&quot; Замеры проводил и с Clear, и без. На скорость не влияет.</p>
+<p>В Collection переопределен Dispose только потому, что именно в Collection есть IDisposable поле, а не только наследование. При вызове Dispose вы должны вызвать Dispose не только вверх по иерархии:</p>
+<p>Вот, из MSDN опять же:</p>
+<p>Метод Dispose должен освобождать все ресурсы, удерживаемые данным объектом и любым объектом, которым он владеет.</p>
+<p>У вас коллекция владетет набором entity. Хотите циатату из иcходников? Да как два пальца. Например, упомянутый вами Component. Даже не рефлектором, оригинальный код (он же у вас есть, надеюсь):</p>
+<pre><code>/// &lt;devdoc&gt;
+///  &lt;para&gt;
+///    Disposes of the &lt;see cref='System.ComponentModel.Component'/&gt; 
+///    .
+///  &lt;/para&gt; 
+/// &lt;/devdoc&gt; 
+[System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2213:DisposableFieldsShouldBeDisposed&quot;)]
+public void Dispose() { 
+  Dispose(true);
+  GC.SuppressFinalize(this);
+}
+
+/// &lt;devdoc&gt;
+///  &lt;para&gt; 
+///  Disposes all the resources associated with this component. 
+///  If disposing is false then you must never touch any other
+///  managed objects, as they may already be finalized. When 
+///  in this state you should dispose any native resources
+///  that you have a reference to.
+///  &lt;/para&gt;
+///  &lt;para&gt; 
+///  When disposing is true then you should dispose all data
+///  and objects you have references to. The normal implementation 
+///  of this method would look something like: 
+///  &lt;/para&gt;
+///  &lt;code&gt; 
+///  public void Dispose() {
+///    Dispose(true);
+///    GC.SuppressFinalize(this);
+///  } 
+///
+///  protected virtual void Dispose(bool disposing) { 
+///    if (disposing) { 
+///      if (myobject != null) {
+///        myobject.Dispose(); 
+///        myobject = null;
+///      }
+///    }
+///    if (myhandle != IntPtr.Zero) { 
+///      NativeMethods.Release(myhandle);
+///      myhandle = IntPtr.Zero; 
+///    } 
+///  }
+/// 
+///  ~MyClass() {
+///    Dispose(false);
+///  }
+///  &lt;/code&gt; 
+///  &lt;para&gt;
+///  For base classes, you should never override the Finalier (~Class in C#) 
+///  or the Dispose method that takes no arguments, rather you should 
+///  always override the Dispose method that takes a bool.
+///  &lt;/para&gt; 
+///  &lt;code&gt;
+///  protected override void Dispose(bool disposing) {
+///    if (disposing) {
+///      if (myobject != null) { 
+///        myobject.Dispose();
+///        myobject = null; 
+///      } 
+///    }
+///    if (myhandle != IntPtr.Zero) { 
+///      NativeMethods.Release(myhandle);
+///      myhandle = IntPtr.Zero;
+///    }
+///    base.Dispose(disposing); 
+///  }
+///  &lt;/code&gt; 
+/// &lt;/devdoc&gt; 
+protected virtual void Dispose(bool disposing) {
+  if (disposing) { 
+    lock(this) {
+      if (site != null &amp;&amp; site.Container != null) {
+        site.Container.Remove(this);
+      } 
+      if (events != null) {
+        EventHandler handler = (EventHandler)events[EventDisposed]; 
+        if (handler != null) handler(this, EventArgs.Empty); 
+      }
+    } 
+  }
+}
+</code></pre>
+<p>Вот унаследованный от другого IDisposable SqlTransaction:</p>
+<pre><code>    protected override void Dispose(bool disposing) { 
+      if (disposing) {
+        SNIHandle bestEffortCleanupTarget = null; 
+        RuntimeHelpers.PrepareConstrainedRegions();
+        try {
+#if DEBUG
+          TdsParser.ReliabilitySection tdsReliabilitySection = new TdsParser.ReliabilitySection(); 
+
+          RuntimeHelpers.PrepareConstrainedRegions(); 
+          try { 
+            tdsReliabilitySection.Start();
+#else 
+          {
+#endif //DEBUG
+            bestEffortCleanupTarget = SqlInternalConnection.GetBestEffortCleanupTarget(_connection);
+            if (!IsZombied &amp;&amp; !IsYukonPartialZombie) { 
+              _internalTransaction.Dispose();
+            } 
+          } 
+#if DEBUG
+          finally { 
+            tdsReliabilitySection.Stop();
+          }
+#endif //DEBUG
+        } 
+        catch (System.OutOfMemoryException e) {
+          _connection.Abort(e); 
+          throw; 
+        }
+        catch (System.StackOverflowException e) { 
+          _connection.Abort(e);
+          throw;
+        }
+        catch (System.Threading.ThreadAbortException e) { 
+          _connection.Abort(e);
+          SqlInternalConnection.BestEffortCleanup(bestEffortCleanupTarget); 
+          throw; 
+        }
+      } 
+      base.Dispose(disposing);
+    }
+</code></pre>
+<p>Видите дурацкие проверки, вызовы диспоуза для полей?
+DataView:</p>
+<pre><code>protected override void Dispose(bool disposing) { 
+  if (disposing) {
+  	Close();
+  }
+  base.Dispose(disposing); 
+}
+</code></pre>
+<p>System.Timers.Timer:</p>
+<pre><code>/// &lt;internalonly/&gt; 
+/// &lt;devdoc&gt;
+/// &lt;/devdoc&gt; 
+protected override void Dispose(bool disposing) {
+  Close();
+  this.disposed = true;
+  base.Dispose(disposing); 
+}
+</code></pre>
+<p>Срочно пишите в коннект чтобы поубирали проверки.</p>
+<p>23 августа 2011 г. 17:25</p>
+<p>Модератор</p>
+<blockquote>
+<p>Нет, я закомментил Clear в Clear потому что это было проще, чем копипастить foreach в диспоуз, для проверки утверждения &quot;или только foreach из Clear тут, почти не влияет на результаты.&quot;</p>
+</blockquote>
+<p>как-то витиевато выражаетесь :)
+и для чего постить код про работу с неуправялемыми ресурсами.</p>
+<p>напоминаю: изанчально тема была про работу OleDbDataAdapter. вот эта тема
+я привел пример-кальку с OleDbDataAdapter и т.д.
+для чего вы флудите про неуправляемы ресурсы? может про COM-объекты еще пофлудите? :)</p>
+<p>23 августа 2011 г. 17:38</p>
+<p>На случай, если у вас нет нормальных исходников .NET, и вы мучаетесь с рефлектором. Вот сравнительный пример. Мой, с левыми проверками и вообще Clear. Ваш, без проверок и с вызовом Clear.</p>
+<p>Запустите на своей машине и сравните результаты. Отпишитесь в этом топике с конкретными цифрами. Удивите меня, скажите что мой код работает медленее вашего. Найдите хоть кого-то со стороны, у кого код работает медленее вашего. Приведите рабочий пример, без скрытых багов. Или просто молчите.</p>
+<pre><code>  public partial class Form1 : Form
+  {
+    List&lt;int[]&gt; arrs = new List&lt;int[]&gt;();
+    void LoadArray()
+    {
+      var arr = new int[100000];
+      arrs.Add(arr);
+    }
+    public Form1()
+    {
+      var count = 500.0;
+      Button b1 = new Button() { Parent = this, Text = &quot;create -&gt; dispose&quot;, Location = new Point(10, 10), Width = 200 };
+      b1.Click += (s, e) =&gt;
+      {
+        var sw = Stopwatch.StartNew();
+        arrs.Clear();
+        for (var i = 0; i &lt; count; i++)
+        {
+          using (var c = new Collection2(0)) { }
+          LoadArray();
+        }
+        MessageBox.Show(sw.ElapsedMilliseconds.ToString());
+      };
+      Button b2 = new Button() { Parent = this, Text = &quot;create -&gt; clear -&gt; dispose&quot;, Location = new Point(10, b1.Bottom + 5), Width = 200 };
+      b2.Click += (s, e) =&gt; // с Clear заметно быстрее
+      {
+        var sw = Stopwatch.StartNew();
+        arrs.Clear();
+        for (var i = 0; i &lt; count; i++)
+        {
+          using (var c = new Collection(0))
+          {
+            c.Clear();
+          }
+          LoadArray();
+        }
+        MessageBox.Show(sw.ElapsedMilliseconds.ToString());
+      };
+    }
+
+    class Entity2 : IDisposable
+    {
+      public int Id { get; private set; }
+      public Entity2(int id) { this.Id = id; }
+      ~Entity2()
+      {
+        this.Dispose(false);
+      }
+      private bool disposed = false;
+
+      //Implement IDisposable.
+      public void Dispose()
+      {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+      }
+
+      protected virtual void Dispose(bool disposing)
+      {
+        if (!disposed)
+        {
+          if (disposing)
+          {
+            // Free other state (managed objects).
+          }
+          // Free your own state (unmanaged objects).
+          // Set large fields to null.
+          disposed = true;
+        }
+      }
+    }
+
+    class Collection2 : Entity2
+    {
+      public IEnumerable&lt;Entity2&gt; Items { get; private set; }
+      public Collection2(int id)
+        : base(id)
+      {
+        var list = new List&lt;Entity2&gt;();
+        for (int i = 0; i &lt; 10000; i++) list.Add(new Entity2(i));
+        this.Items = list;
+      }
+
+      private bool disposed = false;
+
+      protected override void Dispose(bool disposing)
+      {
+        if (!disposed)
+        {
+          if (disposing)
+          {
+            foreach (var itm in this.Items)
+              itm.Dispose();
+          }
+
+          disposed = true;
+        }
+
+        base.Dispose(disposing);
+      }
+    }
+
+    class Entity : IDisposable
+    {
+      public int Id { get; private set; }
+      public Entity(int id) { this.Id = id; }
+      ~Entity() { }
+      public virtual void Dispose() { GC.SuppressFinalize(this); }
+    }
+    class Collection : Entity
+    {
+      public IEnumerable&lt;Entity&gt; Items { get; private set; }
+      public Collection(int id)
+        : base(id)
+      {
+        var list = new List&lt;Entity&gt;();
+        for (int i = 0; i &lt; 10000; i++) list.Add(new Entity(i));
+        this.Items = list;
+      }
+      public void Clear()
+      {
+        foreach (var itm in this.Items) itm.Dispose();
+        ((List&lt;Entity&gt;)this.Items).Clear();
+      }
+      public override void Dispose()
+      {
+        this.Items = null;
+        base.Dispose();
+      }
+    }
+  }
+</code></pre>
+<p>23 августа 2011 г. 17:39</p>
+<p>Модератор</p>
+<p>IDisposable - это интерфейс для освобождения неуправляемых ресурсов. Иногда еще для финтов типа Scope. Уж это то модератор должен знать. Это же основы.</p>
+<p>Dispose Выполняет определяемые приложением задачи, связанные с высвобождением или сбросом неуправляемых ресурсов.</p>
+<p>Нет неуправляемых ресурсов - IDisposable и финализаторы не нужны. Нет финализаторов - нет проблемы.</p>
+<p>Запустите у себя сравнительный пример, из соседнего поста. Там мой код вообще без Clear и ваш Clear. Напрягиесь, я же ваш пример удостужился запустить,</p>
+<p>23 августа 2011 г. 17:44</p>
+<p>Модератор</p>
+<pre><code>// код из System.Data.Common.DataAdapter, с него сделана калька: метод Collection.Dispose в моем примере 
+
+protected override void Dispose(bool disposing)
+{
+    if (disposing)
+    {
+        this._tableMappings = null;
+    }
+    base.Dispose(disposing);
+}
+
+ 
+
+// ваш код.
+
+
+protected override void Dispose(bool disposing)
+{
+    if (!disposed)
+    {
+        if (disposing)
+        {
+            foreach (var itm in this.Items)
+                itm.Dispose();
+        }
+
+        disposed = true;
+    }
+
+    base.Dispose(disposing);
+}
+</code></pre>
+<p>будете продолжать упорствовать?  :) или одумаетесь? только прошу не правьте чужие сообщения. это как минимум некрасиво.</p>
+<p>23 августа 2011 г. 17:51</p>
+<p>Ок, давайте я попробую указать на ключевую разницу между DataAdapter и вашим Collection.</p>
+<p>Класс DataTableMapping - не IDisposable. Владеющий им DataAdapter не должен идти по коллекции и вызывать DataTableMapping.Dispose.</p>
+<p>Класс Entity в вашем примере - IDisposable, да еще и с финализатором. Владеющий им класс Collection должен идти по коллекции и вызывать Dispose.</p>
+<p>Сделайте полную кальку, замените у себя Entity на какой-нибудь не-IDisposable MyDataTableMapping - и проблема с производительностью так же исчезнет.</p>
+<p>Просьба прочитать внимательно, а не просто кричать &quot;я делал кальку&quot;. Вы сделали кальку с багом.</p>
+<p>23 августа 2011 г. 18:02</p>
+<p>Модератор</p>
+<blockquote>
+<p>IDisposable - это интерфейс для освобождения неуправляемых ресурсов. Иногда еще для финтов типа Scope.</p>
+</blockquote>
+<p>это вы прочли где-то в книжке. а теперь загляните в релизацию System.Data.Common.DataAdapter</p>
+<p>23 августа 2011 г. 18:04</p>
+<p>Заглянул. DataAdapter и его наследники используют неуправляемые ресурсы. Ваша очередь заглядывать.</p>
+<p>Чтобы совсем не обмануть - на самом деле DataAdater это компонент, и IDisposable там чисто для борьбы с утечками памяти.</p>
+<p>23 августа 2011 г. 18:06</p>
+<p>Модератор</p>
+<blockquote>
+<p>Ок, давайте я попробую указать на ключевую разницу между DataAdapter и вашим Collection.
+Класс DataTableMapping - не IDisposable.</p>
+</blockquote>
+<p>вы хоть поняли что написали?
+посмотрите на пример утром. у вас случайно не корпоративчик был? ;)</p>
+<p>23 августа 2011 г. 18:07</p>
+<p>Действительно, зачем приводить агрументы, если можно просто нахамить. Тема закрыта.</p>
+<p>23 августа 2011 г. 18:15
+Модератор</p>
+<blockquote>
+<p>я процитирую Илью Сазонова: ... Вы не имеете права осуществлять цензуру чужих мнений</p>
+</blockquote>
+<p>мы в теме №2, а вы загляните в первоисточник, тему №1. вы там удалили  чужие сообщения с примерами, которые опровергли ваше утверждение.</p>
+<blockquote>
+<p>все Entity остаются висеть в очереди на финализацию</p>
+</blockquote>
+<p>и что?
+есть managed heap, есть finalizable queue и еще есть freachable queue.
+в какой из очередей они висят? и как вы это определили? опишите подробней. вы же должны помогать другим понять что к чему.</p>
+<p>только не надо удалять это сообщение ;)</p>
+<p>27 августа 2011 г. 10:52</p>
+<blockquote>
+<p>.... и дал ссылку на документацию.</p>
+</blockquote>
+<p>для чего давать ссылку на документацию, если у всех есть VS. в ней можно проверить все что требуется.
+скажите, как в VS проверить количество объектов, готовых к финализации?</p>
+<p>только не надо удалять это сообщение ;)</p>
+<p>27 августа 2011 г. 11:00</p>
+<p>Я, кстати, не удалял ваши сообщения с кодом. И в том топике - тоже, только поддерживал его закрытым, в состоянии, в которое его привел другой модератор (не я). Он удалил и мои сообщения, кстати. Надеюсь, это смягчит вашу злобу. Deletion Log показывается не весь, только последние несколько сообщений.</p>
+<p>Вы вынесли обсуждение вашего опровергающего примера в эту тему, так зачем было плодить дубли еще и в старом топике? Или отдельная тема, со ссылкой из старой. Или код в старой теме, но никакого нового обсуждения.</p>
+<p>Чтобы пример был опровергающим, нужно сначала показать, что именно Clear влияет на показатели. Это, кстати, очень легко опровергнуть. Удалите строчку <code>((List&lt;Entity&gt;)this.Items).Clear()</code>, и все равно сохранится перекос в сторону второго варианта. Возможно, разница даже станет больше. Это первое, что я сделал, увидев разницу в вашем примере (у меня та же разница, что у вас, если не под отладкой).</p>
+<p>Т.е. разницу дает что-то еще, а не вызов где-то в коде Array.Clear. Вызова нет - а разница та же. Убедительно?</p>
+<p>Насчет финализации - в очереди F-reachable, естественно. К сожалению, стантартный sos может показать только очередь объектов, готовых к финализации - недостижимых, и находящихся в Finalize Queue (команда !FinalizeQueue  -allReady).</p>
+<p>Опять же, к сожалению, SuppressFinalize не убирает объект из очереди финализации физически, а просто сбрасывает флаг (об этом сказано в статье у Рихтера, да и сами сможете просмотреть ниже, добавив команды !finq по желанию). А sosex не работает в студии (по крайней мере у меня).</p>
+<ol>
+<li><p>Выкачайте и поставьте windbg, нужной битности. (он входит в debugging tools for windows, те входят в windows sdk)</p>
+</li>
+<li><p>Выкачайте и распакуйте sosex последней версии: <a href="http://www.stevestechspot.com/">http://www.stevestechspot.com/</a></p>
+</li>
+<li><p>Запустите windbg, под админом.</p>
+</li>
+<li><p>Пропишите путь к отладочным символам: в File/Symbol File Path: SRV<em>d:\symbols</em><a href="http://msdl.microsoft.com/download/symbols">http://msdl.microsoft.com/download/symbols</a></p>
+</li>
+<li><p>Проверьте битость своего приложения Поставьте Debugger.Break() вместо/после LoadArray. Запустите без отладки.</p>
+</li>
+<li><p>Приаатачьтесь к процессу (File/Attach to a Process) (или сразу запустите его через File/Open Executable)</p>
+</li>
+<li><p>Дебаггер сразу же остановится. Загрузите sosex: .load путь\к\sosex.dll</p>
+</li>
+<li><p>Продолжите выполнение: g, Enter. Или F5.</p>
+</li>
+<li><p>Нажмите на кнопку в приложении, для варианта в котором хочется посмотреть очередь.</p>
+</li>
+<li><p>Пару раз нажмите F5, чтобы сборщик мусора успел...собрать мусор. В время сбора он проверят необходимость вызова финализатора, по наличию записи в finq, и флагу suppress finalize, и добавляет объек в F-reachable. В первой итерации есть шанс ничего не увидеть.</p>
+</li>
+<li><p>Посмотрите очередь F-reachable: !frq</p>
+</li>
+</ol>
+<p>Повторите для другой кнопки, желательно, с рестартом примера.</p>
+<p>В первом варианте, без вызова dispose для всех entity в collection - в очереди тысячи объектов.</p>
+<p>В втором, с вызовом Dispose в цикле для всeх Entity, или в моей реализации - в очереди пусто.</p>
+<p>Если что-то не получилось - пишите, помогу.</p>
+<p>27 августа 2011 г. 18:04</p>
+<p>Модератор</p>
+<blockquote>
+<p>Я, кстати, не удалял ваши сообщения с кодом.</p>
+</blockquote>
+<p>ага, целых три раза не удалял :)
+Удалено PashaPash Microsoft Community Contributor, Модератор 7 ч. 48 мин. назад при всем уважении...<br>
+Удалено PashaPash Microsoft Community Contributor, Модератор 7 ч. 32 мин. назад у двух модераторов, прошу заметить. Выше есть вывод этого кода на моей машине, он противоречит вашим утверждениям.<br>
+Удалено PashaPash Microsoft Community Contributor, Модератор 2 ч. 49 мин. назад Sample shows wrong results due buggy implementation of Dispose/Finalize.</p>
+<p>это видно модераторам в теме <a href="http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/aa78a422-c06f-4736-af43-20d048ee7a56">http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/aa78a422-c06f-4736-af43-20d048ee7a56</a></p>
+<p>P.S.
+не надо удалять/редактировать это сообщение</p>
+<p>27 августа 2011 г. 18:43</p>
+<blockquote>
+<p>К сожалению, стантартный sos может показать только очередь объектов, готовых к финализации</p>
+</blockquote>
+<p>это не так. не надо вводить посетителей форума в заблуждение.
+с помощью sos можно посмотреть freachable queue. как? я думаю вы сами найдете ответ.
+как найдете, отпишитесь здесь. вы же должны помогать посетителям форума.</p>
+<p>P.S.
+не надо удалять/редактировать это сообщение</p>
+<p>27 августа 2011 г. 18:52</p>
+<p>Так покажите как. Я sos-ом давно пользовался последний раз, мало ли что там в 4.0 появилось. Заодно покажите почему я ошибся, а вы правы. Или скажите, что эксперимент подтвердил что я прав, и Clear ни при чем. А необоснованные наезды, пожалуйста, оставьте при себе.</p>
+<p>Раз вы научились просматривать F-Reachable - вы можете прямо ответить на вопрос:</p>
+<ul>
+<li><p>да, дело в забивании очереди, или</p>
+</li>
+<li><p>да, дело в clear. при удалении clear - дело а чем то другом &lt;в чем именно&gt;</p>
+</li>
+</ul>
+<p>А то сейчас у вас sosex в студии заработает, и меня опять во лжи обвинят. Не отклоняйтесь от темы, пожалуйста.</p>
+<p>Изменено PashaPash Moderator 27 августа 2011 г. 19:12</p>
+<p>27 августа 2011 г. 19:00</p>
+<p>Модератор</p>
+<p>Про ограничение на показ истории удаления я уже написал.</p>
+<p>Вас не устравивает то, что ваше сообщение не продублировано в двух топиках? Напишите на это жалобу, мол Pashapash удаляет дубликаты. Если кто-то из администрации скажет - ты не прав, нужно при выносе обсуждения оставлять дубликат его в старой теме - с удовольствием восстановлю.</p>
+<p>27 августа 2011 г. 19:04</p>
+<p>Модератор</p>
+<blockquote>
+<p>Так покажите как.</p>
+</blockquote>
+<p>вам? для чего? это вы по правилам форума должны помогать.</p>
+<blockquote>
+<p>Заодно покажите почему я ошибся, а вы правы.</p>
+</blockquote>
+<p>так вы, к сожалению, опять удалите мое сообщение.
+или другой модератор удалит по вашей просьбе. и пометит пример с кодом как агрессивный :)
+уже проходили.</p>
+<p>ждем от вас ответ как использовать sos.
+есть отдельная тема
+<a href="http://social.msdn.microsoft.com/Forums/ru-RU/vsru/thread/7cdf2c79-cda1-4cb8-b807-2a943bfab8fd">http://social.msdn.microsoft.com/Forums/ru-RU/vsru/thread/7cdf2c79-cda1-4cb8-b807-2a943bfab8fd</a></p>
+<p>P.S.
+не надо удалять/редактировать это сообщение.</p>
+<p>27 августа 2011 г. 19:10</p>
+<blockquote>
+<p>Напишите на это жалобу, мол Pashapash удаляет дубликаты.</p>
+</blockquote>
+<p>куда писать? :) в ООО Майкрософт Рус? и не надо опять уводить тему в сторону.
+тема простая: деструктор и SuppressFinalize ускоряют работу системы.</p>
+<p>но вы утверждаете, что это не так :)</p>
+<p>P.S.
+не надо удалять/редактировать это сообщение.</p>
+<p>Изменено Malobukv 27 августа 2011 г. 19:17</p>
+<p>27 августа 2011 г. 19:11</p>
+<p>Вас же кто-то назначил модератором недавно? Вы так и не сказали, кто. Ему и пишите. Я писал Ивану Воронцову и Дмитрию Аболмасову, помогло. Если хоть кто-то, кроме вас, попросит меня восстановить дубликат начала этого топика в старой теме - я с удовольствием это сделаю.</p>
+<p>27 августа 2011 г. 19:15</p>
+<p>Модератор</p>
+<blockquote>
+<p>Вас же кто-то назначил модератором недавно?</p>
+</blockquote>
+<p>для меня статус модератора не важен. и назначили давно.</p>
+<p>восстановите пример в теме <a href="http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/aa78a422-c06f-4736-af43-20d048ee7a56">http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/aa78a422-c06f-4736-af43-20d048ee7a56</a>  - вы его там удалили. три раза.</p>
+<p>P.S.
+не надо удалять/редактировать это сообщение.</p>
+<p>27 августа 2011 г. 19:19</p>
+<p>Пожалуйста, перестаньте спамить про злых модераторов, удаление и редактирование ваших сообщений. Это просьба от меня как от модератора, а не от участника спора. Я даже не буду ничего удалять. Просто помечу ваш пост как оффтоп. Или другой пользователь пометит ваш пост как оффтоп.</p>
+<p>Хорошая система. Вы обвиняете меня в том, что я умышленно скрываю секретный способ посмотреть freachable через sos. Но при этом я, такой вот глупый и нерациональный, трачу время и привожу подробную инструкцию как просмотреть freachable через sosex. Это обман в стиле &quot;я обманул таксиста, заплатил, а сам не поехал&quot;. Возможно я не знаю всех деталей sos, пользовался действительно пару лет назад. Но не считайте меня идиотом, пожалуйста.
+Это технический форум. Приведите доказательство. Код, ссылка на документацию, что угодно. Иначе скажи те &quot;не знаю&quot; или молчите.</p>
+<p>27 августа 2011 г. 19:24</p>
+<p>Модератор</p>
+<blockquote>
+<p>вам? для чего? это вы по правилам форума должны помогать.</p>
+</blockquote>
+<p>я вам помог - рассказал про sos. указал на ошибочный вывод, который вы сделали из вашего примера. Подождем ответов с новом топике. Мне самому интересно - а вдруг можно.</p>
+<p>27 августа 2011 г. 19:26</p>
+<p>Модератор</p>
+<p>Тогда пишите людям из моего списка.</p>
+<p>Оукей, восстановил. Оставил пояснение и линк на эту тему. Справедливо?</p>
+<p>27 августа 2011 г. 19:30</p>
+<p>Модератор</p>
+<blockquote>
+<p>Приведите доказательство. Код, ссылка на документацию, что угодно.</p>
+</blockquote>
+<p>ваше описание как использовать windbg - это не есть доказательство.
+доказательство это ответ дебагера, например, такой:</p>
+<pre><code>SyncBlocks to be cleaned up: 0
+  MTA Interfaces to be released: 0
+  STA Interfaces to be released: 0
+  ----------------------------------
+  generation 0 has 0 finalizable objects (003d5bac-&gt;003d5bac)
+  generation 1 has 3 finalizable objects (003d5ba0-&gt;003d5bac)
+  generation 2 has 0 finalizable objects (003d5ba0-&gt;003d5ba0)
+  Ready for finalization 1 objects (003d5bac-&gt;003d5bb0) 
+...
+
+!Threads
+ PreEmptive   GC Alloc                Lock
+ ID  OSID ThreadOBJ    State GC           Context       Domain   Count APT Exception
+ 8504    1  2138 00465828     86028 Enabled  01bec234:01bee004 0045ead8     0 STA
+ 10392    2  2898 00467348      b228 Enabled  00000000:00000000 0045ead8     0 MTA (Finalizer)
+...
+</code></pre>
+<p>так что будьте добры, как специалист, поделитесь знаниями. если сами не знаете, то спросите у коллег.
+обратитесь к сотрудникам. они же ваши сообщения читают, как вы сами выше сказали, обязательно ответят.</p>
+<p>тема очень серьезная.
+ведь код, который по-вашему с багом есть в .NET Framework.</p>
+<p>27 августа 2011 г. 19:32</p>
+<p>Ок, вот ответ дебаггера, на 6-й итерации:</p>
+<p>Без вызова Dispose для вложенных Entity:</p>
+<pre><code>0:000&gt; !finalizequeue
+SyncBlocks to be cleaned up: 0
+MTA Interfaces to be released: 0
+STA Interfaces to be released: 0
+----------------------------------
+generation 0 has 7951 finalizable objects (004399cc-&gt;00441608)
+generation 1 has 12053 finalizable objects (0042dd78-&gt;004399cc)
+generation 2 has 44 finalizable objects (0042dcc8-&gt;0042dd78)
+Ready for finalization 15950 objects (00441608-&gt;00450f40)
+
+С вызовом Dispose (а в нем - SuppressFinalize) для вложенных Entity и Clear для списка:
+0:000&gt; !FinalizeQueue 
+SyncBlocks to be cleaned up: 0
+MTA Interfaces to be released: 0
+STA Interfaces to be released: 0
+----------------------------------
+generation 0 has 6075 finalizable objects (051a3e54-&gt;051a9d40)
+generation 1 has 3927 finalizable objects (051a00f8-&gt;051a3e54)
+generation 2 has 44 finalizable objects (051a0048-&gt;051a00f8)
+Ready for finalization 0 objects (051a9d40-&gt;051a9d40)
+Просто с вызвовом Dispose (а в нем - SuppressFinalize) для вложенных Entity, без Clear
+
+0:000&gt; !finalizequeue
+SyncBlocks to be cleaned up: 0
+MTA Interfaces to be released: 0
+STA Interfaces to be released: 0
+----------------------------------
+generation 0 has 22840 finalizable objects (004c8268-&gt;004de748)
+generation 1 has 17165 finalizable objects (004b7634-&gt;004c8268)
+generation 2 has 45 finalizable objects (004b7580-&gt;004b7634)
+Ready for finalization 0 objects (004de748-&gt;004de748)
+</code></pre>
+<p>Мой вывод - Clear не нужен.
+Баг в .net запостите в коннект.</p>
+<p>А вы нашли объяснение, почему удаление непосредственно List/Array.Clear не изменяет результаты? Все это обсуждение про финализаторы может затянуться (уже затянулось). Способ с windbg/sosex был удобен лично мне - потому что все было настроено, символы выкачаны, команды я примерно помнил - осталось только отладить и проверить. Получили тот же результат, в студии с sos - отлично, рад за вас. Можете, кроме просмотра очереди финализации:</p>
+<ol>
+<li><p>Удалить все-таки вызов Clear и объяснить отсутствие перемен еще чем-то.</p>
+</li>
+<li><p>Добавить трассировку в финализатор Entity, и проверить что в одном случае он часто вызывается, в втором - нет.</p>
+</li>
+</ol>
+<p>27 августа 2011 г. 20:33</p>
+<p>Модератор</p>
+<p>Кстати, если знаете как в sos посмотреть именно список Ready for finalization, а не просто count - скажите. Мало ли, добавили что-то в 4-ом дотнете. Честно признался что не знаю, спросил вас &quot;как&quot;. Знаете - скажите. Не знаете - молчите. Очень простой принцип, ускоряет обсуждение в сотни тысяч раз. Спасибо за понимание.</p>
+<p>Вы так усиленно уклоняетесь от прямого ответа &quot;Clear ни при чем&quot; .. вы действительно думаете что еще один пост не по теме что-то изменит? Будьте профессионалом, скажите &quot;да, я был неправ&quot;. Я же сказал что &quot;я не знаю новых фишек сос под .net 4&quot; - и ничего, жив, даже ответ вам написал.</p>
+<p>27 августа 2011 г. 20:43</p>
+<p>Модератор</p>
+<p>Malobukv, вы разобрались с проблемой? Если да - то отметьте, пожалуйста, ответы, которые решают проблему. Если нет - уточните вопрос, или смените тип на обсуждение. Спасибо.</p>
+<p>27 августа 2011 г. 22:03</p>
+<p>Модератор</p>
+<blockquote>
+<p>Оукей, восстановил. Оставил пояснение и линк на эту тему. Справедливо?</p>
+</blockquote>
+<p>вот и замечательно. отвечаю здесь на ваше сообщение, потому что та тема заблокирована.</p>
+<p>вы пишете: &quot;Пример отличный, но удаление строки <code>((List&lt;Entity&gt;)this.Items).Clear();</code> дает тот же перекос в результатах.&quot;</p>
+<p>отвечаю: в примере все имеет значение. если удалить еще что-нибудь, а потом еще, то вообще перестанет работать.
+другими словами, если у машины удалить колесо, то будет перекос. не так ли? :)</p>
+<p>28 августа 2011 г. 8:53</p>
+<blockquote>
+<p>я вам помог - рассказал про sos.</p>
+</blockquote>
+<p>в теме <a href="http://social.msdn.microsoft.com/Forums/ru-RU/vsru/thread/7cdf2c79-cda1-4cb8-b807-2a943bfab8fd">http://social.msdn.microsoft.com/Forums/ru-RU/vsru/thread/7cdf2c79-cda1-4cb8-b807-2a943bfab8fd</a> про sos
+вообще НЕТ ответов. забыли отправить?</p>
+<p>28 августа 2011 г. 8:57</p>
+<hr>
+<h2 id="баг-в-net-framework-40">Баг в .NET Framework 4.0</h2>
+<p>Источник: <a href="https://yandexwebcache.net/yandbtm?fmode=inject&amp;tm=1712641413&amp;tld=ru&amp;lang=ru&amp;la=1682147072&amp;text=%D1%84%D0%BE%D1%80%D1%83%D0%BC%D1%8B+msdn+pashapash+malobukv+site%3Amicrosoft.com&amp;url=https%3A//social.msdn.microsoft.com/Forums/windows/ru-RU/92b54cb5-b3b4-47aa-a70d-af5ceb261f67/104110721075-1074-net-framework-40%3Fforum%3Dprogramminglanguageru&amp;l10n=ru&amp;mime=html&amp;sign=21b186783c262ce9be5e1da86d2f169d&amp;keyno=0">https://yandexwebcache.net/yandbtm?fmode=inject&amp;tm=1712641413&amp;tld=ru&amp;lang=ru&amp;la=1682147072&amp;text=форумы+msdn+pashapash+malobukv+site%3Amicrosoft.com&amp;url=https%3A//social.msdn.microsoft.com/Forums/windows/ru-RU/92b54cb5-b3b4-47aa-a70d-af5ceb261f67/104110721075-1074-net-framework-40%3Fforum%3Dprogramminglanguageru&amp;l10n=ru&amp;mime=html&amp;sign=21b186783c262ce9be5e1da86d2f169d&amp;keyno=0</a></p>
+<p>Среда Visual Studio и языки программирования &gt; Языки программирования</p>
+<p>ВНИМАНИЕ: заголовок темы и часть сообщения (см. ниже #2) использовались для доказательства &quot;от обратного&quot; того, что пример (ниже фрагмент в #1) также без бага. в итоге оппонент на англоязычном форуме признал, что в коде нет бага.
+Эта тема касается всех, кто использует DataAdapter и другие реализации IDisposable.</p>
+<p>1. в следующем коде есть &quot;баг в реализации Dispose/Finalize&quot; (по утверждению mcc/msdn: здесь и здесь и для модераторов здесь)</p>
+<pre><code>class Entity : IDisposable
+{
+ public int Id { get; private set; }
+ public Entity(int id) { this.Id = id; }
+ ~Entity() { }
+ public virtual void Dispose() { GC.SuppressFinalize(this); }
+}
+class Collection : Entity
+{
+ public IEnumerable Items { get; private set; }
+ public Collection(int id)
+ : base(id)
+ {
+ var list = new List();
+ for (int i = 0; i &lt; 10000; i++) list.Add(new Entity(i));
+ this.Items = list;
+ }
+ public void Clear()
+ {
+ foreach (var itm in this.Items) itm.Dispose();
+ ((List)this.Items).Clear();
+ }
+ public override void Dispose()
+ {
+ this.Items = null;
+ base.Dispose();
+ }
+}
+</code></pre>
+<p>4. возможные вопросы и ответы:</p>
+<p>Q: почему в #2.Entity.~Entity() пусто?</p>
+<p>A: в ситуации с Entity и его наследником Collection,
+вызов Dispose(false) не нужен.</p>
+<p>Q: почему в #2.Entity нет virtual void Dispose(bool)?</p>
+<p>A: потому что в ситуации с Entity и его наследником,
+Dispose(bool) не нужен.</p>
+<p>Q: может ли Dispose() быть виртуальным?</p>
+<p>A: да, может. см.:</p>
+<ul>
+<li>в .NET Framework см. class HwndWrapper, System.Web.UI.Control, ...</li>
+<li>статья на msdn за 2009; автор - основатель и разработчик известных проектов.</li>
+<li>проект Microsoft</li>
+<li>более 5000 раз встречается в базе открытого кода</li>
+</ul>
+<p>5. вывод: код, который по утверждению mcc/msdn содержит
+баг, есть в .NET Framework.
+очевидно, что этот баг затрагивает очень многих.
+о баге надо сообщить.  модераторы, пожалуйста,
+создайте багрепорт на сайте microsoft connect и
+отпишитесь в эту тему (не забудьте указать прямую
+ссылку на страницу с багрепортом).
+если это не баг, то получается, что не все ответы mcc/msdn
+одинаково полезны ...
+и чтобы впредь не было конфликтов между mcc/msdn и
+другими участниками форумов msdn: надо запретить mcc/msdn удалять сообщения. (лучше просто переносить сообщения в какой-нибудь специальный форум, а
+вместо оригинала оставлять ссылку на текст перенесенного сообщения).</p>
+<p>2. для наглядности давайте из примера слева оставим только то, что относится к Dispose/Finalize</p>
+<pre><code>class Entity : IDisposable
+{
+ ~Entity() { }
+ public virtual void Dispose() { GC.SuppressFinalize(this); }
+}
+class Collection : Entity
+{
+ public IEnumerable Items { get; private set; }
+ public Collection()
+ {
+ this.Items = new List();
+ }
+ public override void Dispose()
+ {
+ this.Items = null;
+ base.Dispose();
+ }
+}
+</code></pre>
+<p>3. ниже код из .NET Framework: (скриншот с ILSpy)
+видно, что он похож на код в #2:
+в DataAdapter.Dispose обнуляется ссылка.
+тоже самое сделано в #2ю.Collection.Dispose; и т.д.</p>
+<p>Изменено Malobukv 29 августа 2011 г. 18:37 добавил &quot;внимание:...&quot;</p>
+<p>28 августа 2011 г. 14:28</p>
+<p>Пожайлуйста, не меняйте главное сообщение постфактум. С кодом как есть не будет проблем в том виде, в котором он есть. Но также код как есть не несет практически никакого смысла. И смысла наследования и реализации интерфейса IDisposable в нем тоже особо нет.</p>
+<p>Подтвержение тому посты MVP с зарубежного форума:</p>
+<ol>
+<li><p>О том, что реализация IDisposable своебразна и применима только к данному конкретному случаю</p>
+</li>
+<li><p>В коде PashaPash приведена верная реализация IDisposable в соответствии с документацией</p>
+</li>
+<li><p>Код Malobukv верен в том виде,в котором он есть, но в большом настоящем проекте, такая реализация скорее всего будет признана ошибочной.</p>
+</li>
+</ol>
+<p>Этот спор врядли кому из пользователей будет полезен, он больше введет их в заблуждение.  Топик закрыт.</p>
+<p>Помечено в качестве ответа Abolmasov Dmitry 30 августа 2011 г. 11:12</p>
+<p>30 августа 2011 г. 11:11</p>
+<p>Вы сами можете создать багрепорт, если считаете нужным. Создайте, это совсем не сложно.</p>
+<p>Можно уточняющий вопрос? Подставьте, пожалуйста, соответствующие классы из вашего примера:</p>
+<pre><code>Component -&gt; ?
+
+DataAdapter -&gt; ?
+
+DataTableMappingCollection -&gt; ?
+
+DataTableMapping -&gt; ?
+</code></pre>
+<p>Я пока не вижу у вас в коде аналога DataTableMapping - обычного класса, без финализатора и IDisposable. И не вижу у вас в коде аналога DataTableMappingCollection - коллекции обычных, нефинализируемых объектов DataTableMapping. Приведите код в полное соответствие, пожалуйста.</p>
+<p>То, что код &quot;похож&quot; - очень сомнительное обоснование. Код с багом всегда похож на код без бага.</p>
+<p>Если Collection владеет Disposable объектам Entity, то он должен вызывать у них Dispose в своем методе Dispose. Советую исправить его перед тем, как постить код в connect. Вы этого почему-то не делаете, уже третий топик подряд. Создаавать отдельный топик для обсуждения каждого бага в вашем коде, на мой взгляд, несколько неэфективно.</p>
+<p>К коду из MSDN этого бага, естественно, нет - там DataTableMapping не IDisposable и не имеют финализаторов.</p>
+<p>Отвечая на вопрос топика (как я его понял) - нет, в реализации Dispose/Finalize у DataAdatper бага нет. Ложная тревога.</p>
+<p>28 августа 2011 г. 17:37</p>
+<p>Модератор</p>
+<blockquote>
+<p>Я пока не вижу у вас в коде аналога DataTableMapping</p>
+</blockquote>
+<p>в теме обсуждаем &quot;баг в реализации Dispose/Finalize&quot;, а вы о чем? не надо уводить тему в сторону.</p>
+<blockquote>
+<p>То, что код &quot;похож&quot; - очень сомнительное обоснование. Код с багом всегда похож на код без бага.</p>
+</blockquote>
+<p>так вот и скажите где баг? как вы и собирались, цитирую &quot;придется при всех ткнуть пальцем&quot;. ткните, не стесняйтесь. #2 перед вами.  где там баг? :) но если он там по-вашему есть, то пишите багрепорт в connect.</p>
+<p>28 августа 2011 г. 17:49</p>
+<p>Да я и не стесняюсь. Говорил вам уже раз 10 наверное. Если Collection владеет Disposable объектам Entity, то он должен вызывать у них Dispose в своем методе Dispose. Ссылки давал, &quot;на пальцах&quot; объяснял, код показывал. Давал вам исправленный вариант вашего номера 2.</p>
+<p>Пальцем: В #2 не хватает строчки перед this.Items = null:</p>
+<pre><code>foreach (var item in this.Items) { item.Dispose(); } 
+</code></pre>
+<p>Постить баг в коннект их-за ошибки в вашем коде не вижу смысла. Connect - это багтрекер MS-а, а не ваших примеров.  Если вы не хотите понимать - я не обязан продолжать объяснять вам основы. За 4 дня можно было уж и прочитать хоть один мой ответ.</p>
+<p>28 августа 2011 г. 19:24</p>
+<p>Модератор</p>
+<blockquote>
+<p>Да я и не стесняюсь.</p>
+</blockquote>
+<p>это заметно по вашим сообщениям с фразами типа &quot;мечу бисер перед свиньями&quot; и т.д.</p>
+<p>но не уводите в сторону. посмотрите на свою реализацию Dispose с проверками в Entity и в Collection.
+вы утверждали, что баг именно в моей реализации, потому что в ней нет проверок.
+но проверок нет в .NET
+так что пишите багрепорт.</p>
+<p>28 августа 2011 г. 19:34</p>
+<blockquote>
+<blockquote>
+<p>в теме обсуждаем &quot;баг в реализации Dispose/Finalize&quot;, а вы о чем? не надо уводить тему в сторону.</p>
+</blockquote>
+</blockquote>
+<p>В теме две реализации Dispose/Finalize:</p>
+<p>ваша, с багом</p>
+<p>в DataAdapeter,без.</p>
+<p>Пожалуйста, если вы хотите обсуждать явную разницу между реализациями - переименуйте тему, и смените тип на обсуждение.</p>
+<p>Если вы хотите обсуждать наличие якобы бага в стандартной реализации - оставьте в теме только ее, свою, с багом, перенесите в старую тему. Объяснение бага там уже есть, очень подробное.</p>
+<p>Если вы хотите обсуждать свою реализацию - то, пожалуйста, уберите отрефлекченный .net. Или явно напишите что он приведен в теме &quot;просто так&quot; - он к вашему примеру отношения не имеет, по причинам, описанным вам выше. И в соседнем топике. И в соседнем топике в удаленном вами обсуждении.</p>
+<p>Если у вас нет уточняющих вопросов по теме, пожалуйста, воздержитесь от флуда, фраз про коварных модераторов и перехода на личности.</p>
+<p>Спасибо.</p>
+<p>28 августа 2011 г. 19:36</p>
+<p>Модератор</p>
+<blockquote>
+<blockquote>
+<p>вы утверждали, что баг именно в моей реализации, потому что в ней нет проверок.</p>
+</blockquote>
+</blockquote>
+<p>Не утверждал про проверки вообще ничего. Что я утверждал - написано одним сообщением выше. Проверки - потому что реализация взята из статьи по Dispose/Finalize. Еще &quot;аргументы&quot; есть?</p>
+<p>Вы так забавно меня обвиняете, как будто я хочу скрыть баг в .net. Вы можете сказать что-то по теме: баг в .net 4.0? (а не в вашем коде).</p>
+<p>28 августа 2011 г. 19:42</p>
+<p>Модератор</p>
+<blockquote>
+<p>В теме две реализации Dispose/Finalize: ваша, с багом</p>
+</blockquote>
+<p>так вот и скажите где в #2 баг? 10 строк кода. скажите в какой строке? вы же модератор и mcc - должны помогать.</p>
+<p>вместо ответа вы выдаете массу слов/рассуждений не по делу.</p>
+<p>P.S.
+загляните в модераторский форум, где вы создали тему &quot;Moderatorial War in russian forums - any way to stop it?&quot;. там уже есть ссылка на эту тему :) так что не удаляйте эту ветку, как предложил ваш коллега ulcer.
+и не редактируйте чужие сообщения.</p>
+<p>Изменено Malobukv 28 августа 2011 г. 19:50 добавил P.S.</p>
+<p>28 августа 2011 г. 19:43</p>
+<p>Зато я читаю чужие сообщения и не хамлю всем подряд без причины.</p>
+<p>В #2 не хватает строчки перед this.Items = null. Между 15 и 16 строками не хватает:</p>
+<pre><code>foreach (var item in this.Items) { item.Dispose(); }  
+</code></pre>
+<p>вы на всякий случай перечитайте мои сообщения выше. Вдруг, ВНЕЗАПНО, я уже вам ответил. Есть еще что сказать? или я могу помечать этот пост ка кответ и закрывать тему?</p>
+<p>28 августа 2011 г. 19:49</p>
+<p>Модератор</p>
+<blockquote>
+<p>Зато я читаю чужие сообщения и не хамлю всем подряд без причины.</p>
+</blockquote>
+<p>вы их не просто читаете, а УДАЛЯЕТЕ примеры с кодом.
+про хамство: по-вашему ваша фраза &quot;мечу бисер перед свиньями&quot; и т.д. - это не хамство? :)</p>
+<blockquote>
+<p>В #2 не хватает строчки перед this.Items = null.</p>
+</blockquote>
+<p>т.е. баг именно в том, что нет строки. но такой строки нет в DataAdapter
+значит в DataAdapter - баг. пишите багрепорт.</p>
+<blockquote>
+<p>я могу помечать этот пост ка кответ и закрывать тему?</p>
+</blockquote>
+<p>НЕТ</p>
+<p>28 августа 2011 г. 19:55</p>
+<p>В DataAdapter обнуляется ссылка на коллекцию DataTableMappingCollection, которая содержит объекты DataTableMapping, которые не являются IDisposable, поэтому и нет необходимости проходить по коллекции и вызывать для объектов метод Dispose.</p>
+<p>IDisposable применяется для освобождения неуправляемых ресурсов, GC их не освобождает и ответственность за их освобождение лежит на разработчике.</p>
+<p>Теперь представьте, что, как вы приводите во 2ом примере, вы создаете коллекцию их N объектов, которые оперируют с неуправляемыми ресурсами. А затем вы хотите освободить все ресурсы, занятые этой коллекцией - для этого нужно освободить ресурсы, занятые каждым объектом, следовательно вызывать метод Dispose каджого объекта. Простое присвоение коллекции к null этого не сделает и неуправляемые ресурсы останутся открытыми. В этом ваша ошибка.</p>
+<p>29 августа 2011 г. 14:13</p>
+<blockquote>
+<p>Теперь представьте, что, как вы приводите во 2ом примере</p>
+</blockquote>
+<p>спасибо за ответ. но вопрос/спор про 1й пример (#1 в первом сообщении).
+а #2 - просто для наглядности, чтобы было легче сравнивать с кодом из .NET</p>
+<p>внимание: мой оппонент (mcc/moderator) признал, что в коде нет бага: &quot;ok, it's not a bug&quot; <a href="http://social.msdn.microsoft.com/Forums/en-US/clr/thread/db86b52a-8fc9-4145-9a3e-d72cc72e8a3c/#00d7e213-a8c4-421f-8d75-4309473eb28a">http://social.msdn.microsoft.com/Forums/en-US/clr/thread/db86b52a-8fc9-4145-9a3e-d72cc72e8a3c/#00d7e213-a8c4-421f-8d75-4309473eb28a</a></p>
+<p>предыстория: изначально #1 был опубликован мной в теме в ответ на ошибочные слова mcc/moderator.
+видимо mcc/moderator разозлился, и началось .... удаления кода, выпады в мой адрес, высмеивания, переход на личности, и т.д., вы и сами все видите в той теме и других темах (включая модераторские).
+позже в теме код был восстановлен со словами: &quot;Пример отличный...&quot; (см. последнее сообщение).</p>
+<p>в итоге он остается модератором, а меня лишили модераторских прав по его не вполне правдивой жалобе.
+наверное посмотрели на его баллы и статус mcc.</p>
+<p>29 августа 2011 г. 15:09</p>
+<p>внимание: мой оппонент (mcc/moderator) признал, что в коде нет бага: &quot;ok, it's not a bug&quot;
+Почему вы смотрите только на часть фразы? Полная фраза:</p>
+<p>ok, it's not a bug. just serious performance issue.
+что говорит о том, что &quot;да - это не баг, а так, просто серьезная проблема c производительностью&quot;</p>
+<p>Вам же и другие пользователи написали о неправильной реализации IDisposable коллекции и о том что возникнет утечка памяти. Это применительно к общему случаю, конечно, конкретно в примере #1 таких проблем не возникнет. Но если кто-нибудь другой воспользуется вашей коллекцией для хранения настоящих IDisposable объектов (которые используют неуправляемые ресурсы) и вызовет Dispose без предварительного вызова Clear - то он получит проблему неосвобожденных ресурсов и утечку памяти.</p>
+<p>29 августа 2011 г. 15:34</p>
+<blockquote>
+<p>Почему вы смотрите только на часть фразы?</p>
+</blockquote>
+<p>потому что он утверждал, что в коде есть баг в реализации Dispose.</p>
+<blockquote>
+<p>написали о неправильной реализации IDisposable коллекции и о том что возникнет утечка памяти. Это применительно к общему случаю, конечно, конкретно в примере #1 таких проблем не возникнет</p>
+</blockquote>
+<p>так речь именно про код #1 &quot;as is&quot; т.е. &quot;как есть&quot; без расширений, изменений и т.д.
+в нем нет бага. такая же &quot;неправильная&quot; реализация встречается в .NET
+незачем было удалять пример и шуметь.</p>
+<p>про утечку ...
+слова - это хорошо. но нужна точность. нужен рецепт/метод выявления.</p>
+<blockquote>
+<p>что говорит о том, что &quot;да - это не баг, а так, просто серьезная проблема c производительностью&quot;</p>
+</blockquote>
+<p>а вы пример запускали? он из двух частей. запустите пример.</p>
+<p>как видите Clear внутри using - против которого так яростно выступал(и) mcc/moderator - как-раз повышает проивзодительность.
+почему? это другой вопрос.</p>
+<p>код-пример просто показывает, что надо смотреть на реализацию. разве это плохо?
+это же реклама .NET, у которого предусмотрена возможность просмотра кода сборок.</p>
+<p>29 августа 2011 г. 15:57</p>
+<p>Смотреть на реализацию - хорошо, но просто смотреть не достаточно, нужно еще понимать почему именно так это реализовано, а не иначе, что тяжело сделать имея только часть диссасемблированного кода .net, т.к. дальше может идти неуправляемый код, всякого рода обертки над ним и прочее..</p>
+<p>Возможно ваш код из темы про using и работает быстрее, но такого рода микрооптимизации (ваша реализация IDisposable) в перспективе могут вылится в серьезные проблемы и головную боль при поиске и устранении их. Так что лучше придерживаться правильной принятой реализации IDisposable, чтобы потом не возникло подобных проблем.</p>
+<p>29 августа 2011 г. 16:28</p>
+<blockquote>
+<p>Смотреть на реализацию - хорошо, но просто смотреть не достаточно ...</p>
+</blockquote>
+<p>правильно. надо еще тестировать, тестировать и еще раз тестировать.
+читать статьи/книги/ответы_на_форумах и проверять, а не верить на слово.</p>
+<blockquote>
+<p>Возможно ваш код из темы про using и работает быстрее, но такого рода микрооптимизации ...</p>
+</blockquote>
+<p>вы же знаете, что при разработке высоконагруженных систем любая микрооптимизация - это хорошо.
+и .NET-разработчики должны знать тонкости. вот я поделился. зря?</p>
+<blockquote>
+<p>... в перспективе могут вылится в серьезные проблемы и головную боль при поиске и устранении их.</p>
+</blockquote>
+<p>если код хорошо изолирован и покрыт юнит-тестами, то боли не будет.
+сорри за повтор: мой код в #1 - это просто пример. частный случай. не более того.
+он показывает как может быть. и больше ничего. и в коде нет агрессии и глупости, как утверждали mcc и не надо
+было его удалять и т.д. и т.п. от mcc.</p>
+<p>29 августа 2011 г. 16:43</p>
+<blockquote>
+<p>Возможно ваш код из темы про using и работает быстрее</p>
+</blockquote>
+<blockquote>
+<p>вы же знаете, что при разработке высоконагруженных систем любая микрооптимизация - это хорошо.
+и .NET-разработчики должны знать тонкости. вот я поделился. зря?</p>
+</blockquote>
+<p>Дело в том, что возможно он работает быстрее. А возможно - медленее. Причем медленее - с большей вероятностью. И ваше обоснование почему &quot;быстрее&quot; содержит ошибку.</p>
+<blockquote>
+<p>как видите Clear внутри using - против которого так яростно выступал(и) mcc/moderator - как-раз повышает проивзодительность.
+почему? это другой вопрос.</p>
+</blockquote>
+<p>Удаление вызова List.Clear оставляет разницу в производительности. Почему вы этого не хотите признать - другой вопрос. Вы же, надеюсь, не станете утверждать, что удаленный вызов List.Clear продолжает влиять на производительность?</p>
+<p>29 августа 2011 г. 16:53</p>
+<p>Модератор</p>
+<p>Предлагаю перестать оффтопить, и вернуться к теме. Укажите, пожалуйста, в каком именно месте в коде DataAdapter есть баг?</p>
+<p>29 августа 2011 г. 16:55</p>
+<p>Модератор</p>
+<blockquote>
+<p>Дело в том, что возможно он работает быстрее. А возможно - медленее. Причем медленее - с большей вероятностью.</p>
+</blockquote>
+<p>не надо гадать. про работу кода есть отдельная тема
+<a href="http://social.msdn.microsoft.com/Forums/ru-RU/vsru/thread/2001ecc6-d241-439d-8b98-111b1eb67836">http://social.msdn.microsoft.com/Forums/ru-RU/vsru/thread/2001ecc6-d241-439d-8b98-111b1eb67836</a></p>
+<blockquote>
+<p>Удаление вызова List.Clear оставляет разницу в производительности.</p>
+</blockquote>
+<p>вообще-то, код - как песня, из него нельзя слова выкидывать.</p>
+<p>29 августа 2011 г. 16:58</p>
+<p>Question</p>
+<p>На мой вгляд, художественная ценность вашего кода не является доказательством наличия бага в .net 4.0.</p>
+<p>Непонятные мне обвинения в &quot;гадании&quot; - тоже. У вас есть что сказать по теме вопроса?</p>
+<p>29 августа 2011 г. 17:51</p>
+<p>Модератор</p>
+<blockquote>
+<p>На мой вгляд, художественная ценность вашего кода не является доказательством наличия бага в .net 4.0.</p>
+</blockquote>
+<p>в .NET нет бага. доказательство того, что в моем коде &quot;as is&quot; нет бага было &quot;от обратного&quot; - есть такой метод.</p>
+<p>вы признали, что бага в моем коде &quot;as is&quot; нет.
+в англоязычном форуме подтвердили <a href="http://social.msdn.microsoft.com/Forums/ru-RU/clr/thread/db86b52a-8fc9-4145-9a3e-d72cc72e8a3c">http://social.msdn.microsoft.com/Forums/ru-RU/clr/thread/db86b52a-8fc9-4145-9a3e-d72cc72e8a3c</a></p>
+<p>все рассуждения типа &quot;а если там убрать, а если здесь добавить&quot; не нужны.</p>
+<p>29 августа 2011 г. 18:01</p>
+<p>Пожайлуйста, не меняйте главное сообщение постфактум. С кодом как есть не будет проблем в том виде, в котором он есть. Но также код как есть не несет практически никакого смысла. И смысла наследования и реализации интерфейса IDisposable в нем тоже особо нет.</p>
+<p>Подтвержение тому посты MVP с зарубежного форума:</p>
+<ol>
+<li><p>О том, что реализация IDisposable своебразна и применима только к данному конкретному случаю</p>
+</li>
+<li><p>В коде PashaPash приведена верная реализация IDisposable в соответствии с документацией</p>
+</li>
+<li><p>Код Malobukv верен в том виде,в котором он есть, но в большом настоящем проекте, такая реализация скорее всего будет признана ошибочной.</p>
+</li>
+</ol>
+<p>Этот спор врядли кому из пользователей будет полезен, он больше введет их в заблуждение.  Топик закрыт.</p>
+<p>Помечено в качестве ответа Abolmasov Dmitry 30 августа 2011 г. 11:12</p>
+<p>30 августа 2011 г. 11:11</p>
+<hr>
+<h2 id="bug-in-net-framework-40">Bug in .NET Framework 4.0?</h2>
+<p>Источник: <a href="https://web.archive.org/web/20201021225442/https://social.msdn.microsoft.com/Forums/en-US/db86b52a-8fc9-4145-9a3e-d72cc72e8a3c/bug-in-net-framework-40?forum=clr">https://social.msdn.microsoft.com/Forums/en-US/db86b52a-8fc9-4145-9a3e-d72cc72e8a3c/bug-in-net-framework-40?forum=clr</a></p>
+<p>.NET Framework &gt; Common Language Runtime Internals and Architecture</p>
+<p>UPDATE: 30 Aug, 2011
+there is no bug in .NET Framework. dispute is over.
+my opponent - PashaPash - has acknowledged that in some cases Dispose into using block boosts performance and there is no bug in my first example.</p>
+<p>Hello,</p>
+<p>MCC claims that the following code has a bug.</p>
+<pre><code>class Entity : IDisposable
+{
+ ~Entity() { }
+ public virtual void Dispose() { GC.SuppressFinalize(this); }
+}
+class Collection : Entity
+{
+ public IEnumerable Items { get; private set; }
+ public Collection()
+ {
+ this.Items = new List();
+ }
+ public override void Dispose()
+ {
+ this.Items = null;
+ base.Dispose();
+ }
+}
+</code></pre>
+<p>I believe there is no bug. Similar code we can find in .NET Framework. Samples are in theme (ru-ru).</p>
+<p>Please, review code and please, do not let them (mcc|moderators: PashaPash and Ulcer) remove theme!</p>
+<p>Thank you!</p>
+<p>Edited by Malobukv Monday, August 29, 2011 10:58 PM</p>
+<p>Sunday, August 28, 2011 8:30 PM</p>
+<p>if the items in the collection implement IDisposable (e.g. SqlConnection) the code would leak. I cannot read russian but the code posted by MCCs fixed the problem.</p>
+<p>This is not a bug in .Net, but a problem in your IDisposable implementation.</p>
+<p>BTW is there a reason not using generics interfaces and collections now?</p>
+<p>The following is signature, not part of post
+Please mark the post answered your question as the answer, and mark other helpful posts as helpful, so they will appear differently to other users who are visiting your thread for the same problem.
+Visual C++ MVP</p>
+<p>Proposed as answer by ulcer Monday, August 29, 2011 11:32 AM<br>
+Unproposed as answer by Malobukv Monday, August 29, 2011 12:12 PM</p>
+<p>Sunday, August 28, 2011 8:49 PM</p>
+<blockquote>
+<p>if the items in the collection implement IDisposable (e.g. SqlConnection) the code would leak.</p>
+</blockquote>
+<p>there is no other code, just only what it is in the first message.
+how can I know about the leak? would you please tell me.</p>
+<blockquote>
+<p>but the code posted by MCCs fixed the problem.</p>
+</blockquote>
+<p>do you mean code under #1 in theme?
+it's not code of MCC. this is my code. but MCC claims about bug.</p>
+<p>Sunday, August 28, 2011 9:03 PM</p>
+<p>If the code above is the complete code of the class, then there is no leak - the List class does not need finalizing and there is no item added to the list .</p>
+<p>But that would be an wasteful piece of code that does nothing beneficial to the end user. You won't see this in any project design, so the class would qualify as a design bug in real world.</p>
+<p>The following is signature, not part of post
+Please mark the post answered your question as the answer, and mark other helpful posts as helpful, so they will appear differently to other users who are visiting your thread for the same problem.
+Visual C++ MVP</p>
+<p>Sunday, August 28, 2011 9:12 PM</p>
+<p>Your implementation of IDisposable is incorrect.  It can cause a bug due to the virtual nature of how you have this implemented.</p>
+<p>In this case, there actually is no reason to implement IDisposable.  However, if you decide to implement it, I would recommend doing it correctly.</p>
+<p>For details on how (and when!) to do this correctly, see: <a href="http://reedcopsey.com/series/idisposable/">http://reedcopsey.com/series/idisposable/</a></p>
+<p>Reed Copsey, Jr. - <a href="http://reedcopsey.com">http://reedcopsey.com</a>
+If a post answers your question, please click &quot;Mark As Answer&quot; on that post and &quot;Mark as Helpful&quot;.</p>
+<p>Sunday, August 28, 2011 9:17 PM</p>
+<p>thanks to all for answers. sorry fo my english.
+there is other example with special behavior.
+please, would you comment, why Clear makes execution more faster?
+and if there is a leak of memory, how i could know about?</p>
+<p>sorry, no formating. editor &quot;eats&quot; some characters</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication12
+{
+public partial class Form1 : Form
+{
+List&lt;int[]&gt; arrs = new List&lt;int[]&gt;();
+void LoadArray()
+{
+var arr = new int[100000];
+arrs.Add(arr);
+}
+public Form1()
+{
+var count = 500.0;
+Button b1 = new Button() { Parent = this, Text = &quot;create -&gt; dispose&quot;, Location = new Point(10, 10), Width = 200 };
+b1.Click += (s, e) =&gt;
+{
+var sw = Stopwatch.StartNew();
+arrs.Clear();
+for (var i = 0; i &lt; count; i++)
+{
+using (var c = new Collection(0)) { }
+LoadArray();
+}
+System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b1.Text);
+};
+Button b2 = new Button() { Parent = this, Text = &quot;create -&gt; clear -&gt; dispose&quot;, Location = new Point(10, b1.Bottom + 5), Width = 200 };
+b2.Click += (s, e) =&gt; // с Clear заметно быстрее
+{
+var sw = Stopwatch.StartNew();
+arrs.Clear();
+for (var i = 0; i &lt; count; i++)
+{
+using (var c = new Collection(0))
+{
+c.Clear();
+}
+LoadArray();
+}
+System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b2.Text);
+};
+}
+class Entity : IDisposable
+{
+public int Id { get; private set; }
+public Entity(int id) { this.Id = id; }
+~Entity() { }
+public virtual void Dispose() { GC.SuppressFinalize(this); }
+}
+class Collection : Entity
+{
+public IEnumerable&lt;Entity&gt; Items { get; private set; }
+public Collection(int id)
+: base(id)
+{
+var list = new List&lt;Entity&gt;();
+for (int i = 0; i &lt; 10000; i++) list.Add(new Entity(i));
+this.Items = list;
+}
+public void Clear()
+{
+foreach (var itm in this.Items) itm.Dispose();
+((List&lt;Entity&gt;)this.Items).Clear();
+}
+public override void Dispose()
+{
+this.Items = null;
+base.Dispose();
+}
+}
+}
+}
+</code></pre>
+<p>Sunday, August 28, 2011 9:31 PM</p>
+<p>You'll know there's a memory leak if your application keeps doing the same thing, and instead of memory being constant over a period of time, the amount of memory will increase.</p>
+<p>Remember, Dispose doesn't clean up memory, dispose is to be used release native resources. If you're class doesn't use P/Invoke to create any native objects, or has any disposable members, there's no need for the class to be disposable.</p>
+<p>Sunday, August 28, 2011 11:48 PM</p>
+<blockquote>
+<p>there's a memory leak if your application keeps doing the same thing</p>
+</blockquote>
+<p>how can I make sure that there is a memory leak in a code?
+should I use a windows task manager? but it is not accurate enough.</p>
+<blockquote>
+<p>If you're class doesn't use P/Invoke to create any native objects, or has any disposable members, there's no need for the class to be disposable.</p>
+</blockquote>
+<p>i'm use IDisposable with using(...) { ... }</p>
+<p>Monday, August 29, 2011 7:06 AM</p>
+<p>Malobukv, I already pointed you to a problem in the code above. It's not leaking memory or unmanaged resources (as there are not unmanaged resources used in this specific sample).</p>
+<p>However, there will be a possible resources &quot;leak&quot; in real application if Entity holds unmanaged resources.</p>
+<p>You sample has only a performance issue because you are not disposing (and SuppressFinalizing this.Items in Collection.Dispose(). Than causes an overload of F-Reachable queue. So the first sample will be definitely slower than second one, where you are explicitely calling Dispose/SuppressFinalizing.</p>
+<p>I already answered you this question about 10 times in Russian forums during last 5 days. Why do you need another &quot;your implementation of IDisposable is incorrect&quot; to believe?</p>
+<p>Monday, August 29, 2011 1:54 PM</p>
+<p>PashaPash</p>
+<blockquote>
+<p>Malobukv, [...] in the code above. It's not leaking memory or unmanaged resources (as there are not unmanaged resources used inthis specific sample).</p>
+</blockquote>
+<p>that is, you agree that the code &quot;as is&quot; has no bug.</p>
+<p>REMINDER:<br>
+the code without bug was removed 3 times by PashaPash from <a href="http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/aa78a422-c06f-4736-af43-20d048ee7a56#c7a18c3d-8ed2-4010-83bb-2ad251ca2ba7">http://social.msdn.microsoft.com/Forums/ru-RU/programminglanguageru/thread/aa78a422-c06f-4736-af43-20d048ee7a56#c7a18c3d-8ed2-4010-83bb-2ad251ca2ba7</a>  moderators could see history of deletions. and there is comments of PashaPash with profanity words.</p>
+<p>Monday, August 29, 2011 2:34 PM</p>
+<blockquote>
+<blockquote>
+<p>that is, you agree that the code &quot;as is&quot; has no bug.</p>
+</blockquote>
+</blockquote>
+<p>ok, it's not a bug. just serious performance issue.</p>
+<p>Monday, August 29, 2011 2:57 PM</p>
+<p>Making it disposable will only make your performance worse, because it now will take more steps for the GC to clean the object up.
+Monday, August 29, 2011 3:00 PM</p>
+<blockquote>
+<p>Making it disposable will only make your performance worse, because it now will take more steps for the GC to clean the object up</p>
+</blockquote>
+<p>ok. thank you.
+would you please explain why calling of Clear boosts performance?</p>
+<pre><code>using (var c = new Collection(0))
+{
+    c.Clear();
+}
+</code></pre>
+<p>(see full code above in my post)</p>
+<p>Monday, August 29, 2011 4:28 PM</p>
+<p>Obviously, you are not only clearing collection, but also explicitly disposing Entities in your Collection.Clear implementation.</p>
+<p>Clearing a collection itself has no significant impact on performance. Just try to remove the following line, and you will still have the same timings:</p>
+<pre><code>((List&lt;Entity&gt;)this.Items).Clear();
+</code></pre>
+<p>Monday, August 29, 2011 4:59 PM</p>
+<blockquote>
+<p>Just try to remove the following line, and you will still have the same timings:((List<entity>)this.Items).Clear();<p>
+</entity></blockquote>
+<p>try to remove something more :)</p>
+<p>could anybody explain performance boost in code &quot;as is&quot; with Clear, please.</p>
+<p>Monday, August 29, 2011 5:05 PM</p>
+<p>We're not phsycic. We could only make stabs in the dark as to why clearing the collection could have performance improvements, given the little sample of code shown here. Without knowing what's in the collection, there's no way we could figure out why you perceive a performance improvement when the code clears the collection.</p>
+<p>Monday, August 29, 2011 6:45 PM</p>
+<blockquote>
+<p>given the little sample of code shown here</p>
+</blockquote>
+<p>sorry for my english. code is above in this theme.
+here is copy (without formating. because editor 'eats' some characters):</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication12
+{
+public partial class Form1 : Form
+{
+List&lt;int[]&gt; arrs = new List&lt;int[]&gt;();
+void LoadArray()
+{
+var arr = new int[100000];
+arrs.Add(arr);
+}
+public Form1()
+{
+var count = 500.0;
+Button b1 = new Button() { Parent = this, Text = &quot;create -&gt; dispose&quot;, Location = new Point(10, 10), Width = 200 };
+b1.Click += (s, e) =&gt;
+{
+var sw = Stopwatch.StartNew();
+arrs.Clear();
+for (var i = 0; i &lt; count; i++)
+{
+using (var c = new Collection(0)) { }
+LoadArray();
+}
+System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b1.Text);
+};
+Button b2 = new Button() { Parent = this, Text = &quot;create -&gt; clear -&gt; dispose&quot;, Location = new Point(10, b1.Bottom + 5), Width = 200 };
+b2.Click += (s, e) =&gt; // с Clear заметно быстрее
+{
+var sw = Stopwatch.StartNew();
+arrs.Clear();
+for (var i = 0; i &lt; count; i++)
+{
+using (var c = new Collection(0))
+{
+c.Clear();
+}
+LoadArray();
+}
+System.Diagnostics.Trace.WriteLine(sw.ElapsedMilliseconds, b2.Text);
+};
+}
+class Entity : IDisposable
+{
+public int Id { get; private set; }
+public Entity(int id) { this.Id = id; }
+~Entity() { }
+public virtual void Dispose() { GC.SuppressFinalize(this); }
+}
+class Collection : Entity
+{
+public IEnumerable&lt;Entity&gt; Items { get; private set; }
+public Collection(int id)
+: base(id)
+{
+var list = new List&lt;Entity&gt;();
+for (int i = 0; i &lt; 10000; i++) list.Add(new Entity(i));
+this.Items = list;
+}
+public void Clear()
+{
+foreach (var itm in this.Items) itm.Dispose();
+((List&lt;Entity&gt;)this.Items).Clear();
+}
+public override void Dispose()
+{
+this.Items = null;
+base.Dispose();
+}
+}
+}
+}
+</code></pre>
+<p>Monday, August 29, 2011 7:16 PM</p>
+<p>Ok, it will be even shorter: It's because you explicitly disposing Entities in your Collection.Clear implementation.</p>
+<p>Monday, August 29, 2011 8:35 PM</p>
+<p>PashaPash:
+Ok, it will be even shorter: It's because you explicitly disposing Entities in your Collection.Clear implementation.</p>
+<p>it's a part of answer. actualy into Entity.Dispose() is GC.SuppressFinalize - it's a key line.
+so, as I told you, in some cases we could use Dispose within using block for performance.</p>
+<p>nice that you understood.</p>
+<p>we spent a lot of efforts since 23 August, 2011 (7 days before) for this theme.
+please, never use profanity words in argue and do not delete examples.</p>
+<p>thanks to all. we can close the theme.</p>
+<p>Best regards,
+Microsoft MVP C#, 2007-2011</p>
+<p>Monday, August 29, 2011 10:33 PM</p>
+<p>Just a note for other answerers - this topic is one of many that Malobukv spawned to proove that clearing DataAdapter.TableMapping just before disposing an adatper will speed up the process. The original code could be seen in the first post of the topic he linked in post before. You don't need know russian to check that. Don't loose you time, Malobukv definitely know that DataTableMapping has no finalizer defined, and that his code is totally unrelated (yes, I told him few times). And yes, he known that there is no bug in .net 4.0. And yes, I told him that clearing an array itself is unrelated to performance.
+To &quot;proove&quot; that he is right, he typed some example with &quot;Dispose&quot; method named Clear, and broken Dispose. Then posted it in original topic stating that &quot;Clearing a collection will speed up GC!, look on my code&quot;. And then he just used his moderator right to create illusion that his &quot;sample&quot; is somehow related to DataAdapter class. That's why this topic named Bug in .NET Framework 4.0.</p>
+<p>Then, eventually, his moderator rights was revoked. I also hope that his MVP status (if any existis, as I still does not known a real name of this &quot;MVP&quot;) will be reviewed.</p>
+<p>Now he just translated an answer that I gave him 7 days before. Nice try, but anyone could use google translate to check that Malobukv is just lying: <a href="http://translate.google.com/translate?sl=auto&amp;tl=en&amp;u=http%3A%2F%2Fsocial.msdn.microsoft.com%2FForums%2Fru-RU%2Fvsru%2Fthread%2F2001ecc6-d241-439d-8b98-111b1eb67836">http://translate.google.com/translate?sl=auto&amp;tl=en&amp;u=http%3A%2F%2Fsocial.msdn.microsoft.com%2FForums%2Fru-RU%2Fvsru%2Fthread%2F2001ecc6-d241-439d-8b98-111b1eb67836</a>. Check the post with translation starting with &quot;A bit strange question&quot;.</p>
+<p>But both his and my posts was reviewed by Russian forum owners/moderators. And you can see the result - he moved to English part just becase got a final warinng &quot;stop spamming with you broken sample, it prooves nothing&quot; in russian .net forums. The only purpose of this topic was, definitely, to get an answer &quot;that two MCC|moderators are wrong&quot; from one of the English forums answerers. Final post should say to all of you &quot;look, I told that PashaPash has no basic knowledge of GC!!!&quot;, hoping that no one of you know russian, and will have no chance to check.</p>
+<p>It's not a &quot;Question Topic&quot;, just yet another spam &quot;someone tell me that I right and bad Russian moderators are wrong topic&quot;. Sorry if you lost some time reading this topic from the beginning. Sorry for a long and probably offtopic answer.</p>
+<p>Monday, August 29, 2011 11:43 PM</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span><script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");ym(65150713, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true});</script><noscript><div><img src="https://mc.yandex.ru/watch/65150713" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
