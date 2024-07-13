@@ -44,7 +44,7 @@
 **Апрель 2018 - Бан модератора**
 
 Модератор Qwertiy резко высказался в комментариях в отношении администратора Nicolas Chabanovsky, за что получил бан.
-- [qwertiy.png](qwertiy.png)
+- [https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/articles/qwertiy.png](https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/articles/qwertiy.png)
 - https://ru.meta.stackoverflow.com/questions/7200/
 
 **Май 2018 - Удаление учетной записи GreenDragon**
