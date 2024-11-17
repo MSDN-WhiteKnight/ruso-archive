@@ -1,0 +1,3 @@
+Из книги Nicolas Chabanovsky **Practical Community Management: Lessons Learned While Working on Stack Overflow**: 
+
+> I joined Stack Overflow in November 2014. We spent the next six months preparing to migrate the HashCode Community to the Stack Overflow platform. On March 31, 2015, we set up a redirection from hashcode.ru to ru.stackoverflow.com, sent out physical letters and T-shirts with the Stack Overflow logo to the top users and an email with the news about the migration to all other users, and posted the official announcement that HashCode from now on will be known as Stack Overflow in Russian.
