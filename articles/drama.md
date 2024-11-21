@@ -26,6 +26,13 @@
 - https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/3779.html
 - https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/3782.html
 
+**Июнь 2017 - Бан Squidward за неполиткорректность**
+
+Участник Squidward (он же Discord) опубликовал на мете ответ, содержащий несколько несколько неполиткорректных терминов. Этот ответ был удален и Squidward получил бан на месяц. Некоторые участники выразили несогласие с баном.
+- https://msdn-whiteknight.github.io/ruso-archive/html/tools/html/ru.meta.stackoverflow.com/deleted/5454.html
+- https://ru.meta.stackoverflow.com/q/5457/240512
+- https://chat.stackexchange.com/transcript/message/38103916#38103916
+
 **Октябрь 2017 - Выдвижение Squidward на выборах модераторов**
 
 Участник Squidward (он же Discord) выдвинул свою кандидатуру на выборах модераторов 2017 года. При этом он начал активно критиковать других кандидатов в комментариях к ответам и в чате. Выяснилось, что Squidward недавно был забанен, а участникам, побывавшим в бане, запрещено выдвигаться на выборах. Модератор PashaPash стал выступать против выдвижения Squidward. В результате Squidward отозвал свою кандидатуру.
