@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1054;&#1090;&#1074;&#1077;&#1090; Vlad from Moscow &#1085;&#1072; &quot;&#1052;&#1086;&#1078;&#1085;&#1086; &#1083;&#1080; &#1082;&#1072;&#1082;-&#1090;&#1086; &#1074;&#1099;&#1081;&#1090;&#1080; &#1080;&#1079; &#1094;&#1080;&#1082;&#1083;&#1072;...&quot; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1054;&#1090;&#1074;&#1077;&#1090; Vlad from Moscow &#1085;&#1072; &quot;&#1052;&#1086;&#1078;&#1085;&#1086; &#1083;&#1080; &#1082;&#1072;&#1082;-&#1090;&#1086; &#1074;&#1099;&#1081;&#1090;&#1080; &#1080;&#1079; &#1094;&#1080;&#1082;&#1083;&#1072;...&quot; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Ответ Vlad from Moscow на "Можно ли как-то выйти из цикла..."</h1>
+<h2>Answer 587433</h2>
+<p><a href="https://ru.stackoverflow.com/a/587433/240512">Source</a> - by <a href="https://ru.stackoverflow.com/users/183394/">Vlad from Moscow</a></p>
+<blockquote>
+<p><em>6 нояб. 2016</em></p>
+<p>Вы должны себе отдавать отчет, что в программировании находится разная публика, чаще всего которая не блистает интеллектом и не умеет программировать. Но, к сожалению, в программировании, как и в жизни, решающим является не талант, а наличии денег.</p>
+<p>Java изобрели очень слабые программисты, которые не умели писать код, когда создавали свой язык. Недаром Java считается реинкарнацией Basic.</p>
+<p>Java существует лишь по одной причине: туда гиганты софтверной индустрии вбухали большие деньги. А сделали они это также по одной причине, чтобы запустить с шумихой новую &quot;технологию&quot;, и тем самым отбить пользователей у своих конкурентов. А когда пользователи разберутся, с какой поделкой они имеют дело, будет уже поздно, так как они в свою очередь уже затратили много денег в том числе и на обучение кадров.</p>
+<p>Что касается вашего конкретного примера, то лучше всего использовать логическую переменную во внешнем цикле, а в теле цикла или внутри switch устанавливать значение этой переменной.</p>
+<p>Что касается Java, то она предоставляет корявую конструкцию с <code>break</code> или <code>continue</code> предложением с меткой, которые просто являются замаскированным <code>goto</code> предложением, только еще более запутанные, чем <code>goto</code> предложение, так как они передают управление не на предложение после помеченного управляющего или иного предложения, а на начало этого управляющего предложения, что <strong>без всяких сомнений</strong>  только запутывает читающего код программиста.</p>
+<p>Рассмотрите данный пример кода из оригинальной документации по Java (раздел документации 14.15 The break Statemen)</p>
+<pre><code>class Graph {
+     int edges[][];
+     public Graph(int[][] edges) { this.edges = edges; } 
+ 
+    public Graph loseEdges(int i, int j) { 
+        int n = edges.length;
+        int[][] newedges = new int[n][];
+        for (int k = 0; k &lt; n; ++k) {
+ edgelist: {
+             int z;
+ search: {
+             if (k == i) {
+                 for (z = 0; z &lt; edges[k].length; ++z) {
+                     if (edges[k][z] == j) break search;
+                 }
+             } else if (k == j) {
+                 for (z = 0; z &lt; edges[k].length; ++z) {
+                     if (edges[k][z] == i) break search;
+                 }
+             } 
+ 
+            // No edge to be deleted; share this list.
+             newedges[k] = edges[k];
+             break edgelist; }
+ //search 
+ 
+            // Copy the list, omitting the edge at position z.
+             int m = edges[k].length - 1;
+             int ne[] = new int[m];
+             System.arraycopy(edges[k], 0, ne, 0, z);
+             System.arraycopy(edges[k], z+1, ne, z, m-z);
+             newedges[k] = ne; }
+ //edgelist
+         }
+         return new Graph(newedges);
+     }
+ }
+</code></pre>
+<p>Это просто что-то страшное! Это &quot;спагетти&quot; невозможно читать и невозможно понять. Сразу же можно сделать вывод о квалификации разработчиков Java.:)</p>
+<p>Недаром Microsoft создала свой язык C#, который по качеству и по стилю резко отличается от Java. C# создавали высококвалифицированные программисты, а Java создавали неучи с завышенным самомнением, которые расплодили точно таких же неучей, которые не умеют писать код.</p>
+<p>Итак, надеюсь, вы уже поняли, что в Java есть исковерканное  <strong>goto</strong> предложение, замаскированное под <code>break</code> и <code>continue</code>, которые передают управление, фактически, неизвестно куда, так как интуитивно вы предполагаете, что если надо выйти из управляющего блока, то управление должно быть передано в предложение, которые следует за управляющим блоком, а на самом деле вы видите, что управление передается в начало управляющего блока.</p>
+<p>Вот фрагмент код из вышеприведенного примера из документации по Java</p>
+<pre><code> edgelist: {
+             int z; search: {
+             if (k == i) {
+                 for (z = 0; z &lt; edges[k].length; ++z) {
+                     if (edges[k][z] == j) break search;
+                 }
+             } else if (k == j) {
+                 for (z = 0; z &lt; edges[k].length; ++z) {
+                     if (edges[k][z] == i) break search;
+                 }
+             } 
+ 
+            // No edge to be deleted; share this list.
+             newedges[k] = edges[k];
+             break edgelist; }
+ //search 
+</code></pre>
+<p>И куда передает управление предложение?</p>
+<pre><code>             break edgelist; }
+</code></pre>
+<p>Покажите этот код человеку, который ранее не имел дело с Java, и увидите, что он будет в замешательстве.:)</p>
+<p>Вы также можете написать, например</p>
+<pre><code>Rxit: while ( true )
+{
+    switch( expression )
+    {
+        //...
+        default: break Exit;
+    }
+}
+</code></pre>
+<p>Только не думайте, что цикл <code>while</code> сновав начнет выполняться по второму разу. На самом деле логически это выглядит как будто бы метка стоит после цикла</p>
+<pre><code>while ( true )
+{
+    switch( expression )
+    {
+        //...
+        default: break Exit;
+    }
+}
+Exit:
+//...
+</code></pre>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span><script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");ym(65150713, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true});</script><noscript><div><img src="https://mc.yandex.ru/watch/65150713" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
