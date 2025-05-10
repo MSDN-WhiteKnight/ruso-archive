@@ -15,6 +15,7 @@
 ## Статьи
 
 - [Список драм](articles/drama.md)
+- [Ссылки](articles/links.md)
 
 Материалы предоставляются по лицензии [Creative Commons Attribution-ShareAlike 4.0 International License](https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE).
 
