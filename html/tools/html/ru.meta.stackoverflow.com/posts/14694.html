@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1041;&#1072;&#1075; &#1080;&#1083;&#1080; &#1092;&#1080;&#1095;&#1072;: &#171;&#1044;&#1091;&#1073;&#1083;&#1080;&#1082;&#1072;&#1090;&#187; &#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1072;&#1077;&#1090;&#1089;&#1103; &#1076;&#1074;&#1072;&#1078;&#1076;&#1099; &#1074; &#1084;&#1077;&#1085;&#1102; &#1090;&#1088;&#1077;&#1074;&#1086;&#1075; | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1041;&#1072;&#1075; &#1080;&#1083;&#1080; &#1092;&#1080;&#1095;&#1072;: &#171;&#1044;&#1091;&#1073;&#1083;&#1080;&#1082;&#1072;&#1090;&#187; &#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1072;&#1077;&#1090;&#1089;&#1103; &#1076;&#1074;&#1072;&#1078;&#1076;&#1099; &#1074; &#1084;&#1077;&#1085;&#1102; &#1090;&#1088;&#1077;&#1074;&#1086;&#1075; | RuSO Archive ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Баг или фича: &#171;Дубликат&#187; отображается дважды в меню тревог</h1>
+<p><a href="https://ru.meta.stackoverflow.com/questions/14694/%d0%91%d0%b0%d0%b3-%d0%b8%d0%bb%d0%b8-%d1%84%d0%b8%d1%87%d0%b0-%d0%94%d1%83%d0%b1%d0%bb%d0%b8%d0%ba%d0%b0%d1%82-%d0%be%d1%82%d0%be%d0%b1%d1%80%d0%b0%d0%b6%d0%b0%d0%b5%d1%82%d1%81%d1%8f-%d0%b4%d0%b2%d0%b0%d0%b6%d0%b4%d1%8b-%d0%b2-%d0%bc%d0%b5%d0%bd%d1%8e-%d1%82%d1%80%d0%b5%d0%b2%d0%be%d0%b3">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/264178/dev18">Dev18</a></p>
+<blockquote>
+<p><a href="https://i.sstatic.net/pBlSzbrf.png" rel="nofollow noreferrer"><img src="https://i.sstatic.net/pBlSzbrf.png" alt="введите сюда описание изображения"></a></p>
+<p>При подаче тревоги на вопрос замечено странное поведение интерфейса.</p>
+<p><strong>Шаги воспроизведения:</strong></p>
+<ol>
+<li><p>Жмём <strong>«Поставить тревогу на вопрос»</strong>.</p>
+</li>
+<li><p>В списке видим: «Спам», «Невежливый или оскорбительный», <strong>«закрыт»</strong>, «Дубликат», «Требуется вмешательство модератора».</p>
+</li>
+<li><p>Жмём на <strong>«закрыт»</strong> → открывается второе меню.</p>
+<ul>
+<li>Уже здесь выглядит немного странно: сам пункт называется просто «закрыт» (с маленькой буквы и без &quot;ь&quot;). Похоже, это автоматический перевод слова closed («закрыть»), но звучит не очень естественно для пункта меню.</li>
+</ul>
+</li>
+<li><p>В этом меню снова есть <strong>«Дубликат»</strong> (хотя он уже был уровнем выше).</p>
+</li>
+<li><p>Таким образом, «Дубликат» дублируется в двух разных местах — в корневом меню и в подменю закрытия.</p>
+</li>
+<li><p>Кнопка <strong>«Назад»</strong> возвращает в основное меню, но ситуация с повтором пунктов сохраняется.</p>
+</li>
+</ol>
+<p><strong>Фактический результат:</strong>
+Причина «Дубликат» отображается дважды:</p>
+<ul>
+<li>как отдельная тревога,</li>
+<li>и как подпричина закрытия.</li>
+</ul>
+<p><strong>Ожидаемый результат:</strong>
+«Дубликат» должен находиться только в одном месте.</p>
+<p>Такое дублирование кажется лишним и может путать участников.</p>
+<p>Дополнительно стоит отметить:</p>
+<ul>
+<li>на основном сайте есть ещё пункт <strong>«удалён из-за низкого качества»</strong>, который также выглядит как автоматический перевод и не совсем гармонично вписывается в интерфейс. Причём этот пункт появляется не всегда...</li>
+</ul>
+<p><a href="https://i.sstatic.net/8Ms4bmjT.png" rel="nofollow noreferrer"><img src="https://i.sstatic.net/8Ms4bmjT.png" alt="введите сюда описание изображения"></a></p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>
