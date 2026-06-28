@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1057;&#1082;&#1088;&#1099;&#1074;&#1072;&#1077;&#1084; &#1074;&#1077;&#1089;&#1100; &#1084;&#1091;&#1089;&#1086;&#1088; &#1080;&#1079; &#1089;&#1072;&#1081;&#1090;&#1072; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; uBO | RuSO Archive </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1057;&#1082;&#1088;&#1099;&#1074;&#1072;&#1077;&#1084; &#1074;&#1077;&#1089;&#1100; &#1084;&#1091;&#1089;&#1086;&#1088; &#1080;&#1079; &#1089;&#1072;&#1081;&#1090;&#1072; &#1089; &#1087;&#1086;&#1084;&#1086;&#1097;&#1100;&#1102; uBO | RuSO Archive ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><i><a href="https://github.com/MSDN-WhiteKnight/ruso-archive/">RuSO Archive</a></i></p>
+<h1>Скрываем весь мусор из сайта с помощью uBO</h1>
+<p><a href="https://ru.meta.stackoverflow.com/questions/14813/%d0%a1%d0%ba%d1%80%d1%8b%d0%b2%d0%b0%d0%b5%d0%bc-%d0%b2%d0%b5%d1%81%d1%8c-%d0%bc%d1%83%d1%81%d0%be%d1%80-%d0%b8%d0%b7-%d1%81%d0%b0%d0%b9%d1%82%d0%b0-%d1%81-%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e-ubo">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/625052/lolpopgames">LolPopGames</a></p>
+<blockquote>
+<p>Будем честны, сейчас в интерфейсе сайта    <strong>О Ч Е Н Ь    М Н О Г О    М У С О Р А</strong>.</p>
+<p>Например:</p>
+<ul>
+<li>Никому не нужные кнопки, по типу AI ассистента</li>
+<li>Лишние надписи</li>
+<li>Постоянная активность духа сообщества</li>
+</ul>
+<p>Интерфейс нагружен тем, чем нагруженным быть не хочется.</p>
+<p>Поэтому тут будет показано как удалить большую часть ненужного мусора через uBlock Origin (и частично через uBlock Origin Lite).</p>
+</blockquote>
+<h2>Answer 14814</h2>
+<p><a href="https://ru.meta.stackoverflow.com/a/14814/">Source</a> - by <a href="https://ru.meta.stackoverflow.com/users/625052/lolpopgames">LolPopGames</a></p>
+<blockquote>
+<p>Сперва нужно установить расширение, uBlock Origin доступен на Mozilla Addons, а в магазине расширений Chrome он вероятнее всего удалён, но там есть частично-поддерживающий uBlock Origin Lite.</p>
+<p>Далее нам нужно добавить эти фильтры.</p>
+<blockquote>
+<p>Нажимаем на иконку расширения → Настройки → Пользовательские/Мои фильтры</p>
+</blockquote>
+<p>И вставляем текст ниже</p>
+<p>Стоит отметить, что в uBOL не поддерживаются все фильтры, содержащие <code>:has()</code> или <code>:has-text()</code></p>
+<p>Для ускорения работы самих фильтров, часто они используют поиск по классам вместо более стабильного , но медленного и не совместимого с uBOL <code>:has-text()</code></p>
+<p>Фильтры визуально отделены новыми строками, что означает, что их, чаще всего, нужно включать/выключать вместе</p>
+<p>Некоторые фильтры закоментированы по умолчанию; Чтобы раскоментировать или закоментировать строку, нужно убрать или добавить <code>!</code> или <code># </code></p>
+<p>Все фильтры в сумме применяют изменения для таких сайтов как:</p>
+<ul>
+<li><a href="https://ru.stackoverflow.com"><code>ru.stackoverflow.com</code></a> и <a href="https://ru.meta.stackoverflow.com"><code>ru.meta.stackoverflow.com</code></a></li>
+<li><a href="https://stackoverflow.com"><code>stackoverflow.com</code></a> и <a href="https://meta.stackoverflow.com"><code>meta.stackoverflow.com</code></a></li>
+<li><a href="https://meta.stackexchange.com"><code>meta.stackexchange.com</code></a></li>
+<li>частично к другим языковым SO (<a href="https://es.stackoverflow.com"><code>es.stackoverflow.com</code></a>, <a href="https://pt.stackoverflow.com"><code>pt.stackoverflow.com</code></a> и <a href="https://ja.stackoverflow.com"><code>ja.stackoverflow.com</code></a>)</li>
+<li><a href="https://chat.stackexchange.com"><code>chat.stackexchange.com</code></a> и <a href="https://chat.stackoverflow.com"><code>chat.stackoverflow.com</code></a></li>
+</ul>
+<pre><code>! ---- Stack Overflow ----
+! --- Общее ---
+! Скрываем RSS ленту вопроса
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.js-feed-link
+<p>! --- Комментарии ---
+! Отключаем комментарии Духа сообщества
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.comment[data-comment-owner-id=&quot;-1&quot;]
+! Так можно откючать комментарии и других участников (подробнее: <a href="https://ru.meta.stackoverflow.com/questions/14795">https://ru.meta.stackoverflow.com/questions/14795</a>)</p>
+<p>! --- Список вопросов/страница вопроса ---
+! Скрываем &quot;поднятые&quot; Духом сообщества на главную страницу старые вопросы
+/^(...)?(meta.)?stack(overf
+/^(...)?(meta.)?stack(overflow|exchange).com$/##body.home-page .s-post-summary:has(a[href^=&quot;/users/-1/&quot;])low|exchange).com$/##body.home-page .s-post-summary:has(a[href^=&quot;/users/-1/&quot;])</p>
+<p>! Скрываем текст после списка вопросов на главной странице и кнопки после списка ответов на странице вопроса
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.js-bottom-notice</p>
+<p>! Скрываем &quot;похожие вопросы&quot; и &quot;связанные вопросы&quot;
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.sidebar-related
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.sidebar-linked</p>
+<p>! Скрываем &quot;Hot Network Questions&quot;
+/^(meta.)?stackoverflow.com$/,meta.stackexchange.com##.tex2jax_ignore</p>
+<p>! Скрываем нижнюю часть
+/^(...)?(meta.)?stack(overflow|exchange).com$/##footer</p>
+<p>! Скрываем ИИ агента
+stackoverflow.com##.mb24.bg-white.w100.wmx7
+stackoverflow.com##.as-start.fd-column.d-flex</p>
+<p>! Скрываем бесполезную надпись под &quot;Interesting posts for you&quot;
+stackoverflow.com##.fc-black-400.fs-body1</p>
+<p>! Скрываем бесполезную надпись под h1 на странице челленджей
+stackoverflow.com##.pr24.mb24.fl-grow1 &gt; .ai-baseline.d-flex</p>
+<p>! --- Верхняя панель ---
+! Скрываем About, Products и Stack Internal
+/^(.*.)?stackoverflow.com$/##.s-topbar--container .s-navigation</p>
+<p>! --- Левая боковая панель ---
+! Скрываем AI Ассистента
+/^(...)?(meta.)?stackoverflow.com$/##a.js-disable-askstack-new-link</p>
+<p>! Скрываем Stack Overflow for Agents
+/^ru.(meta.)?stackoverflow.com$/##li.pb24:nth-of-type(7)
+/^(meta.)?stackoverflow.com$/,meta.stackexchange.com##li.pb24:nth-of-type(6)
+/^(...)?(meta.)?stack(overflow|exchange).com$/##a.js-disable-sofa-new-link</p>
+<p>! Скрываем челленджы
+/^(meta.)?stackoverflow.com$/##a.js-disable-challenges-new-link</p>
+<p>! Скрываем блог
+/^(meta.)?stackoverflow.com$/##a.js-disable-articles-new-link</p>
+<p>! Скрываем компании
+/^(meta.)?stackoverflow.com$/##li.pb24:nth-of-type(13)
+/^(meta.)?stackoverflow.com$/##a#nav-companies</p>
+<p>! Скрываем Stack Internal
+/^(meta.)?stack(overflow|exchange).com$/##.js-create-team-cta</p>
+<p>! Скрываем коллективы
+/^(meta.)?stackoverflow.com$/##.js-collectives-navcta-toggle
+/^(meta.)?stackoverflow.com$/##.mb4.mt32.ml8</p>
+<p>! Скрываем &quot;Looking for your teams?&quot;
+/^...(meta.)?stackoverflow.com$/##li.pb24:nth-of-type(12)
+meta.stackexchange.com##li.pb24:nth-of-type(11)
+/^(...)?(meta.)?stack(overflow|exchange).com$/##p.w100.px0.fs-fine.fc-medium</p>
+<p>! --- Правая боковая панель ---
+! Скрываем недавно полученные знаки
+/^(...)?(meta.)?stack(overflow|exchange).com$/###recent-badges</p>
+<p>! Скрываем весь список меток на главной странице</p>
+<h1 id="metastackoverflowexchangecomrecent-tags">/^(...)?(meta.)?stack(overflow|exchange).com$/###recent-tags</h1>
+<p>! Скрываем FAQ
+meta.stackexchange.com##.js-sidebar-zone</p>
+<p>! -- &quot;Важное на мете&quot; и &quot;Обсуждаемое на мете&quot; --
+! Полностью скрываем</p>
+<h1 id="stackoverflowcommetastackexchangecomdivs-sidebarwidget__yellowmb16">/^...stackoverflow.com$/,meta.stackexchange.com##div.s-sidebarwidget__yellow.mb16</h1>
+<p>/^...meta.stackoverflow.com$/##div.s-sidebarwidget__yellow.mb16</p>
+<p>! Скрываем &quot;The Overflow Blog&quot;
+/^(meta.)?stackoverflow.com$/##div.mb16.s-anchors__grayscale.s-anchors.s-sidebarwidget:nth-of-type(1)</p>
+<p>! Скрываем &quot;Важное на мете&quot;</p>
+<h1 id="rumetastackoverflowcomlihas-lis-sidebarwidget--headerhas-textобсуждаемое-на-мете">/^ru.(meta.)?stackoverflow.com$/##li:has(~ li.s-sidebarwidget--header:has-text(Обсуждаемое на Мете))</h1>
+<h1 id="metastackoverflowcomlihas-lis-sidebarwidget--headerhas-texthot-meta-posts">/^(meta.)?stackoverflow.com$/##li:has(~ li.s-sidebarwidget--header:has-text(Hot Meta Posts))</h1>
+<p>! Оставляем только посты из site Meta в &quot;Важное на мете&quot;</p>
+<h1 id="metastackoverflowexchangecomlihasflex--item1fl-shrink0--favicon-stackexchangemeta">/^(...)?(meta.)?stack(overflow|exchange).com$/##li:has(.flex--item1.fl-shrink0 &gt; .favicon-stackexchangemeta)</h1>
+<h1 id="metastackoverflowexchangecomflex--item1fl-shrink0">/^(...)?(meta.)?stack(overflow|exchange).com$/##.flex--item1.fl-shrink0</h1>
+<p>! Оставляем только посты из SEMeta в &quot;Важное на мете&quot;</p>
+<h1 id="rumetastackoverflowcomlihasflex--item1fl-shrink0--favicon-rumeta">/^ru.(meta.)?stackoverflow.com$/##li:has(.flex--item1.fl-shrink0 &gt; .favicon-rumeta)</h1>
+<h1 id="metastackoverflowcomlihasflex--item1fl-shrink0--favicon-enmeta">/^(meta.)?stackoverflow.com$/##li:has(.flex--item1.fl-shrink0 &gt; .favicon-enmeta)</h1>
+<h1 id="metastackoverflowexchangecomflex--item1fl-shrink0-1">/^(...)?(meta.)?stack(overflow|exchange).com$/##.flex--item1.fl-shrink0</h1>
+<p>! Отключаем &quot;Обсуждаемое на мете&quot;</p>
+<h1 id="rumetastackoverflowcomlis-sidebarwidget--headerhas-textобсуждаемое-на-мете">/^ru.(meta.)?stackoverflow.com$/##li.s-sidebarwidget--header:has-text(Обсуждаемое на Мете)</h1>
+<h1 id="rumetastackoverflowcomlis-sidebarwidget--headerhas-textобсуждаемое-на-мете--">/^ru.(meta.)?stackoverflow.com$/##li.s-sidebarwidget--header:has-text(Обсуждаемое на Мете) ~ *</h1>
+<h1 id="metastackoverflowcomlis-sidebarwidget--headerhas-texthot-meta-posts">/^(meta.)?stackoverflow.com$/##li.s-sidebarwidget--header:has-text(Hot Meta Posts)</h1>
+<h1 id="metastackoverflowcomlis-sidebarwidget--headerhas-texthot-meta-posts--">/^(meta.)?stackoverflow.com$/##li.s-sidebarwidget--header:has-text(Hot Meta Posts) ~ *</h1>
+<p>! --- Страница написания вопроса/ответа/подробного описания метки ---
+! Скрываем подсказки форматирования/написания вопроса или описания метки
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.s-btn__sm.s-btn__muted.active-help
+/^ru.(meta.)?stackoverflow.com$/##.s-btn__sm.s-btn__muted:has-text(Показать подсказки форматирования)
+/^(meta.)?stackoverflow.com$/,meta.stackexchange.com##.s-btn__sm.s-btn__muted:has-text(Show formmating tips)
+/^...(meta.)?stackoverflow.com$/,meta.stackexchange.com##.mdhelp-tabs
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.wmd-help-button
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.js-block-other.g2.d-flex.s-editor-menu-block
+/^(...)?(meta.)?stack(overflow|exchange).com$/##.js-visible-before-review.s-sidebarwidget
+/^(...)?(meta.)?stack(overflow|exchange).com$/##div#how-to-title
+/^...(meta.)?stackoverflow.com$/,meta.stackexchange.com##.gs8.fs-caption.fc-black-400.pb12.d-flex
+/^...(meta.)?stackoverflow.com$/,meta.stackexchange.com##.p8.s-btn.flex--item
+/^(meta.)?stackoverflow.com$/##.mt1
+/^(meta.)?stackoverflow.com$/##.question-v3-sidebar-background</p>
+<p>! ---- Чат Stack Overflow ----
+! Скрываем меню участия в event'е
+/^chat.stack(overflow|exchange).com$/##.mt8.s-notice__warning.s-notice</p>
+<p>! Скрываем бесполезную строку текста на главной странице
+/^chat.stack(overflow|exchange).com$/##.fs-body2</p>
+<p>! Скрываем нижнию часть
+/^chat.stack(overflow|exchange).com$/###footer</p>
+<p>! Скрываем лишние кнопки в части написания сообщения
+/^chat.stack(overflow|exchange).com$/###footer-legal
+/^chat.stack(overflow|exchange).com$/###footer-logo</p>
+<p>! Скрываем лишние кнопки в боковой панели
+/^chat.stack(overflow|exchange).com$/###room-ad</p>
+<p>! Скрываем RSS для показа выделенных вопросов
+/^chat.stack(overflow|exchange).com$/##.feed-icon</p>
+<p>! Скрываем чаты &quot;Discussion on question by ...&quot;
+chat.stackexchange.com##.js-room-card:has(a[title^=&quot;Discussion on question by &quot;])
+</code></pre><p>
+<p>Если максимально укоротить, получиться так:</p>
+<pre><code>/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.js-feed-link
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.comment[data-comment-owner-id=&quot;-1&quot;]
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##body.home-page .s-post-summary:has(a[href^=&quot;/users/-1/&quot;])
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.js-bottom-notice
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.sidebar-related
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.sidebar-linked
+/^(meta\.)?stackoverflow\.com$/,meta.stackexchange.com##.tex2jax_ignore
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##footer
+stackoverflow.com##.mb24.bg-white.w100.wmx7
+stackoverflow.com##.as-start.fd-column.d-flex
+stackoverflow.com##.fc-black-400.fs-body1
+stackoverflow.com##.pr24.mb24.fl-grow1 &gt; .ai-baseline.d-flex
+/^(.*\.)?stackoverflow\.com$/##.s-topbar--container .s-navigation
+/^(..\.)?(meta\.)?stackoverflow\.com$/##a.js-disable-askstack-new-link
+/^ru.(meta\.)?stackoverflow\.com$/##li.pb24:nth-of-type(7)
+/^(meta\.)?stackoverflow\.com$/,meta.stackexchange.com##li.pb24:nth-of-type(6)
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##a.js-disable-sofa-new-link
+/^(meta\.)?stackoverflow\.com$/##a.js-disable-challenges-new-link
+/^(meta\.)?stackoverflow\.com$/##a.js-disable-articles-new-link
+/^(meta\.)?stackoverflow\.com$/##li.pb24:nth-of-type(13)
+/^(meta\.)?stackoverflow\.com$/##a#nav-companies
+/^(meta\.)?stack(overflow|exchange)\.com$/##.js-create-team-cta
+/^(meta\.)?stackoverflow\.com$/##.js-collectives-navcta-toggle
+/^(meta\.)?stackoverflow\.com$/##.mb4.mt32.ml8
+/^..\.(meta\.)?stackoverflow\.com$/##li.pb24:nth-of-type(12)
+meta.stackexchange.com##li.pb24:nth-of-type(11)
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##p.w100.px0.fs-fine.fc-medium
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/###recent-badges
+!/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/###recent-tags
+meta.stackexchange.com##.js-sidebar-zone
+/^..\.meta\.stackoverflow\.com$/##div.s-sidebarwidget__yellow.mb16
+/^(meta\.)?stackoverflow\.com$/##div.mb16.s-anchors__grayscale.s-anchors.s-sidebarwidget:nth-of-type(1)
+!/^ru.(meta\.)?stackoverflow\.com$/##li:has(~ li.s-sidebarwidget--header:has-text(Обсуждаемое на Мете))
+!/^(meta\.)?stackoverflow\.com$/##li:has(~ li.s-sidebarwidget--header:has-text(Hot Meta Posts))
+!/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##li:has(.flex--item1.fl-shrink0 &gt; .favicon-stackexchangemeta)
+!/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.flex--item1.fl-shrink0
+!/^ru.(meta\.)?stackoverflow\.com$/##li:has(.flex--item1.fl-shrink0 &gt; .favicon-rumeta)
+!/^(meta\.)?stackoverflow\.com$/##li:has(.flex--item1.fl-shrink0 &gt; .favicon-enmeta)
+!/^ru.(meta\.)?stackoverflow\.com$/##li.s-sidebarwidget--header:has-text(Обсуждаемое на Мете)
+!/^ru.(meta\.)?stackoverflow\.com$/##li.s-sidebarwidget--header:has-text(Обсуждаемое на Мете) ~ *
+!/^(meta\.)?stackoverflow\.com$/##li.s-sidebarwidget--header:has-text(Hot Meta Posts)
+!/^(meta\.)?stackoverflow\.com$/##li.s-sidebarwidget--header:has-text(Hot Meta Posts) ~ *
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.s-btn__sm.s-btn__muted.active-help
+/^ru\.(meta\.)?stackoverflow\.com$/##.s-btn__sm.s-btn__muted:has-text(Показать подсказки форматирования)
+/^(meta\.)?stackoverflow\.com$/,meta.stackexchange.com##.s-btn__sm.s-btn__muted:has-text(Show formmating tips)
+/^..\.(meta\.)?stackoverflow\.com$/,meta.stackexchange.com##.mdhelp-tabs
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.wmd-help-button
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.js-block-other.g2.d-flex.s-editor-menu-block
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##.js-visible-before-review.s-sidebarwidget
+/^(..\.)?(meta\.)?stack(overflow|exchange)\.com$/##div#how-to-title
+/^..\.(meta\.)?stackoverflow\.com$/,meta.stackexchange.com##.gs8.fs-caption.fc-black-400.pb12.d-flex
+/^..\.(meta\.)?stackoverflow\.com$/,meta.stackexchange.com##.p8.s-btn.flex--item
+/^(meta\.)?stackoverflow\.com$/##.mt1
+/^(meta\.)?stackoverflow\.com$/##.question-v3-sidebar-background
+/^chat\.stack(overflow|exchange)\.com$/##.mt8.s-notice__warning.s-notice
+/^chat\.stack(overflow|exchange)\.com$/##.fs-body2
+/^chat\.stack(overflow|exchange)\.com$/###footer
+/^chat\.stack(overflow|exchange)\.com$/###footer-legal
+/^chat\.stack(overflow|exchange)\.com$/###footer-logo
+/^chat\.stack(overflow|exchange)\.com$/###room-ad
+/^chat\.stack(overflow|exchange)\.com$/##.feed-icon
+chat.stackexchange.com##.js-room-card:has(a[title^=&quot;Discussion on question by &quot;])
+</code></pre>
+<p>Из-за небезопастного поиска по &quot;размытым&quot; классам, вполне возможны баги с неудалением мусора и удалением важных вещей интерфейса, поэтому просьба: писать комментарии для любых найденых багов.</p>
+<p>Поскольку, наверно, обновления поста, особенно после его выкладывания, будут выходить не редко, нужно быть в курсе дела, а поэтому рекомендую включить отслежование этого ответа.</p>
+</blockquote>
+<hr>
+<p><i>Content is retrieved from StackExchange API. </i></p>
+<p><i>Auto-generated by ruso-archive tools. </i></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>RuSO Archive (published from sources in <a href="https://github.com/MSDN-WhiteKnight/ruso-archive">GitHub repository</a>). Content licensed under <a href="https://github.com/MSDN-WhiteKnight/ruso-archive/blob/master/LICENSE">CC-BY-SA 4.0</a>.<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+  </body>
+</html>

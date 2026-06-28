@@ -82,25 +82,22 @@
 <p>Чтобы это сделать, сначала зайдите в страницу профиля и из поисковой строки формата:</p>
 <pre class="lang-none prettyprint-override"><code>https://ru.stackoverflow.com/users/USER_ID/...
 </code></pre>
-<p>Скопируйте USER_ID</p>
+<p>Скопируйте <code>USER_ID</code></p>
 <hr>
-<p>на ruSO и ruSO meta ID будет одинаковый</p>
-<p>Если захотите для enSO и enSO meta то у них другой одинаковый ID</p>
-<p>Для SE meta там будет тоже свой ID</p>
+<p>на ruSO и ruMeta ID будет одинаковый</p>
+<p>Если захотите для enSO и enMeta, то у них другой одинаковый ID</p>
+<p>Для SEMeta там будет тоже свой ID</p>
 <p>Берите те ID, что вам нужны</p>
 <p>(Для примера, будем использовать мои <code>625052</code>, <code>29107413</code> и <code>1629614</code>)</p>
 <hr>
 <p>Теперь установите расширение для блокировки рекламы</p>
 <p>Лично я использую uBlock Origin, в Chrome он, скорее всего, заблокирован, но там есть uBlock Origin Lite</p>
 <p>В обоих расширениях есть пользовательские фильтры, они нам и нужны</p>
-<p>Чтобы в них зайти нужно открыть расширение, нажать на настройки -&gt; пользовательские/мои фильтры, и добавляем вот эти строку:</p>
+<p>Чтобы в них зайти нужно открыть расширение, нажать на настройки -&gt; пользовательские/мои фильтры, и добавляем вот эти строки:</p>
 <pre class="lang-javascript prettyprint-override"><code>! для ruSO
-ru.stackoverflow.com##.comment[data-comment-owner-id=&quot;625052&quot;]
-<p>! для ruSO meta
-ru.meta.stackoverflow.com##.comment[data-comment-owner-id=&quot;625052&quot;]</p>
-<p>! (если хотите) для enSO, enSO meta и SE meta
-stackoverflow.com##.comment[data-comment-owner-id=&quot;29107413&quot;]
-meta.stackoverflow.com##.comment[data-comment-owner-id=&quot;29107413&quot;]
+ru.stackoverflow.com,ru.meta.stackoverflow.com##.comment[data-comment-owner-id=&quot;625052&quot;]
+<p>! (если хотите) для enSO, enMeta и SEMeta
+stackoverflow.com,meta.stackoverflow.com##.comment[data-comment-owner-id=&quot;29107413&quot;]
 meta.stackexchange.com##.comment[data-comment-owner-id=&quot;1629614&quot;]
 </code></pre><p>
 <p>Всё, вы больше не будете видеть комментарии этого пользователя</p>
